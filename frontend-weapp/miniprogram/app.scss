@@ -1,4 +1,47 @@
 /**app.wxss**/
+page {
+  box-sizing: border-box;
+  width: 100vw;
+  overflow-x: hidden;
+}
+
+view,
+text,
+image,
+scroll-view,
+swiper,
+swiper-item,
+cover-view,
+cover-image,
+icon,
+text,
+rich-text,
+progress,
+button,
+checkbox,
+form,
+input,
+label,
+picker,
+picker-view,
+radio,
+slider,
+switch,
+textarea,
+navigator,
+audio,
+camera,
+image,
+video,
+map,
+canvas,
+open-data,
+web-view,
+ad {
+  box-sizing: border-box;
+}
+
 .container {
   box-sizing: border-box;
-} 
+  width: 100%;
+}

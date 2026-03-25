@@ -1,15 +1,18 @@
 @import '../../styles/design-system.scss';
 
 .page {
+  width: 100vw;
   height: 100vh;
   display: flex;
   flex-direction: column;
   background-color: $surface;
+  box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 .content {
   flex: 1;
-  padding-bottom: 120px;
+
   padding-top: 0;
   overflow-y: hidden;
 }
@@ -278,12 +281,12 @@
 }
 
 .arrow {
-  font-family: 'Material Symbols Outlined';
-  font-size: 24px;
-  color: $secondary-fixed-dim;
+  width: 24px;
+  height: 24px;
+  filter: invert(70%) sepia(10%) saturate(100%);
 
   &.arrow-right {
-    color: $primary;
+    filter: invert(0%);
   }
 }
 
@@ -348,9 +351,9 @@
   text-align: center;
 
   .consultant-icon {
-    font-family: 'Material Symbols Outlined';
-    font-size: 48px;
-    color: $tertiary;
+    width: 48px;
+    height: 48px;
+    filter: invert(26%) sepia(100%) saturate(1000%) hue-rotate(15deg);
     margin-bottom: 24px;
   }
 

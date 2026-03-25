@@ -1,16 +1,19 @@
 @import '../../styles/design-system.scss';
 
 .page {
+  width: 100vw;
   height: 100vh;
   display: flex;
   flex-direction: column;
   background-color: $surface;
+  box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 .content {
   flex: 1;
   padding-top: 0;
-  padding-bottom: 120px;
+  // padding-bottom: 120px;
   overflow-y: hidden;
 }
 

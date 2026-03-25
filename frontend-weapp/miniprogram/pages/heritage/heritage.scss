@@ -17,10 +17,13 @@ $font-family-chinese: 'Noto Serif SC', serif;
 $font-family-english: 'Manrope', sans-serif;
 
 .page {
+  width: 100vw;
   height: 100vh;
   display: flex;
   flex-direction: column;
   background-color: $primary;
+  box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 .content {
@@ -90,9 +93,9 @@ $font-family-english: 'Manrope', sans-serif;
   }
 
   .scroll-icon {
-    font-family: 'Material Symbols Outlined';
-    font-size: 32px;
-    color: $tertiary;
+    width: 32px;
+    height: 32px;
+    filter: invert(26%) sepia(100%) saturate(1000%) hue-rotate(15deg);
   }
 }
 
@@ -533,9 +536,9 @@ $font-family-english: 'Manrope', sans-serif;
     }
 
     .arrow-icon {
-      font-family: 'Material Symbols Outlined';
-      font-size: 24px;
-      color: #ffffff;
+      width: 24px;
+      height: 24px;
+      filter: brightness(0) invert(1);
     }
   }
 }

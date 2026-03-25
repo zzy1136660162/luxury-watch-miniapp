@@ -2,11 +2,11 @@
   <view 
     wx:for="{{list}}" 
     wx:key="index" 
-    class="tab-item {{selected === index ? 'active' : ''}}"
+    class="tab-item {{selectedNum === index + 1 ? 'active' : ''}}"
     bindtap="switchTab"
     data-index="{{index}}"
   >
-    <image class="tab-icon" src="{{selected === index ? item.selectedIconPath : item.iconPath}}" mode="aspectFit" />
+    <image class="tab-icon" src="{{selectedNum === index + 1 ? item.selectedIconPath : item.iconPath}}" mode="aspectFit" />
     <text class="tab-text">{{item.text}}</text>
   </view>
 </view>

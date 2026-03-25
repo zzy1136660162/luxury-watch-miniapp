@@ -32,21 +32,21 @@
     <view class="highlights-section">
       <view class="highlights-grid">
         <view class="highlight-item">
-          <text class="highlight-icon">settings_slow_motion</text>
+          <image class="highlight-icon" src="https://cdn.jsdelivr.net/npm/@material-design-icons/svg@0.14.15/filled/settings_slow_motion.svg" mode="aspectFit" />
           <text class="highlight-title">自产机芯</text>
           <text class="highlight-subtitle">In-house Movement</text>
           <text class="highlight-desc">搭载 CH-700 自动上链机芯，精准卓越</text>
         </view>
 
         <view class="highlight-item">
-          <text class="highlight-icon">energy_savings_leaf</text>
+          <image class="highlight-icon" src="https://cdn.jsdelivr.net/npm/@material-design-icons/svg@0.14.15/filled/energy_savings_leaf.svg" mode="aspectFit" />
           <text class="highlight-title">动力储存</text>
           <text class="highlight-subtitle">Power Reserve</text>
           <text class="highlight-desc">长达 72 小时的不间断动力保障</text>
         </view>
 
         <view class="highlight-item">
-          <text class="highlight-icon">waves</text>
+          <image class="highlight-icon" src="https://cdn.jsdelivr.net/npm/@material-design-icons/svg@0.14.15/filled/waves.svg" mode="aspectFit" />
           <text class="highlight-title">防水性能</text>
           <text class="highlight-subtitle">Water Resistance</text>
           <text class="highlight-desc">深达 50 米的生活与艺术平衡</text>

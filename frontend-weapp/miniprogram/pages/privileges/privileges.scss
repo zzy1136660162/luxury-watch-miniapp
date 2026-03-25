@@ -18,10 +18,13 @@ $font-family-chinese: 'Noto Serif SC', serif;
 $font-family-english: 'Manrope', sans-serif;
 
 .page {
+  width: 100vw;
   height: 100vh;
   display: flex;
   flex-direction: column;
   background-color: $surface;
+  box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 .content {

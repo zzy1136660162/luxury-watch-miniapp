@@ -18,10 +18,13 @@ $font-family-chinese: 'Noto Serif SC', serif;
 $font-family-english: 'Manrope', sans-serif;
 
 .page {
+  width: 100vw;
   height: 100vh;
   display: flex;
   flex-direction: column;
   background-color: $surface;
+  box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 .content {
@@ -99,9 +102,9 @@ $font-family-english: 'Manrope', sans-serif;
 }
 
 .card-diamond {
-  font-family: 'Material Symbols Outlined';
-  font-size: 40px;
-  color: $tertiary-fixed-dim;
+  width: 40px;
+  height: 40px;
+  filter: invert(70%) sepia(50%) saturate(500%) hue-rotate(10deg);
   position: relative;
   z-index: 10;
 }
@@ -264,9 +267,9 @@ $font-family-english: 'Manrope', sans-serif;
 }
 
 .privilege-icon {
-  font-family: 'Material Symbols Outlined';
-  font-size: 32px;
-  color: $tertiary;
+  width: 32px;
+  height: 32px;
+  filter: invert(26%) sepia(100%) saturate(1000%) hue-rotate(15deg);
 }
 
 .privilege-info {
@@ -515,9 +518,9 @@ $font-family-english: 'Manrope', sans-serif;
 }
 
 .service-icon {
-  font-family: 'Material Symbols Outlined';
-  font-size: 24px;
-  color: $secondary;
+  width: 24px;
+  height: 24px;
+  filter: invert(40%) sepia(10%) saturate(200%);
 }
 
 .service-name {
@@ -527,11 +530,11 @@ $font-family-english: 'Manrope', sans-serif;
 }
 
 .service-arrow {
-  font-family: 'Material Symbols Outlined';
-  font-size: 24px;
-  color: $outline-variant;
+  width: 24px;
+  height: 24px;
+  filter: invert(70%) sepia(10%) saturate(100%);
 
   .service-item:active & {
-    color: $primary;
+    filter: invert(0%);
   }
 }

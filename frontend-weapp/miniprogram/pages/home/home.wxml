@@ -71,8 +71,8 @@
           <text class="section-subtitle">Featured Collections</text>
         </view>
         <view class="scroll-arrows">
-          <text class="arrow arrow-left" bindtap="onScrollLeft">west</text>
-          <text class="arrow arrow-right" bindtap="onScrollRight">east</text>
+          <image class="arrow arrow-left" src="https://cdn.jsdelivr.net/npm/@material-design-icons/svg@0.14.15/filled/west.svg" mode="aspectFit" bindtap="onScrollLeft" />
+          <image class="arrow arrow-right" src="https://cdn.jsdelivr.net/npm/@material-design-icons/svg@0.14.15/filled/east.svg" mode="aspectFit" bindtap="onScrollRight" />
         </view>
       </view>
 
@@ -108,7 +108,7 @@
     <!-- Section 5: Contact Consultant -->
     <view class="section section-consultant">
       <view class="consultant-card">
-        <text class="consultant-icon">verified_user</text>
+        <image class="consultant-icon" src="https://cdn.jsdelivr.net/npm/@material-design-icons/svg@0.14.15/filled/verified_user.svg" mode="aspectFit" />
         <text class="consultant-title">尊享顾问服务</text>
         <text class="consultant-text">我们的专家将为您提供一对一的选购建议与技术支持</text>
         <button class="consultant-button" bindtap="onContactConsultant">联系顾问 | CONTACT US</button>

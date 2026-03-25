@@ -13,7 +13,7 @@
         <text class="hero-subtitle">BRAND HOUSE</text>
       </view>
       <view class="scroll-indicator">
-        <text class="scroll-icon">keyboard_double_arrow_down</text>
+        <image class="scroll-icon" src="https://cdn.jsdelivr.net/npm/@material-design-icons/svg@0.14.15/filled/keyboard_double_arrow_down.svg" mode="aspectFit" />
       </view>
     </view>
 
@@ -137,7 +137,7 @@
         <text class="entrance-title">经典系列</text>
         <text class="entrance-subtitle">LEGACY COLLECTIONS</text>
         <view class="entrance-arrow">
-          <text class="arrow-icon">arrow_forward</text>
+          <image class="arrow-icon" src="https://cdn.jsdelivr.net/npm/@material-design-icons/svg@0.14.15/filled/arrow_forward.svg" mode="aspectFit" />
         </view>
       </view>
     </view>

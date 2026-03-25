@@ -17,7 +17,7 @@
             <text class="card-level">铂金会员</text>
             <text class="card-level-en">Platinum Member</text>
           </view>
-          <text class="card-diamond">diamond</text>
+          <image class="card-diamond" src="https://cdn.jsdelivr.net/npm/@material-design-icons/svg@0.14.15/filled/diamond.svg" mode="aspectFit" />
         </view>
 
         <!-- User Info -->
@@ -57,7 +57,7 @@
 
       <view class="privileges-grid">
         <view class="privilege-item" bindtap="onPrivilegeTap" data-type="advisor">
-          <text class="privilege-icon">support_agent</text>
+          <image class="privilege-icon" src="https://cdn.jsdelivr.net/npm/@material-design-icons/svg@0.14.15/filled/support_agent.svg" mode="aspectFit" />
           <view class="privilege-info">
             <text class="privilege-name">专属顾问</text>
             <text class="privilege-name-en">Advisor</text>
@@ -65,7 +65,7 @@
         </view>
 
         <view class="privilege-item" bindtap="onPrivilegeTap" data-type="priority">
-          <text class="privilege-icon">event_available</text>
+          <image class="privilege-icon" src="https://cdn.jsdelivr.net/npm/@material-design-icons/svg@0.14.15/filled/event_available.svg" mode="aspectFit" />
           <view class="privilege-info">
             <text class="privilege-name">优先预订</text>
             <text class="privilege-name-en">Priority</text>
@@ -73,7 +73,7 @@
         </view>
 
         <view class="privilege-item" bindtap="onPrivilegeTap" data-type="maintenance">
-          <text class="privilege-icon">featured_seasonal_and_gifts</text>
+          <image class="privilege-icon" src="https://cdn.jsdelivr.net/npm/@material-design-icons/svg@0.14.15/filled/card_giftcard.svg" mode="aspectFit" />
           <view class="privilege-info">
             <text class="privilege-name">保养礼券</text>
             <text class="privilege-name-en">Maintenance</text>
@@ -81,7 +81,7 @@
         </view>
 
         <view class="privilege-item" bindtap="onPrivilegeTap" data-type="birthday">
-          <text class="privilege-icon">cake</text>
+          <image class="privilege-icon" src="https://cdn.jsdelivr.net/npm/@material-design-icons/svg@0.14.15/filled/cake.svg" mode="aspectFit" />
           <view class="privilege-info">
             <text class="privilege-name">生日惊喜</text>
             <text class="privilege-name-en">Birthday</text>
@@ -183,26 +183,26 @@
       <view class="services-list">
         <view class="service-item" bindtap="onServiceTap" data-type="appointments">
           <view class="service-left">
-            <text class="service-icon">calendar_today</text>
+            <image class="service-icon" src="https://cdn.jsdelivr.net/npm/@material-design-icons/svg@0.14.15/filled/calendar_today.svg" mode="aspectFit" />
             <text class="service-name">我的预约</text>
           </view>
-          <text class="service-arrow">chevron_right</text>
+          <image class="service-arrow" src="https://cdn.jsdelivr.net/npm/@material-design-icons/svg@0.14.15/filled/chevron_right.svg" mode="aspectFit" />
         </view>
 
         <view class="service-item" bindtap="onServiceTap" data-type="records">
           <view class="service-left">
-            <text class="service-icon">history_edu</text>
+            <image class="service-icon" src="https://cdn.jsdelivr.net/npm/@material-design-icons/svg@0.14.15/filled/history_edu.svg" mode="aspectFit" />
             <text class="service-name">我的礼遇记录</text>
           </view>
-          <text class="service-arrow">chevron_right</text>
+          <image class="service-arrow" src="https://cdn.jsdelivr.net/npm/@material-design-icons/svg@0.14.15/filled/chevron_right.svg" mode="aspectFit" />
         </view>
 
         <view class="service-item" bindtap="onServiceTap" data-type="consultant">
           <view class="service-left">
-            <text class="service-icon">contact_support</text>
+            <image class="service-icon" src="https://cdn.jsdelivr.net/npm/@material-design-icons/svg@0.14.15/filled/contact_support.svg" mode="aspectFit" />
             <text class="service-name">联系顾问</text>
           </view>
-          <text class="service-arrow">chevron_right</text>
+          <image class="service-arrow" src="https://cdn.jsdelivr.net/npm/@material-design-icons/svg@0.14.15/filled/chevron_right.svg" mode="aspectFit" />
         </view>
       </view>
     </view>

@@ -31,6 +31,18 @@
         "text": "系列",
         "iconPath": "assets/tabbar/collections.png",
         "selectedIconPath": "assets/tabbar/collections-active.png"
+      },
+      {
+        "pagePath": "pages/heritage/heritage",
+        "text": "品牌馆",
+        "iconPath": "assets/tabbar/collections.png",
+        "selectedIconPath": "assets/tabbar/collections-active.png"
+      },
+      {
+        "pagePath": "pages/member/member",
+        "text": "会员",
+        "iconPath": "assets/tabbar/home.png",
+        "selectedIconPath": "assets/tabbar/home-active.png"
       }
     ]
   },
