@@ -1,0 +1,81 @@
+// Chronos Heritage Design System
+// The Timeless Monolith
+
+// Primary Colors
+$primary: #000000;
+$primary-container: #1A1A1A;
+$on-primary: #ffffff;
+$on-primary-container: #858383;
+
+// Secondary Colors
+$secondary: #5d5e5f;
+$secondary-container: #e0dfdf;
+$on-secondary: #ffffff;
+$on-secondary-container: #626363;
+$secondary-fixed: #e3e2e2;
+$secondary-fixed-dim: #c6c6c6;
+
+// Tertiary Colors (Gold Accent)
+$tertiary: #735c00;
+$tertiary-container: #cca730;
+$on-tertiary: #ffffff;
+$on-tertiary-container: #4f3e00;
+$tertiary-fixed: #ffe088;
+$tertiary-fixed-dim: #e9c349;
+
+// Surface Colors
+$surface: #f9f9f9;
+$surface-bright: #f9f9f9;
+$surface-container: #eeeeee;
+$surface-container-high: #e8e8e8;
+$surface-container-highest: #e2e2e2;
+$surface-container-low: #f3f3f3;
+$surface-container-lowest: #ffffff;
+$surface-dim: #dadada;
+$surface-tint: #5f5e5e;
+$surface-variant: #e2e2e2;
+
+// Semantic Colors
+$background: #f9f9f9;
+$on-background: #1a1c1c;
+$on-surface: #1a1c1c;
+$on-surface-variant: #444748;
+$outline: #747878;
+$outline-variant: #c4c7c7;
+$inverse-surface: #2f3131;
+$inverse-on-surface: #f1f1f1;
+$inverse-primary: #c8c6c5;
+$error: #ba1a1a;
+$on-error: #ffffff;
+$error-container: #ffdad6;
+$on-error-container: #93000a;
+
+// Typography
+$font-family-chinese: 'Noto Serif SC', serif;
+$font-family-english: 'Manrope', sans-serif;
+
+// Spacing
+$spacing-unit: 8px;
+$spacing-xs: 8px;
+$spacing-sm: 16px;
+$spacing-md: 24px;
+$spacing-lg: 32px;
+$spacing-xl: 48px;
+$spacing-2xl: 64px;
+$spacing-3xl: 96px;
+
+// Border Radius - 0px (No rounded corners)
+$border-radius: 0px;
+$border-radius-sm: 0px;
+$border-radius-md: 0px;
+$border-radius-lg: 0px;
+$border-radius-full: 9999px;
+
+// Shadows
+$shadow-ambient: 0 0 60px rgba($surface-tint, 0.04);
+
+// Z-Index
+$z-index-header: 100;
+$z-index-nav: 100;
+$z-index-modal: 200;
+$z-index-toast: 300;

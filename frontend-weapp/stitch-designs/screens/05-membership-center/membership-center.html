@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&amp;family=Manrope:wght@300;400;600;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 200, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Manrope', 'Noto Serif SC', serif; }
+        .font-serif { font-family: 'Noto Serif SC', serif; }
+        .gold-gradient {
+            background: linear-gradient(135deg, #D4AF37 0%, #735c00 100%);
+        }
+        .black-gradient {
+            background: linear-gradient(135deg, #1c1b1b 0%, #000000 100%);
+        }
+    </style>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "secondary": "#5d5e5f",
+              "primary": "#000000",
+              "inverse-surface": "#2f3131",
+              "on-secondary-container": "#626363",
+              "surface-container": "#eeeeee",
+              "surface": "#f9f9f9",
+              "on-secondary-fixed": "#1a1c1c",
+              "outline-variant": "#c4c7c7",
+              "on-tertiary-container": "#4f3e00",
+              "on-background": "#1a1c1c",
+              "primary-container": "#1c1b1b",
+              "surface-tint": "#5f5e5e",
+              "inverse-primary": "#c8c6c5",
+              "surface-dim": "#dadada",
+              "surface-variant": "#e2e2e2",
+              "surface-container-highest": "#e2e2e2",
+              "on-primary-fixed-variant": "#474746",
+              "on-primary-fixed": "#1c1b1b",
+              "surface-container-lowest": "#ffffff",
+              "primary-fixed-dim": "#c8c6c5",
+              "on-tertiary-fixed-variant": "#574500",
+              "inverse-on-surface": "#f1f1f1",
+              "background": "#f9f9f9",
+              "tertiary-container": "#cca730",
+              "on-primary": "#ffffff",
+              "tertiary": "#735c00",
+              "secondary-fixed-dim": "#c6c6c6",
+              "on-error": "#ffffff",
+              "tertiary-fixed-dim": "#e9c349",
+              "secondary-container": "#e0dfdf",
+              "surface-container-high": "#e8e8e8",
+              "on-surface": "#1a1c1c",
+              "on-secondary-fixed-variant": "#464747",
+              "error-container": "#ffdad6",
+              "on-tertiary": "#ffffff",
+              "tertiary-fixed": "#ffe088",
+              "on-secondary": "#ffffff",
+              "secondary-fixed": "#e3e2e2",
+              "on-surface-variant": "#444748",
+              "on-primary-container": "#858383",
+              "primary-fixed": "#e5e2e1",
+              "outline": "#747878",
+              "on-error-container": "#93000a",
+              "surface-bright": "#f9f9f9",
+              "error": "#ba1a1a",
+              "on-tertiary-fixed": "#241a00",
+              "surface-container-low": "#f3f3f3"
+            },
+            fontFamily: {
+              "headline": ["Noto Serif SC"],
+              "body": ["Manrope"],
+              "label": ["Manrope"]
+            },
+            borderRadius: {"DEFAULT": "0px", "lg": "0px", "xl": "0px", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface min-h-screen pb-24">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-white/80 dark:bg-black/80 backdrop-blur-xl flex justify-between items-center px-6 py-4 w-full">
+<button class="hover:opacity-70 transition-opacity duration-300 scale-95 duration-200">
+<span class="material-symbols-outlined text-black dark:text-white" data-icon="menu">menu</span>
+</button>
+<h1 class="font-serif text-lg tracking-widest uppercase text-black dark:text-white font-bold">尊享会员 | MEMBERSHIP</h1>
+<button class="hover:opacity-70 transition-opacity duration-300 scale-95 duration-200">
+<span class="material-symbols-outlined text-black dark:text-white" data-icon="account_circle">account_circle</span>
+</button>
+</header>
+<main class="pt-20 px-6 max-w-4xl mx-auto space-y-12">
+<!-- Member Card Section -->
+<section class="relative">
+<div class="black-gradient aspect-[1.6/1] w-full p-8 flex flex-col justify-between shadow-2xl relative overflow-hidden">
+<!-- Decorative grain/texture -->
+<div class="absolute inset-0 opacity-10" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAJrA8I46OjznAdSdAn8lP7ok5OoL2jR-swNh9g7si_T4AQDbIQke4jXhq4M6Qp8XaPmkeMufPUpnvBIT6rLhehRxvetnwLeHi8ESObPGZg71KfrGgFMCR3Ru6KX0ZEg_mi8HzjjlKWN9LWpd_bSn1_JNEAGKA5ENPowr0tUvu26HD-Rym1EYdDWVIfh_wXadhHsuUKHA-7coTWBpw0HSx91ihN21bueklsnNB2R79NL0j-62vf0RJ03i4lqnFjCaVl1NifunY4Q1In');"></div>
+<div class="flex justify-between items-start relative z-10">
+<div>
+<p class="text-[10px] tracking-[0.3em] text-secondary-fixed-dim mb-1 uppercase">Current Status</p>
+<h2 class="font-serif text-2xl text-tertiary-fixed-dim font-bold tracking-widest">铂金会员</h2>
+<p class="text-[10px] tracking-widest text-secondary-fixed-dim uppercase">Platinum Member</p>
+</div>
+<span class="material-symbols-outlined text-tertiary-fixed-dim text-4xl" data-icon="diamond" style="font-variation-settings: 'FILL' 1;">diamond</span>
+</div>
+<div class="relative z-10">
+<div class="flex items-center space-x-4 mb-6">
+<div class="w-12 h-12 border border-tertiary/30 p-0.5">
+<img class="w-full h-full object-cover" data-alt="Close-up portrait of a sophisticated man in a tailored dark suit with soft cinematic lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBDoQbVVmVmaVSpBYX6NpjKX1iSBAcllQK_xEIM7mLhh_hJIBVAe2-2jNvM6SBpYJB5WcVmi35nTjpORWRwvj5Ftzipsk8yXzngO0pGNNS4S7iGOCb1zKlwMN3OlXu-WmCIIso1cW9gNXxLW438SpDQyj0RRAPQ_uyQvqeCepghvffnLEHZnDv-aDSR1Xg0Te24r0kDYMbtXTgtANUUNCPNEwDZG0NCz8ZZ7bMc8L5HOqWgJiH0XQUX2CSZ-dzlOVhn7X4Tt6MHJb0x"/>
+</div>
+<div>
+<p class="font-serif text-lg text-white tracking-tight">ALEXANDER WANG</p>
+<p class="text-[10px] text-secondary-fixed-dim tracking-widest">ID: 8829 4402</p>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-[10px] tracking-widest text-secondary-fixed-dim">
+<span>GROWTH PROGRESS</span>
+<span>12,800 / 17,800</span>
+</div>
+<div class="h-[1px] w-full bg-white/10 overflow-hidden">
+<div class="h-full bg-tertiary w-[72%]"></div>
+</div>
+<p class="text-[9px] text-tertiary tracking-wider">距离 钻石会员 还需 5,000 点成长值</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Privileges Section (Bento Style) -->
+<section>
+<div class="flex items-baseline justify-between mb-8">
+<h3 class="font-serif text-xl tracking-tighter">尊享权益 <span class="text-secondary font-sans text-xs ml-2 tracking-widest uppercase">Privileges</span></h3>
+<a class="text-tertiary border-b border-tertiary text-[10px] tracking-widest uppercase pb-1" href="#">All Benefits</a>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-px bg-outline-variant/20">
+<div class="bg-surface p-6 flex flex-col items-center text-center space-y-4 hover:bg-surface-container transition-colors duration-300">
+<span class="material-symbols-outlined text-tertiary text-3xl" data-icon="support_agent">support_agent</span>
+<div>
+<p class="font-serif text-sm">专属顾问</p>
+<p class="text-[9px] text-secondary tracking-tighter uppercase">Advisor</p>
+</div>
+</div>
+<div class="bg-surface p-6 flex flex-col items-center text-center space-y-4 hover:bg-surface-container transition-colors duration-300">
+<span class="material-symbols-outlined text-tertiary text-3xl" data-icon="event_available">event_available</span>
+<div>
+<p class="font-serif text-sm">优先预订</p>
+<p class="text-[9px] text-secondary tracking-tighter uppercase">Priority</p>
+</div>
+</div>
+<div class="bg-surface p-6 flex flex-col items-center text-center space-y-4 hover:bg-surface-container transition-colors duration-300">
+<span class="material-symbols-outlined text-tertiary text-3xl" data-icon="featured_seasonal_and_gifts">featured_seasonal_and_gifts</span>
+<div>
+<p class="font-serif text-sm">保养礼券</p>
+<p class="text-[9px] text-secondary tracking-tighter uppercase">Maintenance</p>
+</div>
+</div>
+<div class="bg-surface p-6 flex flex-col items-center text-center space-y-4 hover:bg-surface-container transition-colors duration-300">
+<span class="material-symbols-outlined text-tertiary text-3xl" data-icon="cake">cake</span>
+<div>
+<p class="font-serif text-sm">生日惊喜</p>
+<p class="text-[9px] text-secondary tracking-tighter uppercase">Birthday</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Rewards Section -->
+<section>
+<div class="flex items-baseline justify-between mb-8">
+<h3 class="font-serif text-xl tracking-tighter">会员礼遇 <span class="text-secondary font-sans text-xs ml-2 tracking-widest uppercase">Rewards</span></h3>
+<div class="flex items-center space-x-2 text-primary">
+<span class="text-[10px] tracking-widest uppercase">Points:</span>
+<span class="font-bold">12,800</span>
+</div>
+</div>
+<div class="flex space-x-6 overflow-x-auto pb-4 mb-8 no-scrollbar">
+<button class="whitespace-nowrap text-[11px] tracking-widest uppercase border-b-2 border-primary pb-2">All 全部</button>
+<button class="whitespace-nowrap text-[11px] tracking-widest uppercase text-secondary pb-2 hover:text-primary transition-colors">Lifestyle 品牌周边</button>
+<button class="whitespace-nowrap text-[11px] tracking-widest uppercase text-secondary pb-2 hover:text-primary transition-colors">Services 专属服务</button>
+<button class="whitespace-nowrap text-[11px] tracking-widest uppercase text-secondary pb-2 hover:text-primary transition-colors">Exclusive 限定沙龙</button>
+</div>
+<div class="space-y-12">
+<!-- Reward Item 1 -->
+<div class="group cursor-pointer">
+<div class="aspect-[16/9] overflow-hidden mb-4">
+<img class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700" data-alt="Exotic dark green crocodile leather watch strap on a minimalist gray stone surface with soft lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCiyLn9EArWOJ9HUTICJFpmMADfyC_MPED1KtEoyCjmuadlVwKMlPzBr8Q0dDlD0zNUOrC-cyTZ4EYoyt5Cxg43jFZAf3EeqNlApbnBPFioeEaELNHUPOLI4NDYm-lN0O3uNZFpATm8T7LI4GspvWCulHP84AImX0reYy_ai0ZJkFOpwsq-s8gQ7agtSbgt7TreXK-VrAhyUcGwL949xbGFNIj2xvblGy01G0USfTzqVb6W8cP-Wj8ob4zkFH2XodblrzOJ66KKoYhM"/>
+</div>
+<div class="flex justify-between items-end">
+<div>
+<h4 class="font-serif text-lg">高级鳄鱼皮定制表带</h4>
+<p class="text-[10px] text-secondary tracking-widest uppercase mb-2">Bespoke Exotic Leather Strap</p>
+<p class="text-tertiary font-bold tracking-tighter text-sm">8,000 POINTS</p>
+</div>
+<button class="px-6 py-2 bg-primary text-on-primary text-[10px] tracking-widest uppercase hover:bg-tertiary transition-colors duration-300">Redeem</button>
+</div>
+</div>
+<!-- Reward Item 2 -->
+<div class="group cursor-pointer">
+<div class="aspect-[16/9] overflow-hidden mb-4">
+<img class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700" data-alt="Luxury thick hardcover art book with gold embossed title on a dark mahogany desk" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBomNFJk7Vhtg2QWWgYrSjD3NQ_79RgcnmICvUKnU69keSr09sak0vgT21D31S3WYfDo97kV0HOF2g35iNoUp2moZiXWWfWUbk3yOIe06D16wqO-FQByANFyFmqisNwvzma_pd2Pl_w-ggrdVqBFHti2NigXjZY2RNq70JhOG1HL4ZbzVHHvf-WmtxxKd83Df-nQsQ3UeU6G9znUxoUZfurhkPnhRgiMB2EwCjWTE_UGa4kC13pfoyWqIxemZ9rvUjyDwaC2NPsNPuV"/>
+</div>
+<div class="flex justify-between items-end">
+<div>
+<h4 class="font-serif text-lg">品牌 200 周年纪念画册</h4>
+<p class="text-[10px] text-secondary tracking-widest uppercase mb-2">200th Anniversary Anthology</p>
+<p class="text-tertiary font-bold tracking-tighter text-sm">3,500 POINTS</p>
+</div>
+<button class="px-6 py-2 bg-primary text-on-primary text-[10px] tracking-widest uppercase hover:bg-tertiary transition-colors duration-300">Redeem</button>
+</div>
+</div>
+<!-- Reward Item 3 -->
+<div class="group cursor-pointer">
+<div class="aspect-[16/9] overflow-hidden mb-4 relative">
+<img class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700" data-alt="Elegant private lounge with leather chairs and ambient warm lighting for a luxury event" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA2n0SzLyFMW4sHJx5KWZyzaOn6-qoDJYh8p8FpCAB3kGau4PBDyBv4Wm2-AABwCd_TW5kZrPKSacQJizZszmY623C7IgZvhGRD1gAxXkb4rRGNwQxkcBLSH8RURaMxINmefuRB5htf8RuNsYN3z3OAYixJze3wvRKugSXgCukm9BPCptnkixZV1LHh884C4tr4_FytHZNNQcUJk-dWT_MbFoOmc3jbXCOYPKlC4XUbVa-xpPeZrkPUMMkYxB7o7Dz6lJGvcKb75dUI"/>
+<div class="absolute top-4 right-4 bg-tertiary/90 px-3 py-1 text-[9px] text-white tracking-widest uppercase">Limited Edition</div>
+</div>
+<div class="flex justify-between items-end">
+<div>
+<h4 class="font-serif text-lg">线下新品私人品鉴会门票</h4>
+<p class="text-[10px] text-secondary tracking-widest uppercase mb-2">Private Collection Showcase Access</p>
+<p class="text-tertiary font-bold tracking-tighter text-sm">15,000 POINTS</p>
+</div>
+<button class="px-6 py-2 bg-primary text-on-primary text-[10px] tracking-widest uppercase hover:bg-tertiary transition-colors duration-300">Apply</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Services List -->
+<section class="pb-12">
+<h3 class="font-serif text-xl tracking-tighter mb-6">我的服务 <span class="text-secondary font-sans text-xs ml-2 tracking-widest uppercase">Services</span></h3>
+<div class="space-y-px bg-outline-variant/20">
+<a class="bg-surface py-6 flex justify-between items-center group hover:px-2 transition-all duration-300" href="#">
+<div class="flex items-center space-x-4">
+<span class="material-symbols-outlined text-secondary" data-icon="calendar_today">calendar_today</span>
+<span class="font-serif text-sm">我的预约</span>
+</div>
+<span class="material-symbols-outlined text-outline-variant group-hover:text-primary" data-icon="chevron_right">chevron_right</span>
+</a>
+<a class="bg-surface py-6 flex justify-between items-center group hover:px-2 transition-all duration-300" href="#">
+<div class="flex items-center space-x-4">
+<span class="material-symbols-outlined text-secondary" data-icon="history_edu">history_edu</span>
+<span class="font-serif text-sm">我的礼遇记录</span>
+</div>
+<span class="material-symbols-outlined text-outline-variant group-hover:text-primary" data-icon="chevron_right">chevron_right</span>
+</a>
+<a class="bg-surface py-6 flex justify-between items-center group hover:px-2 transition-all duration-300" href="#">
+<div class="flex items-center space-x-4">
+<span class="material-symbols-outlined text-secondary" data-icon="contact_support">contact_support</span>
+<span class="font-serif text-sm">联系顾问</span>
+</div>
+<span class="material-symbols-outlined text-outline-variant group-hover:text-primary" data-icon="chevron_right">chevron_right</span>
+</a>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 bg-white/80 dark:bg-black/80 backdrop-blur-xl z-50 border-t-[0.5px] border-gray-200 dark:border-gray-800">
+<a class="flex flex-col items-center justify-center text-gray-400 dark:text-gray-600 pt-2 pb-4 ease-in-out duration-300 hover:text-black dark:hover:text-white" href="#">
+<span class="material-symbols-outlined" data-icon="diamond">diamond</span>
+<span class="font-serif text-[10px] tracking-widest uppercase mt-1">首页</span>
+</a>
+<a class="flex flex-col items-center justify-center text-gray-400 dark:text-gray-600 pt-2 pb-4 ease-in-out duration-300 hover:text-black dark:hover:text-white" href="#">
+<span class="material-symbols-outlined" data-icon="star">star</span>
+<span class="font-serif text-[10px] tracking-widest uppercase mt-1">礼遇</span>
+</a>
+<a class="flex flex-col items-center justify-center text-gray-400 dark:text-gray-600 pt-2 pb-4 ease-in-out duration-300 hover:text-black dark:hover:text-white" href="#">
+<span class="material-symbols-outlined" data-icon="confirmation_number">confirmation_number</span>
+<span class="font-serif text-[10px] tracking-widest uppercase mt-1">礼券</span>
+</a>
+<!-- Active State: Profile/我的 -->
+<a class="flex flex-col items-center justify-center text-yellow-600 dark:text-yellow-500 border-t-2 border-yellow-600 pt-2 pb-4 ease-in-out duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="person" style="font-variation-settings: 'FILL' 1;">person</span>
+<span class="font-serif text-[10px] tracking-widest uppercase mt-1">我的</span>
+</a>
+</nav>
+</body></html>

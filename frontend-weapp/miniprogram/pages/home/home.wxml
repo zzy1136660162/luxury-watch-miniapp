@@ -1,0 +1,138 @@
+<import src="/components/navigation-bar/navigation-bar.wxml" />
+
+<view class="page">
+  <navigation-bar title="CHRONOS" back="{{false}}" color="black" background="#ffffff" showMenu="{{true}}" />
+
+  <scroll-view class="content" scroll-y type="list" enhanced="{{true}}" bounces="{{false}}">
+    <!-- Section 1: Hero Banner -->
+    <view class="hero-banner">
+      <image class="hero-image" src="{{heroImage}}" mode="aspectFill" />
+      <view class="hero-overlay"></view>
+      <view class="hero-content">
+        <text class="hero-title">时间之承</text>
+        <text class="hero-subtitle">Heritage of Time</text>
+        <view class="hero-divider"></view>
+      </view>
+    </view>
+
+    <!-- Section 2: New Arrivals -->
+    <view class="section section-new-arrivals">
+      <view class="section-header">
+        <text class="section-title">新品推荐</text>
+        <text class="section-subtitle">New Arrivals</text>
+      </view>
+
+      <view class="products-grid">
+        <view class="product-card" bindtap="onProductTap" data-id="1">
+          <view class="product-image-wrapper">
+            <image class="product-image" src="{{newArrival1.image}}" mode="aspectFill" />
+          </view>
+          <view class="product-info">
+            <text class="product-tag">Chronograph Elite</text>
+            <text class="product-name">晨曦系列 · 典藏版</text>
+            <view class="discover-link">
+              <text>DISCOVER MORE</text>
+            </view>
+          </view>
+        </view>
+
+        <view class="product-card product-card-offset" bindtap="onProductTap" data-id="2">
+          <view class="product-image-wrapper">
+            <image class="product-image" src="{{newArrival2.image}}" mode="aspectFill" />
+          </view>
+          <view class="product-info">
+            <text class="product-tag">Luminance Edition</text>
+            <text class="product-name">月相系列 · 铂金款</text>
+            <view class="discover-link">
+              <text>DISCOVER MORE</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- Section 3: Brand Story -->
+    <view class="section section-brand-story">
+      <image class="brand-story-image" src="{{brandStoryImage}}" mode="aspectFill" />
+      <view class="brand-story-overlay"></view>
+      <view class="brand-story-content">
+        <text class="brand-story-title">品牌故事</text>
+        <text class="brand-story-subtitle">Our Story</text>
+        <text class="brand-story-text">自 18 世纪以来，我们始终秉持对精准与艺术的极致追求。每一枚腕表不仅是时间的记录者，更是世代相传的匠心杰作。</text>
+        <button class="brand-story-button" bindtap="onExploreHeritage">EXPLORE HERITAGE</button>
+      </view>
+    </view>
+
+    <!-- Section 4: Featured Collections -->
+    <view class="section section-collections">
+      <view class="section-header-row">
+        <view class="section-header">
+          <text class="section-title">热门系列</text>
+          <text class="section-subtitle">Featured Collections</text>
+        </view>
+        <view class="scroll-arrows">
+          <text class="arrow arrow-left" bindtap="onScrollLeft">west</text>
+          <text class="arrow arrow-right" bindtap="onScrollRight">east</text>
+        </view>
+      </view>
+
+      <scroll-view class="collections-scroll" scroll-x enhanced="{{true}}" show-scrollbar="{{false}}">
+        <view class="collections-track">
+          <view class="collection-item" bindtap="onCollectionTap" data-collection="universe">
+            <view class="collection-image-wrapper">
+              <image class="collection-image" src="{{collection1.image}}" mode="aspectFill" />
+            </view>
+            <text class="collection-name">寰宇系列 | Universe</text>
+            <text class="collection-desc">跨越疆界的探索之魂</text>
+          </view>
+
+          <view class="collection-item" bindtap="onCollectionTap" data-collection="radiance">
+            <view class="collection-image-wrapper">
+              <image class="collection-image" src="{{collection2.image}}" mode="aspectFill" />
+            </view>
+            <text class="collection-name">流光系列 | Radiance</text>
+            <text class="collection-desc">致敬现代女性的优雅</text>
+          </view>
+
+          <view class="collection-item" bindtap="onCollectionTap" data-collection="abyss">
+            <view class="collection-image-wrapper">
+              <image class="collection-image" src="{{collection3.image}}" mode="aspectFill" />
+            </view>
+            <text class="collection-name">深海系列 | Abyss</text>
+            <text class="collection-desc">深邃海洋的精准伴侣</text>
+          </view>
+        </view>
+      </scroll-view>
+    </view>
+
+    <!-- Section 5: Contact Consultant -->
+    <view class="section section-consultant">
+      <view class="consultant-card">
+        <text class="consultant-icon">verified_user</text>
+        <text class="consultant-title">尊享顾问服务</text>
+        <text class="consultant-text">我们的专家将为您提供一对一的选购建议与技术支持</text>
+        <button class="consultant-button" bindtap="onContactConsultant">联系顾问 | CONTACT US</button>
+      </view>
+    </view>
+  </scroll-view>
+
+  <!-- Bottom Navigation -->
+  <view class="bottom-nav">
+    <view class="nav-item nav-item-active" bindtap="onNavTap" data-page="home">
+      <text class="nav-icon">home</text>
+      <text class="nav-label">Home</text>
+    </view>
+    <view class="nav-item" bindtap="onNavTap" data-page="collections">
+      <text class="nav-icon">watch</text>
+      <text class="nav-label">Collections</text>
+    </view>
+    <view class="nav-item" bindtap="onNavTap" data-page="heritage">
+      <text class="nav-icon">history_edu</text>
+      <text class="nav-label">Heritage</text>
+    </view>
+    <view class="nav-item" bindtap="onNavTap" data-page="member">
+      <text class="nav-icon">person</text>
+      <text class="nav-label">Member</text>
+    </view>
+  </view>
+</view>

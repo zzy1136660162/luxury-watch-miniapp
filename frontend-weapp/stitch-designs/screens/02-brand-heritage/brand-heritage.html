@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+
+<html class="light" lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&amp;family=Manrope:wght@300;400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-bright": "#f9f9f9",
+              "surface-container-low": "#f3f3f3",
+              "secondary-fixed": "#e3e2e2",
+              "inverse-primary": "#c8c6c5",
+              "on-primary-container": "#858383",
+              "on-secondary": "#ffffff",
+              "inverse-surface": "#2f3131",
+              "on-surface": "#1a1c1c",
+              "on-tertiary-fixed": "#241a00",
+              "on-tertiary": "#ffffff",
+              "surface-variant": "#e2e2e2",
+              "primary": "#000000",
+              "on-primary": "#ffffff",
+              "on-surface-variant": "#444748",
+              "error": "#ba1a1a",
+              "on-primary-fixed": "#1c1b1b",
+              "surface-dim": "#dadada",
+              "error-container": "#ffdad6",
+              "primary-container": "#1c1b1b",
+              "tertiary-fixed": "#ffe088",
+              "surface-tint": "#5f5e5e",
+              "on-tertiary-container": "#4f3e00",
+              "secondary": "#5d5e5f",
+              "surface-container-lowest": "#ffffff",
+              "on-tertiary-fixed-variant": "#574500",
+              "on-secondary-container": "#626363",
+              "on-error": "#ffffff",
+              "secondary-container": "#e0dfdf",
+              "surface-container": "#eeeeee",
+              "secondary-fixed-dim": "#c6c6c6",
+              "primary-fixed": "#e5e2e1",
+              "outline-variant": "#c4c7c7",
+              "tertiary": "#735c00",
+              "on-background": "#1a1c1c",
+              "inverse-on-surface": "#f1f1f1",
+              "on-secondary-fixed-variant": "#464747",
+              "background": "#f9f9f9",
+              "on-primary-fixed-variant": "#474746",
+              "on-error-container": "#93000a",
+              "primary-fixed-dim": "#c8c6c5",
+              "surface-container-highest": "#e2e2e2",
+              "surface": "#f9f9f9",
+              "on-secondary-fixed": "#1a1c1c",
+              "outline": "#747878",
+              "surface-container-high": "#e8e8e8",
+              "tertiary-container": "#cca730",
+              "tertiary-fixed-dim": "#e9c349"
+            },
+            fontFamily: {
+              "headline": ["Noto Serif SC", "serif"],
+              "body": ["Manrope", "sans-serif"],
+              "label": ["Manrope", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "0px", "lg": "0px", "xl": "0px", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #000000;
+            color: #ffffff;
+            font-family: 'Manrope', sans-serif;
+        }
+        .serif-text {
+            font-family: 'Noto Serif SC', serif;
+        }
+        .timeline-gradient {
+            background: linear-gradient(to bottom, transparent, #c6c6c6 10%, #c6c6c6 90%, transparent);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-primary text-on-primary antialiased overflow-x-hidden">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 rounded-none bg-white/80 dark:bg-black/80 backdrop-blur-md border-b border-zinc-100/20 dark:border-zinc-800/20 shadow-none flex justify-between items-center px-8 py-6 w-full">
+<div class="flex items-center gap-4">
+<button class="text-zinc-500 dark:text-zinc-400 hover:opacity-70 transition-opacity duration-300 active:scale-95 transition-transform">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</div>
+<div class="font-serif text-lg tracking-[0.2em] uppercase text-xl font-bold text-zinc-900 dark:text-zinc-100 tracking-widest">
+            CHRONOS
+        </div>
+<div class="flex items-center gap-4">
+<button class="text-zinc-500 dark:text-zinc-400 hover:opacity-70 transition-opacity duration-300 active:scale-95 transition-transform">
+<span class="material-symbols-outlined">support_agent</span>
+</button>
+</div>
+</header>
+<main class="relative">
+<!-- Section 1: Immersive Visual Introduction -->
+<section class="relative h-screen flex flex-col items-center justify-center text-center overflow-hidden">
+<div class="absolute inset-0 z-0">
+<img class="w-full h-full object-cover opacity-60" data-alt="Close-up high-end luxury watch face with intricate mechanical details and atmospheric dramatic lighting on a dark charcoal background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuARMx1bOq18igcZhn8ReJazVtYUjh-0TyfEMxbNO1aOD46_pqLjaxwoPy59WQrIOge6yMSwoQvWvUgyHZaOzHrsLyzqz5DnCMmCTK5Uyss_e7M4clO5wU72v0A9ifVJLc8RQKrqr5dt5oD_3o2Va7yzo2hUZ5ARySKRouA5lYQF9RKBgD1MCiM3nmJxFxeFHVUgn9esEtlZFOFty0s8g21d9dNCTiNE8qHuzo7NRIiIl8ydaT798xDllNY3kIopYCIJikir_XXgAEqQ"/>
+<div class="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black"></div>
+</div>
+<div class="relative z-10 space-y-4">
+<h1 class="serif-text text-6xl md:text-8xl font-bold tracking-widest text-on-primary">品牌馆</h1>
+<p class="font-label text-sm md:text-base tracking-[0.4em] text-secondary-fixed-dim uppercase">BRAND HOUSE</p>
+</div>
+<div class="absolute bottom-12 z-10 animate-bounce">
+<span class="material-symbols-outlined text-tertiary">keyboard_double_arrow_down</span>
+</div>
+</section>
+<!-- Section 2: Introduction -->
+<section class="bg-primary-container py-32 px-6 md:px-24 flex flex-col items-center text-center">
+<div class="max-w-4xl space-y-12">
+<div class="space-y-2">
+<p class="font-label text-tertiary text-xs tracking-[0.3em] uppercase">The Introduction</p>
+<h2 class="serif-text text-4xl md:text-5xl font-bold">品牌简介</h2>
+</div>
+<div class="space-y-8 leading-relaxed text-on-primary-container font-body text-lg md:text-xl font-light">
+<p>自 18 世纪以来，CHRONOS 始终立于精密制表艺术之巅。我们不仅是在制造时间，更是在雕琢永恒。每一枚时计都是传承与创新的对话，是机械美学与极致匠心的完美交汇。</p>
+<p>Founded on the principles of absolute precision and aesthetic purity, CHRONOS represents the pinnacle of watchmaking heritage. We transcend the mere measurement of time to create artifacts of eternal value.</p>
+</div>
+<div class="pt-8">
+<button class="group inline-flex flex-col items-center gap-2">
+<span class="text-on-primary text-sm tracking-widest font-label uppercase">探索更多 / DISCOVER</span>
+<div class="h-px w-24 bg-tertiary group-hover:w-48 transition-all duration-500"></div>
+</button>
+</div>
+</div>
+</section>
+<!-- Section 3: History Timeline -->
+<section class="bg-black py-40 overflow-hidden">
+<div class="container mx-auto px-6">
+<div class="flex flex-col items-center mb-24 text-center">
+<p class="font-label text-tertiary text-xs tracking-[0.3em] uppercase mb-2">The Heritage</p>
+<h2 class="serif-text text-4xl md:text-5xl font-bold">品牌历史</h2>
+</div>
+<div class="relative max-w-6xl mx-auto">
+<!-- Vertical Line -->
+<div class="absolute left-1/2 top-0 bottom-0 w-px timeline-gradient hidden md:block"></div>
+<!-- Milestone 1 -->
+<div class="relative flex flex-col md:flex-row items-center mb-32 md:mb-48">
+<div class="md:w-1/2 md:pr-16 text-center md:text-right mb-8 md:mb-0">
+<h3 class="serif-text text-5xl md:text-7xl text-secondary-fixed-dim font-bold mb-4">1792</h3>
+<h4 class="serif-text text-2xl mb-4">传奇诞生</h4>
+<p class="text-on-primary-container font-body font-light">在瑞士汝拉山谷的深处，第一间钟表工坊正式创立，开启了长达两个世纪的制表传奇。</p>
+<p class="text-secondary-fixed-dim text-xs tracking-widest mt-2 uppercase">The Foundation in Jura Valley</p>
+</div>
+<div class="relative z-10 w-4 h-4 bg-tertiary hidden md:block"></div>
+<div class="md:w-1/2 md:pl-16">
+<div class="aspect-[4/5] bg-zinc-900 overflow-hidden">
+<img class="w-full h-full object-cover grayscale opacity-70 hover:grayscale-0 hover:opacity-100 transition-all duration-700" data-alt="Vintage sepia photograph of a traditional Swiss watchmaker's workshop with wooden benches and antique magnifying tools" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCI_PPHE5KadYXhgQxIK5JDb0eRVFmYkQ2LafzJasoCtELmd1VhZBXtFhwiuBDYiQDcBkYLUMWg9ItjxUxkJJA552S-SOUofMbkpGkNSap354GvCi90JgJDEJFH7eRWiwADC7U-wdZMzapxYlEYwwpDUhDyfSdVRZbHxlZPF22POqcJa4QihQoisY3m0_1_YJfaIE0pm8IGC0eVxTr7i0XJAD-x8Vh5zgLHlDJ86yZyzTEcidyBUQ_1lC2NSDH_-gnqbfTgNp_tIFhu"/>
+</div>
+</div>
+</div>
+<!-- Milestone 2 -->
+<div class="relative flex flex-col md:flex-row-reverse items-center mb-32 md:mb-48">
+<div class="md:w-1/2 md:pl-16 text-center md:text-left mb-8 md:mb-0">
+<h3 class="serif-text text-5xl md:text-7xl text-secondary-fixed-dim font-bold mb-4">1924</h3>
+<h4 class="serif-text text-2xl mb-4">复杂功能的突破</h4>
+<p class="text-on-primary-container font-body font-light">首款具备万年历功能的腕表问世，打破了当时精密机械小型化的技术瓶颈。</p>
+<p class="text-secondary-fixed-dim text-xs tracking-widest mt-2 uppercase">Perpetual Calendar Breakthrough</p>
+</div>
+<div class="relative z-10 w-4 h-4 bg-tertiary hidden md:block"></div>
+<div class="md:w-1/2 md:pr-16">
+<div class="aspect-[4/5] bg-zinc-900 overflow-hidden">
+<img class="w-full h-full object-cover grayscale opacity-70 hover:grayscale-0 hover:opacity-100 transition-all duration-700" data-alt="Intricate sketch and blueprint of a complex watch movement with compass and architectural drawing tools" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC3ejAFSTdzrssBe5s8YVyDu3hkAT-s8Vr3xfc1yZWiWkndBIDIIKPmXad7ugg9XWYywukA7Bud7BJzCRAzDuJSNx1sYuU8SsqdIVbmKZRC43_JF1goojTXxhInpqm-4FSKeYlZ68QAZrkWd-l5K_m85pDBkdgqdKj2eqOjlINl2S3tLCcgeUnhGE5Lp5goB_fsmMagO6OT8J7p2gTbJJcDQi4BcqT8uNxRb9uK3ZQplZO5RQ7SsP31s1iw2DZME8OR3ZmDXXCO0S4y"/>
+</div>
+</div>
+</div>
+<!-- Milestone 3 -->
+<div class="relative flex flex-col md:flex-row items-center">
+<div class="md:w-1/2 md:pr-16 text-center md:text-right mb-8 md:mb-0">
+<h3 class="serif-text text-5xl md:text-7xl text-secondary-fixed-dim font-bold mb-4">2024</h3>
+<h4 class="serif-text text-2xl mb-4">致敬未来</h4>
+<p class="text-on-primary-container font-body font-light">融合钛金属材质与超薄机芯，CHRONOS 再次定义了现代奢华时计的标准。</p>
+<p class="text-secondary-fixed-dim text-xs tracking-widest mt-2 uppercase">Redefining Modern Luxury</p>
+</div>
+<div class="relative z-10 w-4 h-4 bg-tertiary hidden md:block"></div>
+<div class="md:w-1/2 md:pl-16">
+<div class="aspect-[4/5] bg-zinc-900 overflow-hidden">
+<img class="w-full h-full object-cover grayscale opacity-70 hover:grayscale-0 hover:opacity-100 transition-all duration-700" data-alt="Modern minimalist macro shot of a polished titanium watch case with soft directional lighting on a dark background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC-ixrp5BBTyvoDJQRZBbJ-K4esytXfCyJSb1XlBkVjD8RzwO1yry86Oo7phj6nhEEMb7LxWD5_DDKZovmblGrCrSd-msfUFCI1EN5wAEIEFjtthKw_V_8g9ON-cVwLuG-NS6jE0LkClMwJVu2qlVNi5G0IKi85kIE7AHy5j3cN_ob7zTUX2Wm-VOy3FhMol3AL1AJOFBPgElhsBZdYGP1C-4cNiFavr24D0-rCnSNnHb954PrgVBTFPJQFsCNZgWxlR2or5Fkpt2GC"/>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 4: Craftsmanship -->
+<section class="bg-primary-container py-40">
+<div class="container mx-auto px-6">
+<div class="flex flex-col md:flex-row gap-16 items-center">
+<div class="md:w-1/2 grid grid-cols-2 gap-4">
+<div class="space-y-4">
+<div class="aspect-square bg-zinc-800">
+<img class="w-full h-full object-cover" data-alt="Macro photography of watch gears and escapement wheel with golden metallic reflections" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDniYFkDZiRcmxv1hW3sCJeAfcyBvDS0KVTy90-6SPc9dwgbkHKOWfBY0QFMWzJ4Za7zRxmBlQCuentk_g1kL7xX59kLgER9YoRmD2C3ikVMUTQyoldQBVysn8rE69ckad66lB_-E8o7fsQaRIkmdjWUlf6CgJMYeaRiXNUvYkHQUczcCjkb0V_EkloqVkn5Kq1jCKlRfl30K-LOknPCmGMo33muBTuEH3-yTjMiSCL1tpvSVbBdzFvWd-tQYzGdKkx1R23FsYlc9nE"/>
+</div>
+<div class="aspect-[3/4] bg-zinc-800">
+<img class="w-full h-full object-cover" data-alt="Artisan watchmaker's hands using tweezers to place a tiny screw into a watch movement" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCfopd7KbdPs6LGwFoHmw6Oe2nQXEtbGDjud-UvfEL4aRSFxUvLjbLx49oYS0p3Mw8F8tJbGXfiVXzzrmIZ4wLZEPlN98lQx7cpbutO9KGb6qbnfNcC9gSqUccq1plbP9DUCkUMevPZoCMC8Sn384QEV_O6bd6Xr7jz2qA_L27PAFdVGCDN21Obuq_iKTKPlMSDVN2VRFcST2zqdchu603JEq573k8fiIdxU4oUHJGvcaihEkTnWFhhKIfJwMB0hLI2CNM5h8WazdOL"/>
+</div>
+</div>
+<div class="space-y-4 pt-12">
+<div class="aspect-[3/4] bg-zinc-800">
+<img class="w-full h-full object-cover" data-alt="Close up of watch dial polishing process with soft dust particles in a beam of light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD6Bsft28tS_ZxAPEUpzLpay73A9J0p-3egXEj6vfuxc-E5mhcKULKtowqF8HMMWUefBHfOAEOsnidemPuCw6sPnOCudkNK-7Bnz66sV0JbO6H8pMrgZJ0LtFa1MLhsk7kaufUG7AN6wz7DPoHYEMdsPcpSZMaInUb749XuPzCkayVZHm2pLVsl5puCNUxZPc1rHexZtUkvb4URqXofGhfLqSbo9g2_OMvIeA3cMh9BBef7n6ADQVErw7hUe1csCjApqacxfYFt6vTw"/>
+</div>
+<div class="aspect-square bg-zinc-800">
+<img class="w-full h-full object-cover" data-alt="Finished luxury watch movement under a loupe magnifying glass showing exquisite finishing" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDVRhiYLj2Lc806dCivf7XcwkGkH2FGi0Z3XDJlKIT0IKDg7bgXQbo4dj1vv6PMJFH-hdhBeu0t__zSwaAz3LOjr1wTl_Pq_PUu6J0x94kEurvN7oMm_vFULCaFs4NekY_8K0jSXrh15G4XuTdFPlYE_PEwv-3LIZH3XJRlIdpCY9-8Z246lWP0jolM-v6GaHivGJ5LJEPyGSJm6s0hsNQ3C3GU36NZYJIRMZHNWzvJyViILAntonvbqfD6oEDLHacFYMlbb6XtwV2M"/>
+</div>
+</div>
+</div>
+<div class="md:w-1/2 space-y-12">
+<div class="space-y-2">
+<p class="font-label text-tertiary text-xs tracking-[0.3em] uppercase">The Art of Timing</p>
+<h2 class="serif-text text-4xl md:text-5xl font-bold">制表工艺</h2>
+</div>
+<div class="space-y-8">
+<div class="space-y-4">
+<h5 class="serif-text text-xl border-l-2 border-tertiary pl-4">极致打磨 / EXTREME FINISHING</h5>
+<p class="text-on-primary-container font-body leading-relaxed">每一个齿轮边缘都经过手工倒角处理，即使是隐藏在表壳深处的零件，也拥有如艺术品般的光泽。</p>
+</div>
+<div class="space-y-4">
+<h5 class="serif-text text-xl border-l-2 border-tertiary pl-4">精密组装 / PRECISION ASSEMBLY</h5>
+<p class="text-on-primary-container font-body leading-relaxed">数百个微小零件在制表师的指尖下完美契合，历经数周的调校与测试，确保每一秒的律动都精准无误。</p>
+</div>
+<div class="space-y-4">
+<h5 class="serif-text text-xl border-l-2 border-tertiary pl-4">匠心独运 / UNIQUE MASTERY</h5>
+<p class="text-on-primary-container font-body leading-relaxed">我们坚持传统的制表技艺，同时不断探索材料科学的边界，只为赋予时计更持久的生命力。</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 5: Legacy Collections Entrance -->
+<section class="relative h-[530px] flex items-center justify-center overflow-hidden group cursor-pointer">
+<div class="absolute inset-0">
+<img class="w-full h-full object-cover scale-105 group-hover:scale-100 transition-transform duration-1000 opacity-40" data-alt="A row of luxury watches in a dimly lit glass display case with elegant shadows" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBVwDVPux-iCD3p3YclvgaqzfvuEO7CigGLwNYPj1JgJygTNMdHyw4HGbxDRdKsSJm7qALttgkx34ycPww5vbQWrZfoMeHxnfhf-DNPJakA64dA6UFrQXqGb2iO2NyGYsBu7f7za0C9q3qvCOyMfrvgZ2D9uDUDTsfxn4WSXvjzd50kqFG0y4OQsWjk1hyxTdxcAtGgP-g0AgJtjnUFBFYZ-vzMwkuaTCv04vmRIHSeODNU98GYwChDmOQfQl8rnvXCz4ypQFwxDTvr"/>
+<div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors duration-500"></div>
+</div>
+<div class="relative z-10 text-center space-y-6">
+<div class="space-y-2">
+<p class="font-label text-tertiary text-xs tracking-[0.5em] uppercase">Enter the Gallery</p>
+<h2 class="serif-text text-5xl md:text-6xl font-bold text-on-primary">经典系列</h2>
+<p class="font-label text-secondary-fixed-dim text-sm tracking-[0.3em] uppercase">LEGACY COLLECTIONS</p>
+</div>
+<div class="pt-4 flex justify-center">
+<div class="w-16 h-16 rounded-full border border-tertiary flex items-center justify-center group-hover:bg-tertiary group-hover:text-primary transition-all duration-300">
+<span class="material-symbols-outlined">arrow_forward</span>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-8 pt-2 bg-white/90 dark:bg-black/90 backdrop-blur-2xl border-t border-zinc-100/10 dark:border-zinc-900/10 shadow-none">
+<a class="flex flex-col items-center justify-center text-zinc-400 dark:text-zinc-600 pt-3 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors active:opacity-80 transition-all duration-200" href="#">
+<span class="material-symbols-outlined mb-1">home</span>
+<span class="font-sans text-[10px] tracking-widest uppercase font-medium">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-zinc-400 dark:text-zinc-600 pt-3 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors active:opacity-80 transition-all duration-200" href="#">
+<span class="material-symbols-outlined mb-1">watch</span>
+<span class="font-sans text-[10px] tracking-widest uppercase font-medium">Collections</span>
+</a>
+<a class="flex flex-col items-center justify-center text-amber-600 dark:text-amber-500 border-t border-amber-600 pt-3 active:opacity-80 transition-all duration-200" href="#">
+<span class="material-symbols-outlined mb-1">history_edu</span>
+<span class="font-sans text-[10px] tracking-widest uppercase font-medium">Heritage</span>
+</a>
+<a class="flex flex-col items-center justify-center text-zinc-400 dark:text-zinc-600 pt-3 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors active:opacity-80 transition-all duration-200" href="#">
+<span class="material-symbols-outlined mb-1">person</span>
+<span class="font-sans text-[10px] tracking-widest uppercase font-medium">Member</span>
+</a>
+</nav>
+<!-- FAB Suppression Rule Active: Not rendering FAB on Heritage screen -->
+</body></html>

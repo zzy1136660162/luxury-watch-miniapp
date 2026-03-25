@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&amp;family=Manrope:wght@300;400;500;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-bright": "#f9f9f9",
+              "surface-container-low": "#f3f3f3",
+              "secondary-fixed": "#e3e2e2",
+              "inverse-primary": "#c8c6c5",
+              "on-primary-container": "#858383",
+              "on-secondary": "#ffffff",
+              "inverse-surface": "#2f3131",
+              "on-surface": "#1a1c1c",
+              "on-tertiary-fixed": "#241a00",
+              "on-tertiary": "#ffffff",
+              "surface-variant": "#e2e2e2",
+              "primary": "#000000",
+              "on-primary": "#ffffff",
+              "on-surface-variant": "#444748",
+              "error": "#ba1a1a",
+              "on-primary-fixed": "#1c1b1b",
+              "surface-dim": "#dadada",
+              "error-container": "#ffdad6",
+              "primary-container": "#1c1b1b",
+              "tertiary-fixed": "#ffe088",
+              "surface-tint": "#5f5e5e",
+              "on-tertiary-container": "#4f3e00",
+              "secondary": "#5d5e5f",
+              "surface-container-lowest": "#ffffff",
+              "on-tertiary-fixed-variant": "#574500",
+              "on-secondary-container": "#626363",
+              "on-error": "#ffffff",
+              "secondary-container": "#e0dfdf",
+              "surface-container": "#eeeeee",
+              "secondary-fixed-dim": "#c6c6c6",
+              "primary-fixed": "#e5e2e1",
+              "outline-variant": "#c4c7c7",
+              "tertiary": "#735c00",
+              "on-background": "#1a1c1c",
+              "inverse-on-surface": "#f1f1f1",
+              "on-secondary-fixed-variant": "#464747",
+              "background": "#f9f9f9",
+              "on-primary-fixed-variant": "#474746",
+              "on-error-container": "#93000a",
+              "primary-fixed-dim": "#c8c6c5",
+              "surface-container-highest": "#e2e2e2",
+              "surface": "#f9f9f9",
+              "on-secondary-fixed": "#1a1c1c",
+              "outline": "#747878",
+              "surface-container-high": "#e8e8e8",
+              "tertiary-container": "#cca730",
+              "tertiary-fixed-dim": "#e9c349"
+            },
+            fontFamily: {
+              "headline": ["Noto Serif SC", "serif"],
+              "body": ["Manrope", "sans-serif"],
+              "label": ["Manrope", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "0px", "lg": "0px", "xl": "0px", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+      }
+      body {
+        background-color: #f9f9f9;
+        color: #1a1c1c;
+      }
+      .hide-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+      .hide-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-body selection:bg-tertiary/20">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 rounded-none bg-white/80 dark:bg-black/80 backdrop-blur-md border-b border-zinc-100/20 dark:border-zinc-800/20 shadow-none">
+<div class="flex justify-between items-center px-8 py-6 w-full">
+<div class="active:scale-95 transition-transform hover:opacity-70 transition-opacity duration-300">
+<span class="material-symbols-outlined text-zinc-950 dark:text-zinc-50" data-icon="menu">menu</span>
+</div>
+<div class="text-xl font-bold text-zinc-900 dark:text-zinc-100 tracking-widest font-serif text-lg tracking-[0.2em] uppercase">
+                CHRONOS
+            </div>
+<div class="active:scale-95 transition-transform hover:opacity-70 transition-opacity duration-300">
+<span class="material-symbols-outlined text-zinc-950 dark:text-zinc-50" data-icon="support_agent">support_agent</span>
+</div>
+</div>
+</header>
+<main class="pt-[80px] pb-32">
+<!-- Section 1: Hero Banner -->
+<section class="relative h-[751px] w-full overflow-hidden bg-primary-container">
+<img class="absolute inset-0 w-full h-full object-cover opacity-80" data-alt="extreme close-up of a luxury mechanical watch face with intricate gear details and polished silver surfaces in dramatic low light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBDw8BlafdGDBrHTPyUg47BOJ05I7GsFsUoDPX_6qh9gps50NJTQK47CbHIiMI3TM84epZC_xFHni3YYwsonoWfPiuJCuWDO6jV3BxtoSFCQmvybsrODUQLzKJwy2DO1TtK9Lpdst9M7eClV_UYkUsercONSFEf__Um6ox-ffEQE98nvZF4g_fMBsLAroMtU6FDReQm80j89sJ0dlzbA0Hwnr_syC56iWhaYk2DWQRnMmRH-IolFp-vVQo0_XbMZZxhzQ9578U9a-fd"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+<div class="absolute inset-0 flex flex-col items-center justify-center text-center px-6">
+<h1 class="font-headline text-5xl md:text-7xl text-white tracking-widest mb-4">时间之承</h1>
+<p class="font-label text-xs md:text-sm tracking-[0.4em] text-secondary-fixed-dim uppercase">Heritage of Time</p>
+<div class="mt-12 w-px h-24 bg-tertiary/60"></div>
+</div>
+</section>
+<!-- Section 2: New Arrivals (Bento/Minimalist Grid) -->
+<section class="py-24 px-8 bg-surface">
+<div class="flex flex-col mb-16">
+<h2 class="font-headline text-3xl text-primary">新品推荐</h2>
+<span class="font-label text-[10px] tracking-[0.3em] text-secondary uppercase mt-2">New Arrivals</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+<!-- Card 1 -->
+<div class="group cursor-pointer">
+<div class="aspect-[4/5] bg-surface-container overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="luxury watch with a leather strap and minimalist dial shot against a dark charcoal textured background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBK_IuAfJZ3syASvT-eDvi_L_2U_71oh9USGPVVtZkXPNx3iiRLfLaZ-nEWaiWDTyFbVKU9-9yuea82P5JAv0H2ScYgBaAeaAz6mz4_LZGy5h18RLbFJOi8zJSibnpntXMMinl1WKpswnluqRbx0TcFVxVls_LJENFiTdqnu_u_c6kkyucNiOC4Lx8eWjTglf2xoezUjs99sGgriEfTmRyYch43WkxXqMie3TOqj-RatnAGrYP0YJ9tGBymtsWWSM2wQVP0Zt-xt53Q"/>
+</div>
+<div class="mt-6">
+<p class="font-label text-[10px] tracking-widest text-tertiary uppercase">Chronograph Elite</p>
+<h3 class="font-headline text-xl mt-2">晨曦系列 · 典藏版</h3>
+<div class="mt-4 inline-block border-b border-tertiary pb-1">
+<span class="font-label text-xs tracking-widest text-primary">DISCOVER MORE</span>
+</div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="group cursor-pointer mt-12 md:mt-24">
+<div class="aspect-[4/5] bg-surface-container overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="close up of a sophisticated moonphase complication on a white gold watch dial with elegant blue accents" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA3YkYp6a2fbb7DFs3UrVpUdsZOFRe0AfMNLs5dHTiNwmwBc812gehl1eiLBsPrw9bjU6vig11fL8XIgcHxxxAnckDNouufUdby8A8zndXMH3X-eKr8BZCr5c0hpHx4-zfCFbiJs2P5eMIaSwJ7QmZ_LuN5SQ55JylRnWQ3zsB8JiTXA2Ei3cZh-nt0f_SdDZH2GKyG0qw8LhnM8dT_zhJeq2X4SMZWbakdPnz4EmScB79Y_h7jwipTZ-q7KfWxbiQrlppBoFXSzdb_"/>
+</div>
+<div class="mt-6">
+<p class="font-label text-[10px] tracking-widest text-tertiary uppercase">Luminance Edition</p>
+<h3 class="font-headline text-xl mt-2">月相系列 · 铂金款</h3>
+<div class="mt-4 inline-block border-b border-tertiary pb-1">
+<span class="font-label text-xs tracking-widest text-primary">DISCOVER MORE</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 3: Brand Story -->
+<section class="relative h-[530px] flex items-center justify-center overflow-hidden">
+<img class="absolute inset-0 w-full h-full object-cover" data-alt="misty mountain landscape at dawn with ethereal light and deep green valley for a heritage brand storytelling feel" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAy2jsC7HFx0-uoX4F5kaQkQIWA4ZsBlaPK2OEzFlsB2kkWXPZCkRbrCocJGafIgRSynW5w0UjokMI7JA3j7Cm0b5LXWYOQqf29EYrvDcmLfseoi30RqwE9mRyBrMkw8SKSql2MxzMoZQBikJ9LhMhhWhvEjG8XmCo-gK8bZUua_coaQDPwwqgdq4On7CcuKVi82uwMRvbHre2b6z7vDSi4W9AJd_HBfgovWDpZN_FyKyKRMQCg3VHrNvY9s3WhrcRdXMDYxvQ9sEKI"/>
+<div class="absolute inset-0 bg-primary/40"></div>
+<div class="relative z-10 text-center px-8 max-w-2xl">
+<h2 class="font-headline text-4xl text-white tracking-[0.5em] font-light">品牌故事</h2>
+<p class="font-label text-[10px] tracking-[0.4em] text-secondary-fixed-dim uppercase mt-4 mb-8">Our Story</p>
+<p class="text-white/80 font-body text-sm leading-relaxed tracking-wide">
+                    自 18 世纪以来，我们始终秉持对精准与艺术的极致追求。每一枚腕表不仅是时间的记录者，更是世代相传的匠心杰作。
+                </p>
+<button class="mt-12 px-8 py-4 bg-transparent border border-white/30 text-white font-label text-xs tracking-[0.3em] hover:bg-white hover:text-black transition-colors">
+                    EXPLORE HERITAGE
+                </button>
+</div>
+</section>
+<!-- Section 4: Featured Collections (Horizontal Scroll) -->
+<section class="py-24 bg-surface">
+<div class="px-8 mb-12 flex justify-between items-end">
+<div>
+<h2 class="font-headline text-3xl text-primary">热门系列</h2>
+<span class="font-label text-[10px] tracking-[0.3em] text-secondary uppercase mt-2">Featured Collections</span>
+</div>
+<div class="flex gap-4">
+<span class="material-symbols-outlined text-secondary-fixed-dim" data-icon="west">west</span>
+<span class="material-symbols-outlined text-primary" data-icon="east">east</span>
+</div>
+</div>
+<div class="flex overflow-x-auto hide-scrollbar gap-8 px-8 snap-x snap-mandatory">
+<!-- Item 1 -->
+<div class="min-w-[300px] md:min-w-[450px] snap-start">
+<div class="aspect-square bg-surface-container-low mb-6">
+<img class="w-full h-full object-cover" data-alt="high-end skeleton watch displaying internal movement mechanisms on a dark silver background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAKNI7tjr9HKdK5oxkk24mIJTJyMyBLgCK7LY7ur2DxzTytzSnwNFsdYRAcAQAGKxh8kiM4Y6dQJPpfTUTmDj7iQ9qz48iqAexdr_S04NQAcmBJAPKD01Ba4k6GZrC0Xxz1R_p98eYnXW4Nq4jtuGlCWRXoECtj5Dr2vM61zIi3m4N5bOmB8pAEvQnfIRygmNOoV7-pU4VgHZaixo4y-y6WZc16_OLZhkyVj7BDA7OmX54-D0dWpAJ8MjLlVMK5ojLj0IV-a2RYaoWU"/>
+</div>
+<h4 class="font-headline text-lg tracking-widest">寰宇系列 | Universe</h4>
+<p class="font-body text-xs text-secondary mt-2">跨越疆界的探索之魂</p>
+</div>
+<!-- Item 2 -->
+<div class="min-w-[300px] md:min-w-[450px] snap-start">
+<div class="aspect-square bg-surface-container-low mb-6">
+<img class="w-full h-full object-cover" data-alt="elegant woman's rose gold watch with diamond accents on a soft velvet surface" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCDFLaUkH9t75gko3x1FDkEZTMQzHhQq7nhUWL23vjEi9ri7KuZPINUoqB5zh8tlJ1p0eORBQ7mVFCKlf16iIPmDFPSLa2vTEY2-KU10iwTM-PkB9FcFb7F1raVbL7rELmhvFv5aItDXjvO6LNwvueMz6H0j6YpdCgJVdH1ORllCB6-D8woCo97ibZDFPRLarRH3rJnDiFemZAMOar708qn06ehPjMXeyVKhs8-leJ_rtA53EdTX_jyacnehWAKR5GsRLGLrAUWeuN9"/>
+</div>
+<h4 class="font-headline text-lg tracking-widest">流光系列 | Radiance</h4>
+<p class="font-body text-xs text-secondary mt-2">致敬现代女性的优雅</p>
+</div>
+<!-- Item 3 -->
+<div class="min-w-[300px] md:min-w-[450px] snap-start">
+<div class="aspect-square bg-surface-container-low mb-6">
+<img class="w-full h-full object-cover" data-alt="professional diver watch with steel bracelet and black bezel on a rugged ocean rock" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDGXkoFzxdx0eoqQK3IVuIYrCw0y8O8BIlcZ8LI21Ly3Rk9gvgfB2cCCXtWwBpVo-Xq_vOhE0KJzwy4zqBvjdIhu7n7GkiMZz1bKblNpmrERK0f4TE7G7hla_u99QG8DaqpMpch5kwMA9ctXvn55G3NCKrtyms72UZ1Sh7TT_e515tu43rgYrtWavLKD9fAa3b-g6JP4UxiQMvW-df5hek4JV55towJ1O3KzDt7Bb8e_TXvYWxfRJk2g4Z82aoQ2fzq4qDyPmaEDHgX"/>
+</div>
+<h4 class="font-headline text-lg tracking-widest">深海系列 | Abyss</h4>
+<p class="font-body text-xs text-secondary mt-2">深邃海洋的精准伴侣</p>
+</div>
+</div>
+</section>
+<!-- Section 5: Contact Consultant -->
+<section class="px-8 pb-12">
+<div class="bg-primary-container p-12 flex flex-col items-center text-center">
+<span class="material-symbols-outlined text-tertiary mb-6" data-icon="verified_user" data-weight="fill" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+<h3 class="font-headline text-2xl text-white mb-2">尊享顾问服务</h3>
+<p class="font-body text-xs text-secondary-fixed-dim tracking-wide mb-8">我们的专家将为您提供一对一的选购建议与技术支持</p>
+<button class="bg-tertiary text-on-tertiary px-12 py-4 font-label text-xs tracking-[0.2em] active:scale-95 transition-all">
+                    联系顾问 | CONTACT US
+                </button>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-8 pt-2 bg-white/90 dark:bg-black/90 backdrop-blur-2xl border-t border-zinc-100/10 dark:border-zinc-900/10 shadow-none">
+<a class="flex flex-col items-center justify-center text-amber-600 dark:text-amber-500 border-t border-amber-600 pt-3 active:opacity-80 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-sans text-[10px] tracking-widest uppercase font-medium mt-1">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-zinc-400 dark:text-zinc-600 pt-3 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors active:opacity-80 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="watch">watch</span>
+<span class="font-sans text-[10px] tracking-widest uppercase font-medium mt-1">Collections</span>
+</a>
+<a class="flex flex-col items-center justify-center text-zinc-400 dark:text-zinc-600 pt-3 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors active:opacity-80 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="history_edu">history_edu</span>
+<span class="font-sans text-[10px] tracking-widest uppercase font-medium mt-1">Heritage</span>
+</a>
+<a class="flex flex-col items-center justify-center text-zinc-400 dark:text-zinc-600 pt-3 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors active:opacity-80 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-sans text-[10px] tracking-widest uppercase font-medium mt-1">Member</span>
+</a>
+</nav>
+</body></html>
