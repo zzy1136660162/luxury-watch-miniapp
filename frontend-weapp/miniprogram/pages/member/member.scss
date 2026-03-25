@@ -1,0 +1,537 @@
+// Chronos Heritage Design System Colors
+$primary: #000000;
+$primary-container: #1c1b1b;
+$surface: #f9f9f9;
+$surface-container: #eeeeee;
+$surface-container-low: #f3f3f3;
+$surface-container-lowest: #ffffff;
+$secondary: #5d5e5f;
+$secondary-fixed-dim: #c6c6c6;
+$tertiary: #735c00;
+$tertiary-fixed-dim: #e9c349;
+$on-primary: #ffffff;
+$on-primary-container: #858383;
+$on-surface: #1a1c1c;
+$on-surface-variant: #444748;
+$outline-variant: #c4c7c7;
+$font-family-chinese: 'Noto Serif SC', serif;
+$font-family-english: 'Manrope', sans-serif;
+
+.page {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: $surface;
+}
+
+.content {
+  flex: 1;
+  padding-top: 80px;
+  padding-bottom: 100px;
+  overflow-y: hidden;
+}
+
+// Member Card Section
+.member-card-section {
+  padding: 0 24px;
+}
+
+.member-card {
+  aspect-ratio: 1.6 / 1;
+  background: linear-gradient(135deg, #1c1b1b 0%, #000000 100%);
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.card-grain {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.1;
+  background-size: cover;
+  background-position: center;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  position: relative;
+  z-index: 10;
+}
+
+.card-status {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.card-status-label {
+  font-family: $font-family-english;
+  font-size: 10px;
+  color: $secondary-fixed-dim;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.card-level {
+  font-family: $font-family-chinese;
+  font-size: 20px;
+  color: $tertiary-fixed-dim;
+  font-weight: bold;
+  letter-spacing: 0.1em;
+}
+
+.card-level-en {
+  font-family: $font-family-english;
+  font-size: 10px;
+  color: $secondary-fixed-dim;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.card-diamond {
+  font-family: 'Material Symbols Outlined';
+  font-size: 40px;
+  color: $tertiary-fixed-dim;
+  position: relative;
+  z-index: 10;
+}
+
+.card-user {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  position: relative;
+  z-index: 10;
+  margin-bottom: 24px;
+}
+
+.user-avatar-wrapper {
+  width: 48px;
+  height: 48px;
+  border: 1px solid rgba($tertiary, 0.3);
+  padding: 2px;
+
+  .user-avatar {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.user-name {
+  font-family: $font-family-chinese;
+  font-size: 16px;
+  color: #ffffff;
+  letter-spacing: 0.05em;
+}
+
+.user-id {
+  font-family: $font-family-english;
+  font-size: 10px;
+  color: $secondary-fixed-dim;
+  letter-spacing: 0.1em;
+}
+
+.card-progress {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: relative;
+  z-index: 10;
+}
+
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.progress-label {
+  font-family: $font-family-english;
+  font-size: 10px;
+  color: $secondary-fixed-dim;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.progress-value {
+  font-family: $font-family-english;
+  font-size: 10px;
+  color: $secondary-fixed-dim;
+  letter-spacing: 0.1em;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 1px;
+  background-color: rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+
+  .progress-fill {
+    width: 72%;
+    height: 100%;
+    background-color: $tertiary;
+  }
+}
+
+.progress-hint {
+  font-family: $font-family-english;
+  font-size: 9px;
+  color: $tertiary;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+// Privileges Section
+.privileges-section {
+  padding: 48px 24px;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 32px;
+}
+
+.section-title {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.title-cn {
+  font-family: $font-family-chinese;
+  font-size: 20px;
+  color: $on-surface;
+  letter-spacing: -0.02em;
+}
+
+.title-en {
+  font-family: $font-family-english;
+  font-size: 10px;
+  color: $secondary;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-left: 8px;
+}
+
+.section-link {
+  font-family: $font-family-english;
+  font-size: 10px;
+  color: $tertiary;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border-bottom: 1px solid $tertiary;
+  padding-bottom: 4px;
+}
+
+.privileges-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background-color: rgba($outline-variant, 0.2);
+}
+
+.privilege-item {
+  background-color: $surface;
+  padding: 24px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:active {
+    background-color: $surface-container;
+  }
+}
+
+.privilege-icon {
+  font-family: 'Material Symbols Outlined';
+  font-size: 32px;
+  color: $tertiary;
+}
+
+.privilege-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.privilege-name {
+  font-family: $font-family-chinese;
+  font-size: 14px;
+  color: $on-surface;
+}
+
+.privilege-name-en {
+  font-family: $font-family-english;
+  font-size: 9px;
+  color: $secondary;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+// Rewards Section
+.rewards-section {
+  padding: 0 24px 48px;
+}
+
+.rewards-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 32px;
+}
+
+.points-display {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.points-label {
+  font-family: $font-family-english;
+  font-size: 10px;
+  color: $on-surface;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.points-value {
+  font-family: $font-family-english;
+  font-size: 16px;
+  color: $primary;
+  font-weight: bold;
+}
+
+.rewards-tabs {
+  margin-bottom: 48px;
+}
+
+.tabs-scroll {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.tabs-track {
+  display: flex;
+  gap: 24px;
+  padding-bottom: 8px;
+  min-width: max-content;
+}
+
+.tab-item {
+  white-space: nowrap;
+  padding-bottom: 8px;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+
+  text {
+    font-family: $font-family-english;
+    font-size: 11px;
+    color: $secondary;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  &.tab-active {
+    border-bottom-color: $primary;
+
+    text {
+      color: $primary;
+    }
+  }
+}
+
+.rewards-list {
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+}
+
+.reward-item {
+  cursor: pointer;
+}
+
+.reward-image-wrapper {
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  margin-bottom: 16px;
+  background-color: $surface-container;
+
+  .reward-image {
+    width: 100%;
+    height: 100%;
+    filter: grayscale(100%);
+    transition: filter 0.7s ease, transform 0.7s ease;
+
+    &:active {
+      filter: grayscale(0%);
+      transform: scale(1.05);
+    }
+  }
+
+  &.reward-image-limited {
+    position: relative;
+  }
+}
+
+.limited-badge {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background-color: rgba($tertiary, 0.9);
+  padding: 8px 12px;
+
+  text {
+    font-family: $font-family-english;
+    font-size: 9px;
+    color: #ffffff;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+}
+
+.reward-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.reward-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.reward-title {
+  font-family: $font-family-chinese;
+  font-size: 18px;
+  color: $on-surface;
+}
+
+.reward-subtitle {
+  font-family: $font-family-english;
+  font-size: 10px;
+  color: $secondary;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.reward-points {
+  font-family: $font-family-chinese;
+  font-size: 14px;
+  color: $tertiary;
+  font-weight: bold;
+  letter-spacing: -0.02em;
+}
+
+.redeem-btn {
+  background-color: $primary;
+  color: $on-primary;
+  padding: 12px 24px;
+  font-family: $font-family-english;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+
+  &:active {
+    background-color: $tertiary;
+  }
+}
+
+// Services Section
+.services-section {
+  padding: 0 24px 48px;
+}
+
+.section-title-row {
+  display: flex;
+  align-items: baseline;
+  margin-bottom: 24px;
+}
+
+.section-title-text {
+  font-family: $font-family-chinese;
+  font-size: 20px;
+  color: $on-surface;
+  letter-spacing: -0.02em;
+}
+
+.section-title-en {
+  font-family: $font-family-english;
+  font-size: 10px;
+  color: $secondary;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-left: 8px;
+}
+
+.services-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  background-color: rgba($outline-variant, 0.2);
+}
+
+.service-item {
+  background-color: $surface;
+  padding: 24px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  transition: padding-left 0.3s ease;
+
+  &:active {
+    padding-left: 8px;
+  }
+}
+
+.service-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.service-icon {
+  font-family: 'Material Symbols Outlined';
+  font-size: 24px;
+  color: $secondary;
+}
+
+.service-name {
+  font-family: $font-family-chinese;
+  font-size: 14px;
+  color: $on-surface;
+}
+
+.service-arrow {
+  font-family: 'Material Symbols Outlined';
+  font-size: 24px;
+  color: $outline-variant;
+
+  .service-item:active & {
+    color: $primary;
+  }
+}

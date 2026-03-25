@@ -1,4 +1,5 @@
-@import '../styles/design-system.scss';
+// Chronos Heritage Design System Colors
+$font-family-english: 'Manrope', sans-serif;
 
 .tab-bar {
   position: fixed;
@@ -11,6 +12,8 @@
   backdrop-filter: blur(20px);
   border-top: 1px solid rgba(0, 0, 0, 0.05);
   z-index: 100;
+  padding-bottom: constant(safe-area-inset-bottom);
+  padding-bottom: env(safe-area-inset-bottom);
 }
 
 .tab-item {
@@ -19,9 +22,10 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding-top: 16px;
-  color: $secondary;
+  padding-top: 12px;
+  color: #5d5e5f;
   transition: color 0.3s ease;
+  cursor: pointer;
 
   &.active {
     color: #D4AF37;
@@ -35,11 +39,11 @@
 .tab-icon {
   width: 48px;
   height: 48px;
-  margin-bottom: 8px;
+  margin-bottom: 4px;
 }
 
 .tab-text {
   font-family: $font-family-english;
-  font-size: 20px;
-  letter-spacing: 2px;
+  font-size: 18px;
+  letter-spacing: 1px;
 }
