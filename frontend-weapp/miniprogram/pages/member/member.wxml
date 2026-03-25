@@ -1,0 +1,210 @@
+<import src="/components/navigation-bar/navigation-bar.wxml" />
+
+<view class="page">
+  <navigation-bar title="CHRONOS" back="{{true}}" color="black" background="#ffffff" />
+
+  <scroll-view class="content" scroll-y type="list" enhanced="{{true}}" bounces="{{false}}">
+    <!-- Member Card Section -->
+    <view class="member-card-section">
+      <view class="member-card">
+        <!-- Decorative grain texture -->
+        <view class="card-grain" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAJrA8I46OjznAdSdAn8lP7ok5OoL2jR-swNh9g7si_T4AQDbIQke4jXhq4M6Qp8XaPmkeMufPUpnvBIT6rLhehRxvetnwLeHi8ESObPGZg71KfrGgFMCR3Ru6KX0ZEg_mi8HzjjlKWN9LWpd_bSn1_JNEAGKA5ENPowr0tUvu26HD-Rym1EYdDWVIfh_wXadhHsuUKHA-7coTWBpw0HSx91ihN21bueklsnNB2R79NL0j-62vf0RJ03i4lqnFjCaVl1NifunY4Q1In');"></view>
+
+        <!-- Card Header -->
+        <view class="card-header">
+          <view class="card-status">
+            <text class="card-status-label">Current Status</text>
+            <text class="card-level">铂金会员</text>
+            <text class="card-level-en">Platinum Member</text>
+          </view>
+          <text class="card-diamond">diamond</text>
+        </view>
+
+        <!-- User Info -->
+        <view class="card-user">
+          <view class="user-avatar-wrapper">
+            <image class="user-avatar" src="{{userAvatar}}" mode="aspectFill" />
+          </view>
+          <view class="user-info">
+            <text class="user-name">ALEXANDER WANG</text>
+            <text class="user-id">ID: 8829 4402</text>
+          </view>
+        </view>
+
+        <!-- Growth Progress -->
+        <view class="card-progress">
+          <view class="progress-header">
+            <text class="progress-label">GROWTH PROGRESS</text>
+            <text class="progress-value">12,800 / 17,800</text>
+          </view>
+          <view class="progress-bar">
+            <view class="progress-fill"></view>
+          </view>
+          <text class="progress-hint">距离 钻石会员 还需 5,000 点成长值</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- Privileges Section -->
+    <view class="privileges-section">
+      <view class="section-header">
+        <view class="section-title">
+          <text class="title-cn">尊享权益</text>
+          <text class="title-en">Privileges</text>
+        </view>
+        <text class="section-link">All Benefits</text>
+      </view>
+
+      <view class="privileges-grid">
+        <view class="privilege-item" bindtap="onPrivilegeTap" data-type="advisor">
+          <text class="privilege-icon">support_agent</text>
+          <view class="privilege-info">
+            <text class="privilege-name">专属顾问</text>
+            <text class="privilege-name-en">Advisor</text>
+          </view>
+        </view>
+
+        <view class="privilege-item" bindtap="onPrivilegeTap" data-type="priority">
+          <text class="privilege-icon">event_available</text>
+          <view class="privilege-info">
+            <text class="privilege-name">优先预订</text>
+            <text class="privilege-name-en">Priority</text>
+          </view>
+        </view>
+
+        <view class="privilege-item" bindtap="onPrivilegeTap" data-type="maintenance">
+          <text class="privilege-icon">featured_seasonal_and_gifts</text>
+          <view class="privilege-info">
+            <text class="privilege-name">保养礼券</text>
+            <text class="privilege-name-en">Maintenance</text>
+          </view>
+        </view>
+
+        <view class="privilege-item" bindtap="onPrivilegeTap" data-type="birthday">
+          <text class="privilege-icon">cake</text>
+          <view class="privilege-info">
+            <text class="privilege-name">生日惊喜</text>
+            <text class="privilege-name-en">Birthday</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- Rewards Section -->
+    <view class="rewards-section">
+      <view class="rewards-header">
+        <view class="section-title">
+          <text class="title-cn">会员礼遇</text>
+          <text class="title-en">Rewards</text>
+        </view>
+        <view class="points-display">
+          <text class="points-label">Points:</text>
+          <text class="points-value">{{memberPoints}}</text>
+        </view>
+      </view>
+
+      <view class="rewards-tabs">
+        <scroll-view class="tabs-scroll" scroll-x enhanced="{{true}}" show-scrollbar="{{false}}">
+          <view class="tabs-track">
+            <view class="tab-item tab-active">
+              <text>All 全部</text>
+            </view>
+            <view class="tab-item">
+              <text>Lifestyle 品牌周边</text>
+            </view>
+            <view class="tab-item">
+              <text>Services 专属服务</text>
+            </view>
+            <view class="tab-item">
+              <text>Exclusive 限定沙龙</text>
+            </view>
+          </view>
+        </scroll-view>
+      </view>
+
+      <view class="rewards-list">
+        <!-- Reward Item 1 -->
+        <view class="reward-item" bindtap="onRewardTap" data-id="reward1">
+          <view class="reward-image-wrapper">
+            <image class="reward-image" src="{{reward1.image}}" mode="aspectFill" />
+          </view>
+          <view class="reward-footer">
+            <view class="reward-info">
+              <text class="reward-title">高级鳄鱼皮定制表带</text>
+              <text class="reward-subtitle">Bespoke Exotic Leather Strap</text>
+              <text class="reward-points">8,000 POINTS</text>
+            </view>
+            <button class="redeem-btn">Redeem</button>
+          </view>
+        </view>
+
+        <!-- Reward Item 2 -->
+        <view class="reward-item" bindtap="onRewardTap" data-id="reward2">
+          <view class="reward-image-wrapper">
+            <image class="reward-image" src="{{reward2.image}}" mode="aspectFill" />
+          </view>
+          <view class="reward-footer">
+            <view class="reward-info">
+              <text class="reward-title">品牌 200 周年纪念画册</text>
+              <text class="reward-subtitle">200th Anniversary Anthology</text>
+              <text class="reward-points">3,500 POINTS</text>
+            </view>
+            <button class="redeem-btn">Redeem</button>
+          </view>
+        </view>
+
+        <!-- Reward Item 3 (Limited Edition) -->
+        <view class="reward-item" bindtap="onRewardTap" data-id="reward3">
+          <view class="reward-image-wrapper reward-image-limited">
+            <image class="reward-image" src="{{reward3.image}}" mode="aspectFill" />
+            <view class="limited-badge">
+              <text>Limited Edition</text>
+            </view>
+          </view>
+          <view class="reward-footer">
+            <view class="reward-info">
+              <text class="reward-title">线下新品私人品鉴会门票</text>
+              <text class="reward-subtitle">Private Collection Showcase Access</text>
+              <text class="reward-points">15,000 POINTS</text>
+            </view>
+            <button class="redeem-btn">Apply</button>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- Services Section -->
+    <view class="services-section">
+      <view class="section-title-row">
+        <text class="section-title-text">我的服务</text>
+        <text class="section-title-en">Services</text>
+      </view>
+
+      <view class="services-list">
+        <view class="service-item" bindtap="onServiceTap" data-type="appointments">
+          <view class="service-left">
+            <text class="service-icon">calendar_today</text>
+            <text class="service-name">我的预约</text>
+          </view>
+          <text class="service-arrow">chevron_right</text>
+        </view>
+
+        <view class="service-item" bindtap="onServiceTap" data-type="records">
+          <view class="service-left">
+            <text class="service-icon">history_edu</text>
+            <text class="service-name">我的礼遇记录</text>
+          </view>
+          <text class="service-arrow">chevron_right</text>
+        </view>
+
+        <view class="service-item" bindtap="onServiceTap" data-type="consultant">
+          <view class="service-left">
+            <text class="service-icon">contact_support</text>
+            <text class="service-name">联系顾问</text>
+          </view>
+          <text class="service-arrow">chevron_right</text>
+        </view>
+      </view>
+    </view>
+  </scroll-view>
+</view>

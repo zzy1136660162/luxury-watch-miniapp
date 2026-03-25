@@ -1,0 +1,142 @@
+<import src="/components/navigation-bar/navigation-bar.wxml" />
+
+<view class="page">
+  <navigation-bar title="CHRONOS" back="{{true}}" color="black" background="#ffffff" showMenu="{{true}}" />
+
+  <scroll-view class="content" scroll-y type="list" enhanced="{{true}}" bounces="{{false}}">
+    <!-- 1. Image Carousel -->
+    <view class="carousel-section">
+      <scroll-view class="carousel" scroll-x enhanced="{{true}}" snap-x="{{true}}" bounces="{{false}}">
+        <view class="carousel-track">
+          <view class="carousel-item" wx:for="{{productImages}}" wx:key="index">
+            <image class="carousel-image" src="{{item}}" mode="aspectFill" />
+          </view>
+        </view>
+      </scroll-view>
+      
+      <view class="carousel-indicators">
+        <view class="indicator {{currentImageIndex === 0 ? 'indicator-active' : ''}}"></view>
+        <view class="indicator {{currentImageIndex === 1 ? 'indicator-active' : ''}}"></view>
+        <view class="indicator {{currentImageIndex === 2 ? 'indicator-active' : ''}}"></view>
+      </view>
+    </view>
+
+    <!-- 2. Title & Series -->
+    <view class="title-section">
+      <text class="product-series">The Celestial Collection</text>
+      <text class="product-title">星空系列 - 玫瑰金版</text>
+      <text class="product-subtitle">Starry Sky - Rose Gold Edition</text>
+    </view>
+
+    <!-- 3. Highlights Section -->
+    <view class="highlights-section">
+      <view class="highlights-grid">
+        <view class="highlight-item">
+          <text class="highlight-icon">settings_slow_motion</text>
+          <text class="highlight-title">自产机芯</text>
+          <text class="highlight-subtitle">In-house Movement</text>
+          <text class="highlight-desc">搭载 CH-700 自动上链机芯，精准卓越</text>
+        </view>
+
+        <view class="highlight-item">
+          <text class="highlight-icon">energy_savings_leaf</text>
+          <text class="highlight-title">动力储存</text>
+          <text class="highlight-subtitle">Power Reserve</text>
+          <text class="highlight-desc">长达 72 小时的不间断动力保障</text>
+        </view>
+
+        <view class="highlight-item">
+          <text class="highlight-icon">waves</text>
+          <text class="highlight-title">防水性能</text>
+          <text class="highlight-subtitle">Water Resistance</text>
+          <text class="highlight-desc">深达 50 米的生活与艺术平衡</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 4. Specifications -->
+    <view class="specifications-section">
+      <view class="specifications-card">
+        <view class="specifications-header">
+          <text class="specifications-title">规格参数</text>
+          <text class="specifications-subtitle">Specifications</text>
+        </view>
+
+        <view class="specifications-list">
+          <view class="spec-item">
+            <view class="spec-label">
+              <text class="spec-name">表壳尺寸</text>
+              <text class="spec-name-en">Case Size</text>
+            </view>
+            <text class="spec-value">40 毫米 / 10.5 毫米厚度</text>
+          </view>
+
+          <view class="spec-item">
+            <view class="spec-label">
+              <text class="spec-name">材质</text>
+              <text class="spec-name-en">Material</text>
+            </view>
+            <text class="spec-value">18K 玫瑰金、蓝宝石水晶玻璃</text>
+          </view>
+
+          <view class="spec-item">
+            <view class="spec-label">
+              <text class="spec-name">机芯</text>
+              <text class="spec-name-en">Movement</text>
+            </view>
+            <text class="spec-value">CH-700 自动机械机芯</text>
+          </view>
+
+          <view class="spec-item">
+            <view class="spec-label">
+              <text class="spec-name">表带</text>
+              <text class="spec-name-en">Strap</text>
+            </view>
+            <text class="spec-value">密西西比鳄鱼皮 - 曜石黑</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 5. Design Inspiration -->
+    <view class="inspiration-section">
+      <view class="inspiration-text">
+        <text class="inspiration-title">设计灵感</text>
+        <text class="inspiration-subtitle">Design Inspiration</text>
+        
+        <view class="inspiration-content">
+          <text class="inspiration-paragraph">"星空系列"的诞生，源于人类对苍穹恒古不变的向往。我们将浩瀚宇宙的深邃与18K玫瑰金的温润完美融合，旨在打造一款能够穿越时间的艺术品。</text>
+          
+          <text class="inspiration-paragraph">每一枚腕表的表盘均由匠人手工打磨，其纹理如同星轨交错，在不同光影下呈现出变幻莫测的色彩。这不仅仅是计时工具，更是佩戴在腕间的宇宙微缩景观。</text>
+        </view>
+
+        <view class="inspiration-link" bindtap="onExploreHeritage">
+          <text>Explore Our Heritage</text>
+        </view>
+      </view>
+
+      <view class="inspiration-image-wrapper">
+        <image class="inspiration-image" src="{{inspirationImage}}" mode="aspectFill" />
+      </view>
+    </view>
+  </scroll-view>
+
+  <!-- 6. Bottom Fixed Actions -->
+  <view class="action-footer">
+    <view class="price-info">
+      <text class="price">CNY 248,000</text>
+      <text class="price-label">Retail Price Incl. VAT</text>
+    </view>
+
+    <view class="action-buttons">
+      <button class="action-button action-button-outline" bindtap="onConsult">
+        <text>咨询顾问</text>
+        <text class="button-subtitle">Consult Consultant</text>
+      </button>
+      <button class="action-button action-button-primary" bindtap="onBook">
+        <text>预约到店</text>
+        <text class="button-subtitle">Book an Appointment</text>
+      </button>
+    </view>
+  </view>
+</view>

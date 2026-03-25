@@ -1,0 +1,145 @@
+<import src="/components/navigation-bar/navigation-bar.wxml" />
+
+<view class="page">
+  <navigation-bar title="CHRONOS" back="{{true}}" color="black" background="#ffffff" />
+
+  <scroll-view class="content" scroll-y type="list" enhanced="{{true}}" bounces="{{false}}">
+    <!-- Section 1: Immersive Visual Introduction -->
+    <view class="hero-section">
+      <image class="hero-image" src="{{heroImage}}" mode="aspectFill" />
+      <view class="hero-overlay"></view>
+      <view class="hero-content">
+        <text class="hero-title">品牌馆</text>
+        <text class="hero-subtitle">BRAND HOUSE</text>
+      </view>
+      <view class="scroll-indicator">
+        <text class="scroll-icon">keyboard_double_arrow_down</text>
+      </view>
+    </view>
+
+    <!-- Section 2: Introduction -->
+    <view class="intro-section">
+      <view class="intro-content">
+        <text class="intro-label">The Introduction</text>
+        <text class="intro-title">品牌简介</text>
+        
+        <view class="intro-text">
+          <text class="intro-paragraph">自 18 世纪以来，CHRONOS 始终立于精密制表艺术之巅。我们不仅是在制造时间，更是在雕琢永恒。每一枚时计都是传承与创新的对话，是机械美学与极致匠心的完美交汇。</text>
+          <text class="intro-paragraph-en">Founded on the principles of absolute precision and aesthetic purity, CHRONOS represents the pinnacle of watchmaking heritage. We transcend the mere measurement of time to create artifacts of eternal value.</text>
+        </view>
+
+        <view class="intro-link" bindtap="onDiscover">
+          <text>探索更多 / DISCOVER</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- Section 3: History Timeline -->
+    <view class="timeline-section">
+      <view class="timeline-header">
+        <text class="timeline-label">The Heritage</text>
+        <text class="timeline-title">品牌历史</text>
+      </view>
+
+      <!-- Milestone 1: 1792 -->
+      <view class="timeline-item timeline-item-left">
+        <view class="timeline-content">
+          <text class="timeline-year">1792</text>
+          <text class="timeline-event">传奇诞生</text>
+          <text class="timeline-desc">在瑞士汝拉山谷的深处，第一间钟表工坊正式创立，开启了长达两个世纪的制表传奇。</text>
+          <text class="timeline-desc-en">The Foundation in Jura Valley</text>
+        </view>
+        <view class="timeline-dot"></view>
+        <view class="timeline-image-wrapper">
+          <image class="timeline-image" src="{{milestone1.image}}" mode="aspectFill" />
+        </view>
+      </view>
+
+      <!-- Milestone 2: 1924 -->
+      <view class="timeline-item timeline-item-right">
+        <view class="timeline-image-wrapper">
+          <image class="timeline-image" src="{{milestone2.image}}" mode="aspectFill" />
+        </view>
+        <view class="timeline-dot"></view>
+        <view class="timeline-content">
+          <text class="timeline-year">1924</text>
+          <text class="timeline-event">复杂功能的突破</text>
+          <text class="timeline-desc">首款具备万年历功能的腕表问世，打破了当时精密机械小型化的技术瓶颈。</text>
+          <text class="timeline-desc-en">Perpetual Calendar Breakthrough</text>
+        </view>
+      </view>
+
+      <!-- Milestone 3: 2024 -->
+      <view class="timeline-item timeline-item-left">
+        <view class="timeline-content">
+          <text class="timeline-year">2024</text>
+          <text class="timeline-event">致敬未来</text>
+          <text class="timeline-desc">融合钛金属材质与超薄机芯，CHRONOS 再次定义了现代奢华时计的标准。</text>
+          <text class="timeline-desc-en">Redefining Modern Luxury</text>
+        </view>
+        <view class="timeline-dot"></view>
+        <view class="timeline-image-wrapper">
+          <image class="timeline-image" src="{{milestone3.image}}" mode="aspectFill" />
+        </view>
+      </view>
+    </view>
+
+    <!-- Section 4: Craftsmanship -->
+    <view class="craft-section">
+      <view class="craft-grid">
+        <view class="craft-images">
+          <view class="craft-image-large">
+            <image class="craft-image" src="{{craft1.image}}" mode="aspectFill" />
+          </view>
+          <view class="craft-image-small">
+            <image class="craft-image" src="{{craft2.image}}" mode="aspectFill" />
+          </view>
+        </view>
+        <view class="craft-images-right">
+          <view class="craft-image-tall">
+            <image class="craft-image" src="{{craft3.image}}" mode="aspectFill" />
+          </view>
+          <view class="craft-image-square">
+            <image class="craft-image" src="{{craft4.image}}" mode="aspectFill" />
+          </view>
+        </view>
+      </view>
+
+      <view class="craft-text">
+        <text class="craft-label">The Art of Timing</text>
+        <text class="craft-title">制表工艺</text>
+
+        <view class="craft-items">
+          <view class="craft-item">
+            <text class="craft-item-title">极致打磨 / EXTREME FINISHING</text>
+            <text class="craft-item-desc">每一个齿轮边缘都经过手工倒角处理，即使是隐藏在表壳深处的零件，也拥有如艺术品般的光泽。</text>
+          </view>
+
+          <view class="craft-item">
+            <text class="craft-item-title">精密组装 / PRECISION ASSEMBLY</text>
+            <text class="craft-item-desc">数百个微小零件在制表师的指尖下完美契合，历经数周的调校与测试，确保每一秒的律动都精准无误。</text>
+          </view>
+
+          <view class="craft-item">
+            <text class="craft-item-title">匠心独运 / UNIQUE MASTERY</text>
+            <text class="craft-item-desc">我们坚持传统的制表技艺，同时不断探索材料科学的边界，只为赋予时计更持久的生命力。</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- Section 5: Legacy Collections Entrance -->
+    <view class="collections-entrance" bindtap="onExploreCollections">
+      <image class="entrance-image" src="{{collectionsImage}}" mode="aspectFill" />
+      <view class="entrance-overlay"></view>
+      <view class="entrance-content">
+        <text class="entrance-label">Enter the Gallery</text>
+        <text class="entrance-title">经典系列</text>
+        <text class="entrance-subtitle">LEGACY COLLECTIONS</text>
+        <view class="entrance-arrow">
+          <text class="arrow-icon">arrow_forward</text>
+        </view>
+      </view>
+    </view>
+  </scroll-view>
+</view>

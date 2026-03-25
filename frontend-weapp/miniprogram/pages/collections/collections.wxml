@@ -1,0 +1,133 @@
+<import src="/components/navigation-bar/navigation-bar.wxml" />
+
+<view class="page">
+  <navigation-bar title="CHRONOS" back="{{false}}" color="black" background="#ffffff" showMenu="{{true}}" />
+
+  <scroll-view class="content" scroll-y type="list" enhanced="{{true}}" bounces="{{false}}">
+    <!-- Hero Banner -->
+    <view class="hero-banner">
+      <image class="hero-image" src="{{heroImage}}" mode="aspectFill" />
+      <view class="hero-content">
+        <text class="hero-title">永恒之艺</text>
+        <text class="hero-subtitle">The Art of Eternity</text>
+        <view class="hero-divider"></view>
+      </view>
+    </view>
+
+    <!-- Category Navigation -->
+    <view class="category-nav">
+      <scroll-view class="category-scroll" scroll-x enhanced="{{true}}" show-scrollbar="{{false}}">
+        <view class="category-track">
+          <view class="category-item {{currentCategory === 'classic' ? 'category-active' : ''}}" bindtap="onCategoryTap" data-category="classic">
+            <text class="category-name">经典</text>
+            <text class="category-name-en">Classic</text>
+          </view>
+          <view class="category-item {{currentCategory === 'sport' ? 'category-active' : ''}}" bindtap="onCategoryTap" data-category="sport">
+            <text class="category-name">运动</text>
+            <text class="category-name-en">Sport</text>
+          </view>
+          <view class="category-item {{currentCategory === 'complications' ? 'category-active' : ''}}" bindtap="onCategoryTap" data-category="complications">
+            <text class="category-name">复杂功能</text>
+            <text class="category-name-en">Complications</text>
+          </view>
+          <view class="category-item {{currentCategory === 'ladies' ? 'category-active' : ''}}" bindtap="onCategoryTap" data-category="ladies">
+            <text class="category-name">女士</text>
+            <text class="category-name-en">Ladies</text>
+          </view>
+        </view>
+      </scroll-view>
+    </view>
+
+    <!-- Featured Series Bento Grid -->
+    <view class="featured-section">
+      <view class="featured-grid">
+        <!-- Large Featured Card -->
+        <view class="featured-card-large" bindtap="onProductTap" data-id="featured1">
+          <view class="featured-image-wrapper">
+            <image class="featured-image" src="{{featuredProduct1.image}}" mode="aspectFill" />
+          </view>
+          <view class="featured-card-content">
+            <text class="featured-title">时空猎手</text>
+            <text class="featured-subtitle">Space Hunter Series</text>
+            <text class="featured-desc">穿梭于星际阔境，精准捕捉每一瞬即逝的光阴。在极简设计中蕴含无穷的精密力学。</text>
+            <view class="featured-link">
+              <text>Explore Discovery</text>
+            </view>
+          </view>
+        </view>
+
+        <!-- Vertical Card -->
+        <view class="featured-card-vertical" bindtap="onProductTap" data-id="featured2">
+          <view class="featured-image-wrapper-vertical">
+            <image class="featured-image" src="{{featuredProduct2.image}}" mode="aspectFill" />
+          </view>
+          <view class="featured-card-vertical-content">
+            <text class="featured-title-small">永恒经典</text>
+            <text class="featured-subtitle-small">Heritage Essence</text>
+            <text class="featured-desc-small">致敬制表黄金年代，将百年的工艺沉淀凝练于方寸表盘之间。</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- Product List -->
+    <view class="product-list-section">
+      <!-- Product 1 -->
+      <view class="product-list-item">
+        <view class="product-list-image-wrapper" bindtap="onProductTap" data-id="1">
+          <image class="product-list-image" src="{{product1.image}}" mode="aspectFill" />
+        </view>
+        <view class="product-list-content">
+          <view class="product-ref">
+            <text>Ref. 8820-A</text>
+          </view>
+          <text class="product-list-name">曜石金·自动机械</text>
+          <text class="product-list-subtitle">Obsidian Gold Automatic</text>
+          <view class="product-list-divider"></view>
+          <text class="product-list-desc">搭载定制 Cal.900 动力机芯，配备 72 小时超长动力储存。曜石黑表盘与 18K 黄金表壳的完美邂逅，彰显沉稳不凡的气度。</text>
+          <view class="product-list-action">
+            <button class="view-details-btn" bindtap="onProductTap" data-id="1">View Details</button>
+          </view>
+        </view>
+      </view>
+
+      <!-- Product 2 -->
+      <view class="product-list-item product-list-item-reverse">
+        <view class="product-list-image-wrapper" bindtap="onProductTap" data-id="2">
+          <image class="product-list-image" src="{{product2.image}}" mode="aspectFill" />
+        </view>
+        <view class="product-list-content product-list-content-reverse">
+          <view class="product-ref">
+            <text>Ref. 5410-L</text>
+          </view>
+          <text class="product-list-name">流光银·极简主义</text>
+          <text class="product-list-subtitle">Moonlight Silver Minimal</text>
+          <view class="product-list-divider"></view>
+          <text class="product-list-desc">抛弃繁杂，回归时间的本质。极致纤薄的 5.5mm 表壳设计，采用航天级精钢材质，如同月光轻抚腕间。</text>
+          <view class="product-list-action product-list-action-reverse">
+            <button class="view-details-btn" bindtap="onProductTap" data-id="2">View Details</button>
+          </view>
+        </view>
+      </view>
+
+      <!-- Product 3 -->
+      <view class="product-list-item">
+        <view class="product-list-image-wrapper" bindtap="onProductTap" data-id="3">
+          <image class="product-list-image" src="{{product3.image}}" mode="aspectFill" />
+        </view>
+        <view class="product-list-content">
+          <view class="product-ref">
+            <text>Ref. 7230-D</text>
+          </view>
+          <text class="product-list-name">深海蓝·潜水系列</text>
+          <text class="product-list-subtitle">Abyss Blue Diver</text>
+          <view class="product-list-divider"></view>
+          <text class="product-list-desc">征服深海的勇者之选。单向旋转表圈，300米防水深度，为您开启水下探索之旅。</text>
+          <view class="product-list-action">
+            <button class="view-details-btn" bindtap="onProductTap" data-id="3">View Details</button>
+          </view>
+        </view>
+      </view>
+    </view>
+  </scroll-view>
+</view>

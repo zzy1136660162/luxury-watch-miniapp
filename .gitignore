@@ -3,9 +3,6 @@ miniprogram_npm/
 node_modules/
 package-lock.json
 
-# 编译产物
-*.wxss
-*.wxml
 
 # 微信开发者工具缓存
 .vscode/
