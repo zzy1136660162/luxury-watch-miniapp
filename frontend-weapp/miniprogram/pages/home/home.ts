@@ -1,5 +1,3 @@
-import { Component } from '(miniprogram/compat/module)';
-
 Component({
   data: {
     heroImage: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBDw8BlafdGDBrHTPyUg47BOJ05I7GsFsUoDPX_6qh9gps50NJTQK47CbHIiMI3TM84epZC_xFHni3YYwsonoWfPiuJCuWDO6jV3BxtoSFCQmvybsrODUQLzKJwy2DO1TtK9Lpdst9M7eClV_UYkUsercONSFEf__Um6ox-ffEQE98nvZF4g_fMBsLAroMtU6FDReQm80j89sJ0dlzbA0Hwnr_syC56iWhaYk2DWQRnMmRH-IolFp-vVQo0_XbMZZxhzQ9578U9a-fd',
@@ -64,30 +62,6 @@ Component({
         content: '我们的专家将尽快与您联系',
         confirmText: '确定'
       });
-    },
-
-    onNavTap(e: any) {
-      const page = e.currentTarget.dataset.page;
-      
-      switch (page) {
-        case 'home':
-          break;
-        case 'collections':
-          wx.switchTab({
-            url: '/pages/collections/collections'
-          });
-          break;
-        case 'heritage':
-          wx.navigateTo({
-            url: '/pages/heritage/heritage'
-          });
-          break;
-        case 'member':
-          wx.navigateTo({
-            url: '/pages/member/member'
-          });
-          break;
-      }
     },
 
     onScrollLeft() {

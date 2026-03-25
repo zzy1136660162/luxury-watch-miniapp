@@ -1,0 +1,399 @@
+@import '../../styles/design-system.scss';
+
+.page {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: $surface;
+}
+
+.content {
+  flex: 1;
+  padding-top: 80px;
+  padding-bottom: 180px;
+  overflow-y: hidden;
+}
+
+// Carousel
+.carousel-section {
+  position: relative;
+  width: 100%;
+  height: 618px;
+  background-color: $surface-container;
+  overflow: hidden;
+}
+
+.carousel {
+  width: 100%;
+  height: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.carousel-track {
+  display: flex;
+  height: 100%;
+  width: 100%;
+}
+
+.carousel-item {
+  flex: 0 0 100%;
+  width: 100%;
+  height: 100%;
+
+  .carousel-image {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.carousel-indicators {
+  position: absolute;
+  bottom: 48px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 16px;
+}
+
+.indicator {
+  width: 48px;
+  height: 1px;
+  background-color: $outline-variant;
+
+  &.indicator-active {
+    background-color: $primary;
+  }
+}
+
+// Title Section
+.title-section {
+  padding: 64px 32px;
+  text-align: center;
+}
+
+.product-series {
+  display: block;
+  font-family: $font-family-english;
+  font-size: 14px;
+  color: $secondary;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+.product-title {
+  display: block;
+  font-family: $font-family-chinese;
+  font-size: 48px;
+  color: $primary;
+  margin-bottom: 8px;
+  letter-spacing: 2px;
+}
+
+.product-subtitle {
+  display: block;
+  font-family: $font-family-english;
+  font-size: 18px;
+  color: $secondary;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+}
+
+// Highlights Section
+.highlights-section {
+  padding: 0 32px 96px;
+}
+
+.highlights-grid {
+  border-top: 1px solid $secondary-fixed;
+  padding-top: 64px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 48px;
+}
+
+.highlight-item {
+  text-align: center;
+
+  .highlight-icon {
+    display: block;
+    font-family: 'Material Symbols Outlined';
+    font-size: 48px;
+    color: $tertiary;
+    margin-bottom: 24px;
+  }
+
+  .highlight-title {
+    display: block;
+    font-family: $font-family-chinese;
+    font-size: 20px;
+    color: $on-surface;
+    margin-bottom: 8px;
+  }
+
+  .highlight-subtitle {
+    display: block;
+    font-family: $font-family-english;
+    font-size: 12px;
+    color: $secondary;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .highlight-desc {
+    display: block;
+    font-family: $font-family-english;
+    font-size: 14px;
+    color: $on-surface-variant;
+    font-weight: 300;
+    padding: 0 16px;
+    line-height: 1.6;
+  }
+}
+
+// Specifications Section
+.specifications-section {
+  padding: 0 32px 96px;
+}
+
+.specifications-card {
+  background-color: $surface-container-low;
+  padding: 48px;
+}
+
+.specifications-header {
+  border-bottom: 1px solid $outline-variant;
+  padding-bottom: 24px;
+  margin-bottom: 48px;
+}
+
+.specifications-title {
+  display: block;
+  font-family: $font-family-chinese;
+  font-size: 36px;
+  color: $on-surface;
+  margin-bottom: 8px;
+}
+
+.specifications-subtitle {
+  display: block;
+  font-family: $font-family-english;
+  font-size: 14px;
+  color: $secondary;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-top: 8px;
+}
+
+.specifications-list {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.spec-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+
+  .spec-label {
+    .spec-name {
+      display: block;
+      font-family: $font-family-chinese;
+      font-size: 18px;
+      color: $on-surface;
+      margin-bottom: 4px;
+    }
+
+    .spec-name-en {
+      display: block;
+      font-family: $font-family-english;
+      font-size: 12px;
+      color: $secondary;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+  }
+
+  .spec-value {
+    font-family: $font-family-english;
+    font-size: 14px;
+    color: $on-surface-variant;
+    font-weight: 300;
+    text-align: right;
+  }
+}
+
+// Inspiration Section
+.inspiration-section {
+  padding: 0 32px 96px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 64px;
+  align-items: center;
+}
+
+.inspiration-text {
+  .inspiration-title {
+    display: block;
+    font-family: $font-family-chinese;
+    font-size: 36px;
+    color: $on-surface;
+    margin-bottom: 8px;
+  }
+
+  .inspiration-subtitle {
+    display: block;
+    font-family: $font-family-english;
+    font-size: 14px;
+    color: $secondary;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-top: 8px;
+    margin-bottom: 32px;
+  }
+
+  .inspiration-content {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    margin-bottom: 40px;
+
+    .inspiration-paragraph {
+      display: block;
+      font-family: $font-family-english;
+      font-size: 14px;
+      color: $on-surface-variant;
+      line-height: 1.8;
+      letter-spacing: 0.5px;
+    }
+  }
+
+  .inspiration-link {
+    padding-bottom: 4px;
+    border-bottom: 1px solid $tertiary;
+    display: inline-block;
+
+    text {
+      font-family: $font-family-english;
+      font-size: 14px;
+      color: $tertiary;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    &:active {
+      opacity: 0.7;
+    }
+  }
+}
+
+.inspiration-image-wrapper {
+  width: 100%;
+  height: 500px;
+  overflow: hidden;
+
+  .inspiration-image {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+// Action Footer
+.action-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  padding: 24px 32px;
+  z-index: $z-index-nav;
+}
+
+.price-info {
+  display: none;
+  margin-bottom: 16px;
+
+  .price {
+    display: block;
+    font-family: $font-family-chinese;
+    font-size: 20px;
+    color: $on-surface;
+  }
+
+  .price-label {
+    display: block;
+    font-family: $font-family-english;
+    font-size: 12px;
+    color: $secondary;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+}
+
+.action-buttons {
+  display: flex;
+  gap: 16px;
+}
+
+.action-button {
+  flex: 1;
+  padding: 16px;
+  font-family: $font-family-chinese;
+  font-size: 18px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  .button-subtitle {
+    font-family: $font-family-english;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    opacity: 0.6;
+    margin-top: 4px;
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+
+  &.action-button-outline {
+    border: 1px solid $primary;
+    color: $on-surface;
+    background-color: transparent;
+
+    &:active {
+      background-color: $surface-container;
+    }
+  }
+
+  &.action-button-primary {
+    background-color: $primary;
+    color: $on-primary;
+    position: relative;
+    overflow: hidden;
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to right, $primary, $primary-container);
+      transform: translateX(100%);
+      transition: transform 0.5s ease;
+    }
+
+    &:active::after {
+      transform: translateX(0);
+    }
+  }
+}

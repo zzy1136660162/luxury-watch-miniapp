@@ -1,0 +1,20 @@
+# 微信小程序编译文件
+miniprogram_npm/
+node_modules/
+package-lock.json
+
+# 编译产物
+*.wxss
+*.wxml
+
+# 微信开发者工具缓存
+.vscode/
+*.log
+
+# macOS
+.DS_Store
+
+# 微信小程序的日志和缓存
+logs/
+*.log
+/.idea/

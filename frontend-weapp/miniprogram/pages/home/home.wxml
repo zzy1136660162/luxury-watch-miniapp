@@ -115,24 +115,4 @@
       </view>
     </view>
   </scroll-view>
-
-  <!-- Bottom Navigation -->
-  <view class="bottom-nav">
-    <view class="nav-item nav-item-active" bindtap="onNavTap" data-page="home">
-      <text class="nav-icon">home</text>
-      <text class="nav-label">Home</text>
-    </view>
-    <view class="nav-item" bindtap="onNavTap" data-page="collections">
-      <text class="nav-icon">watch</text>
-      <text class="nav-label">Collections</text>
-    </view>
-    <view class="nav-item" bindtap="onNavTap" data-page="heritage">
-      <text class="nav-icon">history_edu</text>
-      <text class="nav-label">Heritage</text>
-    </view>
-    <view class="nav-item" bindtap="onNavTap" data-page="member">
-      <text class="nav-icon">person</text>
-      <text class="nav-label">Member</text>
-    </view>
-  </view>
 </view>
