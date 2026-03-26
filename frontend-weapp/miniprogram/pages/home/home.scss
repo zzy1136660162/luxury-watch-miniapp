@@ -272,6 +272,7 @@
 // Featured Collections
 .section-collections {
   background-color: $surface;
+  width: 100vw;
   padding: 96px 0;
 }
 
@@ -294,7 +295,7 @@
 }
 
 .collections-scroll {
-  width: 100%;
+  width: 100vw;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
 }
@@ -308,6 +309,7 @@
 .collection-item {
   min-width: 300px;
   max-width: 450px;
+  padding-right: 5vw;
   cursor: pointer;
 
   .collection-image-wrapper {

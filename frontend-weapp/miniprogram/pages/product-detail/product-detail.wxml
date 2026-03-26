@@ -6,18 +6,14 @@
   <scroll-view class="content" scroll-y type="list" enhanced="{{true}}" bounces="{{false}}">
     <!-- 1. Image Carousel -->
     <view class="carousel-section">
-      <scroll-view class="carousel" scroll-x enhanced="{{true}}" snap-x="{{true}}" bounces="{{false}}">
-        <view class="carousel-track">
-          <view class="carousel-item" wx:for="{{productImages}}" wx:key="index">
-            <image class="carousel-image" src="{{item}}" mode="aspectFill" />
-          </view>
-        </view>
-      </scroll-view>
+      <swiper class="carousel" indicator-dots="{{false}}" autoplay="{{true}}" interval="3000" duration="500" circular="{{true}}" bindchange="onImageChange">
+        <swiper-item wx:for="{{productImages}}" wx:key="index">
+          <image class="carousel-image" src="{{item}}" mode="aspectFill" />
+        </swiper-item>
+      </swiper>
       
       <view class="carousel-indicators">
-        <view class="indicator {{currentImageIndex === 0 ? 'indicator-active' : ''}}"></view>
-        <view class="indicator {{currentImageIndex === 1 ? 'indicator-active' : ''}}"></view>
-        <view class="indicator {{currentImageIndex === 2 ? 'indicator-active' : ''}}"></view>
+        <view class="indicator {{currentImageIndex === index ? 'indicator-active' : ''}}" wx:for="{{productImages}}" wx:key="index"></view>
       </view>
     </view>
 
