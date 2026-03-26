@@ -32,7 +32,7 @@
     <view class="highlights-section">
       <view class="highlights-grid">
         <view class="highlight-item">
-          <image class="highlight-icon" src="https://cdn.jsdelivr.net/npm/@material-design-icons/svg@0.14.15/filled/settings_slow_motion.svg" mode="aspectFit" />
+          <image class="highlight-icon" src="https://cdn.jsdelivr.net/npm/@material-design-icons/svg@0.14.15/filled/timer.svg" mode="aspectFit" />
           <text class="highlight-title">自产机芯</text>
           <text class="highlight-subtitle">In-house Movement</text>
           <text class="highlight-desc">搭载 CH-700 自动上链机芯，精准卓越</text>

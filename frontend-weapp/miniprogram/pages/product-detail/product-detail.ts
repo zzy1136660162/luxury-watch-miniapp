@@ -18,7 +18,7 @@ Component({
       price: 'CNY 248,000',
       highlights: [
         {
-          icon: 'settings_slow_motion',
+          icon: 'timer',
           title: '自产机芯',
           subtitle: 'In-house Movement',
           desc: '搭载 CH-700 自动上链机芯，精准卓越'
