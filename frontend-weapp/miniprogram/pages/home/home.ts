@@ -63,7 +63,7 @@ Component({
 
     onExploreHeritage() {
       wx.navigateTo({
-        url: '/pages/heritage/heritage'
+        url: '/pages/product-detail/product-detail?id=heritage'
       });
     },
 

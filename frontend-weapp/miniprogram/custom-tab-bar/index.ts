@@ -6,26 +6,26 @@ Component({
       {
         pagePath: '/pages/home/home',
         text: '首页',
-        iconPath: '/assets/iconfont/首页 (1).png',
-        selectedIconPath: '/assets/iconfont/首页.png'
+        iconPath: '/assets/iconfont/c1.png',
+        selectedIconPath: '/assets/iconfont/c2.png'
       },
       {
         pagePath: '/pages/collections/collections',
         text: '系列',
-        iconPath: '/assets/iconfont/配饰-手表-线性 (1).png',
-        selectedIconPath: '/assets/iconfont/配饰-手表-线性.png'
+        iconPath: '/assets/iconfont/d1.png',
+        selectedIconPath: '/assets/iconfont/d2.png'
       },
       {
         pagePath: '/pages/heritage/heritage',
         text: '品牌馆',
-        iconPath: '/assets/iconfont/签到，羽毛，笔，毛笔，羽毛笔 (1).png',
-        selectedIconPath: '/assets/iconfont/签到，羽毛，笔，毛笔，羽毛笔.png'
+        iconPath: '/assets/iconfont/a1.png',
+        selectedIconPath: '/assets/iconfont/a2.png'
       },
       {
         pagePath: '/pages/member/member',
         text: '会员',
-        iconPath: '/assets/iconfont/038_我的8 (1).png',
-        selectedIconPath: '/assets/iconfont/038_我的8.png'
+        iconPath: '/assets/iconfont/b1.png',
+        selectedIconPath: '/assets/iconfont/b2.png'
       }
     ]
   },
