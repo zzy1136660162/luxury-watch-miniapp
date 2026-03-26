@@ -3,10 +3,35 @@
 <view class="page">
   <navigation-bar title="时全饰美" back="{{false}}" color="black" background="#ffffff" showMenu="{{true}}" />
 
-  <scroll-view class="content" scroll-y type="list" enhanced="{{true}}" bounces="{{false}}">
+  <!-- Fixed Category Navigation - shown when scrolled -->
+  <view class="category-nav-fixed {{isNavFixed ? 'category-nav-fixed-visible' : ''}}">
+    <scroll-view class="category-scroll" scroll-x enhanced="{{true}}" show-scrollbar="{{false}}">
+      <view class="category-track">
+        <view class="category-item {{currentCategory === 'classic' ? 'category-active' : ''}}" bindtap="onCategoryTap" data-category="classic">
+          <text class="category-name">经典</text>
+          <text class="category-name-en">Classic</text>
+        </view>
+        <view class="category-item {{currentCategory === 'sport' ? 'category-active' : ''}}" bindtap="onCategoryTap" data-category="sport">
+          <text class="category-name">运动</text>
+          <text class="category-name-en">Sport</text>
+        </view>
+        <view class="category-item {{currentCategory === 'complications' ? 'category-active' : ''}}" bindtap="onCategoryTap" data-category="complications">
+          <text class="category-name">复杂功能</text>
+          <text class="category-name-en">Complications</text>
+        </view>
+        <view class="category-item {{currentCategory === 'ladies' ? 'category-active' : ''}}" bindtap="onCategoryTap" data-category="ladies">
+          <text class="category-name">女士</text>
+          <text class="category-name-en">Ladies</text>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+
+  <scroll-view class="content" scroll-y type="list" enhanced="{{true}}" bounces="{{false}}" bindscroll="onScroll" id="main-scroll">
     <!-- Hero Banner -->
     <view class="hero-banner">
       <image class="hero-image" src="{{heroImage}}" mode="aspectFill" />
+      <view class="hero-overlay"></view>
       <view class="hero-content">
         <text class="hero-title">永恒之艺</text>
         <text class="hero-subtitle">The Art of Eternity</text>
@@ -14,8 +39,8 @@
       </view>
     </view>
 
-    <!-- Category Navigation -->
-    <view class="category-nav">
+    <!-- Category Navigation - normal position below hero-banner -->
+    <view class="category-nav" id="category-nav">
       <scroll-view class="category-scroll" scroll-x enhanced="{{true}}" show-scrollbar="{{false}}">
         <view class="category-track">
           <view class="category-item {{currentCategory === 'classic' ? 'category-active' : ''}}" bindtap="onCategoryTap" data-category="classic">
@@ -117,16 +142,26 @@
         </view>
         <view class="product-list-content">
           <view class="product-ref">
-            <text>Ref. 7230-D</text>
+            <text>Ref. 9900-D</text>
           </view>
-          <text class="product-list-name">深海蓝·潜水系列</text>
-          <text class="product-list-subtitle">Abyss Blue Diver</text>
+          <text class="product-list-name">深海之蓝·探险者</text>
+          <text class="product-list-subtitle">Deep Sea Blue Explorer</text>
           <view class="product-list-divider"></view>
-          <text class="product-list-desc">征服深海的勇者之选。单向旋转表圈，300米防水深度，为您开启水下探索之旅。</text>
+          <text class="product-list-desc">300米专业级防水，配有陶瓷旋转表圈。深邃的蓝色放射纹表盘，在不同光线下折射出如海洋般的万千变幻。</text>
           <view class="product-list-action">
             <button class="view-details-btn" bindtap="onProductTap" data-id="3">View Details</button>
           </view>
         </view>
+      </view>
+    </view>
+
+    <!-- Footer CTA Section -->
+    <view class="footer-cta-section">
+      <text class="footer-cta-title">探寻更多可能</text>
+      <text class="footer-cta-desc">从经典到现代，每一款 CHRONOS 腕表都讲述着关于时间与匠心的独特故事。</text>
+      <view class="footer-cta-buttons">
+        <button class="cta-btn-outline" bindtap="onRequestCatalogue">Request Catalogue</button>
+        <button class="cta-btn-primary" bindtap="onLocateBoutique">Locate Boutique</button>
       </view>
     </view>
   </scroll-view>

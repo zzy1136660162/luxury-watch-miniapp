@@ -3,6 +3,7 @@
 .page {
   width: 100vw;
   height: 100vh;
+  padding-bottom: 10vh;
   display: flex;
   flex-direction: column;
   background-color: $surface;
@@ -282,10 +283,13 @@
 .arrow {
   width: 24px;
   height: 24px;
-  filter: invert(70%) sepia(10%) saturate(100%);
+  filter: invert(0%);
+  opacity: 1;
+  transition: opacity 0.3s ease;
 
-  &.arrow-right {
-    filter: invert(0%);
+  &.arrow-disabled {
+    filter: invert(70%) sepia(10%) saturate(100%);
+    opacity: 0.4;
   }
 }
 

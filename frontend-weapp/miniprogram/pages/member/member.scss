@@ -245,7 +245,7 @@ $font-family-english: 'Manrope', sans-serif;
 
 .privileges-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 1px;
   background-color: rgba($outline-variant, 0.2);
 }
@@ -344,9 +344,11 @@ $font-family-english: 'Manrope', sans-serif;
 
 .tab-item {
   white-space: nowrap;
-  padding-bottom: 8px;
+  padding: 8px 16px;
   border-bottom: 2px solid transparent;
   cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
 
   text {
     font-family: $font-family-english;
@@ -354,13 +356,31 @@ $font-family-english: 'Manrope', sans-serif;
     color: $secondary;
     letter-spacing: 0.1em;
     text-transform: uppercase;
+    transition: color 0.3s ease;
+  }
+
+  &:active {
+    background-color: rgba($tertiary, 0.05);
+    border-radius: 4px 4px 0 0;
   }
 
   &.tab-active {
-    border-bottom-color: $primary;
+    border-bottom-color: $tertiary;
 
     text {
-      color: $primary;
+      color: $tertiary;
+      font-weight: 500;
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 20px;
+      height: 2px;
+      background-color: $tertiary;
     }
   }
 }
@@ -471,70 +491,82 @@ $font-family-english: 'Manrope', sans-serif;
 .section-title-row {
   display: flex;
   align-items: baseline;
-  margin-bottom: 24px;
+  margin-bottom: 32px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba($outline-variant, 0.3);
 }
 
 .section-title-text {
   font-family: $font-family-chinese;
   font-size: 20px;
   color: $on-surface;
-  letter-spacing: -0.02em;
+  letter-spacing: 0.05em;
 }
 
 .section-title-en {
   font-family: $font-family-english;
   font-size: 10px;
-  color: $secondary;
-  letter-spacing: 0.1em;
+  color: $tertiary;
+  letter-spacing: 0.15em;
   text-transform: uppercase;
-  margin-left: 8px;
+  margin-left: 12px;
 }
 
 .services-list {
   display: flex;
   flex-direction: column;
-  gap: 1px;
-  background-color: rgba($outline-variant, 0.2);
+  gap: 12px;
 }
 
 .service-item {
-  background-color: $surface;
-  padding: 24px 0;
+  background: linear-gradient(135deg, $surface 0%, $surface-container-low 100%);
+  padding: 28px 24px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   cursor: pointer;
-  transition: padding-left 0.3s ease;
+  border-radius: 12px;
+  border: 1px solid rgba($outline-variant, 0.15);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  transition: all 0.3s ease;
 
   &:active {
-    padding-left: 8px;
+    transform: translateX(4px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    border-color: rgba($tertiary, 0.3);
   }
 }
 
 .service-left {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 20px;
 }
 
 .service-icon {
-  width: 24px;
-  height: 24px;
-  filter: invert(40%) sepia(10%) saturate(200%);
+  width: 40px;
+  height: 40px;
+  padding: 8px;
+  background-color: rgba($tertiary, 0.08);
+  border-radius: 10px;
+  filter: invert(26%) sepia(100%) saturate(1000%) hue-rotate(15deg);
 }
 
 .service-name {
   font-family: $font-family-chinese;
-  font-size: 14px;
+  font-size: 15px;
   color: $on-surface;
+  letter-spacing: 0.02em;
 }
 
 .service-arrow {
-  width: 24px;
-  height: 24px;
-  filter: invert(70%) sepia(10%) saturate(100%);
+  width: 20px;
+  height: 20px;
+  filter: invert(60%) sepia(10%) saturate(100%);
+  transition: transform 0.3s ease;
 
   .service-item:active & {
-    filter: invert(0%);
+    filter: invert(26%) sepia(100%) saturate(1000%) hue-rotate(15deg);
+    transform: translateX(4px);
   }
 }

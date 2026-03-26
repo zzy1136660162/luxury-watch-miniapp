@@ -1,4 +1,14 @@
 Component({
+  pageLifetimes: {
+    show() {
+      // 设置 tabBar 选中索引为 2（品牌馆）
+      const tabBar = this.getTabBar();
+      if (tabBar) {
+        tabBar.setSelectedIndex(2);
+      }
+    }
+  },
+
   data: {
     heroImage: 'https://lh3.googleusercontent.com/aida-public/AB6AXuARMx1bOq18igcZhn8ReJazVtYUjh-0TyfEMxbNO1aOD46_pqLjaxwoPy59WQrIOge6yMSwoQvWvUgyHZaOzHrsLyzqz5DnCMmCTK5Uyss_e7M4clO5wU72v0A9ifVJLc8RQKrqr5dt5oD_3o2Va7yzo2hUZ5ARySKRouA5lYQF9RKBgD1MCiM3nmJxFxeFHVUgn9esEtlZFOFty0s8g21d9dNCTiNE8qHuzo7NRIiIl8ydaT798xDllNY3kIopYCIJikir_XXgAEqQ',
 

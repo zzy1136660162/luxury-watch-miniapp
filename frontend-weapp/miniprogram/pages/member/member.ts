@@ -1,5 +1,16 @@
 Component({
+  pageLifetimes: {
+    show() {
+      // 设置 tabBar 选中索引为 3（会员）
+      const tabBar = this.getTabBar();
+      if (tabBar) {
+        tabBar.setSelectedIndex(3);
+      }
+    }
+  },
+
   data: {
+    currentTab: 'all',
     memberPoints: '12,800',
 
     userAvatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBDoQbVVmVmaVSpBYX6NpjKX1iSBAcllQK_xEIM7mLhh_hJIBVAe2-2jNvM6SBpYJB5WcVmi35nTjpORWRwvj5Ftzipsk8yXzngO0pGNNS4S7iGOCb1zKlwMN3OlXu-WmCIIso1cW9gNXxLW438SpDQyj0RRAPQ_uyQvqeCepghvffnLEHZnDv-aDSR1Xg0Te24r0kDYMbtXTgtANUUNCPNEwDZG0NCz8ZZ7bMc8L5HOqWgJiH0XQUX2CSZ-dzlOVhn7X4Tt6MHJb0x',
@@ -41,10 +52,9 @@ Component({
 
     onRewardTap(e: any) {
       const id = e.currentTarget.dataset.id;
-      wx.showModal({
-        title: '商品详情',
-        content: `商品ID: ${id}`,
-        confirmText: '确定'
+      // 跳转到商品详情页
+      wx.navigateTo({
+        url: `/pages/product-detail/product-detail?id=${id}`
       });
     },
 
@@ -55,6 +65,11 @@ Component({
         content: `正在打开 ${type} 功能`,
         confirmText: '确定'
       });
+    },
+
+    onTabChange(e: any) {
+      const tab = e.currentTarget.dataset.tab;
+      this.setData({ currentTab: tab });
     }
   }
 });

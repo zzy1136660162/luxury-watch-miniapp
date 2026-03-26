@@ -1,5 +1,16 @@
 Component({
+  pageLifetimes: {
+    show() {
+      // 设置 tabBar 选中索引为 0（首页）
+      const tabBar = this.getTabBar();
+      if (tabBar) {
+        tabBar.setSelectedIndex(0);
+      }
+    }
+  },
+
   data: {
+    scrollLeft: 0,
     heroImage: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBDw8BlafdGDBrHTPyUg47BOJ05I7GsFsUoDPX_6qh9gps50NJTQK47CbHIiMI3TM84epZC_xFHni3YYwsonoWfPiuJCuWDO6jV3BxtoSFCQmvybsrODUQLzKJwy2DO1TtK9Lpdst9M7eClV_UYkUsercONSFEf__Um6ox-ffEQE98nvZF4g_fMBsLAroMtU6FDReQm80j89sJ0dlzbA0Hwnr_syC56iWhaYk2DWQRnMmRH-IolFp-vVQo0_XbMZZxhzQ9578U9a-fd',
     
     newArrival1: {
@@ -65,17 +76,31 @@ Component({
     },
 
     onScrollLeft() {
-      const scrollView = this.selectComponent('.collections-scroll');
-      if (scrollView) {
-        scrollView.scrollLeft -= 450;
-      }
+      const query = this.createSelectorQuery();
+      query.select('#collectionsScroll').scrollOffset();
+      query.exec((res) => {
+        if (res && res[0]) {
+          const currentScrollLeft = res[0].scrollLeft;
+          const newScrollLeft = Math.max(0, currentScrollLeft - 300);
+          this.setData({ scrollLeft: newScrollLeft });
+        }
+      });
     },
 
     onScrollRight() {
-      const scrollView = this.selectComponent('.collections-scroll');
-      if (scrollView) {
-        scrollView.scrollLeft += 450;
-      }
+      const query = this.createSelectorQuery();
+      query.select('#collectionsScroll').scrollOffset();
+      query.exec((res) => {
+        if (res && res[0]) {
+          const currentScrollLeft = res[0].scrollLeft;
+          this.setData({ scrollLeft: currentScrollLeft + 300 });
+        }
+      });
+    },
+
+    onCollectionScroll(e: any) {
+      const scrollLeft = e.detail.scrollLeft;
+      this.setData({ scrollLeft: scrollLeft });
     }
   }
 });

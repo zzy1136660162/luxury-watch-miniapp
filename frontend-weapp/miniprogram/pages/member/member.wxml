@@ -106,16 +106,16 @@
       <view class="rewards-tabs">
         <scroll-view class="tabs-scroll" scroll-x enhanced="{{true}}" show-scrollbar="{{false}}">
           <view class="tabs-track">
-            <view class="tab-item tab-active">
+            <view class="tab-item {{currentTab === 'all' ? 'tab-active' : ''}}" bindtap="onTabChange" data-tab="all">
               <text>All 全部</text>
             </view>
-            <view class="tab-item">
+            <view class="tab-item {{currentTab === 'lifestyle' ? 'tab-active' : ''}}" bindtap="onTabChange" data-tab="lifestyle">
               <text>Lifestyle 品牌周边</text>
             </view>
-            <view class="tab-item">
+            <view class="tab-item {{currentTab === 'services' ? 'tab-active' : ''}}" bindtap="onTabChange" data-tab="services">
               <text>Services 专属服务</text>
             </view>
-            <view class="tab-item">
+            <view class="tab-item {{currentTab === 'exclusive' ? 'tab-active' : ''}}" bindtap="onTabChange" data-tab="exclusive">
               <text>Exclusive 限定沙龙</text>
             </view>
           </view>

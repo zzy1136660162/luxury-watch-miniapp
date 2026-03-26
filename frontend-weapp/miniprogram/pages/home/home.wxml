@@ -71,12 +71,12 @@
           <text class="section-subtitle">Featured Collections</text>
         </view>
         <view class="scroll-arrows">
-          <image class="arrow arrow-left" src="https://cdn.jsdelivr.net/npm/@material-design-icons/svg@0.14.15/filled/west.svg" mode="aspectFit" bindtap="onScrollLeft" />
+          <image class="arrow arrow-left {{scrollLeft <= 0 ? 'arrow-disabled' : ''}}" src="https://cdn.jsdelivr.net/npm/@material-design-icons/svg@0.14.15/filled/west.svg" mode="aspectFit" bindtap="onScrollLeft" />
           <image class="arrow arrow-right" src="https://cdn.jsdelivr.net/npm/@material-design-icons/svg@0.14.15/filled/east.svg" mode="aspectFit" bindtap="onScrollRight" />
         </view>
       </view>
 
-      <scroll-view class="collections-scroll" scroll-x enhanced="{{true}}" show-scrollbar="{{false}}">
+      <scroll-view id="collectionsScroll" class="collections-scroll" scroll-x enhanced="{{true}}" show-scrollbar="{{false}}" scroll-left="{{scrollLeft}}" bindscroll="onCollectionScroll">
         <view class="collections-track">
           <view class="collection-item" bindtap="onCollectionTap" data-collection="universe">
             <view class="collection-image-wrapper">
