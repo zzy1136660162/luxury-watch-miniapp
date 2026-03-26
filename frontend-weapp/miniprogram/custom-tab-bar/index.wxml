@@ -1,41 +1,41 @@
 <view class="tab-bar">
   <!-- 首页按钮 -->
   <view 
-    class="tab-item {{num1 === 1 ? 'active' : ''}}"
+    class="tab-item {{isHomeActive ? 'active' : ''}}"
     bindtap="switchTab"
     data-index="0"
   >
-    <image class="tab-icon" src="{{num1 === 1 ? list[0].selectedIconPath : list[0].iconPath}}" mode="aspectFit" />
+    <image class="tab-icon" src="{{isHomeActive ? list[0].selectedIconPath : list[0].iconPath}}" mode="aspectFit" />
     <text class="tab-text">{{list[0].text}}</text>
   </view>
   
   <!-- 系列按钮 -->
   <view 
-    class="tab-item {{num2 === 1 ? 'active' : ''}}"
+    class="tab-item {{isSeriesActive ? 'active' : ''}}"
     bindtap="switchTab"
     data-index="1"
   >
-    <image class="tab-icon" src="{{num2 === 1 ? list[1].selectedIconPath : list[1].iconPath}}" mode="aspectFit" />
+    <image class="tab-icon" src="{{isSeriesActive ? list[1].selectedIconPath : list[1].iconPath}}" mode="aspectFit" />
     <text class="tab-text">{{list[1].text}}</text>
   </view>
   
   <!-- 品牌馆按钮 -->
   <view 
-    class="tab-item {{num3 === 1 ? 'active' : ''}}"
+    class="tab-item {{isBrandActive ? 'active' : ''}}"
     bindtap="switchTab"
     data-index="2"
   >
-    <image class="tab-icon" src="{{num3 === 1 ? list[2].selectedIconPath : list[2].iconPath}}" mode="aspectFit" />
+    <image class="tab-icon" src="{{isBrandActive ? list[2].selectedIconPath : list[2].iconPath}}" mode="aspectFit" />
     <text class="tab-text">{{list[2].text}}</text>
   </view>
   
   <!-- 会员按钮 -->
   <view 
-    class="tab-item {{num4 === 1 ? 'active' : ''}}"
+    class="tab-item {{isMemberActive ? 'active' : ''}}"
     bindtap="switchTab"
     data-index="3"
   >
-    <image class="tab-icon" src="{{num4 === 1 ? list[3].selectedIconPath : list[3].iconPath}}" mode="aspectFit" />
+    <image class="tab-icon" src="{{isMemberActive ? list[3].selectedIconPath : list[3].iconPath}}" mode="aspectFit" />
     <text class="tab-text">{{list[3].text}}</text>
   </view>
 </view>

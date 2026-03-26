@@ -1,7 +1,7 @@
 <import src="/components/navigation-bar/navigation-bar.wxml" />
 
 <view class="page">
-  <navigation-bar title="CHRONOS" back="{{false}}" color="black" background="#ffffff" showMenu="{{true}}" />
+  <navigation-bar title="时全饰美" back="{{false}}" color="black" background="#ffffff" showMenu="{{true}}" />
 
   <scroll-view class="content" scroll-y type="list" enhanced="{{true}}" bounces="{{false}}">
     <!-- Section 1: Hero Banner -->
