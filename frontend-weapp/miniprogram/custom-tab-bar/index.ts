@@ -6,25 +6,25 @@ Component({
       {
         pagePath: '/pages/home/home',
         text: '首页',
-        iconPath: '/assets/iconfont/c1.png',
+        iconPath: '/assets/iconfont/home_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.png',
         selectedIconPath: '/assets/iconfont/home_24dp_D4AF37_FILL0_wght400_GRAD0_opsz24.png'
       },
       {
         pagePath: '/pages/collections/collections',
         text: '系列',
-        iconPath: '/assets/iconfont/d1.png',
+        iconPath: '/assets/iconfont/watch_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.png',
         selectedIconPath: '/assets/iconfont/watch_24dp_D4AF37_FILL0_wght400_GRAD0_opsz24.png'
       },
       {
         pagePath: '/pages/heritage/heritage',
         text: '品牌馆',
-        iconPath: '/assets/iconfont/a1.png',
+        iconPath: '/assets/iconfont/history_edu_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.png',
         selectedIconPath: '/assets/iconfont/history_edu_24dp_D4AF37_FILL0_wght400_GRAD0_opsz24.png'
       },
       {
         pagePath: '/pages/member/member',
         text: '会员',
-        iconPath: '/assets/iconfont/b1.png',
+        iconPath: '/assets/iconfont/person_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.png',
         selectedIconPath: '/assets/iconfont/person_24dp_D4AF37_FILL0_wght400_GRAD0_opsz24.png'
       }
     ]
