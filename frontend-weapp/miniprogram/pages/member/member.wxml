@@ -26,7 +26,7 @@
             <image class="user-avatar" src="{{userAvatar}}" mode="aspectFill" />
           </view>
           <view class="user-info">
-            <text class="user-name">ALEXANDER WANG</text>
+            <text class="user-name">王先生</text>
             <text class="user-id">ID: 8829 4402</text>
           </view>
         </view>

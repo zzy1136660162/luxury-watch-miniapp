@@ -1,17 +1,44 @@
-# 微信小程序编译文件
-miniprogram_npm/
-node_modules/
-package-lock.json
-
-
-# 微信开发者工具缓存
-.vscode/
-*.log
-
-# macOS
+# ===========================
+# 通用
+# ===========================
 .DS_Store
-
-# 微信小程序的日志和缓存
-logs/
+.idea/
+*.iml
 *.log
-/.idea/
+*.local
+logs/
+
+# ===========================
+# 后端 Java (Spring Boot / Maven)
+# ===========================
+backend-java/target/
+backend-java/logs/
+# Maven
+*.class
+*.jar
+*.war
+*.ear
+!.mvn/wrapper/maven-wrapper.jar
+
+# ===========================
+# 管理后台 (Vue 3)
+# ===========================
+backend-admin/node_modules/
+backend-admin/dist/
+backend-admin/dist-ssr/
+backend-admin/*.local
+backend-admin/.eslintcache
+backend-admin/.stylelintcache
+backend-admin/.env
+backend-admin/.env.local
+backend-admin/.env.*.local
+
+# ===========================
+# 微信小程序
+# ===========================
+frontend-weapp/node_modules/
+frontend-weapp/miniprogram_npm/
+frontend-weapp/package-lock.json
+frontend-weapp/.vscode/
+frontend-weapp/logs/
+frontend-weapp/*.log
