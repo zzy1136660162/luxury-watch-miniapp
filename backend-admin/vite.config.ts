@@ -3,6 +3,7 @@ import path from 'node:path'
 import process from 'node:process'
 import dayjs from 'dayjs'
 import { defineConfig, loadEnv } from 'vite'
+import type { Rewrite } from 'vite'
 import pkg from './package.json'
 import createVitePlugins from './vite/plugins'
 
@@ -23,9 +24,10 @@ export default defineConfig(({ mode, command }) => {
       host: true,
       port: 9000,
       proxy: {
-        '/admin': {
+        '/proxy': {
           target: env.VITE_APP_API_BASEURL,
           changeOrigin: command === 'serve' && env.VITE_OPEN_PROXY === 'true',
+          rewrite: (path: Rewrite) => path.replace(/^\/proxy/, ''),
         },
       },
     },

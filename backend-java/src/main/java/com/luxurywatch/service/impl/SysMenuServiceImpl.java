@@ -70,7 +70,7 @@ public class SysMenuServiceImpl implements SysMenuService {
         meta.put("menuType", menu.getMenuType());
 
         // 如果是按钮，添加权限标识
-        if (menu.getMenuType() == 3 && StringUtils.hasText(menu.getPermission())) {
+        if (menu.getMenuType() != null && menu.getMenuType() == 3 && StringUtils.hasText(menu.getPermission())) {
             meta.put("auth", menu.getPermission());
         }
 
@@ -78,46 +78,30 @@ public class SysMenuServiceImpl implements SysMenuService {
         List<SysMenu> children = groupByParent.getOrDefault(menu.getId(), Collections.emptyList());
 
         if (!children.isEmpty()) {
-            // 有子菜单，是目录或菜单
-            if (menu.getMenuType() == 1) {
-                // 目录类型
-                node.put("component", "Layout");
-            } else {
-                // 菜单类型
-                node.put("component", menu.getComponent());
-            }
-
+            // 有子菜单
             List<Map<String, Object>> childNodes = children.stream()
                     .sorted(Comparator.comparingInt(m -> m.getSort() == null ? 0 : m.getSort()))
                     .map(child -> buildMenuNode(child, groupByParent))
                     .collect(Collectors.toList());
             node.put("children", childNodes);
+
+            // 目录类型设置 Layout 组件
+            if (menu.getMenuType() != null && menu.getMenuType() == 1) {
+                node.put("component", "Layout");
+            } else if (StringUtils.hasText(menu.getComponent())) {
+                node.put("component", menu.getComponent());
+            }
         } else {
             // 没有子菜单
-            if (menu.getMenuType() == 2) {
-                // 菜单类型
-                node.put("component", menu.getComponent());
+            if (menu.getMenuType() != null && menu.getMenuType() == 2) {
+                // 菜单类型，设置组件
+                if (StringUtils.hasText(menu.getComponent())) {
+                    node.put("component", menu.getComponent());
+                }
             }
         }
 
         node.put("meta", meta);
         return node;
-    }
-
-    /**
-     * 构建菜单元信息
-     */
-    private Map<String, Object> buildMenuMeta(SysMenu menu) {
-        Map<String, Object> meta = new LinkedHashMap<>();
-        meta.put("title", menu.getName());
-        meta.put("icon", menu.getIcon());
-        meta.put("menuType", menu.getMenuType());
-
-        // 如果是按钮，添加权限标识
-        if (menu.getMenuType() == 3 && StringUtils.hasText(menu.getPermission())) {
-            meta.put("auth", menu.getPermission());
-        }
-
-        return meta;
     }
 }

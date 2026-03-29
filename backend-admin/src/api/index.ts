@@ -2,6 +2,9 @@ import axios from 'axios'
 // import qs from 'qs'
 import { toast } from 'vue-sonner'
 
+// 调试模式
+const DEBUG = true
+
 // 请求重试配置
 const MAX_RETRY_COUNT = 3 // 最大重试次数
 const RETRY_DELAY = 1000 // 重试延迟时间（毫秒）
@@ -16,7 +19,7 @@ declare module 'axios' {
 
 const api = axios.create({
   baseURL: (import.meta.env.DEV && import.meta.env.VITE_OPEN_PROXY) ? '/proxy/' : import.meta.env.VITE_APP_API_BASEURL,
-  timeout: 1000 * 60,
+  timeout: 1000 * 600,
   responseType: 'json',
 })
 
@@ -29,8 +32,12 @@ api.interceptors.request.use(
       if (userStore.isLogin) {
         // 使用 Authorization header 携带 Token
         request.headers.Authorization = userStore.token
+        DEBUG && console.log('[API] 请求添加 Token:', request.url, 'Token:', userStore.token)
+      } else {
+        DEBUG && console.log('[API] 请求未添加 Token (未登录):', request.url)
       }
     }
+    DEBUG && console.log('[API] 请求发送:', request.method?.toUpperCase(), request.url, request)
     // 是否将 POST 请求参数进行字符串化处理
     if (request.method === 'post') {
       // request.data = qs.stringify(request.data, {
@@ -43,8 +50,12 @@ api.interceptors.request.use(
 
 // 处理错误信息的函数
 function handleError(error: any) {
+  DEBUG && console.error('[API] 请求错误:', error)
+  DEBUG && console.error('[API] 错误状态:', error.response?.status)
+  DEBUG && console.error('[API] 错误数据:', error.response?.data)
   // 处理 401 未授权
   if (error.response?.status === 401) {
+    DEBUG && console.log('[API] 收到 401, 调用 requestLogout')
     useUserStore().requestLogout()
   }
   else {
@@ -67,6 +78,7 @@ function handleError(error: any) {
 
 api.interceptors.response.use(
   (response) => {
+    DEBUG && console.log('[API] 响应成功:', response.config.url, response.data)
     /**
      * 全局拦截请求发送后返回的数据，如果数据有报错则在这做全局的错误提示
      * 适配后端返回格式: { code: 200, msg: 'success', data: {} }
@@ -78,6 +90,7 @@ api.interceptors.response.use(
       }
       else {
         // 业务错误
+        DEBUG && console.warn('[API] 业务错误:', response.data.code, response.data.msg)
         toast.error('Error', {
           description: response.data.msg || '请求失败',
         })
@@ -90,6 +103,7 @@ api.interceptors.response.use(
     }
   },
   async (error) => {
+    DEBUG && console.error('[API] 响应错误:', error)
     // 获取请求配置
     const config = error.config
     // 如果配置不存在或未启用重试，则直接处理错误

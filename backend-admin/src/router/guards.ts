@@ -3,20 +3,30 @@ import { useNProgress } from '@vueuse/integrations/useNProgress'
 import { asyncRoutes, asyncRoutesByFilesystem } from './routes'
 import '@/assets/styles/nprogress.css'
 
+// 调试模式
+const DEBUG = true
+
 function setupRoutes(router: Router) {
   router.beforeEach(async (to) => {
     const settingsStore = useSettingsStore()
     const userStore = useUserStore()
     const routeStore = useRouteStore()
     const menuStore = useMenuStore()
+
+    DEBUG && console.log('[Router] 路由导航到:', to.path, to.name, '当前 isLogin:', userStore.isLogin, 'token:', userStore.token)
+
     // 是否已登录
     if (userStore.isLogin) {
+      DEBUG && console.log('[Router] 用户已登录')
+
       // 是否已根据权限动态生成并注册路由
       if (routeStore.isGenerate) {
+        DEBUG && console.log('[Router] 路由已生成')
         // 导航栏如果不是 single 模式，则需要根据 path 定位主导航的选中状态
         settingsStore.settings.menu.mode !== 'single' && menuStore.setActived(to.path)
         // 如果已登录状态下，进入登录页会强制跳转到主页
         if (to.name === 'login') {
+          DEBUG && console.log('[Router] 已登录但进入登录页，重定向到主页')
           return {
             path: settingsStore.settings.home.fullPath,
             replace: true,
@@ -25,6 +35,7 @@ function setupRoutes(router: Router) {
         // 如果未开启主页，但进入的是主页，则会进入侧边栏导航第一个模块
         else if (!settingsStore.settings.home.enable && to.fullPath === settingsStore.settings.home.fullPath) {
           if (menuStore.sidebarMenus.length > 0) {
+            DEBUG && console.log('[Router] 进入主页，重定向到第一个菜单')
             return {
               path: menuStore.sidebarMenusFirstDeepestPath,
               replace: true,
@@ -33,15 +44,20 @@ function setupRoutes(router: Router) {
         }
       }
       else {
+        DEBUG && console.log('[Router] 路由未生成，开始获取权限和生成路由')
         try {
           // 获取用户权限
-          settingsStore.settings.app.enablePermission && await userStore.getPermissions()
+          if (settingsStore.settings.app.enablePermission) {
+            DEBUG && console.log('[Router] 获取用户权限')
+            await userStore.getPermissions()
+          }
           // 生成动态路由
           switch (settingsStore.settings.app.routeBaseOn) {
             case 'frontend':
               routeStore.generateRoutesAtFront(asyncRoutes)
               break
             case 'backend':
+              DEBUG && console.log('[Router] 从后端生成路由')
               await routeStore.generateRoutesAtBack()
               break
             case 'filesystem':
@@ -71,11 +87,14 @@ function setupRoutes(router: Router) {
             })
           }
           routeStore.setCurrentRemoveRoutes(removeRoutes)
+          DEBUG && console.log('[Router] 路由生成完成')
         }
-        catch {
+        catch (error) {
+          DEBUG && console.error('[Router] 路由生成失败:', error)
           userStore.logout()
         }
         // 动态路由生成并注册后，重新进入当前路由
+        DEBUG && console.log('[Router] 重新进入当前路由')
         return {
           path: to.path,
           query: to.query,
@@ -84,7 +103,9 @@ function setupRoutes(router: Router) {
       }
     }
     else {
+      DEBUG && console.log('[Router] 用户未登录')
       if (to.name !== 'login') {
+        DEBUG && console.log('[Router] 未登录且不在登录页，重定向到登录页')
         return {
           name: 'login',
           query: {

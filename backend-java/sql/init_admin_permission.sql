@@ -85,8 +85,8 @@ INSERT INTO `sys_role` (`id`, `role_name`, `role_code`, `description`, `sort`, `
 
 -- 插入管理员用户 (密码: admin123, BCrypt加密)
 INSERT INTO `admin_user` (`id`, `username`, `password`, `nickname`, `status`) VALUES
-(1, 'admin', '$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iAt6Z5EHsM8lE9lBOsl7iAt6Z5EH', '系统管理员', 1),
-(2, 'test', '$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iAt6Z5EHsM8lE9lBOsl7iAt6Z5EH', '测试用户', 1);
+(1, 'admin', '$2a$10$slYQmyNdGzTn7ZLBXBChFOC9f6kFjAqPhccnP6DxlWXx2lPk1C3G6', '系统管理员', 1),
+(2, 'test', '$2a$10$slYQmyNdGzTn7ZLBXBChFOC9f6kFjAqPhccnP6DxlWXx2lPk1C3G6', '测试用户', 1);
 
 -- 关联管理员和角色
 INSERT INTO `admin_user_role` (`user_id`, `role_id`) VALUES
@@ -96,7 +96,7 @@ INSERT INTO `admin_user_role` (`user_id`, `role_id`) VALUES
 -- 插入菜单数据
 INSERT INTO `sys_menu` (`id`, `parent_id`, `name`, `path`, `component`, `icon`, `menu_type`, `permission`, `sort`, `visible`, `status`) VALUES
 -- 一级菜单
-(1, 0, '首页', '/home', 'LAYOUT', 'i-ant-design:home-twotone', 2, NULL, 1, 1, 1),
+(1, 0, '首页', '/home', 'Layout', 'i-ant-design:home-twotone', 2, NULL, 1, 1, 1),
 (2, 0, '系统管理', '/system', 'LAYOUT', 'i-ant-design:setting-twotone', 1, NULL, 100, 1, 1),
 (3, 0, '商品管理', '/product', 'LAYOUT', 'i-ant-design:shop-twotone', 1, NULL, 200, 1, 1),
 (4, 0, '订单管理', '/order', 'LAYOUT', 'i-ant-design:container-twotone', 1, NULL, 300, 1, 1),
