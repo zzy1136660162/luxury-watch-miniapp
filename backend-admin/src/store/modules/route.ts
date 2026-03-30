@@ -23,17 +23,24 @@ export const useRouteStore = defineStore(
     const routes = computed(() => {
       const returnRoutes: RouteRecordRaw[] = []
       if (settingsStore.settings.app.routeBaseOn !== 'filesystem') {
-        if (routesRaw.value) {
+        if (routesRaw.value && routesRaw.value.length > 0) {
           routesRaw.value.forEach((item) => {
-            const tmpRoutes = cloneDeep(item.children) as RouteRecordRaw[]
-            tmpRoutes.map((v) => {
-              if (!v.meta) {
-                v.meta = {}
-              }
-              v.meta.auth = item.meta?.auth ?? v.meta?.auth
-              return v
-            })
-            returnRoutes.push(...tmpRoutes)
+            // 先添加父路由（目录类型）
+            if (item.path && item.component) {
+              returnRoutes.push(cloneDeep(item) as RouteRecordRaw)
+            }
+            // 再添加子路由
+            if (item.children && item.children.length > 0) {
+              const tmpRoutes = cloneDeep(item.children) as RouteRecordRaw[]
+              tmpRoutes.map((v) => {
+                if (!v.meta) {
+                  v.meta = {}
+                }
+                v.meta.auth = item.meta?.auth ?? v.meta?.auth
+                return v
+              })
+              returnRoutes.push(...tmpRoutes)
+            }
           })
           returnRoutes.forEach((item) => {
             if (item.children) {
@@ -85,11 +92,31 @@ export const useRouteStore = defineStore(
     function generateRoutesAtFront(asyncRoutes: Route.recordMainRaw[]) {
       // 设置 routes 数据
       routesRaw.value = cloneDeep(asyncRoutes) as any
-      // 创建路由匹配器
+      // 创建路由匹配器 - 展平所有路由
       const routes: RouteRecordRaw[] = []
+
+      function flattenRoutes(routes: Route.recordMainRaw[], parentAuth?: string): RouteRecordRaw[] {
+        const result: RouteRecordRaw[] = []
+        routes.forEach((route) => {
+          // 合并权限
+          const auth = parentAuth || route.meta?.auth
+          const routeRecord = cloneDeep(route) as RouteRecordRaw
+          if (auth && routeRecord.meta) {
+            routeRecord.meta.auth = auth
+          }
+          if (routeRecord.children && routeRecord.children.length > 0) {
+            result.push(routeRecord)
+            result.push(...flattenRoutes(routeRecord.children as RouteRecordRaw[], auth))
+          } else {
+            result.push(routeRecord)
+          }
+        })
+        return result
+      }
+
       routesRaw.value.forEach((route) => {
         if (route.children) {
-          routes.push(...route.children)
+          routes.push(...flattenRoutes(route.children as RouteRecordRaw[]))
         }
       })
       routesMatcher.value = createRouterMatcher(routes, {})
@@ -97,38 +124,104 @@ export const useRouteStore = defineStore(
     }
     // 格式化后端路由数据
     function formatBackRoutes(routes: any, views = import.meta.glob('../../views/**/*.vue')): Route.recordMainRaw[] {
-      return routes.map((route: any) => {
-        switch (route.component) {
-          case 'Layout':
-            route.component = () => import('@/layouts/index.vue')
-            break
-          default:
-            if (route.component) {
-              route.component = views[`../../views/${route.component}`]
-            }
-            else {
-              delete route.component
-            }
+      if (!routes || !Array.isArray(routes)) {
+        console.warn('[Route] formatBackRoutes: routes is not a valid array', routes)
+        return []
+      }
+      return routes.map((route: any, index: number) => {
+        // 防御性检查：跳过无效路由
+        if (!route || typeof route !== 'object') {
+          console.warn(`[Route] formatBackRoutes: skipping invalid route at index ${index}`, route)
+          return null
+        }
+        if (!route.path) {
+          console.warn(`[Route] formatBackRoutes: skipping route without path at index ${index}`, route)
+          return null
+        }
+
+        console.log(`[Route] formatBackRoutes processing route[${index}]:`, route.path, 'component:', route.component)
+
+        // 处理 Layout 组件名称（兼容 LAYOUT 和 Layout）
+        const componentStr = route.component
+        if (componentStr && (componentStr.toUpperCase() === 'LAYOUT' || componentStr === 'Layout')) {
+          route.component = () => import('@/layouts/index.vue')
+        }
+        else if (componentStr) {
+          // 处理组件路径，添加 .vue 后缀（如果没有的话）
+          // 移除开头的斜杠，避免产生双斜杠路径
+          const cleanPath = componentStr.startsWith('/') ? componentStr.substring(1) : componentStr
+          let viewPath = `../../views/${cleanPath}`
+          if (!viewPath.endsWith('.vue')) {
+            viewPath = `${viewPath}.vue`
+          }
+          console.log(`[Route] Looking up view:`, viewPath, 'exists:', !!views[viewPath])
+          route.component = views[viewPath]
+          if (!route.component) {
+            console.warn(`[Route] View not found for component:`, route.component, 'tried:', viewPath)
+            delete route.component
+          }
+        }
+        else {
+          delete route.component
         }
         if (route.children) {
           route.children = formatBackRoutes(route.children, views)
+          // 过滤掉 null 值
+          route.children = route.children.filter((c: any) => c !== null)
         }
         return route
-      })
+      }).filter((r: any) => r !== null)
     }
     // 生成路由（后端获取）
     async function generateRoutesAtBack() {
       await apiApp.routeList().then((res) => {
+        console.log('[Route] API response:', res)
+        console.log('[Route] res.data:', res.data)
+        if (!res.data || !Array.isArray(res.data)) {
+          console.error('[Route] API返回的data不是有效数组:', res.data)
+          throw new Error('API返回的data不是有效数组')
+        }
         // 设置 routes 数据
         routesRaw.value = formatBackRoutes(res.data) as any
-        // 创建路由匹配器
-        const routes: RouteRecordRaw[] = []
-        routesRaw.value.forEach((route) => {
-          if (route.children) {
-            routes.push(...route.children)
-          }
-        })
-        routesMatcher.value = createRouterMatcher(routes, {})
+        console.log('[Route] routesRaw after format:', routesRaw.value)
+        // 创建路由匹配器 - 需要包含父路由和完整的嵌套结构
+        const flatRoutes: RouteRecordRaw[] = []
+
+        function flattenRoutes(routes: any[], parentAuth?: string): RouteRecordRaw[] {
+          const result: RouteRecordRaw[] = []
+          routes.forEach((route: any) => {
+            // 合并权限
+            const auth = parentAuth || route?.meta?.auth
+            if (auth && route.meta) {
+              route.meta.auth = auth
+            }
+
+            if (route.children && route.children.length > 0) {
+              // 有子路由，先添加父路由
+              result.push(cloneDeep(route) as RouteRecordRaw)
+              // 递归处理子路由
+              result.push(...flattenRoutes(route.children, auth))
+            } else {
+              // 没有子路由，添加自身
+              result.push(cloneDeep(route) as RouteRecordRaw)
+            }
+          })
+          return result
+        }
+
+        flatRoutes.push(...flattenRoutes(routesRaw.value))
+
+        console.log('[Route] Flat routes:', flatRoutes)
+        if (flatRoutes.length === 0) {
+          console.warn('[Route] Warning: flatRoutes array is empty!')
+          return
+        }
+        try {
+          routesMatcher.value = createRouterMatcher(flatRoutes, {})
+        } catch (e) {
+          console.error('[Route] createRouterMatcher error:', e)
+          throw e
+        }
         isGenerate.value = true
       })
     }

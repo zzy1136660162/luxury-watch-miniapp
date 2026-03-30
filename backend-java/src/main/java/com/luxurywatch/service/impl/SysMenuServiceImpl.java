@@ -24,8 +24,13 @@ public class SysMenuServiceImpl implements SysMenuService {
             return new ArrayList<>();
         }
 
+        // 过滤掉按钮权限（menu_type = 3），按钮不需要生成路由
+        List<SysMenu> menuOnly = allMenus.stream()
+                .filter(m -> m.getMenuType() == null || m.getMenuType() != 3)
+                .collect(Collectors.toList());
+
         // 构建菜单树
-        return buildMenuTree(allMenus);
+        return buildMenuTree(menuOnly);
     }
 
     @Override
@@ -93,7 +98,10 @@ public class SysMenuServiceImpl implements SysMenuService {
             }
         } else {
             // 没有子菜单
-            if (menu.getMenuType() != null && menu.getMenuType() == 2) {
+            if (menu.getMenuType() != null && menu.getMenuType() == 1) {
+                // 目录类型，始终设置 Layout 组件
+                node.put("component", "Layout");
+            } else if (menu.getMenuType() != null && menu.getMenuType() == 2) {
                 // 菜单类型，设置组件
                 if (StringUtils.hasText(menu.getComponent())) {
                     node.put("component", menu.getComponent());

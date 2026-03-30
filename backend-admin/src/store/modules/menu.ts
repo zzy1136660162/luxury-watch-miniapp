@@ -19,7 +19,8 @@ export const useMenuStore = defineStore(
     function convertRouteToMenu(routes: Route.recordMainRaw[]): Menu.recordMainRaw[] {
       const returnMenus: Menu.recordMainRaw[] = []
       routes.forEach((item) => {
-        if (item.children.length > 0) {
+        // 确保 children 存在且有内容
+        if (item.children && item.children.length > 0) {
           if (settingsStore.settings.menu.mode === 'single') {
             returnMenus.length === 0 && returnMenus.push({
               meta: {},
@@ -169,12 +170,12 @@ export const useMenuStore = defineStore(
     }
     // 生成导航（前端生成）
     async function generateMenusAtFront() {
-      filesystemMenusRaw.value = menu.filter(item => item.children.length !== 0)
+      filesystemMenusRaw.value = menu.filter(item => item.children && item.children.length !== 0)
     }
     // 生成导航（后端生成）
     async function generateMenusAtBack() {
       await apiApp.menuList().then(async (res) => {
-        filesystemMenusRaw.value = (res.data as Menu.recordMainRaw[]).filter(item => item.children.length !== 0)
+        filesystemMenusRaw.value = (res.data as Menu.recordMainRaw[]).filter(item => item.children && item.children.length !== 0)
       }).catch(() => {})
     }
     // 设置主导航
