@@ -8,7 +8,13 @@
         </el-form-item>
         <el-form-item label="商品分类">
           <el-select v-model="searchForm.category" placeholder="请选择分类" clearable style="width: 160px">
-            <el-option label="腕表" value="watch" />
+            <el-option-group label="腕表">
+              <el-option label="全部腕表" value="watch" />
+              <el-option label="经典" value="classic" />
+              <el-option label="运动" value="sport" />
+              <el-option label="复杂功能" value="complication" />
+              <el-option label="女士" value="ladies" />
+            </el-option-group>
             <el-option label="配件" value="accessory" />
             <el-option label="礼品" value="gift" />
           </el-select>
@@ -150,14 +156,20 @@ const dialogVisible = ref(false)
 const dialogType = ref<'add' | 'edit'>('add')
 const currentRow = ref<Partial<Product>>({})
 
+// 分类映射（包含二级分类）
+const categoryMap: Record<string, string> = {
+  watch: '腕表',
+  accessory: '配件',
+  gift: '礼品',
+  classic: '经典',
+  sport: '运动',
+  complication: '复杂功能',
+  ladies: '女士',
+}
+
 // 获取分类文本
 const getCategoryText = (category: string) => {
-  const map: Record<string, string> = {
-    watch: '腕表',
-    accessory: '配件',
-    gift: '礼品',
-  }
-  return map[category] || category
+  return categoryMap[category] || category
 }
 
 // 获取列表数据
