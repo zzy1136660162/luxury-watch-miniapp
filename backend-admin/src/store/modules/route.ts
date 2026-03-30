@@ -174,6 +174,7 @@ export const useRouteStore = defineStore(
     }
     // 生成路由（后端获取）
     async function generateRoutesAtBack() {
+      console.log('[Route] 开始调用 routeList API')
       await apiApp.routeList().then((res) => {
         console.log('[Route] API response:', res)
         console.log('[Route] res.data:', res.data)
@@ -214,12 +215,16 @@ export const useRouteStore = defineStore(
         console.log('[Route] Flat routes:', flatRoutes)
         if (flatRoutes.length === 0) {
           console.warn('[Route] Warning: flatRoutes array is empty!')
+          // 即使没有路由，也要设置 isGenerate 为 true，避免无限循环
+          isGenerate.value = true
           return
         }
         try {
           routesMatcher.value = createRouterMatcher(flatRoutes, {})
         } catch (e) {
           console.error('[Route] createRouterMatcher error:', e)
+          // 即使出错，也要设置 isGenerate 为 true，避免无限循环
+          isGenerate.value = true
           throw e
         }
         isGenerate.value = true

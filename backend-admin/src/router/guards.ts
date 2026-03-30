@@ -45,6 +45,8 @@ function setupRoutes(router: Router) {
       }
       else {
         DEBUG && console.log('[Router] 路由未生成，开始获取权限和生成路由')
+        DEBUG && console.log('[Router] enablePermission:', settingsStore.settings.app.enablePermission)
+        DEBUG && console.log('[Router] routeBaseOn:', settingsStore.settings.app.routeBaseOn)
         try {
           // 获取用户权限
           if (settingsStore.settings.app.enablePermission) {
@@ -54,6 +56,7 @@ function setupRoutes(router: Router) {
           // 生成动态路由
           switch (settingsStore.settings.app.routeBaseOn) {
             case 'frontend':
+              DEBUG && console.log('[Router] 使用前端路由')
               routeStore.generateRoutesAtFront(asyncRoutes)
               break
             case 'backend':
@@ -91,7 +94,13 @@ function setupRoutes(router: Router) {
         }
         catch (error) {
           DEBUG && console.error('[Router] 路由生成失败:', error)
-          userStore.logout()
+          // 路由生成失败时不调用 logout，避免循环问题
+          // 清除登录状态，让用户重新登录
+          localStorage.removeItem('token')
+          return {
+            name: 'login',
+            query: { redirect: to.fullPath },
+          }
         }
         // 动态路由生成并注册后，重新进入当前路由
         DEBUG && console.log('[Router] 重新进入当前路由')

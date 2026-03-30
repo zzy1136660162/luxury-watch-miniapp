@@ -161,8 +161,16 @@ public class DatabaseInitializer implements CommandLineRunner {
         menus.add(btn(id++, 12L, "删除菜单", "system:menu:delete", 4));
 
         // 商品管理子菜单
-        menus.add(menu(id++, 3L, "商品列表", "list", "/product/list/index", "i-ant-design:shopping-twotone", 2, "", 1, 1, 1));
+        menus.add(menu(id++, 3L, "商品列表", "list", "/product/list/index", "i-ant-design:unordered-list-outlined", 2, "", 1, 1, 1));
         menus.add(menu(id++, 3L, "商品分类", "category", "/product/category/index", "i-ant-design:appstore-twotone", 2, "", 2, 1, 1));
+
+        // 商品列表按钮权限
+        menus.add(btn(id++, 30L, "查看商品", "product:list", 1));
+        menus.add(btn(id++, 30L, "新增商品", "product:add", 2));
+        menus.add(btn(id++, 30L, "编辑商品", "product:edit", 3));
+        menus.add(btn(id++, 30L, "删除商品", "product:delete", 4));
+        menus.add(btn(id++, 30L, "批量删除", "product:batchDelete", 5));
+        menus.add(btn(id++, 30L, "更新状态", "product:updateStatus", 6));
 
         // 订单管理子菜单
         menus.add(menu(id++, 4L, "订单列表", "list", "/order/list/index", "i-ant-design:unordered-list-twotone", 2, "", 1, 1, 1));

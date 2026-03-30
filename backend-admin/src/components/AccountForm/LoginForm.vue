@@ -41,6 +41,7 @@ const form = useForm({
 const onSubmit = form.handleSubmit((values) => {
   loading.value = true
   userStore.login(values).then(() => {
+    console.log('[LoginForm] 登录成功，准备跳转')
     if (values.remember) {
       localStorage.setItem('login_account', values.account)
     }
@@ -48,6 +49,8 @@ const onSubmit = form.handleSubmit((values) => {
       localStorage.removeItem('login_account')
     }
     emits('onLogin', values.account)
+  }).catch((error) => {
+    console.error('[LoginForm] 登录失败:', error)
   }).finally(() => {
     loading.value = false
   })

@@ -101,8 +101,20 @@ public class AdminController {
      */
     @GetMapping("/menus")
     public R<List<Map<String, Object>>> getMenus() {
+        // 调试日志
+        System.out.println("[MenuAPI] Token: " + StpUtil.getTokenValue());
+        System.out.println("[MenuAPI] isLogin: " + StpUtil.isLogin());
+        
+        if (!StpUtil.isLogin()) {
+            System.out.println("[MenuAPI] 用户未登录");
+            return R.error("未登录");
+        }
+        
         Long userId = StpUtil.getLoginIdAsLong();
+        System.out.println("[MenuAPI] userId: " + userId);
+        
         List<Map<String, Object>> menus = sysMenuService.getUserMenus(userId);
+        System.out.println("[MenuAPI] menus size: " + (menus != null ? menus.size() : 0));
         return R.success(menus);
     }
 

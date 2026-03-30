@@ -5,10 +5,19 @@ spring:
   application:
     name: luxury-watch-backend
   datasource:
-    url: jdbc:mysql://101.126.90.255:63306/luxury-watch-db?characterEncoding=utf8&connectTimeout=3000000&socketTimeout=3000000&autoReconnect=true&useUnicode=true&useSSL=false&serverTimezone=Asia/Shanghai&allowMultiQueries=true
+    url: jdbc:mysql://101.126.90.255:63306/luxury-watch-db?characterEncoding=utf8&connectTimeout=30000&socketTimeout=30000&autoReconnect=true&useUnicode=true&useSSL=false&serverTimezone=Asia/Shanghai&allowMultiQueries=true
     username: root
     password: Gesoft9919.
     driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      # 连接池配置
+      minimum-idle: 5
+      maximum-pool-size: 20
+      idle-timeout: 300000
+      max-lifetime: 1200000
+      connection-timeout: 30000
+      connection-test-query: SELECT 1
+      validation-timeout: 5000
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
@@ -48,6 +57,12 @@ sa-token:
   is-share: false
   # 是否输出操作日志
   is-log: true
+  # Token 风格
+  token-style: uuid
+  # 是否从 cookie 读取 Token
+  is-read-cookie: false
+  # 是否从请求头读取 Token
+  is-read-header: true
 
 # 日志配置
 logging:
