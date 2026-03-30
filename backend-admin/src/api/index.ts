@@ -2,6 +2,9 @@ import axios from 'axios'
 // import qs from 'qs'
 import { toast } from 'vue-sonner'
 
+// 导入 API 模块
+import product from './modules/product'
+
 // 调试模式
 const DEBUG = true
 
@@ -14,6 +17,10 @@ declare module 'axios' {
   export interface AxiosRequestConfig {
     retry?: boolean
     retryCount?: number
+  }
+
+  export interface AxiosInstance {
+    product: typeof product
   }
 }
 
@@ -124,5 +131,8 @@ api.interceptors.response.use(
     return api(config)
   },
 )
+
+// 将模块挂载到 api 实例上
+api.product = product
 
 export default api

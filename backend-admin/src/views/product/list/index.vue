@@ -122,6 +122,7 @@
 import { ref, reactive, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Search, Plus, Delete } from '@element-plus/icons-vue'
+import api from '@/api'
 import type { Product } from '@/types'
 import ProductFormDialog from './components/ProductFormDialog.vue'
 
@@ -163,67 +164,15 @@ const getCategoryText = (category: string) => {
 const fetchList = async () => {
   loading.value = true
   try {
-    // TODO: 对接后端API
-    // const res = await api.product.getProductList({
-    //   page: pagination.page,
-    //   size: pagination.size,
-    //   ...searchForm,
-    // })
-    // tableData.value = res.data.list
-    // pagination.total = res.data.total
-
-    // 模拟数据
-    tableData.value = [
-      {
-        id: 1,
-        name: '劳力士潜航者型',
-        code: 'ROLEX-001',
-        category: 'watch',
-        image: 'https://via.placeholder.com/80x80',
-        price: 85000,
-        stock: 10,
-        sales: 25,
-        status: 1,
-        createTime: '2024-01-15 10:30:00',
-      },
-      {
-        id: 2,
-        name: '欧米茄海马系列',
-        code: 'OMEGA-002',
-        category: 'watch',
-        image: 'https://via.placeholder.com/80x80',
-        price: 45000,
-        stock: 15,
-        sales: 18,
-        status: 1,
-        createTime: '2024-01-14 14:20:00',
-      },
-      {
-        id: 3,
-        name: '皮质表带套装',
-        code: 'ACC-003',
-        category: 'accessory',
-        image: 'https://via.placeholder.com/80x80',
-        price: 2800,
-        stock: 50,
-        sales: 120,
-        status: 1,
-        createTime: '2024-01-13 09:15:00',
-      },
-      {
-        id: 4,
-        name: '腕表收藏礼盒',
-        code: 'GIFT-004',
-        category: 'gift',
-        image: 'https://via.placeholder.com/80x80',
-        price: 580,
-        stock: 100,
-        sales: 45,
-        status: 0,
-        createTime: '2024-01-12 16:45:00',
-      },
-    ]
-    pagination.total = 4
+    const res = await api.product.getProductList({
+      page: pagination.page,
+      size: pagination.size,
+      ...searchForm,
+    })
+    tableData.value = res.data.list
+    pagination.total = res.data.total
+  } catch (error) {
+    ElMessage.error('获取商品列表失败')
   } finally {
     loading.value = false
   }
@@ -273,8 +222,7 @@ const handleDelete = async (row: Product) => {
     await ElMessageBox.confirm(`确认删除商品"${row.name}"？`, '提示', {
       type: 'warning',
     })
-    // TODO: 对接后端API
-    // await api.product.deleteProduct(row.id)
+    await api.product.deleteProduct(row.id)
     ElMessage.success('删除成功')
     fetchList()
   } catch {
@@ -288,8 +236,7 @@ const handleBatchDelete = async () => {
     await ElMessageBox.confirm(`确认删除选中的 ${selectedIds.value.length} 个商品？`, '提示', {
       type: 'warning',
     })
-    // TODO: 对接后端API
-    // await api.product.batchDeleteProduct(selectedIds.value)
+    await api.product.batchDeleteProduct(selectedIds.value)
     ElMessage.success('批量删除成功')
     fetchList()
   } catch {
@@ -300,8 +247,7 @@ const handleBatchDelete = async () => {
 // 状态变更
 const handleStatusChange = async (id: number, status: number) => {
   try {
-    // TODO: 对接后端API
-    // await api.product.updateProductStatus(id, status)
+    await api.product.updateProductStatus(id, status)
     ElMessage.success('状态更新成功')
   } catch {
     fetchList()
