@@ -15,7 +15,7 @@
           <text class="category-name">运动</text>
           <text class="category-name-en">Sport</text>
         </view>
-        <view class="category-item {{currentCategory === 'complications' ? 'category-active' : ''}}" bindtap="onCategoryTap" data-category="complications">
+        <view class="category-item {{currentCategory === 'complication' ? 'category-active' : ''}}" bindtap="onCategoryTap" data-category="complication">
           <text class="category-name">复杂功能</text>
           <text class="category-name-en">Complications</text>
         </view>
@@ -51,7 +51,7 @@
             <text class="category-name">运动</text>
             <text class="category-name-en">Sport</text>
           </view>
-          <view class="category-item {{currentCategory === 'complications' ? 'category-active' : ''}}" bindtap="onCategoryTap" data-category="complications">
+          <view class="category-item {{currentCategory === 'complication' ? 'category-active' : ''}}" bindtap="onCategoryTap" data-category="complication">
             <text class="category-name">复杂功能</text>
             <text class="category-name-en">Complications</text>
           </view>
@@ -63,8 +63,8 @@
       </scroll-view>
     </view>
 
-    <!-- Featured Series Bento Grid -->
-    <view class="featured-section">
+    <!-- Featured Series Bento Grid - Only show for default category -->
+    <view wx:if="{{currentCategory === 'classic'}}" class="featured-section">
       <view class="featured-grid">
         <!-- Large Featured Card -->
         <view class="featured-card-large" bindtap="onProductTap" data-id="featured1">
@@ -97,59 +97,86 @@
 
     <!-- Product List -->
     <view class="product-list-section">
-      <!-- Product 1 -->
-      <view class="product-list-item">
-        <view class="product-list-image-wrapper" bindtap="onProductTap" data-id="1">
-          <image class="product-list-image" src="{{product1.image}}" mode="aspectFill" />
-        </view>
-        <view class="product-list-content">
-          <view class="product-ref">
-            <text>Ref. 8820-A</text>
+      <!-- 经典系列产品 -->
+      <view wx:if="{{currentCategory === 'classic'}}">
+        <view wx:for="{{classicProducts}}" wx:key="id" class="product-list-item {{index % 2 === 1 ? 'product-list-item-reverse' : ''}}">
+          <view class="product-list-image-wrapper" bindtap="onProductTap" data-id="{{item.id}}">
+            <image class="product-list-image" src="{{item.image}}" mode="aspectFill" />
           </view>
-          <text class="product-list-name">曜石金·自动机械</text>
-          <text class="product-list-subtitle">Obsidian Gold Automatic</text>
-          <view class="product-list-divider"></view>
-          <text class="product-list-desc">搭载定制 Cal.900 动力机芯，配备 72 小时超长动力储存。曜石黑表盘与 18K 黄金表壳的完美邂逅，彰显沉稳不凡的气度。</text>
-          <view class="product-list-action">
-            <button class="view-details-btn" bindtap="onProductTap" data-id="1">View Details</button>
-          </view>
-        </view>
-      </view>
-
-      <!-- Product 2 -->
-      <view class="product-list-item product-list-item-reverse">
-        <view class="product-list-image-wrapper" bindtap="onProductTap" data-id="2">
-          <image class="product-list-image" src="{{product2.image}}" mode="aspectFill" />
-        </view>
-        <view class="product-list-content product-list-content-reverse">
-          <view class="product-ref">
-            <text>Ref. 5410-L</text>
-          </view>
-          <text class="product-list-name">流光银·极简主义</text>
-          <text class="product-list-subtitle">Moonlight Silver Minimal</text>
-          <view class="product-list-divider"></view>
-          <text class="product-list-desc">抛弃繁杂，回归时间的本质。极致纤薄的 5.5mm 表壳设计，采用航天级精钢材质，如同月光轻抚腕间。</text>
-          <view class="product-list-action product-list-action-reverse">
-            <button class="view-details-btn" bindtap="onProductTap" data-id="2">View Details</button>
+          <view class="product-list-content {{index % 2 === 1 ? 'product-list-content-reverse' : ''}}">
+            <view class="product-ref">
+              <text>{{item.ref}}</text>
+            </view>
+            <text class="product-list-name">{{item.name}}</text>
+            <text class="product-list-subtitle">{{item.subtitle}}</text>
+            <view class="product-list-divider"></view>
+            <text class="product-list-desc">{{item.desc}}</text>
+            <view class="product-list-action {{index % 2 === 1 ? 'product-list-action-reverse' : ''}}">
+              <button class="view-details-btn" bindtap="onProductTap" data-id="{{item.id}}">View Details</button>
+            </view>
           </view>
         </view>
       </view>
 
-      <!-- Product 3 -->
-      <view class="product-list-item">
-        <view class="product-list-image-wrapper" bindtap="onProductTap" data-id="3">
-          <image class="product-list-image" src="{{product3.image}}" mode="aspectFill" />
-        </view>
-        <view class="product-list-content">
-          <view class="product-ref">
-            <text>Ref. 9900-D</text>
+      <!-- 运动系列产品 -->
+      <view wx:if="{{currentCategory === 'sport'}}">
+        <view wx:for="{{sportProducts}}" wx:key="id" class="product-list-item {{index % 2 === 1 ? 'product-list-item-reverse' : ''}}">
+          <view class="product-list-image-wrapper" bindtap="onProductTap" data-id="{{item.id}}">
+            <image class="product-list-image" src="{{item.image}}" mode="aspectFill" />
           </view>
-          <text class="product-list-name">深海之蓝·探险者</text>
-          <text class="product-list-subtitle">Deep Sea Blue Explorer</text>
-          <view class="product-list-divider"></view>
-          <text class="product-list-desc">300米专业级防水，配有陶瓷旋转表圈。深邃的蓝色放射纹表盘，在不同光线下折射出如海洋般的万千变幻。</text>
-          <view class="product-list-action">
-            <button class="view-details-btn" bindtap="onProductTap" data-id="3">View Details</button>
+          <view class="product-list-content {{index % 2 === 1 ? 'product-list-content-reverse' : ''}}">
+            <view class="product-ref">
+              <text>{{item.ref}}</text>
+            </view>
+            <text class="product-list-name">{{item.name}}</text>
+            <text class="product-list-subtitle">{{item.subtitle}}</text>
+            <view class="product-list-divider"></view>
+            <text class="product-list-desc">{{item.desc}}</text>
+            <view class="product-list-action {{index % 2 === 1 ? 'product-list-action-reverse' : ''}}">
+              <button class="view-details-btn" bindtap="onProductTap" data-id="{{item.id}}">View Details</button>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <!-- 复杂功能系列产品 -->
+      <view wx:if="{{currentCategory === 'complication'}}">
+        <view wx:for="{{complicationProducts}}" wx:key="id" class="product-list-item {{index % 2 === 1 ? 'product-list-item-reverse' : ''}}">
+          <view class="product-list-image-wrapper" bindtap="onProductTap" data-id="{{item.id}}">
+            <image class="product-list-image" src="{{item.image}}" mode="aspectFill" />
+          </view>
+          <view class="product-list-content {{index % 2 === 1 ? 'product-list-content-reverse' : ''}}">
+            <view class="product-ref">
+              <text>{{item.ref}}</text>
+            </view>
+            <text class="product-list-name">{{item.name}}</text>
+            <text class="product-list-subtitle">{{item.subtitle}}</text>
+            <view class="product-list-divider"></view>
+            <text class="product-list-desc">{{item.desc}}</text>
+            <view class="product-list-action {{index % 2 === 1 ? 'product-list-action-reverse' : ''}}">
+              <button class="view-details-btn" bindtap="onProductTap" data-id="{{item.id}}">View Details</button>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <!-- 女士系列产品 -->
+      <view wx:if="{{currentCategory === 'ladies'}}">
+        <view wx:for="{{ladiesProducts}}" wx:key="id" class="product-list-item {{index % 2 === 1 ? 'product-list-item-reverse' : ''}}">
+          <view class="product-list-image-wrapper" bindtap="onProductTap" data-id="{{item.id}}">
+            <image class="product-list-image" src="{{item.image}}" mode="aspectFill" />
+          </view>
+          <view class="product-list-content {{index % 2 === 1 ? 'product-list-content-reverse' : ''}}">
+            <view class="product-ref">
+              <text>{{item.ref}}</text>
+            </view>
+            <text class="product-list-name">{{item.name}}</text>
+            <text class="product-list-subtitle">{{item.subtitle}}</text>
+            <view class="product-list-divider"></view>
+            <text class="product-list-desc">{{item.desc}}</text>
+            <view class="product-list-action {{index % 2 === 1 ? 'product-list-action-reverse' : ''}}">
+              <button class="view-details-btn" bindtap="onProductTap" data-id="{{item.id}}">View Details</button>
+            </view>
           </view>
         </view>
       </view>
@@ -160,8 +187,8 @@
       <text class="footer-cta-title">探寻更多可能</text>
       <text class="footer-cta-desc">从经典到现代，每一款 CHRONOS 腕表都讲述着关于时间与匠心的独特故事。</text>
       <view class="footer-cta-buttons">
-        <button class="cta-btn-outline" bindtap="onRequestCatalogue">Request Catalogue</button>
-        <button class="cta-btn-primary" bindtap="onLocateBoutique">Locate Boutique</button>
+        <button class="cta-btn-outline" bindtap="onRequestCatalogue">索取目录</button>
+        <button class="cta-btn-primary" bindtap="onLocateBoutique">查找精品店</button>
       </view>
     </view>
   </scroll-view>
