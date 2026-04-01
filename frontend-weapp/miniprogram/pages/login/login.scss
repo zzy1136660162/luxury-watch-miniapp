@@ -120,16 +120,23 @@ $font-family-english: 'Manrope', sans-serif;
   }
 
   .password-toggle {
-    width: 24px;
-    height: 24px;
     display: flex;
     align-items: center;
     justify-content: center;
 
-    .toggle-icon {
-      width: 20px;
-      height: 20px;
-      opacity: 0.6;
+    .toggle-text {
+      font-family: $font-family-english;
+      font-size: 12px;
+      color: $secondary;
+      padding: 4px 8px;
+      background-color: transparent;
+      border: 1px solid $outline-variant;
+      border-radius: 4px;
+
+      &.toggle-active {
+        color: $primary;
+        border-color: $primary;
+      }
     }
   }
 }
