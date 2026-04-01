@@ -27,7 +27,7 @@ Component({
       title: '高级鳄鱼皮定制表带',
       subtitle: 'Bespoke Exotic Leather Strap',
       points: '8,000',
-      image: 'D:/项目图标/member/unnamed (1).png'
+      image: 'http://localhost:8081/api/images/unnamed%20(1).png'
     },
 
     reward2: {
@@ -35,7 +35,7 @@ Component({
       title: '品牌 200 周年纪念画册',
       subtitle: '200th Anniversary Anthology',
       points: '3,500',
-      image: 'D:/项目图标/member/unnamed (4).png'
+      image: 'http://localhost:8081/api/images/unnamed%20(4).png'
     },
 
     reward3: {
@@ -43,7 +43,7 @@ Component({
       title: '线下新品私人品鉴会门票',
       subtitle: 'Private Collection Showcase Access',
       points: '15,000',
-      image: 'D:/项目图标/member/unnamed (9).png'
+      image: 'http://localhost:8081/api/images/unnamed%20(9).png'
     },
 
     levelInfo: {

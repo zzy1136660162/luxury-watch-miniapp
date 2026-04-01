@@ -19,10 +19,10 @@
         </el-form-item>
         <el-form-item label="会员等级">
           <el-select v-model="searchForm.memberLevel" placeholder="请选择会员等级" clearable style="width: 140px">
-            <el-option label="普通用户" :value="0" />
-            <el-option label="银卡会员" :value="1" />
-            <el-option label="金卡会员" :value="2" />
-            <el-option label="钻石会员" :value="3" />
+            <el-option label="普通会员" :value="1" />
+            <el-option label="银卡会员" :value="2" />
+            <el-option label="金卡会员" :value="3" />
+            <el-option label="钻卡会员" :value="4" />
           </el-select>
         </el-form-item>
         <el-form-item label="状态">
@@ -93,10 +93,10 @@
         </el-form-item>
         <el-form-item label="会员等级">
           <el-select v-model="formData.memberLevel" placeholder="请选择会员等级" style="width: 100%">
-            <el-option label="普通用户" :value="0" />
-            <el-option label="银卡会员" :value="1" />
-            <el-option label="金卡会员" :value="2" />
-            <el-option label="钻石会员" :value="3" />
+            <el-option label="普通会员" :value="1" />
+            <el-option label="银卡会员" :value="2" />
+            <el-option label="金卡会员" :value="3" />
+            <el-option label="钻卡会员" :value="4" />
           </el-select>
         </el-form-item>
         <el-form-item label="生日">
@@ -154,7 +154,7 @@ const formData = reactive({
   nickname: '',
   phone: '',
   points: 0,
-  memberLevel: 0,
+  memberLevel: 1,
   birthday: '',
   gender: 0,
   status: 1
@@ -164,13 +164,23 @@ const dialogTitle = computed(() => isEdit.value ? '编辑小程序用户' : '新
 
 // 获取会员等级文本
 const getMemberLevelText = (level: number) => {
-  const levels = ['普通用户', '银卡会员', '金卡会员', '钻石会员']
+  const levels: { [key: number]: string } = {
+    1: '普通会员',
+    2: '银卡会员',
+    3: '金卡会员',
+    4: '钻卡会员'
+  }
   return levels[level] || '未知'
 }
 
 // 获取会员等级标签类型
 const getMemberLevelTagType = (level: number) => {
-  const types = ['', 'success', 'warning', 'danger']
+  const types: { [key: number]: string } = {
+    1: '',
+    2: 'success',
+    3: 'warning',
+    4: 'danger'
+  }
   return types[level] || ''
 }
 
@@ -207,62 +217,81 @@ const handleSearch = () => {
   loadWxUserList()
 }
 
-// 重置搜索条件
+// 重置
 const handleReset = () => {
-  Object.assign(searchForm, {
-    username: '',
-    phone: '',
-    memberLevel: undefined,
-    status: undefined
-  })
+  searchForm.username = ''
+  searchForm.phone = ''
+  searchForm.memberLevel = undefined
+  searchForm.status = undefined
   loadWxUserList()
 }
 
-// 编辑用户
+// 新增（已禁用）
+const handleAdd = () => {
+  isEdit.value = false
+  dialogVisible.value = true
+}
+
+// 编辑
 const handleEdit = (row: WxUser) => {
   isEdit.value = true
-  Object.assign(formData, row)
+  formData.id = row.id
+  formData.username = row.username
+  formData.nickname = row.nickname || ''
+  formData.phone = row.phone || ''
+  formData.points = row.points || 0
+  formData.memberLevel = row.memberLevel || 1
+  formData.birthday = row.birthday || ''
+  formData.gender = row.gender || 0
+  formData.status = row.status || 1
   dialogVisible.value = true
 }
 
 // 积分调整
 const handlePointsAdjust = (row: WxUser) => {
-  ElMessageBox.prompt('请输入积分调整值（正数为增加，负数为减少）', '积分调整', {
+  ElMessageBox.prompt('请输入调整积分（正数为增加，负数为减少）', '积分调整', {
     confirmButtonText: '确定',
     cancelButtonText: '取消',
     inputPattern: /^-?\d+$/,
     inputErrorMessage: '请输入整数'
-  }).then(async ({ value }) => {
-    const points = parseInt(value)
-    try {
-      await wxUserApi.adjustWxUserPoints(row.id, points, '管理员手动调整')
-      ElMessage.success('积分调整成功')
-      loadWxUserList()
-    } catch (error) {
-      ElMessage.error('积分调整失败')
-    }
-  }).catch(() => {
-    // 用户取消
   })
+    .then(async ({ value }) => {
+      try {
+        const response = await wxUserApi.adjustWxUserPoints(row.id, parseInt(value), '后台手动调整')
+        if (response.code === 200) {
+          ElMessage.success('积分调整成功')
+          loadWxUserList()
+        } else {
+          ElMessage.error(response.data.msg || '积分调整失败')
+        }
+      } catch (error) {
+        ElMessage.error('积分调整失败')
+      }
+    })
+    .catch(() => { })
 }
 
-// 删除用户
-const handleDelete = async (row: WxUser) => {
-  try {
-    await ElMessageBox.confirm(`确定要删除用户 "${row.nickname}" 吗？`, '删除确认', {
-      confirmButtonText: '确定',
-      cancelButtonText: '取消',
-      type: 'warning'
+// 删除
+const handleDelete = (row: WxUser) => {
+  ElMessageBox.confirm('确定要删除该用户吗？', '提示', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning'
+  })
+    .then(async () => {
+      try {
+        const response = await wxUserApi.deleteWxUser(row.id)
+        if (response.code === 200) {
+          ElMessage.success('删除成功')
+          loadWxUserList()
+        } else {
+          ElMessage.error(response.data.msg || '删除失败')
+        }
+      } catch (error) {
+        ElMessage.error('删除失败')
+      }
     })
-
-    await wxUserApi.updateWxUserStatus(row.id, 0)
-    ElMessage.success('删除成功')
-    loadWxUserList()
-  } catch (error) {
-    if (error !== 'cancel') {
-      ElMessage.error('删除失败')
-    }
-  }
+    .catch(() => { })
 }
 
 // 提交表单
@@ -272,7 +301,6 @@ const handleSubmit = async () => {
       await wxUserApi.updateWxUser(formData.id, formData)
       ElMessage.success('更新成功')
     } else {
-      // 新增用户功能已隐藏
       ElMessage.warning('新增用户功能已禁用')
       return
     }

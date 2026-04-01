@@ -3,21 +3,7 @@
 <view class="page">
   <navigation-bar title="时全饰美" back="{{false}}" color="black" background="#ffffff" showMenu="{{true}}" />
 
-  <!-- Fixed Category Navigation - shown when scrolled -->
-  <view class="category-nav-fixed {{isNavFixed ? 'category-nav-fixed-visible' : ''}}">
-    <scroll-view class="category-scroll" scroll-x enhanced="{{true}}" show-scrollbar="{{false}}">
-      <view class="category-track">
-        <view class="category-item {{currentCategory === 'all' ? 'category-active' : ''}}" bindtap="onCategoryTap" data-category="all">
-          <text class="category-name">全部</text>
-          <text class="category-name-en">All</text>
-        </view>
-        <view class="category-item {{currentCategory === item.name ? 'category-active' : ''}}" wx:for="{{categories}}" wx:key="id" bindtap="onCategoryTap" data-category="{{item.name}}">
-          <text class="category-name">{{item.name}}</text>
-          <text class="category-name-en">{{item.nameEn || item.name}}</text>
-        </view>
-      </view>
-    </scroll-view>
-  </view>
+
 
   <scroll-view class="content" scroll-y type="list" enhanced="{{true}}" bounces="{{false}}" bindscroll="onScroll" id="main-scroll" bindrefresherrefresh="onPullDownRefresh" refresher-enabled="{{true}}" bindscrolltolower="onReachBottom">
     <!-- Hero Banner -->
@@ -94,7 +80,7 @@
             <text class="product-name">{{item.name}}</text>
             <text class="product-price" wx:if="{{item.price}}">¥{{item.price}}</text>
             <view class="product-action">
-              <button class="view-details-btn" catchtap="onProductTap" data-id="{{item.id}}">View Details</button>
+              <button class="view-details-btn" catchtap="onProductTap" data-id="{{item.id}}">查看详情</button>
             </view>
           </view>
         </view>

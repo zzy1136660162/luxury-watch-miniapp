@@ -39,7 +39,6 @@
               <text class="user-name">{{userName}}</text>
               <text class="user-id">{{userId}}</text>
             </view>
-            <button class="logout-btn" bindtap="onLogoutTap">退出</button>
           </view>
 
           <view class="card-progress">
@@ -222,10 +221,10 @@
           <image class="service-arrow" src="https://cdn.jsdelivr.net/npm/@material-design-icons/svg@0.14.15/filled/chevron_right.svg" mode="aspectFit" />
         </view>
 
-        <view class="service-item" bindtap="onServiceTap" data-type="settings">
+        <view class="service-item" bindtap="onLogoutTap">
           <view class="service-left">
-            <image class="service-icon" src="https://cdn.jsdelivr.net/npm/@material-design-icons/svg@0.14.15/filled/settings.svg" mode="aspectFit" />
-            <text class="service-name">账户设置</text>
+            <image class="service-icon" src="https://cdn.jsdelivr.net/npm/@material-design-icons/svg@0.14.15/filled/logout.svg" mode="aspectFit" />
+            <text class="service-name">退出登录</text>
           </view>
           <image class="service-arrow" src="https://cdn.jsdelivr.net/npm/@material-design-icons/svg@0.14.15/filled/chevron_right.svg" mode="aspectFit" />
         </view>

@@ -41,11 +41,7 @@
             bindblur="onPasswordBlur"
           />
           <view class="password-toggle" bindtap="togglePasswordVisibility">
-            <image 
-              class="toggle-icon" 
-              src="{{showPassword ? icons.eyeOpen : icons.eyeClosed}}" 
-              mode="aspectFit" 
-            />
+            <text class="toggle-text {{showPassword ? 'toggle-active' : ''}}">{{showPassword ? '隐藏' : '显示'}}</text>
           </view>
         </view>
       </view>
