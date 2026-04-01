@@ -70,3 +70,14 @@ logging:
     com.luxurywatch: debug
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{50} - %msg%n"
+
+# 图片上传配置
+upload:
+  # 图片存储根目录
+  image-path: D:/项目图标
+  # 支持的图片格式
+  allowed-extensions: jpg,jpeg,png,gif,webp
+  # 最大文件大小 (单位：MB)
+  max-file-size: 10
+  # 图片访问基础URL
+  base-url: /images

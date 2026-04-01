@@ -6,7 +6,7 @@
   <scroll-view class="content" scroll-y type="list" enhanced="{{true}}" bounces="{{false}}">
     <!-- Section 1: Immersive Visual Introduction -->
     <view class="hero-section">
-      <image class="hero-image" src="{{heroImage}}" mode="aspectFill" />
+      <image class="hero-image" src="{{heroImage}}" mode="aspectFill" binderror="onImageError" />
       <view class="hero-overlay"></view>
       <view class="hero-content">
         <text class="hero-title">品牌馆</text>
@@ -51,14 +51,14 @@
         </view>
         <view class="timeline-dot"></view>
         <view class="timeline-image-wrapper">
-          <image class="timeline-image" src="{{milestone1.image}}" mode="aspectFill" />
+          <image class="timeline-image" src="{{milestone1.image}}" mode="widthFix" binderror="onImageError" />
         </view>
       </view>
 
       <!-- Milestone 2: 1924 -->
       <view class="timeline-item timeline-item-right">
         <view class="timeline-image-wrapper">
-          <image class="timeline-image" src="{{milestone2.image}}" mode="aspectFill" />
+          <image class="timeline-image" src="{{milestone2.image}}" mode="widthFix" binderror="onImageError" />
         </view>
         <view class="timeline-dot"></view>
         <view class="timeline-content">
@@ -79,7 +79,7 @@
         </view>
         <view class="timeline-dot"></view>
         <view class="timeline-image-wrapper">
-          <image class="timeline-image" src="{{milestone3.image}}" mode="aspectFill" />
+          <image class="timeline-image" src="{{milestone3.image}}" mode="widthFix" binderror="onImageError" />
         </view>
       </view>
     </view>
@@ -89,18 +89,18 @@
       <view class="craft-grid">
         <view class="craft-images">
           <view class="craft-image-large">
-            <image class="craft-image" src="{{craft1.image}}" mode="aspectFill" />
+            <image class="craft-image" src="{{craft1.image}}" mode="widthFix" binderror="onImageError" />
           </view>
           <view class="craft-image-small">
-            <image class="craft-image" src="{{craft2.image}}" mode="aspectFill" />
+            <image class="craft-image" src="{{craft2.image}}" mode="widthFix" binderror="onImageError" />
           </view>
         </view>
         <view class="craft-images-right">
           <view class="craft-image-tall">
-            <image class="craft-image" src="{{craft3.image}}" mode="aspectFill" />
+            <image class="craft-image" src="{{craft3.image}}" mode="widthFix" binderror="onImageError" />
           </view>
           <view class="craft-image-square">
-            <image class="craft-image" src="{{craft4.image}}" mode="aspectFill" />
+            <image class="craft-image" src="{{craft4.image}}" mode="widthFix" binderror="onImageError" />
           </view>
         </view>
       </view>
@@ -130,7 +130,7 @@
 
     <!-- Section 5: Legacy Collections Entrance -->
     <view class="collections-entrance" bindtap="onExploreCollections">
-      <image class="entrance-image" src="{{collectionsImage}}" mode="aspectFill" />
+      <image class="entrance-image" src="{{collectionsImage}}" mode="aspectFill" binderror="onImageError" />
       <view class="entrance-overlay"></view>
       <view class="entrance-content">
         <text class="entrance-label">Enter the Gallery</text>

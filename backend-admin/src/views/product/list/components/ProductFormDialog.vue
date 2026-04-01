@@ -62,19 +62,11 @@
       </el-row>
 
       <el-form-item label="商品图片" prop="image">
-        <el-upload
-          class="avatar-uploader"
-          action="#"
-          :show-file-list="false"
-          :before-upload="beforeUpload"
-        >
-          <img v-if="form.image" :src="form.image" class="avatar" />
-          <div v-else class="upload-placeholder">
-            <el-icon class="upload-icon"><Plus /></el-icon>
-            <div class="upload-text">点击上传</div>
-          </div>
-        </el-upload>
-        <div class="upload-tip">建议尺寸：800x800px，支持 jpg、png 格式</div>
+        <ImageUpload
+          v-model="form.image"
+          placeholder="点击上传商品图片"
+          tip="建议尺寸：800x800px，支持 jpg、png、gif、webp 格式，大小不超过10MB"
+        />
       </el-form-item>
 
       <el-form-item label="商品描述" prop="description">
@@ -99,10 +91,10 @@
 <script setup lang="ts">
 import { ref, reactive, watch, computed } from 'vue'
 import { ElMessage } from 'element-plus'
-import { Plus } from '@element-plus/icons-vue'
-import type { FormInstance, UploadRawFile } from 'element-plus'
+import type { FormInstance } from 'element-plus'
 import type { Product } from '@/types'
 import api from '@/api'
+import ImageUpload from '@/components/ImageUpload.vue'
 
 interface CategoryOption {
   id: number
@@ -214,15 +206,6 @@ watch(
   }
 )
 
-// 上传前校验
-const beforeUpload = (file: UploadRawFile) => {
-  // TODO: 实现图片上传逻辑
-  console.log('上传图片', file)
-  // 模拟上传成功
-  form.image = 'https://via.placeholder.com/200x200'
-  return false
-}
-
 // 提交
 const handleSubmit = async () => {
   const valid = await formRef.value?.validate()
@@ -252,55 +235,5 @@ const handleSubmit = async () => {
   max-height: 60vh;
   overflow-y: auto;
   padding-right: 10px;
-}
-
-.avatar-uploader {
-  :deep(.el-upload) {
-    border: 1px dashed var(--el-border-color);
-    border-radius: 6px;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-    transition: var(--el-transition-duration-fast);
-    width: 150px;
-    height: 150px;
-
-    &:hover {
-      border-color: var(--el-color-primary);
-    }
-  }
-}
-
-.upload-placeholder {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 150px;
-  height: 150px;
-
-  .upload-icon {
-    font-size: 28px;
-    color: #8c939d;
-  }
-
-  .upload-text {
-    font-size: 12px;
-    color: #8c939d;
-    margin-top: 8px;
-  }
-}
-
-.avatar {
-  width: 150px;
-  height: 150px;
-  display: block;
-  object-fit: cover;
-}
-
-.upload-tip {
-  font-size: 12px;
-  color: var(--el-text-color-secondary);
-  margin-top: 8px;
 }
 </style>

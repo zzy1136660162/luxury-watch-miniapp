@@ -30,6 +30,8 @@ public class WxUser implements Serializable {
 
     private Integer points;
 
+    private Integer growthValue;
+
     private Integer memberLevel;
 
     private LocalDate birthday;

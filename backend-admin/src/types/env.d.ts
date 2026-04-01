@@ -13,6 +13,10 @@ interface ImportMetaEnv {
    */
   readonly VITE_APP_DISABLE_DEVTOOL: boolean
   /**
+   * 图片预览基础URL
+   */
+  readonly VITE_APP_IMAGE_PREVIEW_BASEURL: string
+  /**
    * 应用配置面板
    */
   readonly VITE_APP_SETTING: boolean

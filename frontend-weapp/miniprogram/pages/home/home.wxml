@@ -3,9 +3,9 @@
 <view class="page">
   <navigation-bar title="时全饰美" back="{{false}}" color="black" background="#ffffff" showMenu="{{true}}" />
 
-  <scroll-view class="content" scroll-y type="list" enhanced="{{true}}" bounces="{{false}}">
+  <scroll-view class="content" scroll-y type="list" enhanced="{{true}}" bounces="{{false}}" bindrefresherrefresh="onPullDownRefresh" refresher-enabled="{{true}}">
     <!-- Section 1: Hero Banner -->
-    <view class="hero-banner">
+    <view class="hero-banner" wx:if="{{heroImage}}">
       <image class="hero-image" src="{{heroImage}}" mode="aspectFill" />
       <view class="hero-overlay"></view>
       <view class="hero-content">
@@ -16,33 +16,21 @@
     </view>
 
     <!-- Section 2: New Arrivals -->
-    <view class="section section-new-arrivals">
+    <view class="section section-new-arrivals" wx:if="{{newArrivals.length > 0}}">
       <view class="section-header">
         <text class="section-title">新品推荐</text>
         <text class="section-subtitle">New Arrivals</text>
       </view>
 
       <view class="products-grid">
-        <view class="product-card" bindtap="onProductTap" data-id="1">
+        <view class="product-card" wx:for="{{newArrivals}}" wx:key="id" bindtap="onProductTap" data-id="{{item.id}}">
           <view class="product-image-wrapper">
-            <image class="product-image" src="{{newArrival1.image}}" mode="aspectFill" />
+            <image class="product-image" src="{{item.image}}" mode="aspectFill" />
           </view>
           <view class="product-info">
-            <text class="product-tag">Chronograph Elite</text>
-            <text class="product-name">晨曦系列 · 典藏版</text>
-            <view class="discover-link">
-              <text>DISCOVER MORE</text>
-            </view>
-          </view>
-        </view>
-
-        <view class="product-card product-card-offset" bindtap="onProductTap" data-id="2">
-          <view class="product-image-wrapper">
-            <image class="product-image" src="{{newArrival2.image}}" mode="aspectFill" />
-          </view>
-          <view class="product-info">
-            <text class="product-tag">Luminance Edition</text>
-            <text class="product-name">月相系列 · 铂金款</text>
+            <text class="product-tag">{{item.tag}}</text>
+            <text class="product-name">{{item.name}}</text>
+            <text class="product-price" wx:if="{{item.price}}">¥{{item.price}}</text>
             <view class="discover-link">
               <text>DISCOVER MORE</text>
             </view>
@@ -51,8 +39,13 @@
       </view>
     </view>
 
+    <!-- Loading State -->
+    <view class="loading-state" wx:if="{{loading}}">
+      <text>加载中...</text>
+    </view>
+
     <!-- Section 3: Brand Story -->
-    <view class="section section-brand-story">
+    <view class="section section-brand-story" wx:if="{{brandStoryImage}}">
       <image class="brand-story-image" src="{{brandStoryImage}}" mode="aspectFill" />
       <view class="brand-story-overlay"></view>
       <view class="brand-story-content">
@@ -63,12 +56,12 @@
       </view>
     </view>
 
-    <!-- Section 4: Featured Collections -->
-    <view class="section section-collections">
+    <!-- Section 4: Hot Series (Products) -->
+    <view class="section section-collections" wx:if="{{hotSeries.length > 0}}">
       <view class="section-header-row">
         <view class="section-header">
           <text class="section-title">热门系列</text>
-          <text class="section-subtitle">Featured Collections</text>
+          <text class="section-subtitle">Hot Series</text>
         </view>
         <view class="scroll-arrows">
           <image class="arrow arrow-left {{scrollLeft <= 0 ? 'arrow-disabled' : ''}}" src="https://cdn.jsdelivr.net/npm/@material-design-icons/svg@0.14.15/filled/west.svg" mode="aspectFit" bindtap="onScrollLeft" />
@@ -78,41 +71,41 @@
 
       <scroll-view id="collectionsScroll" class="collections-scroll" scroll-x enhanced="{{true}}" show-scrollbar="{{false}}" scroll-left="{{scrollLeft}}" bindscroll="onCollectionScroll">
         <view class="collections-track">
-          <view class="collection-item" bindtap="onCollectionTap" data-collection="universe">
+          <view class="collection-item" wx:for="{{hotSeries}}" wx:key="id" bindtap="onHotSeriesTap" data-id="{{item.id}}">
             <view class="collection-image-wrapper">
-              <image class="collection-image" src="{{collection1.image}}" mode="aspectFill" />
+              <image class="collection-image" src="{{item.image}}" mode="aspectFill" />
             </view>
-            <text class="collection-name">寰宇系列 | Universe</text>
-            <text class="collection-desc">跨越疆界的探索之魂</text>
-          </view>
-
-          <view class="collection-item" bindtap="onCollectionTap" data-collection="radiance">
-            <view class="collection-image-wrapper">
-              <image class="collection-image" src="{{collection2.image}}" mode="aspectFill" />
-            </view>
-            <text class="collection-name">流光系列 | Radiance</text>
-            <text class="collection-desc">致敬现代女性的优雅</text>
-          </view>
-
-          <view class="collection-item" bindtap="onCollectionTap" data-collection="abyss">
-            <view class="collection-image-wrapper">
-              <image class="collection-image" src="{{collection3.image}}" mode="aspectFill" />
-            </view>
-            <text class="collection-name">深海系列 | Abyss</text>
-            <text class="collection-desc">深邃海洋的精准伴侣</text>
+            <text class="collection-name">{{item.name}}</text>
+            <text class="collection-desc">{{item.description}}</text>
           </view>
         </view>
       </scroll-view>
     </view>
 
-    <!-- Section 5: Contact Consultant -->
-    <view class="section section-consultant">
-      <view class="consultant-card">
-        <image class="consultant-icon" src="https://cdn.jsdelivr.net/npm/@material-design-icons/svg@0.14.15/filled/verified_user.svg" mode="aspectFit" />
-        <text class="consultant-title">尊享顾问服务</text>
-        <text class="consultant-text">我们的专家将为您提供一对一的选购建议与技术支持</text>
-        <button class="consultant-button" bindtap="onContactConsultant">联系顾问 | CONTACT US</button>
+    <!-- Section 5: Featured Products -->
+    <view class="section section-featured" wx:if="{{featuredProducts.length > 0}}">
+      <view class="section-header">
+        <text class="section-title">精选腕表</text>
+        <text class="section-subtitle">Featured Timepieces</text>
       </view>
+
+      <view class="featured-grid">
+        <view class="featured-card" wx:for="{{featuredProducts}}" wx:key="id" bindtap="onProductTap" data-id="{{item.id}}">
+          <view class="featured-image-wrapper">
+            <image class="featured-image" src="{{item.image}}" mode="aspectFill" />
+          </view>
+          <view class="featured-info">
+            <text class="featured-name">{{item.name}}</text>
+            <text class="featured-price" wx:if="{{item.price}}">¥{{item.price}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- Footer -->
+    <view class="footer">
+      <text class="footer-text">时全饰美 CHRONOS</text>
+      <text class="footer-desc">传承经典 · 匠心独运</text>
     </view>
   </scroll-view>
 </view>

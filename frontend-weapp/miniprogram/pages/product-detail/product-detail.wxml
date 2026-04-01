@@ -3,136 +3,104 @@
 <view class="page">
   <navigation-bar title="时全饰美" back="{{true}}" color="black" background="#ffffff" showMenu="{{true}}" />
 
-  <scroll-view class="content" scroll-y type="list" enhanced="{{true}}" bounces="{{false}}">
-    <!-- 1. Image Carousel -->
-    <view class="carousel-section">
-      <swiper class="carousel" indicator-dots="{{false}}" autoplay="{{true}}" interval="3000" duration="500" circular="{{true}}" bindchange="onImageChange">
-        <swiper-item wx:for="{{productImages}}" wx:key="index">
-          <image class="carousel-image" src="{{item}}" mode="aspectFill" />
-        </swiper-item>
-      </swiper>
-      
-      <view class="carousel-indicators">
-        <view class="indicator {{currentImageIndex === index ? 'indicator-active' : ''}}" wx:for="{{productImages}}" wx:key="index"></view>
-      </view>
+  <scroll-view class="content" scroll-y type="list" enhanced="{{true}}" bounces="{{false}}" bindrefresherrefresh="onPullDownRefresh" refresher-enabled="{{true}}">
+    <!-- Loading State -->
+    <view class="loading-state" wx:if="{{loading}}">
+      <text>加载中...</text>
     </view>
 
-    <!-- 2. Title & Series -->
-    <view class="title-section">
-      <text class="product-series">The Celestial Collection</text>
-      <text class="product-title">星空系列 - 玫瑰金版</text>
-      <text class="product-subtitle">Starry Sky - Rose Gold Edition</text>
-    </view>
-
-    <!-- 3. Highlights Section -->
-    <view class="highlights-section">
-      <view class="highlights-grid">
-        <view class="highlight-item">
-          <image class="highlight-icon" src="https://cdn.jsdelivr.net/npm/@material-design-icons/svg@0.14.15/filled/timer.svg" mode="aspectFit" />
-          <text class="highlight-title">自产机芯</text>
-          <text class="highlight-subtitle">In-house Movement</text>
-          <text class="highlight-desc">搭载 CH-700 自动上链机芯，精准卓越</text>
-        </view>
-
-        <view class="highlight-item">
-          <image class="highlight-icon" src="https://cdn.jsdelivr.net/npm/@material-design-icons/svg@0.14.15/filled/energy_savings_leaf.svg" mode="aspectFit" />
-          <text class="highlight-title">动力储存</text>
-          <text class="highlight-subtitle">Power Reserve</text>
-          <text class="highlight-desc">长达 72 小时的不间断动力保障</text>
-        </view>
-
-        <view class="highlight-item">
-          <image class="highlight-icon" src="https://cdn.jsdelivr.net/npm/@material-design-icons/svg@0.14.15/filled/waves.svg" mode="aspectFit" />
-          <text class="highlight-title">防水性能</text>
-          <text class="highlight-subtitle">Water Resistance</text>
-          <text class="highlight-desc">深达 50 米的生活与艺术平衡</text>
-        </view>
-      </view>
-    </view>
-
-    <!-- 4. Specifications -->
-    <view class="specifications-section">
-      <view class="specifications-card">
-        <view class="specifications-header">
-          <text class="specifications-title">规格参数</text>
-          <text class="specifications-subtitle">Specifications</text>
-        </view>
-
-        <view class="specifications-list">
-          <view class="spec-item">
-            <view class="spec-label">
-              <text class="spec-name">表壳尺寸</text>
-              <text class="spec-name-en">Case Size</text>
-            </view>
-            <text class="spec-value">40 毫米 / 10.5 毫米厚度</text>
-          </view>
-
-          <view class="spec-item">
-            <view class="spec-label">
-              <text class="spec-name">材质</text>
-              <text class="spec-name-en">Material</text>
-            </view>
-            <text class="spec-value">18K 玫瑰金、蓝宝石水晶玻璃</text>
-          </view>
-
-          <view class="spec-item">
-            <view class="spec-label">
-              <text class="spec-name">机芯</text>
-              <text class="spec-name-en">Movement</text>
-            </view>
-            <text class="spec-value">CH-700 自动机械机芯</text>
-          </view>
-
-          <view class="spec-item">
-            <view class="spec-label">
-              <text class="spec-name">表带</text>
-              <text class="spec-name-en">Strap</text>
-            </view>
-            <text class="spec-value">密西西比鳄鱼皮 - 曜石黑</text>
-          </view>
-        </view>
-      </view>
-    </view>
-
-    <!-- 5. Design Inspiration -->
-    <view class="inspiration-section">
-      <view class="inspiration-text">
-        <text class="inspiration-title">设计灵感</text>
-        <text class="inspiration-subtitle">Design Inspiration</text>
+    <!-- Product Content -->
+    <block wx:else>
+      <!-- 1. Image Carousel -->
+      <view class="carousel-section" wx:if="{{productImages.length > 0}}">
+        <swiper class="carousel" indicator-dots="{{productImages.length > 1}}" autoplay="{{true}}" interval="3000" duration="500" circular="{{true}}" bindchange="onImageChange">
+          <swiper-item wx:for="{{productImages}}" wx:key="index">
+            <image class="carousel-image" src="{{item}}" mode="aspectFill" />
+          </swiper-item>
+        </swiper>
         
-        <view class="inspiration-content">
-          <text class="inspiration-paragraph">"星空系列"的诞生，源于人类对苍穹恒古不变的向往。我们将浩瀚宇宙的深邃与18K玫瑰金的温润完美融合，旨在打造一款能够穿越时间的艺术品。</text>
-          
-          <text class="inspiration-paragraph">每一枚腕表的表盘均由匠人手工打磨，其纹理如同星轨交错，在不同光影下呈现出变幻莫测的色彩。这不仅仅是计时工具，更是佩戴在腕间的宇宙微缩景观。</text>
-        </view>
-
-        <view class="inspiration-link" bindtap="onExploreHeritage">
-          <text>Explore Our Heritage</text>
+        <view class="carousel-indicators" wx:if="{{productImages.length > 1}}">
+          <view class="indicator {{currentImageIndex === index ? 'indicator-active' : ''}}" wx:for="{{productImages}}" wx:key="index"></view>
         </view>
       </view>
 
-      <view class="inspiration-image-wrapper">
-        <image class="inspiration-image" src="{{inspirationImage}}" mode="aspectFill" />
+      <!-- 2. Title & Series -->
+      <view class="title-section">
+        <text class="product-series">{{productInfo.series}}</text>
+        <text class="product-title">{{productInfo.name}}</text>
+        <text class="product-subtitle">{{productInfo.subtitle}}</text>
+        <text class="product-price">{{productInfo.price}}</text>
       </view>
+
+      <!-- 3. Highlights Section -->
+      <view class="highlights-section" wx:if="{{productInfo.highlights.length > 0}}">
+        <view class="highlights-grid">
+          <view class="highlight-item" wx:for="{{productInfo.highlights}}" wx:key="index">
+            <image class="highlight-icon" src="https://cdn.jsdelivr.net/npm/@material-design-icons/svg@0.14.15/filled/{{item.icon}}.svg" mode="aspectFit" />
+            <text class="highlight-title">{{item.title}}</text>
+            <text class="highlight-subtitle">{{item.subtitle}}</text>
+            <text class="highlight-desc">{{item.desc}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 4. Specifications -->
+      <view class="specifications-section" wx:if="{{productInfo.specifications.length > 0}}">
+        <view class="specifications-card">
+          <view class="specifications-header">
+            <text class="specifications-title">商品信息</text>
+            <text class="specifications-subtitle">Product Information</text>
+          </view>
+
+          <view class="specifications-list">
+            <view class="spec-item" wx:for="{{productInfo.specifications}}" wx:key="index">
+              <view class="spec-label">
+                <text class="spec-name">{{item.name}}</text>
+                <text class="spec-name-en">{{item.nameEn}}</text>
+              </view>
+              <text class="spec-value">{{item.value}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <!-- 5. Product Description -->
+      <view class="description-section" wx:if="{{product.description}}">
+        <view class="description-card">
+          <view class="description-header">
+            <text class="description-title">商品描述</text>
+            <text class="description-subtitle">Description</text>
+          </view>
+          <view class="description-content">
+            <text>{{product.description}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 6. Product Content -->
+      <view class="content-section" wx:if="{{product.content}}">
+        <view class="content-card">
+          <view class="content-header">
+            <text class="content-title">商品详情</text>
+            <text class="content-subtitle">Details</text>
+          </view>
+          <view class="content-html">
+            <text>{{product.content}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 7. Action Buttons -->
+      <view class="action-section">
+        <button class="action-btn-consult" bindtap="onConsult">咨询顾问</button>
+        <button class="action-btn-book" bindtap="onBook">预约到店</button>
+      </view>
+    </block>
+
+    <!-- Footer -->
+    <view class="footer">
+      <text class="footer-text">时全饰美 CHRONOS</text>
+      <text class="footer-desc">传承经典 · 匠心独运</text>
     </view>
   </scroll-view>
-
-  <!-- 6. Bottom Fixed Actions -->
-  <view class="action-footer">
-    <view class="price-info">
-      <text class="price">CNY 248,000</text>
-      <text class="price-label">Retail Price Incl. VAT</text>
-    </view>
-
-    <view class="action-buttons">
-      <button class="action-button action-button-outline" bindtap="onConsult">
-        <text>咨询顾问</text>
-        <text class="button-subtitle">Consult Consultant</text>
-      </button>
-      <button class="action-button action-button-primary" bindtap="onBook">
-        <text>预约到店</text>
-        <text class="button-subtitle">Book an Appointment</text>
-      </button>
-    </view>
-  </view>
 </view>

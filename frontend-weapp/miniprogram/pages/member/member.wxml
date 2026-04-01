@@ -4,46 +4,58 @@
   <navigation-bar title="时全饰美" back="{{true}}" color="black" background="#ffffff" />
 
   <scroll-view class="content" scroll-y type="list" enhanced="{{true}}" bounces="{{false}}">
-    <!-- Member Card Section -->
-    <view class="member-card-section">
-      <view class="member-card">
-        <!-- Decorative grain texture -->
-        <view class="card-grain" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAJrA8I46OjznAdSdAn8lP7ok5OoL2jR-swNh9g7si_T4AQDbIQke4jXhq4M6Qp8XaPmkeMufPUpnvBIT6rLhehRxvetnwLeHi8ESObPGZg71KfrGgFMCR3Ru6KX0ZEg_mi8HzjjlKWN9LWpd_bSn1_JNEAGKA5ENPowr0tUvu26HD-Rym1EYdDWVIfh_wXadhHsuUKHA-7coTWBpw0HSx91ihN21bueklsnNB2R79NL0j-62vf0RJ03i4lqnFjCaVl1NifunY4Q1In');"></view>
-
-        <!-- Card Header -->
-        <view class="card-header">
-          <view class="card-status">
-            <text class="card-status-label">Current Status</text>
-            <text class="card-level">铂金会员</text>
-            <text class="card-level-en">Platinum Member</text>
-          </view>
-          <image class="card-diamond" src="https://cdn.jsdelivr.net/npm/@material-design-icons/svg@0.14.15/filled/diamond.svg" mode="aspectFit" />
-        </view>
-
-        <!-- User Info -->
-        <view class="card-user">
-          <view class="user-avatar-wrapper">
-            <image class="user-avatar" src="{{userAvatar}}" mode="aspectFill" />
-          </view>
-          <view class="user-info">
-            <text class="user-name">王先生</text>
-            <text class="user-id">ID: 8829 4402</text>
-          </view>
-        </view>
-
-        <!-- Growth Progress -->
-        <view class="card-progress">
-          <view class="progress-header">
-            <text class="progress-label">GROWTH PROGRESS</text>
-            <text class="progress-value">12,800 / 17,800</text>
-          </view>
-          <view class="progress-bar">
-            <view class="progress-fill"></view>
-          </view>
-          <text class="progress-hint">距离 钻石会员 还需 5,000 点成长值</text>
+    <!-- Not Logged In -->
+    <block wx:if="{{!isLoggedIn}}">
+      <view class="login-prompt-section">
+        <view class="login-prompt-card">
+          <image class="prompt-icon" src="https://cdn.jsdelivr.net/npm/@material-design-icons/svg@0.14.15/filled/account_circle.svg" mode="aspectFit" />
+          <text class="prompt-title">登录后查看会员信息</text>
+          <text class="prompt-subtitle">登录即享专属权益和积分优惠</text>
+          <button class="login-prompt-btn" bindtap="onLoginTap">立即登录</button>
         </view>
       </view>
-    </view>
+    </block>
+
+    <!-- Member Card Section (Logged In) -->
+    <block wx:if="{{isLoggedIn}}">
+      <view class="member-card-section">
+        <view class="member-card">
+          <view class="card-grain" style="background-image: url('D:/项目图标/member/unnamed.png');"></view>
+
+          <view class="card-header">
+            <view class="card-status">
+              <text class="card-status-label">Current Status</text>
+              <text class="card-level">{{memberLevelName}}</text>
+              <text class="card-level-en">{{memberLevelEn}}</text>
+            </view>
+            <image class="card-diamond" src="https://cdn.jsdelivr.net/npm/@material-design-icons/svg@0.14.15/filled/diamond.svg" mode="aspectFit" />
+          </view>
+
+          <view class="card-user">
+            <view class="user-avatar-wrapper">
+              <image class="user-avatar" src="{{userAvatar}}" mode="aspectFill" />
+            </view>
+            <view class="user-info">
+              <text class="user-name">{{userName}}</text>
+              <text class="user-id">{{userId}}</text>
+            </view>
+            <button class="logout-btn" bindtap="onLogoutTap">退出</button>
+          </view>
+
+          <view class="card-progress">
+            <view class="progress-header">
+              <text class="progress-label">GROWTH PROGRESS</text>
+              <text class="progress-value">{{growthValue}} / {{nextLevelGrowth}}</text>
+            </view>
+            <view class="progress-bar">
+              <view class="progress-fill" style="width: {{growthValue / nextLevelGrowth * 100}}%;"></view>
+            </view>
+            <text class="progress-hint" wx:if="{{currentLevel < 4}}">距离下一等级还需 {{nextLevelGrowth - growthValue}} 点成长值</text>
+            <text class="progress-hint" wx:if="{{currentLevel === 4}}">已是最高等级会员</text>
+          </view>
+        </view>
+      </view>
+    </block>
 
     <!-- Privileges Section -->
     <view class="privileges-section">
@@ -98,7 +110,7 @@
           <text class="title-en">Rewards</text>
         </view>
         <view class="points-display">
-          <text class="points-label">Points:</text>
+          <text class="points-label">积分:</text>
           <text class="points-value">{{memberPoints}}</text>
         </view>
       </view>
@@ -107,67 +119,64 @@
         <scroll-view class="tabs-scroll" scroll-x enhanced="{{true}}" show-scrollbar="{{false}}">
           <view class="tabs-track">
             <view class="tab-item {{currentTab === 'all' ? 'tab-active' : ''}}" bindtap="onTabChange" data-tab="all">
-              <text>All 全部</text>
+              <text>全部</text>
             </view>
             <view class="tab-item {{currentTab === 'lifestyle' ? 'tab-active' : ''}}" bindtap="onTabChange" data-tab="lifestyle">
-              <text>Lifestyle 品牌周边</text>
+              <text>品牌周边</text>
             </view>
             <view class="tab-item {{currentTab === 'services' ? 'tab-active' : ''}}" bindtap="onTabChange" data-tab="services">
-              <text>Services 专属服务</text>
+              <text>专属服务</text>
             </view>
             <view class="tab-item {{currentTab === 'exclusive' ? 'tab-active' : ''}}" bindtap="onTabChange" data-tab="exclusive">
-              <text>Exclusive 限定沙龙</text>
+              <text>限定沙龙</text>
             </view>
           </view>
         </scroll-view>
       </view>
 
       <view class="rewards-list">
-        <!-- Reward Item 1 -->
         <view class="reward-item" bindtap="onRewardTap" data-id="reward1">
           <view class="reward-image-wrapper">
             <image class="reward-image" src="{{reward1.image}}" mode="aspectFill" />
           </view>
           <view class="reward-footer">
             <view class="reward-info">
-              <text class="reward-title">高级鳄鱼皮定制表带</text>
-              <text class="reward-subtitle">Bespoke Exotic Leather Strap</text>
-              <text class="reward-points">8,000 POINTS</text>
+              <text class="reward-title">{{reward1.title}}</text>
+              <text class="reward-subtitle">{{reward1.subtitle}}</text>
+              <text class="reward-points">{{reward1.points}} 积分</text>
             </view>
-            <button class="redeem-btn">Redeem</button>
+            <button class="redeem-btn">兑换</button>
           </view>
         </view>
 
-        <!-- Reward Item 2 -->
         <view class="reward-item" bindtap="onRewardTap" data-id="reward2">
           <view class="reward-image-wrapper">
             <image class="reward-image" src="{{reward2.image}}" mode="aspectFill" />
           </view>
           <view class="reward-footer">
             <view class="reward-info">
-              <text class="reward-title">品牌 200 周年纪念画册</text>
-              <text class="reward-subtitle">200th Anniversary Anthology</text>
-              <text class="reward-points">3,500 POINTS</text>
+              <text class="reward-title">{{reward2.title}}</text>
+              <text class="reward-subtitle">{{reward2.subtitle}}</text>
+              <text class="reward-points">{{reward2.points}} 积分</text>
             </view>
-            <button class="redeem-btn">Redeem</button>
+            <button class="redeem-btn">兑换</button>
           </view>
         </view>
 
-        <!-- Reward Item 3 (Limited Edition) -->
         <view class="reward-item" bindtap="onRewardTap" data-id="reward3">
           <view class="reward-image-wrapper reward-image-limited">
             <image class="reward-image" src="{{reward3.image}}" mode="aspectFill" />
             <view class="limited-badge">
-              <text>Limited Edition</text>
+              <text>限定</text>
             </view>
           </view>
           <view class="reward-footer">
             <view class="reward-info">
-              <text class="reward-title">线下新品私人品鉴会门票</text>
-              <text class="reward-subtitle">Private Collection Showcase Access</text>
-              <text class="reward-points">15,000 POINTS</text>
+              <text class="reward-title">{{reward3.title}}</text>
+              <text class="reward-subtitle">{{reward3.subtitle}}</text>
+              <text class="reward-points">{{reward3.points}} 积分</text>
             </view>
-            <button class="redeem-btn">Apply</button>
+            <button class="redeem-btn">申请</button>
           </view>
         </view>
       </view>
@@ -199,8 +208,24 @@
 
         <view class="service-item" bindtap="onServiceTap" data-type="consultant">
           <view class="service-left">
-            <image class="service-icon" src="https://cdn.jsdelivr.net/npm/@material-design-icons/svg@0.14.15/filled/contact_support.svg" mode="aspectFit" />
-            <text class="service-name">联系顾问</text>
+            <image class="service-icon" src="https://cdn.jsdelivr.net/npm/@material-design-icons/svg@0.14.15/filled/contact_phone.svg" mode="aspectFit" />
+            <text class="service-name">专属顾问</text>
+          </view>
+          <image class="service-arrow" src="https://cdn.jsdelivr.net/npm/@material-design-icons/svg@0.14.15/filled/chevron_right.svg" mode="aspectFit" />
+        </view>
+
+        <view class="service-item" bindtap="onServiceTap" data-type="address">
+          <view class="service-left">
+            <image class="service-icon" src="https://cdn.jsdelivr.net/npm/@material-design-icons/svg@0.14.15/filled/location_on.svg" mode="aspectFit" />
+            <text class="service-name">收货地址</text>
+          </view>
+          <image class="service-arrow" src="https://cdn.jsdelivr.net/npm/@material-design-icons/svg@0.14.15/filled/chevron_right.svg" mode="aspectFit" />
+        </view>
+
+        <view class="service-item" bindtap="onServiceTap" data-type="settings">
+          <view class="service-left">
+            <image class="service-icon" src="https://cdn.jsdelivr.net/npm/@material-design-icons/svg@0.14.15/filled/settings.svg" mode="aspectFit" />
+            <text class="service-name">账户设置</text>
           </view>
           <image class="service-arrow" src="https://cdn.jsdelivr.net/npm/@material-design-icons/svg@0.14.15/filled/chevron_right.svg" mode="aspectFit" />
         </view>

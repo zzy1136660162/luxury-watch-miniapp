@@ -63,7 +63,18 @@
         <el-table-column label="商品信息" min-width="280">
           <template #default="{ row }">
             <div class="product-info">
-              <el-image :src="row.image" class="product-image" fit="cover" />
+              <el-image
+                v-if="row.image"
+                :src="getImageUrl(row.image)"
+                class="product-image"
+                fit="cover"
+                :preview-src-list="[getImageUrl(row.image)]"
+                preview-teleported
+                :initial-index="0"
+              />
+              <div v-else class="product-image-placeholder">
+                <el-icon><Picture /></el-icon>
+              </div>
               <div class="product-detail">
                 <div class="name">{{ row.name }}</div>
                 <div class="code">编码: {{ row.code }}</div>
@@ -127,10 +138,24 @@
 <script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { Search, Plus, Delete } from '@element-plus/icons-vue'
+import { Search, Plus, Delete, Picture } from '@element-plus/icons-vue'
 import api from '@/api'
 import type { Product } from '@/types'
 import ProductFormDialog from './components/ProductFormDialog.vue'
+
+// 图片预览基础URL
+const imagePreviewBaseUrl = import.meta.env.VITE_APP_IMAGE_PREVIEW_BASEURL || import.meta.env.VITE_APP_API_BASEURL || 'http://localhost:8081'
+
+// 获取完整的图片URL
+const getImageUrl = (imagePath: string) => {
+  if (!imagePath) return ''
+
+  if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
+    return imagePath
+  }
+
+  return `${imagePreviewBaseUrl}${imagePath}`
+}
 
 // 搜索表单
 const searchForm = reactive({
@@ -318,6 +343,19 @@ onMounted(() => {
     width: 60px;
     height: 60px;
     border-radius: 4px;
+    cursor: pointer;
+  }
+
+  .product-image-placeholder {
+    width: 60px;
+    height: 60px;
+    border-radius: 4px;
+    background-color: var(--el-fill-color-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--el-text-color-placeholder);
+    font-size: 24px;
   }
 
   .product-detail {

@@ -6,6 +6,7 @@
     "pages/member/member",
     "pages/privileges/privileges",
     "pages/product-detail/product-detail",
+    "pages/login/login",
     "pages/index/index",
     "pages/logs/logs"
   ],

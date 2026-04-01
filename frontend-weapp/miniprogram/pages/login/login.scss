@@ -1,0 +1,210 @@
+$primary: #000000;
+$primary-container: #1c1b1b;
+$surface: #f9f9f9;
+$surface-container: #eeeeee;
+$surface-container-low: #f3f3f3;
+$surface-container-lowest: #ffffff;
+$secondary: #5d5e5f;
+$secondary-fixed-dim: #c6c6c6;
+$tertiary: #D4AF37;
+$on-primary: #ffffff;
+$on-primary-container: #858383;
+$on-surface: #1a1c1c;
+$on-surface-variant: #444748;
+$outline-variant: #c4c7c7;
+$error: #BA1A1A;
+$font-family-chinese: 'Noto Serif SC', serif;
+$font-family-english: 'Manrope', sans-serif;
+
+.page {
+  width: 100vw;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: $surface-container-lowest;
+  box-sizing: border-box;
+}
+
+.login-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 0 48px;
+  padding-top: 120px;
+}
+
+.logo-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 80px;
+
+  .logo {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background-color: $primary-container;
+    margin-bottom: 24px;
+  }
+
+  .brand-name {
+    font-family: $font-family-chinese;
+    font-size: 36px;
+    font-weight: bold;
+    color: $primary;
+    letter-spacing: 0.1em;
+    margin-bottom: 8px;
+  }
+
+  .brand-subtitle {
+    font-family: $font-family-english;
+    font-size: 10px;
+    color: $secondary;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+  }
+}
+
+.form-section {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin-bottom: 48px;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.input-wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 56px;
+  padding: 0 16px;
+  background-color: $surface;
+  border: 1px solid $outline-variant;
+  border-radius: 12px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+
+  &.input-focus {
+    border-color: $tertiary;
+    box-shadow: 0 0 0 2px rgba($tertiary, 0.1);
+  }
+
+  .input-icon {
+    width: 24px;
+    height: 24px;
+    margin-right: 12px;
+    opacity: 0.6;
+  }
+
+  .input-field {
+    flex: 1;
+    height: 100%;
+    font-family: $font-family-english;
+    font-size: 16px;
+    color: $on-surface;
+    background: transparent;
+    border: none;
+    outline: none;
+
+    &::placeholder {
+      color: $secondary;
+    }
+  }
+
+  .placeholder {
+    color: $secondary;
+  }
+
+  .password-toggle {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .toggle-icon {
+      width: 20px;
+      height: 20px;
+      opacity: 0.6;
+    }
+  }
+}
+
+.login-btn {
+  height: 56px;
+  background-color: $primary;
+  border: none;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 16px;
+
+  &.btn-disabled {
+    background-color: $secondary-fixed-dim;
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+  .btn-text {
+    font-family: $font-family-chinese;
+    font-size: 18px;
+    font-weight: bold;
+    color: $on-primary;
+    letter-spacing: 0.1em;
+  }
+}
+
+.tips-section {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin-top: 16px;
+
+  .tips-text {
+    font-family: $font-family-english;
+    font-size: 12px;
+    color: $secondary;
+  }
+
+  .tips-link {
+    font-family: $font-family-english;
+    font-size: 12px;
+    color: $tertiary;
+    margin: 0 2px;
+  }
+}
+
+.footer-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding-bottom: 48px;
+}
+
+.divider {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 16px;
+
+  .divider-line {
+    flex: 1;
+    height: 1px;
+    background-color: $outline-variant;
+  }
+
+  .divider-text {
+    font-family: $font-family-english;
+    font-size: 12px;
+    color: $secondary;
+  }
+}

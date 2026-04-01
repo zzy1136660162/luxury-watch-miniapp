@@ -7,29 +7,21 @@
   <view class="category-nav-fixed {{isNavFixed ? 'category-nav-fixed-visible' : ''}}">
     <scroll-view class="category-scroll" scroll-x enhanced="{{true}}" show-scrollbar="{{false}}">
       <view class="category-track">
-        <view class="category-item {{currentCategory === 'classic' ? 'category-active' : ''}}" bindtap="onCategoryTap" data-category="classic">
-          <text class="category-name">经典</text>
-          <text class="category-name-en">Classic</text>
+        <view class="category-item {{currentCategory === 'all' ? 'category-active' : ''}}" bindtap="onCategoryTap" data-category="all">
+          <text class="category-name">全部</text>
+          <text class="category-name-en">All</text>
         </view>
-        <view class="category-item {{currentCategory === 'sport' ? 'category-active' : ''}}" bindtap="onCategoryTap" data-category="sport">
-          <text class="category-name">运动</text>
-          <text class="category-name-en">Sport</text>
-        </view>
-        <view class="category-item {{currentCategory === 'complication' ? 'category-active' : ''}}" bindtap="onCategoryTap" data-category="complication">
-          <text class="category-name">复杂功能</text>
-          <text class="category-name-en">Complications</text>
-        </view>
-        <view class="category-item {{currentCategory === 'ladies' ? 'category-active' : ''}}" bindtap="onCategoryTap" data-category="ladies">
-          <text class="category-name">女士</text>
-          <text class="category-name-en">Ladies</text>
+        <view class="category-item {{currentCategory === item.name ? 'category-active' : ''}}" wx:for="{{categories}}" wx:key="id" bindtap="onCategoryTap" data-category="{{item.name}}">
+          <text class="category-name">{{item.name}}</text>
+          <text class="category-name-en">{{item.nameEn || item.name}}</text>
         </view>
       </view>
     </scroll-view>
   </view>
 
-  <scroll-view class="content" scroll-y type="list" enhanced="{{true}}" bounces="{{false}}" bindscroll="onScroll" id="main-scroll">
+  <scroll-view class="content" scroll-y type="list" enhanced="{{true}}" bounces="{{false}}" bindscroll="onScroll" id="main-scroll" bindrefresherrefresh="onPullDownRefresh" refresher-enabled="{{true}}" bindscrolltolower="onReachBottom">
     <!-- Hero Banner -->
-    <view class="hero-banner">
+    <view class="hero-banner" wx:if="{{heroImage}}">
       <image class="hero-image" src="{{heroImage}}" mode="aspectFill" />
       <view class="hero-overlay"></view>
       <view class="hero-content">
@@ -43,53 +35,32 @@
     <view class="category-nav" id="category-nav">
       <scroll-view class="category-scroll" scroll-x enhanced="{{true}}" show-scrollbar="{{false}}">
         <view class="category-track">
-          <view class="category-item {{currentCategory === 'classic' ? 'category-active' : ''}}" bindtap="onCategoryTap" data-category="classic">
-            <text class="category-name">经典</text>
-            <text class="category-name-en">Classic</text>
+          <view class="category-item {{currentCategory === 'all' ? 'category-active' : ''}}" bindtap="onCategoryTap" data-category="all">
+            <text class="category-name">全部</text>
+            <text class="category-name-en">All</text>
           </view>
-          <view class="category-item {{currentCategory === 'sport' ? 'category-active' : ''}}" bindtap="onCategoryTap" data-category="sport">
-            <text class="category-name">运动</text>
-            <text class="category-name-en">Sport</text>
-          </view>
-          <view class="category-item {{currentCategory === 'complication' ? 'category-active' : ''}}" bindtap="onCategoryTap" data-category="complication">
-            <text class="category-name">复杂功能</text>
-            <text class="category-name-en">Complications</text>
-          </view>
-          <view class="category-item {{currentCategory === 'ladies' ? 'category-active' : ''}}" bindtap="onCategoryTap" data-category="ladies">
-            <text class="category-name">女士</text>
-            <text class="category-name-en">Ladies</text>
+          <view class="category-item {{currentCategory === item.code ? 'category-active' : ''}}" wx:for="{{categories}}" wx:key="id" bindtap="onCategoryTap" data-category="{{item.code}}">
+            <text class="category-name">{{item.name}}</text>
+            <text class="category-name-en">{{item.nameEn || item.name}}</text>
           </view>
         </view>
       </scroll-view>
     </view>
 
-    <!-- Featured Series Bento Grid - Only show for default category -->
-    <view wx:if="{{currentCategory === 'classic'}}" class="featured-section">
+    <!-- Featured Products -->
+    <view class="featured-section" wx:if="{{featuredProducts.length > 0 && currentCategory === 'all'}}">
+      <view class="section-header">
+        <text class="section-title">精选系列</text>
+        <text class="section-subtitle">Featured Collections</text>
+      </view>
       <view class="featured-grid">
-        <!-- Large Featured Card -->
-        <view class="featured-card-large" bindtap="onProductTap" data-id="featured1">
+        <view class="featured-card" wx:for="{{featuredProducts}}" wx:key="id" bindtap="onProductTap" data-id="{{item.id}}">
           <view class="featured-image-wrapper">
-            <image class="featured-image" src="{{featuredProduct1.image}}" mode="aspectFill" />
+            <image class="featured-image" src="{{item.image}}" mode="aspectFill" />
           </view>
-          <view class="featured-card-content">
-            <text class="featured-title">时空猎手</text>
-            <text class="featured-subtitle">Space Hunter Series</text>
-            <text class="featured-desc">穿梭于星际阔境，精准捕捉每一瞬即逝的光阴。在极简设计中蕴含无穷的精密力学。</text>
-            <view class="featured-link">
-              <text>Explore Discovery</text>
-            </view>
-          </view>
-        </view>
-
-        <!-- Vertical Card -->
-        <view class="featured-card-vertical" bindtap="onProductTap" data-id="featured2">
-          <view class="featured-image-wrapper-vertical">
-            <image class="featured-image" src="{{featuredProduct2.image}}" mode="aspectFill" />
-          </view>
-          <view class="featured-card-vertical-content">
-            <text class="featured-title-small">永恒经典</text>
-            <text class="featured-subtitle-small">Heritage Essence</text>
-            <text class="featured-desc-small">致敬制表黄金年代，将百年的工艺沉淀凝练于方寸表盘之间。</text>
+          <view class="featured-info">
+            <text class="featured-name">{{item.name}}</text>
+            <text class="featured-price" wx:if="{{item.price}}">¥{{item.price}}</text>
           </view>
         </view>
       </view>
@@ -97,95 +68,53 @@
 
     <!-- Product List -->
     <view class="product-list-section">
-      <!-- 经典系列产品 -->
-      <view wx:if="{{currentCategory === 'classic'}}">
-        <view wx:for="{{classicProducts}}" wx:key="id" class="product-list-item {{index % 2 === 1 ? 'product-list-item-reverse' : ''}}">
-          <view class="product-list-image-wrapper" bindtap="onProductTap" data-id="{{item.id}}">
-            <image class="product-list-image" src="{{item.image}}" mode="aspectFill" />
+      <view class="section-header">
+        <text class="section-title">产品列表</text>
+        <text class="section-subtitle">Products</text>
+      </view>
+
+      <!-- Loading State -->
+      <view class="loading-state" wx:if="{{loading && products.length === 0}}">
+        <text>加载中...</text>
+      </view>
+
+      <!-- Empty State -->
+      <view class="empty-state" wx:elif="{{products.length === 0 && !loading}}">
+        <text>暂无产品</text>
+      </view>
+
+      <!-- Product Grid -->
+      <view class="product-grid" wx:else>
+        <view class="product-item {{index % 2 === 1 ? 'product-item-reverse' : ''}}" wx:for="{{products}}" wx:key="id" bindtap="onProductTap" data-id="{{item.id}}">
+          <view class="product-image-wrapper">
+            <image class="product-image" src="{{item.image}}" mode="aspectFill" />
           </view>
-          <view class="product-list-content {{index % 2 === 1 ? 'product-list-content-reverse' : ''}}">
-            <view class="product-ref">
-              <text>{{item.ref}}</text>
-            </view>
-            <text class="product-list-name">{{item.name}}</text>
-            <text class="product-list-subtitle">{{item.subtitle}}</text>
-            <view class="product-list-divider"></view>
-            <text class="product-list-desc">{{item.desc}}</text>
-            <view class="product-list-action {{index % 2 === 1 ? 'product-list-action-reverse' : ''}}">
-              <button class="view-details-btn" bindtap="onProductTap" data-id="{{item.id}}">View Details</button>
+          <view class="product-content">
+            <text class="product-code">{{item.code}}</text>
+            <text class="product-name">{{item.name}}</text>
+            <text class="product-price" wx:if="{{item.price}}">¥{{item.price}}</text>
+            <view class="product-action">
+              <button class="view-details-btn" catchtap="onProductTap" data-id="{{item.id}}">View Details</button>
             </view>
           </view>
         </view>
       </view>
 
-      <!-- 运动系列产品 -->
-      <view wx:if="{{currentCategory === 'sport'}}">
-        <view wx:for="{{sportProducts}}" wx:key="id" class="product-list-item {{index % 2 === 1 ? 'product-list-item-reverse' : ''}}">
-          <view class="product-list-image-wrapper" bindtap="onProductTap" data-id="{{item.id}}">
-            <image class="product-list-image" src="{{item.image}}" mode="aspectFill" />
-          </view>
-          <view class="product-list-content {{index % 2 === 1 ? 'product-list-content-reverse' : ''}}">
-            <view class="product-ref">
-              <text>{{item.ref}}</text>
-            </view>
-            <text class="product-list-name">{{item.name}}</text>
-            <text class="product-list-subtitle">{{item.subtitle}}</text>
-            <view class="product-list-divider"></view>
-            <text class="product-list-desc">{{item.desc}}</text>
-            <view class="product-list-action {{index % 2 === 1 ? 'product-list-action-reverse' : ''}}">
-              <button class="view-details-btn" bindtap="onProductTap" data-id="{{item.id}}">View Details</button>
-            </view>
-          </view>
-        </view>
+      <!-- Loading More -->
+      <view class="loading-more" wx:if="{{loading && products.length > 0}}">
+        <text>加载中...</text>
       </view>
 
-      <!-- 复杂功能系列产品 -->
-      <view wx:if="{{currentCategory === 'complication'}}">
-        <view wx:for="{{complicationProducts}}" wx:key="id" class="product-list-item {{index % 2 === 1 ? 'product-list-item-reverse' : ''}}">
-          <view class="product-list-image-wrapper" bindtap="onProductTap" data-id="{{item.id}}">
-            <image class="product-list-image" src="{{item.image}}" mode="aspectFill" />
-          </view>
-          <view class="product-list-content {{index % 2 === 1 ? 'product-list-content-reverse' : ''}}">
-            <view class="product-ref">
-              <text>{{item.ref}}</text>
-            </view>
-            <text class="product-list-name">{{item.name}}</text>
-            <text class="product-list-subtitle">{{item.subtitle}}</text>
-            <view class="product-list-divider"></view>
-            <text class="product-list-desc">{{item.desc}}</text>
-            <view class="product-list-action {{index % 2 === 1 ? 'product-list-action-reverse' : ''}}">
-              <button class="view-details-btn" bindtap="onProductTap" data-id="{{item.id}}">View Details</button>
-            </view>
-          </view>
-        </view>
-      </view>
-
-      <!-- 女士系列产品 -->
-      <view wx:if="{{currentCategory === 'ladies'}}">
-        <view wx:for="{{ladiesProducts}}" wx:key="id" class="product-list-item {{index % 2 === 1 ? 'product-list-item-reverse' : ''}}">
-          <view class="product-list-image-wrapper" bindtap="onProductTap" data-id="{{item.id}}">
-            <image class="product-list-image" src="{{item.image}}" mode="aspectFill" />
-          </view>
-          <view class="product-list-content {{index % 2 === 1 ? 'product-list-content-reverse' : ''}}">
-            <view class="product-ref">
-              <text>{{item.ref}}</text>
-            </view>
-            <text class="product-list-name">{{item.name}}</text>
-            <text class="product-list-subtitle">{{item.subtitle}}</text>
-            <view class="product-list-divider"></view>
-            <text class="product-list-desc">{{item.desc}}</text>
-            <view class="product-list-action {{index % 2 === 1 ? 'product-list-action-reverse' : ''}}">
-              <button class="view-details-btn" bindtap="onProductTap" data-id="{{item.id}}">View Details</button>
-            </view>
-          </view>
-        </view>
+      <!-- No More -->
+      <view class="no-more" wx:if="{{!hasMore && products.length > 0}}">
+        <text>没有更多了</text>
       </view>
     </view>
 
     <!-- Footer CTA Section -->
     <view class="footer-cta-section">
       <text class="footer-cta-title">探寻更多可能</text>
-      <text class="footer-cta-desc">从经典到现代，每一款 CHRONOS 腕表都讲述着关于时间与匠心的独特故事。</text>
+      <text class="footer-cta-desc">从经典到现代，每一枚 CHRONOS 腕表都讲述着关于时间与匠心的独特故事。</text>
       <view class="footer-cta-buttons">
         <button class="cta-btn-outline" bindtap="onRequestCatalogue">索取目录</button>
         <button class="cta-btn-primary" bindtap="onLocateBoutique">查找精品店</button>
