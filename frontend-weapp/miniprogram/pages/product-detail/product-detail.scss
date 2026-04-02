@@ -3,7 +3,7 @@
 .page {
   width: 100vw;
   height: 100vh;
-  padding-bottom: 10vh;
+  padding-bottom: 4vh;
   display: flex;
   flex-direction: column;
   background-color: $surface;
@@ -15,7 +15,19 @@
   flex: 1;
   overflow-y: hidden;
 }
-
+.imga{
+  width: 90vw;
+  height: 400px;
+  margin: auto;
+  margin-top: 2vh;
+}
+.imga>image{
+  width: 100%;
+  height: 100%;
+}
+#brandstorybtn{
+  border: 1px solid black;
+}
 // Carousel
 .carousel-section {
   position: relative;
@@ -63,6 +75,7 @@ swiper-item {
 .title-section {
   padding: 64px 32px;
   text-align: center;
+  display: none;
 }
 
 .product-series {
@@ -188,8 +201,7 @@ swiper-item {
 
 .spec-item {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
+  align-items: flex;
 
   .spec-label {
     .spec-name {
@@ -251,7 +263,15 @@ swiper-item {
   font-weight: 500;
   margin-bottom: 4px;
 }
-
+#brandstoryheader{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 3vh;
+}
+#brandstorycontent{
+  margin: 0px 20px;
+}
 .description-subtitle {
   display: block;
   font-family: $font-family-english;
@@ -413,101 +433,59 @@ swiper-item {
   }
 }
 
-// Action Section (Page Content)
-.action-section {
-  padding: 80px 32px;
+// Fixed Action Buttons
+.action-fixed {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
   display: flex;
-  gap: 24px;
-  justify-content: center;
-  align-items: center;
-  
+  flex-direction: row;
+  gap: 12px;
+  padding: 16px 20px;
+  padding-bottom: calc(16px + env(safe-area-inset-bottom));
+  background-color: rgba($surface-container-lowest, 0.98);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.08);
+
   .action-btn-consult,
   .action-btn-book {
+    flex: 1;
     position: relative;
-    min-width: 200px;
-    padding: 18px 48px;
+    padding: 16px 24px;
     border-radius: 40px;
     font-family: $font-family-chinese;
-    font-size: 17px;
+    font-size: 15px;
     font-weight: 600;
-    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    cursor: pointer;
     border: none;
-    overflow: hidden;
-    
-    &::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-      transition: left 0.6s ease;
-    }
     
     &:active {
-      transform: translateY(3px);
-      
-      &::before {
-        left: 100%;
-      }
+      transform: scale(0.98);
     }
   }
   
   .action-btn-consult {
-    background: linear-gradient(135deg, rgba($primary, 0.05) 0%, rgba($primary, 0.1) 100%);
-    border: 2px solid rgba($primary, 0.3);
+    background: rgba($surface, 0.9);
+    border: 1.5px solid rgba($primary, 0.3);
     color: $primary;
-    box-shadow: 0 2px 12px rgba($primary, 0.1);
-    
-    &:active {
-      background: linear-gradient(135deg, rgba($primary, 0.1) 0%, rgba($primary, 0.15) 100%);
-      box-shadow: 0 4px 20px rgba($primary, 0.15);
-    }
   }
   
   .action-btn-book {
     background: linear-gradient(135deg, $primary 0%, $primary-variant 100%);
     color: $on-primary;
-    box-shadow: 0 6px 24px rgba($primary, 0.3);
-    position: relative;
-    
-    &::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(135deg, rgba($on-primary, 0.1) 0%, transparent 50%);
-      opacity: 0;
-      transition: opacity 0.3s ease;
-    }
-    
-    &:active {
-      background: linear-gradient(135deg, $primary-variant 0%, $primary 100%);
-      box-shadow: 0 8px 32px rgba($primary, 0.4);
-      
-      &::after {
-        opacity: 1;
-      }
-    }
   }
 }
 
-// Action Footer
-.action-footer {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  background-color: rgba($surface, 0.98);
-  backdrop-filter: blur(30px);
-  border-top: 1px solid rgba($outline-variant, 0.1);
-  padding: 20px 32px;
-  z-index: $z-index-nav;
-  box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.08);
+// Bottom padding for scroll content
+.bottom-padding {
+  height: 100px;
+}
+
+// Action Section (Page Content) - hidden, buttons are now fixed
+.action-section {
+  display: none;
 }
 
 // 响应式设计
@@ -576,55 +554,17 @@ swiper-item {
     }
   }
   
-  .action-section {
-     padding: 64px 24px;
-     flex-direction: column;
-     gap: 20px;
-     
-     .action-btn-consult,
-     .action-btn-book {
-       min-width: 180px;
-       padding: 16px 40px;
-       font-size: 16px;
-       border-radius: 36px;
-     }
-   }
-   
-   .action-footer {
-     padding: 20px 24px;
-     
-     .price-info {
-       .price-content {
-         .price {
-           font-size: 20px;
-         }
-         
-         .price-label {
-           font-size: 11px;
-         }
-       }
-       
-       .product-code {
-         font-size: 10px;
-       }
-     }
-     
-     .action-buttons {
-       gap: 16px;
-     }
-     
-     .action-button {
-       min-width: 140px;
-       padding: 14px 28px;
-       font-size: 15px;
-       border-radius: 28px;
-       
-       .button-subtitle {
-         font-size: 9px;
-         letter-spacing: 1.2px;
-       }
-     }
-   }
+  // Fixed Action Buttons - responsive
+  .action-fixed {
+    padding: 12px 16px;
+    padding-bottom: calc(12px + env(safe-area-inset-bottom));
+    
+    .action-btn-consult,
+    .action-btn-book {
+      padding: 14px 20px;
+      font-size: 14px;
+    }
+  }
 }
 
 .price-info {

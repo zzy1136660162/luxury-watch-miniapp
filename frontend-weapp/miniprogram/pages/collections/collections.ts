@@ -41,7 +41,9 @@ Component({
 
   attached() {
     // 计算导航栏位置
-    this.calculateNavPosition();
+    setTimeout(() => {
+      this.calculateNavPosition();
+    }, 100);
     // 加载Hero图片
     this.loadHeroImage();
     // 加载分类数据
@@ -53,6 +55,35 @@ Component({
   },
 
   methods: {
+    // 计算导航栏位置
+    calculateNavPosition() {
+      const query = wx.createSelectorQuery();
+      query.select('#category-nav').boundingClientRect();
+      query.selectViewport().scrollOffset();
+      query.exec((res: any) => {
+        if (res && res[0] && res[1]) {
+          const navRect = res[0];
+          const scrollOffset = res[1];
+          const navOffsetTop = navRect.top + scrollOffset.scrollTop;
+          this.setData({
+            navTop: navOffsetTop
+          });
+        }
+      });
+    },
+
+    // 监听滚动事件
+    onScroll(e: any) {
+      const scrollTop = e.detail.scrollTop;
+      const { navTop, isNavFixed } = this.data;
+
+      if (scrollTop >= navTop && !isNavFixed) {
+        this.setData({ isNavFixed: true });
+      } else if (scrollTop < navTop && isNavFixed) {
+        this.setData({ isNavFixed: false });
+      }
+    },
+
     // 加载Hero图片（使用系列页面专用图）
     async loadHeroImage() {
       try {
@@ -144,35 +175,6 @@ Component({
       } catch (error) {
         console.error('加载产品失败:', error);
         this.setData({ loading: false });
-      }
-    },
-
-    // 计算导航栏位置
-    calculateNavPosition() {
-      const query = this.createSelectorQuery();
-      query.select('#category-nav').boundingClientRect();
-      query.selectViewport().scrollOffset();
-      query.exec((res) => {
-        if (res && res[0] && res[1]) {
-          const navRect = res[0];
-          const scrollOffset = res[1];
-          const navOffsetTop = navRect.top + scrollOffset.scrollTop;
-          this.setData({
-            navTop: navOffsetTop
-          });
-        }
-      });
-    },
-
-    // 监听滚动事件
-    onScroll(e: any) {
-      const scrollTop = e.detail.scrollTop;
-      const { navTop, isNavFixed } = this.data;
-
-      if (scrollTop >= navTop && !isNavFixed) {
-        this.setData({ isNavFixed: true });
-      } else if (scrollTop < navTop && isNavFixed) {
-        this.setData({ isNavFixed: false });
       }
     },
 

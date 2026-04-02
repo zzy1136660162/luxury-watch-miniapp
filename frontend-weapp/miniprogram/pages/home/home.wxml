@@ -52,7 +52,7 @@
         <text class="brand-story-title">品牌故事</text>
         <text class="brand-story-subtitle">Our Story</text>
         <text class="brand-story-text">自 18 世纪以来，我们始终秉持对精准与艺术的极致追求。每一枚腕表不仅是时间的记录者，更是世代相传的匠心杰作。</text>
-        <button class="brand-story-button" bindtap="onExploreHeritage">EXPLORE HERITAGE</button>
+        <button class="brand-story-button" bindtap="onExploreHeritage">品牌馆</button>
       </view>
     </view>
 
@@ -110,9 +110,5 @@
     </view>
 
     <!-- Footer -->
-    <view class="footer">
-      <text class="footer-text">时全饰美 CHRONOS</text>
-      <text class="footer-desc">传承经典 · 匠心独运</text>
-    </view>
   </scroll-view>
 </view>

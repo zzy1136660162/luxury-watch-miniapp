@@ -3,7 +3,21 @@
 <view class="page">
   <navigation-bar title="时全饰美" back="{{false}}" color="black" background="#ffffff" showMenu="{{true}}" />
 
-
+  <!-- Fixed Category Navigation -->
+  <view class="category-nav-fixed {{isNavFixed ? 'show' : ''}}">
+    <scroll-view class="category-scroll" scroll-x enhanced="{{true}}" show-scrollbar="{{false}}">
+      <view class="category-track">
+        <view class="category-item {{currentCategory === 'all' ? 'category-active' : ''}}" bindtap="onCategoryTap" data-category="all">
+          <text class="category-name">全部</text>
+          <text class="category-name-en">All</text>
+        </view>
+        <view class="category-item {{currentCategory === item.code ? 'category-active' : ''}}" wx:for="{{categories}}" wx:key="id" bindtap="onCategoryTap" data-category="{{item.code}}">
+          <text class="category-name">{{item.name}}</text>
+          <text class="category-name-en">{{item.nameEn || item.name}}</text>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
 
   <scroll-view class="content" scroll-y type="list" enhanced="{{true}}" bounces="{{false}}" bindscroll="onScroll" id="main-scroll" bindrefresherrefresh="onPullDownRefresh" refresher-enabled="{{true}}" bindscrolltolower="onReachBottom">
     <!-- Hero Banner -->
@@ -17,7 +31,7 @@
       </view>
     </view>
 
-    <!-- Category Navigation - normal position below hero-banner -->
+    <!-- Category Navigation - normal position -->
     <view class="category-nav" id="category-nav">
       <scroll-view class="category-scroll" scroll-x enhanced="{{true}}" show-scrollbar="{{false}}">
         <view class="category-track">
@@ -54,56 +68,36 @@
 
     <!-- Product List -->
     <view class="product-list-section">
-      <view class="section-header">
+      <!-- <view class="section-header">
         <text class="section-title">产品列表</text>
         <text class="section-subtitle">Products</text>
-      </view>
+      </view> -->
 
-      <!-- Loading State -->
       <view class="loading-state" wx:if="{{loading && products.length === 0}}">
         <text>加载中...</text>
       </view>
 
-      <!-- Empty State -->
       <view class="empty-state" wx:elif="{{products.length === 0 && !loading}}">
         <text>暂无产品</text>
       </view>
 
-      <!-- Product Grid -->
       <view class="product-grid" wx:else>
-        <view class="product-item {{index % 2 === 1 ? 'product-item-reverse' : ''}}" wx:for="{{products}}" wx:key="id" bindtap="onProductTap" data-id="{{item.id}}">
+        <view class="product-card" wx:for="{{products}}" wx:key="id" bindtap="onProductTap" data-id="{{item.id}}">
           <view class="product-image-wrapper">
             <image class="product-image" src="{{item.image}}" mode="aspectFill" />
+            <view class="product-badge" wx:if="{{item.isNew}}">NEW</view>
           </view>
-          <view class="product-content">
-            <text class="product-code">{{item.code}}</text>
+          <view class="product-info" id="pi">
             <text class="product-name">{{item.name}}</text>
+            <text class="product-subtitle">{{item.subtitle}}</text>
             <text class="product-price" wx:if="{{item.price}}">¥{{item.price}}</text>
-            <view class="product-action">
-              <button class="view-details-btn" catchtap="onProductTap" data-id="{{item.id}}">查看详情</button>
-            </view>
           </view>
         </view>
       </view>
 
-      <!-- Loading More -->
-      <view class="loading-more" wx:if="{{loading && products.length > 0}}">
-        <text>加载中...</text>
-      </view>
-
-      <!-- No More -->
-      <view class="no-more" wx:if="{{!hasMore && products.length > 0}}">
-        <text>没有更多了</text>
-      </view>
-    </view>
-
-    <!-- Footer CTA Section -->
-    <view class="footer-cta-section">
-      <text class="footer-cta-title">探寻更多可能</text>
-      <text class="footer-cta-desc">从经典到现代，每一枚 CHRONOS 腕表都讲述着关于时间与匠心的独特故事。</text>
-      <view class="footer-cta-buttons">
-        <button class="cta-btn-outline" bindtap="onRequestCatalogue">索取目录</button>
-        <button class="cta-btn-primary" bindtap="onLocateBoutique">查找精品店</button>
+      <view id="loadmore" class="load-more" wx:if="{{products.length > 0}}">
+        <text wx:if="{{loading && products.length > 0}}">加载中...</text>
+        <text wx:elif="{{!hasMore}}">没有更多了</text>
       </view>
     </view>
   </scroll-view>

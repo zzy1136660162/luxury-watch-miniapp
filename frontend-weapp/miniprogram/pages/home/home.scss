@@ -115,6 +115,8 @@
       }
       
       .featured-action {
+        width: 150px;
+        margin-left: 70px;
         margin-top: 16px;
         padding: 4px 12px;
         background: transparent;
@@ -454,7 +456,7 @@
     border: 1px solid rgba(255, 255, 255, 0.3);
     color: #ffffff;
     font-family: $font-family-english;
-    font-size: 12px;
+    font-size: 15px;
     letter-spacing: 4px;
     text-transform: uppercase;
 

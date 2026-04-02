@@ -10,7 +10,12 @@
   overflow-x: hidden;
   padding-bottom: 10vh;
 }
-
+#nomore{
+  margin-top: 5vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 .content {
   flex: 1;
   padding-top: 0;
@@ -85,36 +90,37 @@
   }
 }
 
-// Category Navigation - normal position below hero-banner
+// Fixed Category Navigation
+.category-nav-fixed {
+  position: fixed;
+  top: 88px;
+  left: 0;
+  right: 0;
+  z-index: 99;
+  background-color: rgba($surface, 0.98);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  padding: 12px 0;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-100%);
+  transition: all 0.3s ease;
+
+  &.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+}
+
+// Category Navigation
 .category-nav {
   position: relative;
   z-index: 40;
-  background-color: rgba($surface, 0.9);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  padding: 32px 0;
-}
-
-// Fixed navigation bar - hidden by default
-.category-nav-fixed {
-  position: fixed;
-  top: 10vh;
-  left: 0;
-  right: 0;
-  z-index: 100;
   background-color: rgba($surface, 0.95);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  padding: 32px 0;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.3s ease, visibility 0.3s ease;
-}
-
-// Show fixed nav when scrolled
-.category-nav-fixed-visible {
-  opacity: 1;
-  visibility: visible;
+  padding: 12px 0;
 }
 
 .category-scroll {
@@ -186,6 +192,7 @@
 .featured-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  margin-top: 3vh;
   gap: 48px;
 }
 
@@ -449,7 +456,10 @@
     border-radius: 12px;
   }
 }
-
+#pi{
+  margin-top: 3vh;
+  margin-left: 3vh;
+}
 .product-content {
   padding: 24px;
   
@@ -495,7 +505,12 @@
     }
   }
 }
-
+#loadmore{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 3vh;
+}
 // 响应式设计
 @media (max-width: 768px) {
   .product-list-section {
@@ -639,8 +654,12 @@
     }
   }
 
+  .category-nav-fixed {
+    top: 70px;
+  }
+
   .category-nav {
-    padding: 24px 0;
+    padding: 8px 0;
   }
 
   .category-track {
@@ -952,5 +971,6 @@
   .footer-cta-section {
     max-width: 1200px;
     margin: 0 auto;
+    padding-top: 4vh;
   }
 

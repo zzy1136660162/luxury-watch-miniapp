@@ -48,32 +48,32 @@
       <view class="specifications-section" wx:if="{{productInfo.specifications.length > 0}}">
         <view class="specifications-card">
           <view class="specifications-header">
-            <text class="specifications-title">商品信息</text>
-            <text class="specifications-subtitle">Product Information</text>
+            <text class="specifications-title">产品参数</text>
+            <text class="specifications-subtitle">Specifications</text>
           </view>
-
-          <view class="specifications-list">
+          <view class="specifications-grid">
             <view class="spec-item" wx:for="{{productInfo.specifications}}" wx:key="index">
-              <view class="spec-label">
-                <text class="spec-name">{{item.name}}</text>
-                <text class="spec-name-en">{{item.nameEn}}</text>
-              </view>
+              <text class="spec-label">{{item.label}}</text>
               <text class="spec-value">{{item.value}}</text>
             </view>
           </view>
         </view>
       </view>
 
-      <!-- 5. Product Description -->
-      <view class="description-section" wx:if="{{product.description}}">
-        <view class="description-card">
-          <view class="description-header">
-            <text class="description-title">商品描述</text>
-            <text class="description-subtitle">Description</text>
+      <!-- 5. Brand Story -->
+      <view class="brand-story-section">
+        <view class="brand-story-card">
+          <view class="brand-story-header" id="brandstoryheader">
+            <text class="brand-story-title">品牌故事</text>
+            <text class="brand-story-subtitle">Brand Story</text>
           </view>
-          <view class="description-content">
-            <text>{{product.description}}</text>
+          <view class="brand-story-content" id="brandstorycontent">
+            <text class="brand-story-text">自 18 世纪创立以来，我们始终秉持对精准与艺术的极致追求。每一枚腕表都凝聚了制表大师的心血，代表着对时间的敬意与对工艺的执着。</text>
           </view>
+          <view class="imga">
+          <image src="http://localhost:8081/api/images/unnamed%20(3).png" mode="aspectFill" />
+          </view>
+          <button id="brandstorybtn" class="brand-story-btn" bindtap="onExploreHeritage" style="margin-top: 5vh;">探索品牌</button>
         </view>
       </view>
 
@@ -90,17 +90,14 @@
         </view>
       </view>
 
-      <!-- 7. Action Buttons -->
-      <view class="action-section">
-        <button class="action-btn-consult" bindtap="onConsult">咨询顾问</button>
-        <button class="action-btn-book" bindtap="onBook">预约到店</button>
-      </view>
+      <!-- Bottom padding for fixed buttons -->
+      <view class="bottom-padding"></view>
     </block>
-
-    <!-- Footer -->
-    <view class="footer">
-      <text class="footer-text">时全饰美 CHRONOS</text>
-      <text class="footer-desc">传承经典 · 匠心独运</text>
-    </view>
   </scroll-view>
+
+  <!-- Fixed Action Buttons -->
+  <view class="action-fixed">
+    <button class="action-btn-consult" bindtap="onConsult">咨询顾问</button>
+    <button class="action-btn-book" bindtap="onBook">预约到店</button>
+  </view>
 </view>
