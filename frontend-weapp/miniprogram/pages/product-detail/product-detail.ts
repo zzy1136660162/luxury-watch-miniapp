@@ -152,7 +152,7 @@ Component({
     },
 
     onExploreHeritage() {
-      wx.navigateTo({
+      wx.switchTab({
         url: '/pages/heritage/heritage'
       });
     },

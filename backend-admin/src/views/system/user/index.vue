@@ -190,6 +190,7 @@ const loadWxUserList = async () => {
     loading.value = true
     const response = await wxUserApi.getWxUserList({
       keyword: searchForm.username,
+      phone: searchForm.phone,
       memberLevel: searchForm.memberLevel,
       status: searchForm.status
     })
@@ -237,7 +238,7 @@ const handleEdit = (row: WxUser) => {
   formData.memberLevel = row.memberLevel || 1
   formData.birthday = row.birthday || ''
   formData.gender = row.gender || 0
-  formData.status = row.status || 1
+  formData.status = row.status ?? 1
   dialogVisible.value = true
 }
 

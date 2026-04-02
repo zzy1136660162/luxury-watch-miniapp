@@ -9,7 +9,7 @@ public interface WxUserService extends IService<WxUser> {
     /**
      * 分页查询小程序用户列表
      */
-    Page<WxUser> pageWxUser(Page<WxUser> page, String keyword, Integer memberLevel, Integer status);
+    Page<WxUser> pageWxUser(Page<WxUser> page, String keyword, String phone, Integer memberLevel, Integer status);
 
     /**
      * 更新小程序用户状态

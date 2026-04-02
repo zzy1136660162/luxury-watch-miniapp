@@ -17,7 +17,7 @@ public class WxUserServiceImpl extends ServiceImpl<WxUserMapper, WxUser> impleme
     private WxUserMapper wxUserMapper;
 
     @Override
-    public Page<WxUser> pageWxUser(Page<WxUser> page, String keyword, Integer memberLevel, Integer status) {
+    public Page<WxUser> pageWxUser(Page<WxUser> page, String keyword, String phone, Integer memberLevel, Integer status) {
         LambdaQueryWrapper<WxUser> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(WxUser::getDeleted, 0);
         
@@ -26,9 +26,11 @@ public class WxUserServiceImpl extends ServiceImpl<WxUserMapper, WxUser> impleme
                 .like(WxUser::getUsername, keyword)
                 .or()
                 .like(WxUser::getNickname, keyword)
-                .or()
-                .like(WxUser::getPhone, keyword)
             );
+        }
+        
+        if (StringUtils.hasText(phone)) {
+            wrapper.eq(WxUser::getPhone, phone);
         }
         
         if (memberLevel != null) {

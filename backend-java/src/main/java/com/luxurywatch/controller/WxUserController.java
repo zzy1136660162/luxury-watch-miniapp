@@ -24,6 +24,7 @@ public class WxUserController {
             @RequestParam(defaultValue = "1") Integer pageNum,
             @RequestParam(defaultValue = "10") Integer pageSize,
             @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) String phone,
             @RequestParam(required = false) Integer memberLevel,
             @RequestParam(required = false) Integer status) {
         
@@ -33,7 +34,7 @@ public class WxUserController {
         }
         
         Page<WxUser> page = new Page<>(pageNum, pageSize);
-        Page<WxUser> result = wxUserService.pageWxUser(page, keyword, memberLevel, status);
+        Page<WxUser> result = wxUserService.pageWxUser(page, keyword, phone, memberLevel, status);
         return R.success(new PageResult<>(result.getRecords(), result.getTotal()));
     }
 

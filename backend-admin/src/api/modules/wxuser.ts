@@ -22,6 +22,7 @@ export default {
     page?: number
     size?: number
     keyword?: string
+    phone?: string
     memberLevel?: number
     status?: number
   }) => api.get<ApiResponse<PageResult<WxUser>>>('/wx-user/list', { params }),
