@@ -20,7 +20,7 @@
     <block wx:if="{{isLoggedIn}}">
       <view class="member-card-section">
         <view class="member-card">
-          <view class="card-grain" style="background-image: url('D:/项目图标/member/unnamed.png');"></view>
+          <view class="card-grain"></view>
 
           <view class="card-header">
             <view class="card-status">
@@ -221,10 +221,10 @@
           <image class="service-arrow" src="https://cdn.jsdelivr.net/npm/@material-design-icons/svg@0.14.15/filled/chevron_right.svg" mode="aspectFit" />
         </view>
 
-        <view class="service-item" bindtap="onLogoutTap">
+        <view class="service-item" bindtap="onSettingsTap">
           <view class="service-left">
-            <image class="service-icon" src="https://cdn.jsdelivr.net/npm/@material-design-icons/svg@0.14.15/filled/logout.svg" mode="aspectFit" />
-            <text class="service-name">退出登录</text>
+            <image class="service-icon" src="https://cdn.jsdelivr.net/npm/@material-design-icons/svg@0.14.15/filled/settings.svg" mode="aspectFit" />
+            <text class="service-name">设置</text>
           </view>
           <image class="service-arrow" src="https://cdn.jsdelivr.net/npm/@material-design-icons/svg@0.14.15/filled/chevron_right.svg" mode="aspectFit" />
         </view>

@@ -3,7 +3,7 @@
  * 用于调用后端API
  */
 
-const baseUrl = 'http://localhost:8081';
+const baseUrl = 'http://192.168.177.1:8081';
 
 /**
  * 封装wx.request请求

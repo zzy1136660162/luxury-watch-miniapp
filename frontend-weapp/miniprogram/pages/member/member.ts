@@ -16,7 +16,7 @@ Component({
     growthValue: '0',
     currentLevel: 1,
     nextLevelGrowth: 1000,
-    userAvatar: 'https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia03jQ8xswV2O7YqGh9ELz9iaERMLFiaNUjXEPiaiciaWic0aBJfNicic9ib0O4A8EiaQe4ibEqiag/0',
+    userAvatar: 'https://img.yzcdn.cn/vant/cat.jpeg',
     userName: '游客',
     userId: '',
     memberLevelName: '普通会员',
@@ -58,35 +58,35 @@ Component({
     loadUserInfo() {
       const userInfo = wx.getStorageSync('userInfo');
       const token = wx.getStorageSync('token');
+      const wechatAvatar = wx.getStorageSync('wechatAvatar');
 
       if (token && userInfo) {
+        const level = userInfo.memberLevel || 1;
+        const levelInfo = this.data.levelInfo[level as keyof typeof this.data.levelInfo] || this.data.levelInfo[1];
+
+        let avatarUrl = this.data.userAvatar;
+        if (wechatAvatar) {
+          avatarUrl = wechatAvatar;
+        } else if (userInfo.avatar) {
+          avatarUrl = userInfo.avatar;
+        }
+
         this.setData!({
           isLoggedIn: true,
-          memberPoints: userInfo.points.toString(),
-          growthValue: userInfo.growthValue.toString(),
-          currentLevel: userInfo.memberLevel,
-          memberLevelName: userInfo.memberLevelName,
-          userAvatar: userInfo.avatar || this.data.userAvatar,
+          memberPoints: (userInfo.points || 0).toString(),
+          growthValue: (userInfo.growthValue || 0).toString(),
+          currentLevel: level,
+          memberLevelName: levelInfo.name,
+          memberLevelEn: levelInfo.nameEn,
+          userAvatar: avatarUrl,
           userName: userInfo.username || '用户',
           userId: userInfo.id ? `ID: ${userInfo.id.toString().padStart(8, '0')}` : ''
         });
 
-        this.updateMemberLevelName();
         this.calculateNextLevel();
       } else {
         this.setData!({
           isLoggedIn: false
-        });
-      }
-    },
-
-    updateMemberLevelName() {
-      const level = this.data.currentLevel;
-      const levelInfo = this.data.levelInfo[level as keyof typeof this.data.levelInfo];
-      if (levelInfo) {
-        this.setData!({
-          memberLevelName: levelInfo.name,
-          memberLevelEn: levelInfo.nameEn
         });
       }
     },
@@ -120,9 +120,21 @@ Component({
       if (!this.checkLogin()) return;
 
       const id = e.currentTarget.dataset.id;
-      wx.navigateTo({
-        url: `/pages/product-detail/product-detail?id=${id}`
-      });
+      let rewardData = null;
+      
+      if (id === 'reward1') {
+        rewardData = this.data.reward1;
+      } else if (id === 'reward2') {
+        rewardData = this.data.reward2;
+      } else if (id === 'reward3') {
+        rewardData = this.data.reward3;
+      }
+      
+      if (rewardData) {
+        wx.navigateTo({
+          url: `/pages/reward-detail/reward-detail?data=${encodeURIComponent(JSON.stringify(rewardData))}`
+        });
+      }
     },
 
     onServiceTap(e: any) {
@@ -144,6 +156,12 @@ Component({
     onLoginTap() {
       wx.navigateTo({
         url: '/pages/login/login'
+      });
+    },
+
+    onSettingsTap() {
+      wx.navigateTo({
+        url: '/pages/settings/settings'
       });
     },
 

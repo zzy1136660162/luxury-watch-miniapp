@@ -52,12 +52,6 @@
             </el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="birthday" label="生日" width="120" />
-        <el-table-column prop="gender" label="性别" width="80">
-          <template #default="{ row }">
-            {{ getGenderText(row.gender) }}
-          </template>
-        </el-table-column>
         <el-table-column prop="status" label="状态" width="100">
           <template #default="{ row }">
             <el-tag :type="row.status === 1 ? 'success' : 'danger'">

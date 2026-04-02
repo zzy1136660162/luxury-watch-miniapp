@@ -1,0 +1,201 @@
+$primary: #000000;
+$surface: #f9f9f9;
+$surface-container: #eeeeee;
+$surface-container-lowest: #ffffff;
+$secondary: #5d5e5f;
+$tertiary: #D4AF37;
+$on-surface: #1a1c1c;
+$outline-variant: #c4c7c7;
+$font-family-chinese: 'Noto Serif SC', serif;
+$font-family-english: 'Manrope', sans-serif;
+
+.page {
+  width: 100vw;
+  min-height: 80vh;
+  margin-top: 7vh;
+  display: flex;
+  flex-direction: column;
+  background-color: $surface;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.nav-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 2vh;
+  height: 84px;
+  padding: 0 16px;
+  background-color: $surface-container-lowest;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+}
+
+.nav-bar-left {
+  width: 60px;
+  height: 44px;
+  margin-top: 1.5vh;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  
+  &:active {
+    opacity: 0.6;
+  }
+}
+
+.back-arrow {
+  font-size: 32px;
+  color: $on-surface;
+  font-weight: bold;
+  line-height: 1;
+}
+
+.nav-bar-title {
+  position: absolute;
+  margin-top: 2vh;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: $font-family-chinese;
+  font-size: 17px;
+  font-weight: bold;
+  color: $on-surface;
+}
+
+.nav-bar-right {
+  width: 60px;
+}
+
+.content {
+  flex: 1;
+  padding-top: 5vh;
+  padding-bottom: 80px;
+}
+
+.reward-image-wrapper {
+  width: 100%;
+  height: 300px;
+  background-color: $surface-container;
+}
+
+.reward-image {
+  width: 100%;
+  height: 100%;
+}
+
+.reward-info {
+  padding: 24px 16px;
+}
+
+.reward-header {
+  margin-bottom: 20px;
+}
+
+.reward-title {
+  display: block;
+  font-family: $font-family-chinese;
+  font-size: 20px;
+  font-weight: bold;
+  color: $on-surface;
+  margin-bottom: 8px;
+}
+
+.reward-subtitle {
+  display: block;
+  font-family: $font-family-english;
+  font-size: 14px;
+  color: $secondary;
+}
+
+.points-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  background-color: $surface-container-lowest;
+  border-radius: 12px;
+  margin-bottom: 20px;
+}
+
+.points-label {
+  font-family: $font-family-chinese;
+  font-size: 15px;
+  color: $on-surface;
+}
+
+.points-value {
+  font-family: $font-family-english;
+  font-size: 24px;
+  font-weight: bold;
+  color: $tertiary;
+}
+
+.description-section,
+.notice-section {
+  margin-bottom: 20px;
+}
+
+.section-title {
+  display: block;
+  font-family: $font-family-chinese;
+  font-size: 16px;
+  font-weight: bold;
+  color: $on-surface;
+  margin-bottom: 12px;
+}
+
+.description-text {
+  font-family: $font-family-chinese;
+  font-size: 14px;
+  color: $secondary;
+  line-height: 1.6;
+}
+
+.notice-item {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+
+.notice-dot {
+  color: $tertiary;
+  margin-right: 8px;
+}
+
+.notice-text {
+  flex: 1;
+  font-family: $font-family-chinese;
+  font-size: 14px;
+  color: $secondary;
+  line-height: 1.5;
+}
+
+.bottom-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 16px;
+  background-color: $surface-container-lowest;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.exchange-btn {
+  width: 100%;
+  height: 48px;
+  background-color: $primary;
+  border: none;
+  border-radius: 24px;
+  font-family: $font-family-chinese;
+  font-size: 16px;
+  font-weight: bold;
+  color: $surface-container-lowest;
+
+  &:active {
+    opacity: 0.8;
+  }
+}

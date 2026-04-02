@@ -1,4 +1,5 @@
 interface LoginIcons {
+  phone: string;
   username: string;
   password: string;
   eyeOpen: string;
@@ -8,10 +9,14 @@ interface LoginIcons {
 interface LoginData {
   username: string;
   password: string;
+  phone: string;
   showPassword: boolean;
   loading: boolean;
   usernameFocus: boolean;
   passwordFocus: boolean;
+  phoneFocus: boolean;
+  hasAvatar: boolean;
+  avatarUrl: string;
   logoUrl: string;
   icons: LoginIcons;
 }
@@ -20,12 +25,17 @@ Page({
   data: {
     username: '',
     password: '',
+    phone: '',
     showPassword: false,
     loading: false,
     usernameFocus: false,
     passwordFocus: false,
+    phoneFocus: false,
+    hasAvatar: false,
+    avatarUrl: '',
     logoUrl: 'https://via.placeholder.com/150x150/000000/FFFFFF?text=CHRONOS',
     icons: {
+      phone: 'https://cdn.jsdelivr.net/npm/material-design-icons/svg@latest/outline/phone_android.svg',
       username: 'https://cdn.jsdelivr.net/npm/material-design-icons/svg@latest/outline/person_black_24dp.svg',
       password: 'https://cdn.jsdelivr.net/npm/material-design-icons/svg@latest/outline/lock_black_24dp.svg',
       eyeOpen: 'https://cdn.jsdelivr.net/npm/material-design-icons/svg@latest/outline/visibility_black_24dp.svg',
@@ -35,6 +45,7 @@ Page({
 
   onLoad() {
     this.checkAutoLogin();
+    this.loadSavedAvatar();
   },
 
   checkAutoLogin() {
@@ -44,6 +55,120 @@ Page({
         url: '/pages/member/member'
       });
     }
+  },
+
+  loadSavedAvatar() {
+    const savedAvatar = wx.getStorageSync('wechatAvatar');
+    if (savedAvatar) {
+      this.setData!({
+        hasAvatar: true,
+        avatarUrl: savedAvatar
+      });
+    }
+  },
+
+  onChooseAvatar(e: any) {
+    const avatarUrl = e.detail.avatarUrl;
+    
+    if (avatarUrl) {
+      wx.showLoading({ title: '处理中...' });
+      
+      this.saveAvatar(avatarUrl);
+    }
+  },
+
+  saveAvatar(avatarUrl: string) {
+    if (avatarUrl.startsWith('http://temp') || avatarUrl.startsWith('wxfile://')) {
+      wx.getFileSystemManager().saveFile({
+        tempFilePath: avatarUrl,
+        success: (res) => {
+          const savedPath = res.savedFilePath;
+          wx.setStorageSync('wechatAvatar', savedPath);
+          
+          this.setData!({
+            hasAvatar: true,
+            avatarUrl: savedPath
+          });
+          
+          wx.hideLoading();
+          wx.showToast({
+            title: '头像已获取',
+            icon: 'success',
+            duration: 1500
+          });
+        },
+        fail: () => {
+          wx.hideLoading();
+          this.setData!({
+            hasAvatar: true,
+            avatarUrl: avatarUrl
+          });
+          wx.setStorageSync('wechatAvatar', avatarUrl);
+        }
+      });
+    } else {
+      wx.downloadFile({
+        url: avatarUrl,
+        success: (res) => {
+          if (res.statusCode === 200) {
+            const tempPath = res.tempFilePath;
+            wx.getFileSystemManager().saveFile({
+              tempFilePath: tempPath,
+              success: (saveRes) => {
+                const savedPath = saveRes.savedFilePath;
+                wx.setStorageSync('wechatAvatar', savedPath);
+                
+                this.setData!({
+                  hasAvatar: true,
+                  avatarUrl: savedPath
+                });
+                
+                wx.hideLoading();
+                wx.showToast({
+                  title: '头像已获取',
+                  icon: 'success',
+                  duration: 1500
+                });
+              },
+              fail: () => {
+                wx.hideLoading();
+                this.setData!({
+                  hasAvatar: true,
+                  avatarUrl: tempPath
+                });
+                wx.setStorageSync('wechatAvatar', tempPath);
+              }
+            });
+          }
+        },
+        fail: () => {
+          wx.hideLoading();
+          wx.showToast({
+            title: '头像获取失败',
+            icon: 'none',
+            duration: 2000
+          });
+        }
+      });
+    }
+  },
+
+  onPhoneInput(e: any) {
+    this.setData!({
+      phone: e.detail.value
+    });
+  },
+
+  onPhoneFocus() {
+    this.setData!({
+      phoneFocus: true
+    });
+  },
+
+  onPhoneBlur() {
+    this.setData!({
+      phoneFocus: false
+    });
   },
 
   onUsernameInput(e: any) {
@@ -89,9 +214,27 @@ Page({
   },
 
   onLogin() {
-    const { username, password, loading } = this.data;
+    const { username, password, phone, loading, avatarUrl } = this.data;
     
     if (loading) return;
+
+    if (!phone.trim()) {
+      wx.showToast({
+        title: '请输入手机号',
+        icon: 'none',
+        duration: 2000
+      });
+      return;
+    }
+
+    if (!/^1[3-9]\d{9}$/.test(phone.trim())) {
+      wx.showToast({
+        title: '请输入正确的手机号',
+        icon: 'none',
+        duration: 2000
+      });
+      return;
+    }
 
     if (!username.trim()) {
       wx.showToast({
@@ -113,6 +256,8 @@ Page({
 
     this.setData!({ loading: true });
 
+    const wechatAvatar = wx.getStorageSync('wechatAvatar') || avatarUrl;
+
     wx.request({
       url: 'http://localhost:8081/api/mini/login',
       method: 'POST',
@@ -122,8 +267,10 @@ Page({
       data: {
         username: username.trim(),
         password: password.trim(),
-        avatar: 'https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia03jQ8xswV2O7YqGh9ELz9iaERMLFiaNUjXEPiaiciaW0zRwAkHic9ib0O4A8EiaQe4ibEqiag/0',
-        nickname: username.trim()
+        phone: phone.trim(),
+        avatar: wechatAvatar || 'https://img.yzcdn.cn/vant/cat.jpeg',
+        nickname: username.trim(),
+        wechatAvatar: wechatAvatar
       },
       success: (res: any) => {
         if (res.data.code === 200) {
@@ -134,6 +281,7 @@ Page({
             id: userInfo.id,
             username: userInfo.username,
             avatar: userInfo.avatar,
+            phone: userInfo.phone || phone.trim(),
             points: userInfo.points,
             growthValue: userInfo.growthValue,
             memberLevel: userInfo.memberLevel,

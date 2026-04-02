@@ -16,4 +16,8 @@ public class MiniLoginRequest implements Serializable {
     private String avatar;
 
     private String nickname;
+
+    private String phone;
+
+    private String wechatAvatar;
 }

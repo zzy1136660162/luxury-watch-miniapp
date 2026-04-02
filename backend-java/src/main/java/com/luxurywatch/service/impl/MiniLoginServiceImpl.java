@@ -42,13 +42,22 @@ public class MiniLoginServiceImpl implements MiniLoginService {
             user.setLastLoginTime(LocalDateTime.now());
             user.setLastLoginIp(ip);
             user.setUpdateTime(LocalDateTime.now());
+            if (StringUtils.hasText(request.getPhone())) {
+                user.setPhone(request.getPhone());
+            }
+            if (StringUtils.hasText(request.getWechatAvatar())) {
+                user.setWechatAvatar(request.getWechatAvatar());
+                user.setAvatar(request.getWechatAvatar());
+            }
             wxUserMapper.updateById(user);
         } else {
             user = new WxUser();
             user.setUsername(username);
             user.setPassword(BCrypt.hashpw(password, BCrypt.gensalt()));
-            user.setAvatar(request.getAvatar());
+            user.setAvatar(request.getWechatAvatar() != null ? request.getWechatAvatar() : request.getAvatar());
+            user.setWechatAvatar(request.getWechatAvatar());
             user.setNickname(StringUtils.hasText(request.getNickname()) ? request.getNickname() : username);
+            user.setPhone(request.getPhone());
             user.setPoints(0);
             user.setGrowthValue(0);
             user.setMemberLevel(1);
@@ -80,6 +89,7 @@ public class MiniLoginServiceImpl implements MiniLoginService {
         MiniLoginResponse response = new MiniLoginResponse();
         response.setId(user.getId());
         response.setUsername(user.getUsername());
+        response.setPhone(user.getPhone());
         response.setAvatar(user.getAvatar());
         response.setPoints(user.getPoints() != null ? user.getPoints() : 0);
         response.setGrowthValue(user.getGrowthValue() != null ? user.getGrowthValue() : 0);

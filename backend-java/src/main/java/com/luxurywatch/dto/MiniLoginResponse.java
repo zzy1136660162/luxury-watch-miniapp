@@ -13,6 +13,8 @@ public class MiniLoginResponse implements Serializable {
 
     private String username;
 
+    private String phone;
+
     private String avatar;
 
     private Integer points;

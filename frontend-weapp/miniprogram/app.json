@@ -7,6 +7,9 @@
     "pages/privileges/privileges",
     "pages/product-detail/product-detail",
     "pages/login/login",
+    "pages/settings/settings",
+    "pages/profile/profile",
+    "pages/reward-detail/reward-detail",
     "pages/index/index",
     "pages/logs/logs"
   ],

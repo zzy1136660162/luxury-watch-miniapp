@@ -71,7 +71,16 @@ Component({
 
     onImageError(e: any) {
       console.error('图片加载失败:', e.detail);
-      const src = e.detail?.errMsg?.match(/src:\s*(.+)/)?.[1] || e.target?.dataset?.src || 'unknown';
+      let src = 'unknown';
+      if (e.detail && e.detail.errMsg) {
+        const match = e.detail.errMsg.match(/src:\s*(.+)/);
+        if (match && match[1]) {
+          src = match[1];
+        }
+      }
+      if (src === 'unknown' && e.target && e.target.dataset && e.target.dataset.src) {
+        src = e.target.dataset.src;
+      }
       console.log('失败的图片:', src);
     }
   }

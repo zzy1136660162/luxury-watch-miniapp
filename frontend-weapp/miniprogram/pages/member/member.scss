@@ -126,9 +126,8 @@ $font-family-english: 'Manrope', sans-serif;
   left: 0;
   width: 100%;
   height: 100%;
-  opacity: 0.1;
-  background-size: cover;
-  background-position: center;
+  background: linear-gradient(135deg, rgba($tertiary, 0.05) 0%, transparent 50%);
+  pointer-events: none;
 }
 
 .card-header {
@@ -192,10 +191,13 @@ $font-family-english: 'Manrope', sans-serif;
   height: 48px;
   border: 1px solid rgba($tertiary, 0.3);
   padding: 2px;
+  position: relative;
+  z-index: 10;
 
   .user-avatar {
     width: 100%;
     height: 100%;
+    border-radius: 50%;
   }
 }
 

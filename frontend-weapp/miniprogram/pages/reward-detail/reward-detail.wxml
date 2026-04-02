@@ -1,0 +1,52 @@
+<view class="page">
+  <view class="nav-bar">
+    <view class="nav-bar-left" bindtap="onBack">
+      <text class="back-arrow">‹</text>
+    </view>
+    <view class="nav-bar-title">礼品详情</view>
+    <view class="nav-bar-right"></view>
+  </view>
+
+  <view class="content">
+    <view class="reward-image-wrapper">
+      <image class="reward-image" src="{{reward.image}}" mode="aspectFill" />
+    </view>
+
+    <view class="reward-info">
+      <view class="reward-header">
+        <text class="reward-title">{{reward.title}}</text>
+        <text class="reward-subtitle">{{reward.subtitle}}</text>
+      </view>
+
+      <view class="points-section">
+        <text class="points-label">所需积分</text>
+        <text class="points-value">{{reward.points}}</text>
+      </view>
+
+      <view class="description-section">
+        <text class="section-title">礼品说明</text>
+        <text class="description-text">尊贵的会员您好，此礼品为会员专属权益，兑换后可在品牌门店领取。详情请咨询客服。</text>
+      </view>
+
+      <view class="notice-section">
+        <text class="section-title">兑换须知</text>
+        <view class="notice-item">
+          <text class="notice-dot">•</text>
+          <text class="notice-text">兑换成功后，客服将在3个工作日内与您联系</text>
+        </view>
+        <view class="notice-item">
+          <text class="notice-dot">•</text>
+          <text class="notice-text">请确保手机号码正确，以便接收兑换码</text>
+        </view>
+        <view class="notice-item">
+          <text class="notice-dot">•</text>
+          <text class="notice-text">此礼品仅限会员本人兑换使用</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="bottom-bar">
+      <button class="exchange-btn" bindtap="onExchange">立即兑换</button>
+    </view>
+  </view>
+</view>
