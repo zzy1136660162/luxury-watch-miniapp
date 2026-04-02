@@ -219,6 +219,125 @@ swiper-item {
   }
 }
 
+// Description Section
+.description-section {
+  padding: 0 32px 96px;
+}
+
+.description-card {
+  background-color: $surface-container;
+  border-radius: 16px;
+  padding: 48px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  
+  &:hover {
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+    transform: translateY(-2px);
+  }
+}
+
+.description-header {
+  border-bottom: 1px solid rgba($outline-variant, 0.3);
+  padding-bottom: 24px;
+  margin-bottom: 32px;
+}
+
+.description-title {
+  display: block;
+  font-family: $font-family-chinese;
+  font-size: 28px;
+  color: $on-surface;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.description-subtitle {
+  display: block;
+  font-family: $font-family-english;
+  font-size: 12px;
+  color: $secondary-fixed-dim;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+
+.description-content {
+  font-family: $font-family-chinese;
+  font-size: 16px;
+  color: $on-surface-variant;
+  line-height: 1.8;
+  letter-spacing: 0.2px;
+  
+  text {
+    display: block;
+    margin-bottom: 16px;
+    
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+  
+  // 段落首行缩进
+  text:first-child {
+    text-indent: 2em;
+  }
+}
+
+// Content Section
+.content-section {
+  padding: 0 32px 96px;
+}
+
+.content-card {
+  background-color: $surface-container-low;
+  border-radius: 16px;
+  padding: 48px;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.05);
+}
+
+.content-header {
+  border-bottom: 1px solid rgba($outline-variant, 0.2);
+  padding-bottom: 24px;
+  margin-bottom: 32px;
+}
+
+.content-title {
+  display: block;
+  font-family: $font-family-chinese;
+  font-size: 28px;
+  color: $on-surface;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.content-subtitle {
+  display: block;
+  font-family: $font-family-english;
+  font-size: 12px;
+  color: $secondary-fixed-dim;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+
+.content-html {
+  font-family: $font-family-chinese;
+  font-size: 15px;
+  color: $on-surface-variant;
+  line-height: 1.7;
+  letter-spacing: 0.1px;
+  
+  text {
+    display: block;
+    margin-bottom: 12px;
+    
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
 // Inspiration Section
 .inspiration-section {
   padding: 0 32px 96px;
@@ -294,87 +413,66 @@ swiper-item {
   }
 }
 
-// Action Footer
-.action-footer {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 15vh;
-  background-color: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(20px);
-  border-top: 1px solid rgba(0, 0, 0, 0.05);
-  padding: 24px 32px;
-  z-index: $z-index-nav;
-}
-
-.price-info {
-  display: none;
-  margin-bottom: 16px;
-
-  .price {
-    display: block;
-    font-family: $font-family-chinese;
-    font-size: 20px;
-    color: $on-surface;
-  }
-
-  .price-label {
-    display: block;
-    font-family: $font-family-english;
-    font-size: 12px;
-    color: $secondary;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-  }
-}
-
-.action-buttons {
+// Action Section (Page Content)
+.action-section {
+  padding: 80px 32px;
   display: flex;
-  gap: 16px;
-  height: 80%;
-}
-
-.action-button {
-  flex: 1;
-  padding: 16px;
-  font-family: $font-family-chinese;
-  font-size: 18px;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  gap: 24px;
   justify-content: center;
-
-  .button-subtitle {
-    font-family: $font-family-english;
-    font-size: 10px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    opacity: 0.6;
-    margin-top: 4px;
-  }
-
-  &:active {
-    transform: scale(0.95);
-  }
-
-  &.action-button-outline {
-    border: 1px solid $primary;
-    color: $on-surface;
-    background-color: transparent;
-
+  align-items: center;
+  
+  .action-btn-consult,
+  .action-btn-book {
+    position: relative;
+    min-width: 200px;
+    padding: 18px 48px;
+    border-radius: 40px;
+    font-family: $font-family-chinese;
+    font-size: 17px;
+    font-weight: 600;
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    cursor: pointer;
+    border: none;
+    overflow: hidden;
+    
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.6s ease;
+    }
+    
     &:active {
-      background-color: $surface-container;
+      transform: translateY(3px);
+      
+      &::before {
+        left: 100%;
+      }
     }
   }
-
-  &.action-button-primary {
-    background-color: $primary;
+  
+  .action-btn-consult {
+    background: linear-gradient(135deg, rgba($primary, 0.05) 0%, rgba($primary, 0.1) 100%);
+    border: 2px solid rgba($primary, 0.3);
+    color: $primary;
+    box-shadow: 0 2px 12px rgba($primary, 0.1);
+    
+    &:active {
+      background: linear-gradient(135deg, rgba($primary, 0.1) 0%, rgba($primary, 0.15) 100%);
+      box-shadow: 0 4px 20px rgba($primary, 0.15);
+    }
+  }
+  
+  .action-btn-book {
+    background: linear-gradient(135deg, $primary 0%, $primary-variant 100%);
     color: $on-primary;
+    box-shadow: 0 6px 24px rgba($primary, 0.3);
     position: relative;
-    overflow: hidden;
-
+    
     &::after {
       content: '';
       position: absolute;
@@ -382,13 +480,275 @@ swiper-item {
       left: 0;
       width: 100%;
       height: 100%;
-      background: linear-gradient(to right, $primary, $primary-container);
-      transform: translateX(100%);
-      transition: transform 0.5s ease;
+      background: linear-gradient(135deg, rgba($on-primary, 0.1) 0%, transparent 50%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    
+    &:active {
+      background: linear-gradient(135deg, $primary-variant 0%, $primary 100%);
+      box-shadow: 0 8px 32px rgba($primary, 0.4);
+      
+      &::after {
+        opacity: 1;
+      }
+    }
+  }
+}
+
+// Action Footer
+.action-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: rgba($surface, 0.98);
+  backdrop-filter: blur(30px);
+  border-top: 1px solid rgba($outline-variant, 0.1);
+  padding: 20px 32px;
+  z-index: $z-index-nav;
+  box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.08);
+}
+
+// 响应式设计
+@media (max-width: 768px) {
+  .description-section {
+    padding: 0 24px 64px;
+    
+    .description-card {
+      padding: 32px 24px;
+      border-radius: 12px;
+      
+      .description-header {
+        padding-bottom: 20px;
+        margin-bottom: 24px;
+        
+        .description-title {
+          font-size: 24px;
+        }
+        
+        .description-subtitle {
+          font-size: 11px;
+          letter-spacing: 1.5px;
+        }
+      }
+      
+      .description-content {
+        font-size: 15px;
+        line-height: 1.7;
+        
+        text {
+          margin-bottom: 14px;
+        }
+      }
+    }
+  }
+  
+  .content-section {
+    padding: 0 24px 64px;
+    
+    .content-card {
+      padding: 32px 24px;
+      border-radius: 12px;
+      
+      .content-header {
+        padding-bottom: 20px;
+        margin-bottom: 24px;
+        
+        .content-title {
+          font-size: 24px;
+        }
+        
+        .content-subtitle {
+          font-size: 11px;
+          letter-spacing: 1.5px;
+        }
+      }
+      
+      .content-html {
+        font-size: 14px;
+        line-height: 1.6;
+        
+        text {
+          margin-bottom: 10px;
+        }
+      }
+    }
+  }
+  
+  .action-section {
+     padding: 64px 24px;
+     flex-direction: column;
+     gap: 20px;
+     
+     .action-btn-consult,
+     .action-btn-book {
+       min-width: 180px;
+       padding: 16px 40px;
+       font-size: 16px;
+       border-radius: 36px;
+     }
+   }
+   
+   .action-footer {
+     padding: 20px 24px;
+     
+     .price-info {
+       .price-content {
+         .price {
+           font-size: 20px;
+         }
+         
+         .price-label {
+           font-size: 11px;
+         }
+       }
+       
+       .product-code {
+         font-size: 10px;
+       }
+     }
+     
+     .action-buttons {
+       gap: 16px;
+     }
+     
+     .action-button {
+       min-width: 140px;
+       padding: 14px 28px;
+       font-size: 15px;
+       border-radius: 28px;
+       
+       .button-subtitle {
+         font-size: 9px;
+         letter-spacing: 1.2px;
+       }
+     }
+   }
+}
+
+.price-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  
+  .price-content {
+    .price {
+      display: block;
+      font-family: $font-family-english;
+      font-size: 22px;
+      color: $primary;
+      font-weight: 600;
+    }
+    
+    .price-label {
+      display: block;
+      font-family: $font-family-chinese;
+      font-size: 12px;
+      color: $secondary;
+      margin-top: 2px;
+    }
+  }
+  
+  .product-code {
+    font-family: $font-family-english;
+    font-size: 11px;
+    color: $secondary-fixed-dim;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+}
+
+.action-buttons {
+  display: flex;
+  gap: 16px;
+}
+
+.action-button {
+  flex: 1;
+  min-width: 160px;
+  padding: 16px 32px;
+  border-radius: 32px;
+  font-family: $font-family-chinese;
+  font-size: 16px;
+  font-weight: 600;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  cursor: pointer;
+  border: none;
+  overflow: hidden;
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.6s ease;
+  }
+
+  .button-subtitle {
+    font-family: $font-family-english;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    opacity: 0.8;
+    margin-top: 3px;
+    font-weight: 500;
+  }
+
+  &:active {
+    transform: translateY(2px);
+    
+    &::before {
+      left: 100%;
+    }
+  }
+
+  &.action-button-outline {
+    background: linear-gradient(135deg, rgba($primary, 0.05) 0%, rgba($primary, 0.1) 100%);
+    border: 2px solid rgba($primary, 0.4);
+    color: $primary;
+    box-shadow: 0 2px 12px rgba($primary, 0.1);
+
+    &:active {
+      background: linear-gradient(135deg, rgba($primary, 0.1) 0%, rgba($primary, 0.15) 100%);
+      box-shadow: 0 4px 20px rgba($primary, 0.15);
+    }
+  }
+
+  &.action-button-primary {
+    background: linear-gradient(135deg, $primary 0%, $primary-variant 100%);
+    color: $on-primary;
+    box-shadow: 0 6px 24px rgba($primary, 0.3);
+    
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba($on-primary, 0.1) 0%, transparent 50%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
     }
 
-    &:active::after {
-      transform: translateX(0);
+    &:active {
+      background: linear-gradient(135deg, $primary-variant 0%, $primary 100%);
+      box-shadow: 0 8px 32px rgba($primary, 0.4);
+      
+      &::after {
+        opacity: 1;
+      }
     }
   }
 }
