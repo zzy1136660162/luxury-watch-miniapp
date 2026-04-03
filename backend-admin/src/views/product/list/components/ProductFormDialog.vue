@@ -62,10 +62,10 @@
       </el-row>
 
       <el-form-item label="商品图片" prop="image">
-        <ImageUpload
+        <ImagesUpload
           v-model="form.image"
-          placeholder="点击上传商品图片"
-          tip="建议尺寸：800x800px，支持 jpg、png、gif、webp 格式，大小不超过10MB"
+          placeholder="点击上传"
+          tip="建议尺寸：800x800px，支持 jpg、png、gif、webp 格式，最多上传9张图片"
         />
       </el-form-item>
 
@@ -94,7 +94,7 @@ import { ElMessage } from 'element-plus'
 import type { FormInstance } from 'element-plus'
 import type { Product } from '@/types'
 import api from '@/api'
-import ImageUpload from '@/components/ImageUpload.vue'
+import ImagesUpload from '@/components/ImagesUpload.vue'
 
 interface CategoryOption {
   id: number

@@ -51,9 +51,12 @@
             <text class="specifications-title">产品参数</text>
             <text class="specifications-subtitle">Specifications</text>
           </view>
-          <view class="specifications-grid">
+          <view class="specifications-list">
             <view class="spec-item" wx:for="{{productInfo.specifications}}" wx:key="index">
-              <text class="spec-label">{{item.label}}</text>
+              <view class="spec-left">
+                <text class="spec-name">{{item.name}}</text>
+                <text class="spec-name-en">{{item.nameEn}}</text>
+              </view>
               <text class="spec-value">{{item.value}}</text>
             </view>
           </view>

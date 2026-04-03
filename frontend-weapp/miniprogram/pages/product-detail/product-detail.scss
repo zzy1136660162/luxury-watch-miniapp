@@ -196,37 +196,46 @@ swiper-item {
 .specifications-list {
   display: flex;
   flex-direction: column;
-  gap: 32px;
 }
 
 .spec-item {
   display: flex;
-  align-items: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 0;
+  border-bottom: 1px solid $outline-variant;
 
-  .spec-label {
-    .spec-name {
-      display: block;
-      font-family: $font-family-chinese;
-      font-size: 18px;
-      color: $on-surface;
-      margin-bottom: 4px;
-    }
+  &:last-child {
+    border-bottom: none;
+  }
 
-    .spec-name-en {
-      display: block;
-      font-family: $font-family-english;
-      font-size: 12px;
-      color: $secondary;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
+  .spec-left {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .spec-name {
+    display: block;
+    font-family: $font-family-chinese;
+    font-size: 14px;
+    color: $on-surface;
+  }
+
+  .spec-name-en {
+    display: block;
+    font-family: $font-family-english;
+    font-size: 10px;
+    color: $secondary;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 2px;
   }
 
   .spec-value {
     font-family: $font-family-english;
     font-size: 14px;
     color: $on-surface-variant;
-    font-weight: 300;
+    font-weight: 400;
     text-align: right;
   }
 }

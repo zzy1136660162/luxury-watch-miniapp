@@ -40,10 +40,6 @@ Component({
   },
 
   attached() {
-    // 计算导航栏位置
-    setTimeout(() => {
-      this.calculateNavPosition();
-    }, 100);
     // 加载Hero图片
     this.loadHeroImage();
     // 加载分类数据
@@ -52,21 +48,21 @@ Component({
     this.loadFeaturedProducts();
     // 加载产品列表
     this.loadProducts();
+    // 计算导航栏位置
+    setTimeout(() => {
+      this.calculateNavPosition();
+    }, 300);
   },
 
   methods: {
     // 计算导航栏位置
     calculateNavPosition() {
       const query = wx.createSelectorQuery();
-      query.select('#category-nav').boundingClientRect();
-      query.selectViewport().scrollOffset();
+      query.select('#hero-banner').boundingClientRect();
       query.exec((res: any) => {
-        if (res && res[0] && res[1]) {
-          const navRect = res[0];
-          const scrollOffset = res[1];
-          const navOffsetTop = navRect.top + scrollOffset.scrollTop;
+        if (res && res[0]) {
           this.setData({
-            navTop: navOffsetTop
+            navTop: res[0].height + 1
           });
         }
       });
@@ -122,9 +118,11 @@ Component({
           const featuredProducts = (res.data || []).map((item: any) => ({
             id: item.id,
             name: item.name,
+            nameEn: item.nameEn,
+            intro: item.intro,
+            code: item.code,
             price: item.price,
-            image: getFullImageUrl(item.image),
-            description: item.description
+            image: getFullImageUrl(item.image)
           }));
           
           this.setData({ featuredProducts });
@@ -156,10 +154,11 @@ Component({
           const newProducts = (data.list || []).map((item: any) => ({
             id: item.id,
             name: item.name,
+            nameEn: item.nameEn,
+            intro: item.intro,
             code: item.code,
             price: item.price,
             image: getFullImageUrl(item.image),
-            description: item.description,
             category: item.category
           }));
           

@@ -1,4 +1,4 @@
-import { getFullImageUrl } from '../../utils/config';
+import { getFullImageUrl, getImageUrls } from '../../utils/config';
 import { productApi } from '../../utils/request';
 
 Component({
@@ -6,13 +6,10 @@ Component({
     currentImageIndex: 0,
     productId: null,
 
-    // 商品数据
     product: null as any,
 
-    // 商品图片列表
     productImages: [] as string[],
 
-    // 商品基本信息
     productInfo: {
       series: '',
       name: '',
@@ -22,7 +19,6 @@ Component({
       specifications: [] as any[]
     },
 
-    // 加载状态
     loading: true
   },
 
@@ -57,7 +53,6 @@ Component({
   },
 
   methods: {
-    // 加载商品详情
     async loadProductDetail(id: number) {
       try {
         this.setData({ loading: true });
@@ -67,54 +62,66 @@ Component({
         if (res.code === 200) {
           const product = res.data;
 
-          // 处理商品图片
           let productImages: string[] = [];
+          
+          // 优先使用 images 字段（逗号分隔的多图）
           if (product.images) {
-            try {
-              // 尝试解析images字段（可能是JSON数组）
-              const imagesArray = JSON.parse(product.images);
-              productImages = imagesArray.map((img: string) => getFullImageUrl(img));
-            } catch (e) {
-              // 如果不是JSON，就当作单个图片处理
-              productImages = [getFullImageUrl(product.images)];
-            }
-          } else if (product.image) {
-            // 使用主图
-            productImages = [getFullImageUrl(product.image)];
+            productImages = getImageUrls(product.images);
+          } 
+          // 其次使用 image 字段
+          else if (product.image) {
+            productImages = getImageUrls(product.image);
           }
 
-          // 构建商品信息
+          const highlights: any[] = [];
+
+          highlights.push({
+            icon: 'timer',
+            title: '自产机芯',
+            subtitle: 'In-house Movement',
+            desc: `搭载定制 ${product.code || 'Cal.900'} 动力机芯，精准卓越`
+          });
+
+          if (product.powerReserve) {
+            highlights.push({
+              icon: 'energy_savings_leaf',
+              title: '动力储存',
+              subtitle: 'Power Reserve',
+              desc: `长达 ${product.powerReserve} 的不间断动力保障`
+            });
+          }
+
+          if (product.waterResistance) {
+            highlights.push({
+              icon: 'waves',
+              title: '防水性能',
+              subtitle: 'Water Resistance',
+              desc: `深达 ${product.waterResistance} 米的生活与艺术平衡`
+            });
+          }
+
+          const specifications: any[] = [];
+
+          if (product.caseSize) {
+            specifications.push({ name: '表壳尺寸', nameEn: 'Case Size', value: product.caseSize });
+          }
+          if (product.material) {
+            specifications.push({ name: '材质', nameEn: 'Material', value: product.material });
+          }
+          if (product.code) {
+            specifications.push({ name: '机芯', nameEn: 'Movement', value: product.code });
+          }
+          if (product.strap) {
+            specifications.push({ name: '表带', nameEn: 'Strap', value: product.strap });
+          }
+
           const productInfo = {
             series: product.category || 'CHRONOS 系列',
             name: product.name,
             subtitle: product.code || '',
             price: product.price ? `¥${product.price}` : '价格面议',
-            highlights: [
-              {
-                icon: 'timer',
-                title: '自产机芯',
-                subtitle: 'In-house Movement',
-                desc: '搭载定制 Cal.900 动力机芯，精准卓越'
-              },
-              {
-                icon: 'energy_savings_leaf',
-                title: '动力储存',
-                subtitle: 'Power Reserve',
-                desc: '长达 72 小时的不间断动力保障'
-              },
-              {
-                icon: 'waves',
-                title: '防水性能',
-                subtitle: 'Water Resistance',
-                desc: '深达 50 米的生活与艺术平衡'
-              }
-            ],
-            specifications: [
-              { name: '商品编码', nameEn: 'Code', value: product.code || '-' },
-              { name: '商品分类', nameEn: 'Category', value: product.category || '-' },
-              { name: '库存数量', nameEn: 'Stock', value: product.stock ? `${product.stock} 件` : '有货' },
-              { name: '销量', nameEn: 'Sales', value: product.sales ? `${product.sales} 件` : '0 件' }
-            ]
+            highlights,
+            specifications
           };
 
           this.setData({
@@ -135,7 +142,6 @@ Component({
       }
     },
 
-    // 显示错误提示
     showError() {
       this.setData({ loading: false });
       wx.showToast({
@@ -173,24 +179,11 @@ Component({
       });
     },
 
-    onShareAppMessage() {
-      const { product, productImages } = this.data;
-      return {
-        title: product ? `${product.name} | CHRONOS` : 'CHRONOS 奢侈品腕表',
-        path: `/pages/product-detail/product-detail?id=${this.data.productId}`,
-        imageUrl: productImages[0] || ''
-      };
-    },
-
-    // 下拉刷新
     onPullDownRefresh() {
       if (this.data.productId) {
-        this.loadProductDetail(this.data.productId).then(() => {
-          wx.stopPullDownRefresh();
-        });
-      } else {
-        wx.stopPullDownRefresh();
+        this.loadProductDetail(this.data.productId);
       }
+      wx.stopPullDownRefresh();
     }
   }
 });

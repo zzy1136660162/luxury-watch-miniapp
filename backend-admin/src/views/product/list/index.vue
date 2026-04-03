@@ -65,12 +65,11 @@
             <div class="product-info">
               <el-image
                 v-if="row.image"
-                :src="getImageUrl(row.image)"
+                :src="getImageUrl(getFirstImage(row.image))"
                 class="product-image"
                 fit="cover"
-                :preview-src-list="[getImageUrl(row.image)]"
+                :preview-src-list="getImagePreviewList(row.image)"
                 preview-teleported
-                :initial-index="0"
               />
               <div v-else class="product-image-placeholder">
                 <el-icon><Picture /></el-icon>
@@ -102,10 +101,9 @@
           </template>
         </el-table-column>
         <el-table-column prop="createTime" label="创建时间" width="180" />
-        <el-table-column label="操作" width="200" fixed="right">
+        <el-table-column label="操作" width="150" fixed="right">
           <template #default="{ row }">
             <el-button link type="primary" @click="handleEdit(row)">编辑</el-button>
-            <el-button link type="primary" @click="handleView(row)">查看</el-button>
             <el-button link type="danger" @click="handleDelete(row)">删除</el-button>
           </template>
         </el-table-column>
@@ -155,6 +153,23 @@ const getImageUrl = (imagePath: string) => {
   }
 
   return `${imagePreviewBaseUrl}${imagePath}`
+}
+
+// 将逗号分隔的图片字符串转换为数组
+const getImageList = (imageStr: string) => {
+  if (!imageStr) return []
+  return imageStr.split(',').filter(Boolean)
+}
+
+// 获取图片预览列表
+const getImagePreviewList = (imageStr: string) => {
+  return getImageList(imageStr).map(img => getImageUrl(img))
+}
+
+// 获取第一张图片
+const getFirstImage = (imageStr: string) => {
+  const list = getImageList(imageStr)
+  return list.length > 0 ? list[0] : ''
 }
 
 // 搜索表单
@@ -344,6 +359,7 @@ onMounted(() => {
     height: 60px;
     border-radius: 4px;
     cursor: pointer;
+    flex-shrink: 0;
   }
 
   .product-image-placeholder {

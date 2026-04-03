@@ -3,7 +3,7 @@
 <view class="page">
   <navigation-bar title="时全饰美" back="{{false}}" color="black" background="#ffffff" showMenu="{{true}}" />
 
-  <!-- Fixed Category Navigation -->
+  <!-- 固定在顶部的导航栏（滚动时显示） -->
   <view class="category-nav-fixed {{isNavFixed ? 'show' : ''}}">
     <scroll-view class="category-scroll" scroll-x enhanced="{{true}}" show-scrollbar="{{false}}">
       <view class="category-track">
@@ -21,7 +21,7 @@
 
   <scroll-view class="content" scroll-y type="list" enhanced="{{true}}" bounces="{{false}}" bindscroll="onScroll" id="main-scroll" bindrefresherrefresh="onPullDownRefresh" refresher-enabled="{{true}}" bindscrolltolower="onReachBottom">
     <!-- Hero Banner -->
-    <view class="hero-banner" wx:if="{{heroImage}}">
+    <view class="hero-banner" id="hero-banner" wx:if="{{heroImage}}">
       <image class="hero-image" src="{{heroImage}}" mode="aspectFill" />
       <view class="hero-overlay"></view>
       <view class="hero-content">
@@ -31,7 +31,7 @@
       </view>
     </view>
 
-    <!-- Category Navigation - normal position -->
+    <!-- Category Navigation（元素内导航栏，初始显示） -->
     <view class="category-nav" id="category-nav">
       <scroll-view class="category-scroll" scroll-x enhanced="{{true}}" show-scrollbar="{{false}}">
         <view class="category-track">
@@ -54,13 +54,20 @@
         <text class="section-subtitle">Featured Collections</text>
       </view>
       <view class="featured-grid">
-        <view class="featured-card" wx:for="{{featuredProducts}}" wx:key="id" bindtap="onProductTap" data-id="{{item.id}}">
-          <view class="featured-image-wrapper">
-            <image class="featured-image" src="{{item.image}}" mode="aspectFill" />
+        <view class="product-item" wx:for="{{featuredProducts}}" wx:key="id" bindtap="onProductTap" data-id="{{item.id}}">
+          <view class="product-image-wrapper">
+            <image class="product-image" src="{{item.image}}" mode="aspectFill" />
           </view>
-          <view class="featured-info">
-            <text class="featured-name">{{item.name}}</text>
-            <text class="featured-price" wx:if="{{item.price}}">¥{{item.price}}</text>
+          <view class="product-content">
+            <text class="product-code">{{item.code}}</text>
+            <text class="product-name">{{item.name}}</text>
+            <text class="product-name-en" wx:if="{{item.nameEn}}">{{item.nameEn}}</text>
+            <text class="product-intro" wx:if="{{item.intro}}">{{item.intro}}</text>
+            <view class="product-action">
+              <view class="view-details-btn">
+                <text>查看详情</text>
+              </view>
+            </view>
           </view>
         </view>
       </view>
@@ -82,15 +89,20 @@
       </view>
 
       <view class="product-grid" wx:else>
-        <view class="product-card" wx:for="{{products}}" wx:key="id" bindtap="onProductTap" data-id="{{item.id}}">
+        <view class="product-item" wx:for="{{products}}" wx:key="id" bindtap="onProductTap" data-id="{{item.id}}">
           <view class="product-image-wrapper">
             <image class="product-image" src="{{item.image}}" mode="aspectFill" />
-            <view class="product-badge" wx:if="{{item.isNew}}">NEW</view>
           </view>
-          <view class="product-info" id="pi">
+          <view class="product-content">
+            <text class="product-code">{{item.code}}</text>
             <text class="product-name">{{item.name}}</text>
-            <text class="product-subtitle">{{item.subtitle}}</text>
-            <text class="product-price" wx:if="{{item.price}}">¥{{item.price}}</text>
+            <text class="product-name-en" wx:if="{{item.nameEn}}">{{item.nameEn}}</text>
+            <text class="product-intro" wx:if="{{item.intro}}">{{item.intro}}</text>
+            <view class="product-action">
+              <view class="view-details-btn">
+                <text>查看详情</text>
+              </view>
+            </view>
           </view>
         </view>
       </view>
