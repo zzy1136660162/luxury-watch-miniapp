@@ -16,4 +16,10 @@ public interface AdminUserRoleMapper extends BaseMapper<AdminUserRole> {
 
     @Select("DELETE FROM admin_user_role WHERE user_id = #{userId} AND deleted = 0")
     void deleteByUserId(@Param("userId") Long userId);
+
+    @Select("DELETE FROM admin_user_role WHERE user_id = #{userId} AND role_id = #{roleId} AND deleted = 0")
+    void deleteByUserIdAndRoleId(@Param("userId") Long userId, @Param("roleId") Long roleId);
+
+    @Select("SELECT COUNT(*) FROM admin_user_role WHERE user_id = #{userId} AND role_id = #{roleId} AND deleted = 0")
+    int countByUserIdAndRoleId(@Param("userId") Long userId, @Param("roleId") Long roleId);
 }

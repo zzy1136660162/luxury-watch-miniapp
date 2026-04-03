@@ -7,7 +7,6 @@
       </div>
     </div>
 
-    <!-- 搜索区域 -->
     <div class="search-container">
       <el-form :model="searchForm" inline>
         <el-form-item label="用户名">
@@ -42,21 +41,22 @@
           </template>
         </el-table-column>
         <el-table-column prop="createTime" label="创建时间" />
-        <el-table-column label="操作" width="300">
+        <el-table-column label="操作" width="200">
           <template #default="{ row }">
             <el-button link type="primary" size="small" @click="handleEdit(row)">编辑</el-button>
-            <el-button link type="primary" size="small" @click="handleRoleConfig(row)">角色配置</el-button>
             <el-button link type="danger" size="small" @click="handleDelete(row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
     </div>
 
-    <!-- 管理员表单对话框 -->
     <el-dialog v-model="dialogVisible" :title="dialogTitle" width="600px">
       <el-form :model="formData" label-width="80px" :rules="formRules" ref="formRef">
         <el-form-item label="用户名" prop="username">
           <el-input v-model="formData.username" placeholder="请输入用户名" />
+        </el-form-item>
+        <el-form-item label="密码" prop="password" v-if="!isEdit">
+          <el-input v-model="formData.password" type="password" placeholder="请输入密码" show-password />
         </el-form-item>
         <el-form-item label="昵称" prop="nickname">
           <el-input v-model="formData.nickname" placeholder="请输入昵称" />
@@ -82,16 +82,15 @@
       </el-form>
       <template #footer>
         <el-button @click="dialogVisible = false">取消</el-button>
-        <el-button type="primary" @click="handleSubmit">确定</el-button>
+        <el-button type="primary" :loading="submitLoading" @click="handleSubmit">确定</el-button>
       </template>
     </el-dialog>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, computed, onMounted } from 'vue'
-import { ElMessage, ElMessageBox } from 'element-plus'
-import type { FormInstance, FormRules } from 'element-plus'
+import { ElMessage, ElMessageBox, type FormInstance, type FormRules } from 'element-plus'
+import adminApi from '@/api/modules/admin'
 
 interface AdminData {
   id: number
@@ -103,6 +102,7 @@ interface AdminData {
   roleName: string
   status: number
   createTime: string
+  password?: string
 }
 
 interface SearchForm {
@@ -110,20 +110,18 @@ interface SearchForm {
   status: number | null
 }
 
-// 响应式数据
 const loading = ref(false)
+const submitLoading = ref(false)
 const tableData = ref<AdminData[]>([])
 const dialogVisible = ref(false)
 const isEdit = ref(false)
 const formRef = ref<FormInstance>()
 
-// 搜索表单
 const searchForm = reactive<SearchForm>({
   username: '',
   status: null
 })
 
-// 表单数据
 const formData = reactive({
   id: 0,
   username: '',
@@ -131,14 +129,18 @@ const formData = reactive({
   email: '',
   phone: '',
   roleId: 1,
-  status: 1
+  status: 1,
+  password: ''
 })
 
-// 表单验证规则
 const formRules = reactive<FormRules>({
   username: [
     { required: true, message: '请输入用户名', trigger: 'blur' },
     { min: 3, max: 20, message: '用户名长度在 3 到 20 个字符', trigger: 'blur' }
+  ],
+  password: [
+    { required: true, message: '请输入密码', trigger: 'blur' },
+    { min: 6, max: 18, message: '密码长度在 6 到 18 个字符', trigger: 'blur' }
   ],
   nickname: [
     { required: true, message: '请输入昵称', trigger: 'blur' },
@@ -155,47 +157,24 @@ const formRules = reactive<FormRules>({
   ]
 })
 
-// 计算属性
 const dialogTitle = computed(() => isEdit.value ? '编辑管理员' : '新增管理员')
 
-// 模拟数据
-const mockData: AdminData[] = [
-  {
-    id: 1,
-    username: 'admin',
-    nickname: '系统管理员',
-    email: 'admin@example.com',
-    phone: '13800138000',
-    roleId: 1,
-    roleName: '超级管理员',
-    status: 1,
-    createTime: '2024-01-01'
-  },
-  {
-    id: 2,
-    username: 'test',
-    nickname: '测试管理员',
-    email: 'test@example.com',
-    phone: '13800138001',
-    roleId: 2,
-    roleName: '普通管理员',
-    status: 1,
-    createTime: '2024-01-01'
-  }
-]
-
-// 生命周期
 onMounted(() => {
   loadAdminList()
 })
 
-// 加载管理员列表
 const loadAdminList = async () => {
   loading.value = true
   try {
-    // 模拟API调用
-    await new Promise(resolve => setTimeout(resolve, 500))
-    tableData.value = mockData
+    const res = await adminApi.getAdminUsers({
+      keyword: searchForm.username || undefined,
+      status: searchForm.status ?? undefined
+    })
+    if (res.code === 200) {
+      tableData.value = res.data || []
+    } else {
+      ElMessage.error(res.msg || '加载失败')
+    }
   } catch (error) {
     ElMessage.error('加载管理员列表失败')
   } finally {
@@ -203,12 +182,10 @@ const loadAdminList = async () => {
   }
 }
 
-// 搜索
 const handleSearch = () => {
   loadAdminList()
 }
 
-// 重置搜索
 const handleReset = () => {
   Object.assign(searchForm, {
     username: '',
@@ -217,7 +194,6 @@ const handleReset = () => {
   loadAdminList()
 }
 
-// 新增管理员
 const handleAdd = () => {
   isEdit.value = false
   Object.assign(formData, {
@@ -227,24 +203,27 @@ const handleAdd = () => {
     email: '',
     phone: '',
     roleId: 1,
-    status: 1
+    status: 1,
+    password: ''
   })
   dialogVisible.value = true
 }
 
-// 编辑管理员
 const handleEdit = (row: AdminData) => {
   isEdit.value = true
-  Object.assign(formData, row)
+  Object.assign(formData, {
+    id: row.id,
+    username: row.username,
+    nickname: row.nickname,
+    email: row.email || '',
+    phone: row.phone || '',
+    roleId: row.roleId || 1,
+    status: row.status,
+    password: ''
+  })
   dialogVisible.value = true
 }
 
-// 角色配置
-const handleRoleConfig = (row: AdminData) => {
-  ElMessage.info('角色配置功能待实现')
-}
-
-// 删除管理员
 const handleDelete = async (row: AdminData) => {
   try {
     await ElMessageBox.confirm(
@@ -257,35 +236,59 @@ const handleDelete = async (row: AdminData) => {
       }
     )
 
-    // 模拟删除操作
-    ElMessage.success('删除成功')
-    loadAdminList()
-  } catch {
-    // 用户取消删除
+    const res = await adminApi.deleteAdminUser(row.id)
+    if (res.code === 200) {
+      ElMessage.success('删除成功')
+      loadAdminList()
+    } else {
+      ElMessage.error(res.msg || '删除失败')
+    }
+  } catch (error: any) {
+    if (error !== 'cancel') {
+      ElMessage.error(error.message || '删除失败')
+    }
   }
 }
 
-// 提交表单
 const handleSubmit = async () => {
   if (!formRef.value) return
 
-  const valid = await formRef.value.validate()
+  const valid = await formRef.value.validate().catch(() => false)
   if (!valid) return
 
+  submitLoading.value = true
   try {
-    // 模拟提交操作
-    await new Promise(resolve => setTimeout(resolve, 500))
-
-    if (isEdit.value) {
-      ElMessage.success('编辑管理员成功')
-    } else {
-      ElMessage.success('新增管理员成功')
+    const data = {
+      username: formData.username,
+      nickname: formData.nickname,
+      email: formData.email,
+      phone: formData.phone,
+      roleId: formData.roleId,
+      status: formData.status
     }
 
-    dialogVisible.value = false
-    loadAdminList()
-  } catch (error) {
-    ElMessage.error('操作失败')
+    let res
+    if (isEdit.value) {
+      if (formData.password) {
+        data.password = formData.password
+      }
+      res = await adminApi.updateAdminUser(formData.id, data)
+    } else {
+      data.password = formData.password
+      res = await adminApi.createAdminUser(data)
+    }
+
+    if (res.code === 200) {
+      ElMessage.success(isEdit.value ? '编辑成功' : '新增成功')
+      dialogVisible.value = false
+      loadAdminList()
+    } else {
+      ElMessage.error(res.msg || '操作失败')
+    }
+  } catch (error: any) {
+    ElMessage.error(error.message || '操作失败')
+  } finally {
+    submitLoading.value = false
   }
 }
 </script>

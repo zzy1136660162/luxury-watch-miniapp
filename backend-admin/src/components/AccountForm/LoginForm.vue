@@ -56,11 +56,6 @@ const onSubmit = form.handleSubmit((values) => {
   })
 })
 
-function testAccount(account: string) {
-  form.setFieldValue('account', account)
-  form.setFieldValue('password', 'admin123')
-  onSubmit()
-}
 </script>
 
 <template>
@@ -129,17 +124,6 @@ function testAccount(account: string) {
           </FaButton>
         </div>
       </form>
-      <div class="mt-4 text-center -mb-4">
-        <FaDivider>演示账号一键登录</FaDivider>
-        <div class="space-x-2">
-          <FaButton variant="default" size="sm" plain @click="testAccount('admin')">
-            admin
-          </FaButton>
-          <FaButton variant="outline" size="sm" plain @click="testAccount('test')">
-            test
-          </FaButton>
-        </div>
-      </div>
     </div>
     <div v-show="type === 'qrcode'">
       <div class="flex-col-center">

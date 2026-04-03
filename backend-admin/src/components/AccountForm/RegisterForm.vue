@@ -3,6 +3,8 @@ import { toTypedSchema } from '@vee-validate/zod'
 import { useForm } from 'vee-validate'
 import * as z from 'zod'
 import { FormControl, FormDescription, FormField, FormItem, FormMessage } from '@/ui/shadcn/ui/form'
+import { ElMessage } from 'element-plus'
+import adminApi from '@/api/modules/admin'
 
 defineOptions({
   name: 'RegisterForm',
@@ -14,7 +16,6 @@ const props = defineProps<{
 
 const emits = defineEmits<{
   onLogin: [account?: string]
-  onRegister: [account?: string]
 }>()
 
 const loading = ref(false)
@@ -36,9 +37,25 @@ const form = useForm({
     checkPassword: '',
   },
 })
-const onSubmit = form.handleSubmit((values) => {
+
+const onSubmit = form.handleSubmit(async (values) => {
   loading.value = true
-  emits('onRegister', values.account)
+  try {
+    const response = await adminApi.register({
+      username: values.account,
+      password: values.password,
+    })
+    if (response.code === 200) {
+      ElMessage.success('注册成功，请登录')
+      emits('onLogin', values.account)
+    } else {
+      ElMessage.error(response.msg || '注册失败')
+    }
+  } catch (error: any) {
+    ElMessage.error(error.message || '注册失败，请稍后重试')
+  } finally {
+    loading.value = false
+  }
 })
 </script>
 
@@ -47,10 +64,10 @@ const onSubmit = form.handleSubmit((values) => {
     <form @submit="onSubmit">
       <div class="mb-8 space-y-2">
         <h3 class="text-4xl color-[var(--el-text-color-primary)] font-bold">
-          探索从这里开始 🚀
+          创建管理员账号
         </h3>
         <p class="text-sm text-muted-foreground lg:text-base">
-          演示系统未提供该功能
+          请填写以下信息注册管理员账号
         </p>
       </div>
       <FormField v-slot="{ componentField, errors }" name="account">

@@ -47,8 +47,7 @@ const formType = ref<'login' | 'register' | 'resetPassword'>('login')
         <RegisterForm
           v-else-if="formType === 'register'"
           :account
-          @on-register="(val) => { formType = 'login'; account = val }"
-          @on-login="formType = 'login'"
+          @on-login="(val) => { formType = 'login'; account = val }"
         />
         <ResetPasswordForm
           v-else-if="formType === 'resetPassword'"

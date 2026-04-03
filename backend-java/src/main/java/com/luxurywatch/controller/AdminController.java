@@ -128,6 +128,98 @@ public class AdminController {
     }
 
     /**
+     * 注册管理员账号
+     */
+    @PostMapping("/register")
+    public R<Void> register(@RequestBody Map<String, String> params) {
+        String username = params.get("username");
+        String password = params.get("password");
+
+        if (username == null || username.trim().isEmpty()) {
+            return R.error("用户名不能为空");
+        }
+        if (password == null || password.length() < 6) {
+            return R.error("密码长度不能少于6位");
+        }
+
+        adminUserService.register(username.trim(), password);
+        return R.success();
+    }
+
+    /**
+     * 获取管理员列表
+     */
+    @GetMapping("/users")
+    public R<List<Map<String, Object>>> listUsers(
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) Integer status) {
+        List<Map<String, Object>> list = adminUserService.listAdmins(keyword, status);
+        return R.success(list);
+    }
+
+    /**
+     * 创建管理员
+     */
+    @PostMapping("/users")
+    public R<Void> createUser(@RequestBody Map<String, Object> params) {
+        AdminUser admin = new AdminUser();
+        admin.setUsername((String) params.get("username"));
+        admin.setNickname((String) params.get("nickname"));
+        admin.setEmail((String) params.get("email"));
+        admin.setPhone((String) params.get("phone"));
+        admin.setStatus(params.get("status") != null ? ((Number) params.get("status")).intValue() : 1);
+
+        Object passwordObj = params.get("password");
+        if (passwordObj != null) {
+            admin.setPassword((String) passwordObj);
+        }
+
+        Long roleId = null;
+        if (params.get("roleId") != null) {
+            roleId = ((Number) params.get("roleId")).longValue();
+        }
+
+        adminUserService.createAdmin(admin, roleId);
+        return R.success();
+    }
+
+    /**
+     * 更新管理员
+     */
+    @PutMapping("/users/{id}")
+    public R<Void> updateUser(@PathVariable Long id, @RequestBody Map<String, Object> params) {
+        AdminUser admin = new AdminUser();
+        admin.setId(id);
+        admin.setUsername((String) params.get("username"));
+        admin.setNickname((String) params.get("nickname"));
+        admin.setEmail((String) params.get("email"));
+        admin.setPhone((String) params.get("phone"));
+        admin.setStatus(params.get("status") != null ? ((Number) params.get("status")).intValue() : 1);
+
+        Object passwordObj = params.get("password");
+        if (passwordObj != null && !((String) passwordObj).isEmpty()) {
+            admin.setPassword((String) passwordObj);
+        }
+
+        Long roleId = null;
+        if (params.get("roleId") != null) {
+            roleId = ((Number) params.get("roleId")).longValue();
+        }
+
+        adminUserService.updateAdmin(admin, roleId);
+        return R.success();
+    }
+
+    /**
+     * 删除管理员
+     */
+    @DeleteMapping("/users/{id}")
+    public R<Void> deleteUser(@PathVariable Long id) {
+        adminUserService.deleteAdmin(id);
+        return R.success();
+    }
+
+    /**
      * 构建用户信息
      */
     private UserInfoVO buildUserInfo(AdminUser admin) {

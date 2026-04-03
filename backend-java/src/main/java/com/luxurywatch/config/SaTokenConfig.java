@@ -21,6 +21,7 @@ public class SaTokenConfig implements WebMvcConfigurer {
             .addPathPatterns("/**")
             .excludePathPatterns(
                 "/admin/login",
+                "/admin/register",
                 "/admin/logout",
                 "/admin/captcha/**",
                 "/api/**",
