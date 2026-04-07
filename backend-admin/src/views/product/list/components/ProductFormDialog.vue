@@ -69,12 +69,52 @@
         />
       </el-form-item>
 
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <el-form-item label="表壳尺寸" prop="caseSize">
+            <el-input v-model="form.caseSize" placeholder="如：40毫米/10毫米厚度" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="续航时长" prop="powerReserve">
+            <el-input v-model="form.powerReserve" placeholder="如：72小时" />
+          </el-form-item>
+        </el-col>
+      </el-row>
+
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <el-form-item label="防水深度" prop="waterResistance">
+            <el-input-number
+              v-model="form.waterResistance"
+              :min="0"
+              :precision="0"
+              style="width: 100%"
+              placeholder="默认单位：米"
+            />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="材质" prop="material">
+            <el-input v-model="form.material" placeholder="如：18K玫瑰金、蓝宝石水晶玻璃" />
+          </el-form-item>
+        </el-col>
+      </el-row>
+
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <el-form-item label="表带材质" prop="strap">
+            <el-input v-model="form.strap" placeholder="如：真皮表带、钢带、橡胶表带" />
+          </el-form-item>
+        </el-col>
+      </el-row>
+
       <el-form-item label="商品描述" prop="description">
         <el-input
           v-model="form.description"
           type="textarea"
           :rows="4"
-          placeholder="请输入商品描述"
+          placeholder="请输入商品描述，此描述将会展示在商品卡中作为商品介绍"
         />
       </el-form-item>
     </el-form>
@@ -152,6 +192,11 @@ const form = reactive<Partial<Product>>({
   image: '',
   description: '',
   status: 1,
+  caseSize: '',
+  powerReserve: '',
+  waterResistance: undefined as number | undefined,
+  material: '',
+  strap: '',
 })
 
 // 表单校验规则
@@ -161,6 +206,7 @@ const rules = {
   category_id: [{ required: true, message: '请选择商品分类', trigger: 'change' }],
   price: [{ required: true, message: '请输入商品价格', trigger: 'blur' }],
   stock: [{ required: true, message: '请输入库存数量', trigger: 'blur' }],
+  waterResistance: [{ type: 'number', message: '请输入数字', trigger: 'blur' }],
 }
 
 // 分类选择变化处理
@@ -202,6 +248,11 @@ watch(
       form.image = ''
       form.description = ''
       form.status = 1
+      form.caseSize = ''
+      form.powerReserve = ''
+      form.waterResistance = undefined
+      form.material = ''
+      form.strap = ''
     }
   }
 )
@@ -212,12 +263,19 @@ const handleSubmit = async () => {
   if (!valid) return
 
   submitting.value = true
+
+  // 处理防水深度：如果为0则设为undefined（存入空值）
+  const submitData = { ...form }
+  if (submitData.waterResistance === 0) {
+    submitData.waterResistance = undefined
+  }
+
   try {
     if (props.type === 'add') {
-      await api.product.createProduct(form)
+      await api.product.createProduct(submitData)
       ElMessage.success('新增成功')
     } else {
-      await api.product.updateProduct(form.id!, form)
+      await api.product.updateProduct(submitData.id!, submitData)
       ElMessage.success('更新成功')
     }
     visible.value = false
