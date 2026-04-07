@@ -30,7 +30,6 @@
           <view class="product-info">
             <text class="product-tag">{{item.tag}}</text>
             <text class="product-name">{{item.name}}</text>
-            <text class="product-price" wx:if="{{item.price}}">¥{{item.price}}</text>
             <view class="discover-link">
               <text>DISCOVER MORE</text>
             </view>
@@ -90,18 +89,25 @@
       </view>
 
       <view class="featured-grid">
-        <view class="featured-card" wx:for="{{featuredProducts}}" wx:key="id" bindtap="onProductTap" data-id="{{item.id}}">
+        <view class="featured-card {{index === 0 ? 'featured-card-first' : ''}} {{index === 1 ? 'featured-card-second' : ''}} {{index === 2 ? 'featured-card-third' : ''}} {{index === 3 ? 'featured-card-fourth' : ''}} {{index === 4 ? 'featured-card-fifth' : ''}} {{index === 5 ? 'featured-card-sixth' : ''}}" wx:for="{{featuredProducts}}" wx:key="id" bindtap="onProductTap" data-id="{{item.id}}">
           <view class="featured-image-wrapper">
             <image class="featured-image" src="{{item.image}}" mode="aspectFill" />
             <!-- 产品标签 -->
             <view class="featured-tag" wx:if="{{item.tag}}">{{item.tag}}</view>
           </view>
-          <view class="featured-info">
+          <view class="featured-info {{index === 0 ? 'featured-info-first' : ''}} {{index === 1 ? 'featured-info-second' : ''}} {{index === 2 ? 'featured-info-third' : ''}} {{index === 3 ? 'featured-info-fourth' : ''}} {{index === 4 ? 'featured-info-fifth' : ''}} {{index === 5 ? 'featured-info-sixth' : ''}}">
             <text class="featured-name">{{item.name}}</text>
             <text class="featured-subtitle" wx:if="{{item.subtitle}}">{{item.subtitle}}</text>
-            <text class="featured-price" wx:if="{{item.price}}">¥{{item.price}}</text>
+            <text class="featured-price" wx:if="{{item.price && index !== 0 && index !== 1 && index !== 2 && index !== 3 && index !== 4 && index !== 5}}">¥{{item.price}}</text>
+            <!-- 商品详情介绍（仅前六个商品） -->
+            <text class="featured-description" wx:if="{{index === 0}}">这款腕表融合了精湛工艺与经典设计，采用优质材料打造，展现出卓越的品质和优雅的风格。</text>
+            <text class="featured-description" wx:if="{{index === 1}}">此款腕表以其独特的设计理念和卓越的性能著称，完美诠释了现代制表工艺的精髓。</text>
+            <text class="featured-description" wx:if="{{index === 2}}">这款腕表体现了对细节的极致追求，每一处设计都彰显着非凡的品味与格调。</text>
+            <text class="featured-description" wx:if="{{index === 3}}">这款腕表以其优雅的外观和卓越的性能，成为时尚与功能的完美结合。</text>
+            <text class="featured-description" wx:if="{{index === 4}}">这款腕表凭借其卓越的工艺和独特的设计，成为收藏家们的心头好。</text>
+            <text class="featured-description" wx:if="{{index === 5}}">这款腕表以其创新的技术和精湛的工艺，重新定义了现代腕表的标杆。</text>
             <!-- 查看详情按钮 -->
-            <view class="featured-action">
+            <view class="featured-action {{index === 0 ? 'featured-action-first' : ''}} {{index === 1 ? 'featured-action-second' : ''}} {{index === 2 ? 'featured-action-third' : ''}} {{index === 3 ? 'featured-action-fourth' : ''}} {{index === 4 ? 'featured-action-fifth' : ''}} {{index === 5 ? 'featured-action-sixth' : ''}}">
               <text>查看详情</text>
             </view>
           </view>
