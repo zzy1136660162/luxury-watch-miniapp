@@ -115,14 +115,12 @@
       }
       
       .featured-action {
-        width: 150px;
-        margin-left: 70px;
-        margin-top: 16px;
-        padding: 4px 12px;
+        display: inline-block;
+        width: 130px;
+        padding: 4px 32px;
         background: transparent;
         border: 1.5px solid $primary;
         border-radius: 20px;
-        text-align: center;
         transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         position: relative;
         overflow: hidden;
@@ -141,7 +139,7 @@
         
         text {
           font-family: $font-family-chinese;
-          font-size: 11px;
+          font-size:15px;
           color: $primary;
           font-weight: 600;
           letter-spacing: 0.3px;
@@ -174,9 +172,9 @@
   }
 }
 
-// 第一个商品的特殊样式
-.featured-card-first {
-  .featured-info-first {
+// 奇数商品（左对齐）
+.featured-card-odd {
+  .featured-info-odd {
     .featured-price {
       display: none;
     }
@@ -191,7 +189,7 @@
       text-align: left;
     }
     
-    .featured-action-first {
+    .featured-action-odd {
       text-align: left;
       margin-top: 0;
       padding-left: 0;
@@ -210,9 +208,9 @@
   }
 }
 
-// 第二个商品的特殊样式（靠右显示）
-.featured-card-second {
-  .featured-info-second {
+// 偶数商品（右对齐）
+.featured-card-even {
+  .featured-info-even {
     text-align: right;
     
     .featured-price {
@@ -237,9 +235,10 @@
       text-align: right;
     }
     
-    .featured-action-second {
+    .featured-action-even {
       text-align: right;
       margin-top: 0;
+      justify-content: flex-end;
       
       text {
         font-family: $font-family-chinese;
@@ -247,154 +246,8 @@
         color: $primary;
         font-weight: 600;
         letter-spacing: 0.3px;
-      }
-    }
-  }
-}
-
-// 第三个商品的特殊样式（靠左显示）
-.featured-card-third {
-  .featured-info-third {
-    .featured-price {
-      display: none;
-    }
-    
-    .featured-description {
-      display: block;
-      font-family: $font-family-chinese;
-      font-size: 14px;
-      color: $on-surface-variant;
-      line-height: 1.6;
-      margin-bottom: 16px;
-      text-align: left;
-    }
-    
-    .featured-action-third {
-      text-align: left;
-      margin-top: 0;
-      
-      text {
-        font-family: $font-family-chinese;
-        font-size: 14px;
-        color: $primary;
-        font-weight: 600;
-        letter-spacing: 0.3px;
-      }
-    }
-  }
-}
-
-// 第四个商品的特殊样式（靠右显示）
-.featured-card-fourth {
-  .featured-info-fourth {
-    text-align: right;
-    
-    .featured-price {
-      display: none;
-    }
-    
-    .featured-name {
-      text-align: right;
-    }
-    
-    .featured-subtitle {
-      text-align: right;
-    }
-    
-    .featured-description {
-      display: block;
-      font-family: $font-family-chinese;
-      font-size: 14px;
-      color: $on-surface-variant;
-      line-height: 1.6;
-      margin-bottom: 16px;
-      text-align: right;
-    }
-    
-    .featured-action-fourth {
-      text-align: right;
-      margin-top: 0;
-      
-      text {
-        font-family: $font-family-chinese;
-        font-size: 14px;
-        color: $primary;
-        font-weight: 600;
-        letter-spacing: 0.3px;
-      }
-    }
-  }
-}
-
-// 第五个商品的特殊样式（靠左显示）
-.featured-card-fifth {
-  .featured-info-fifth {
-    .featured-price {
-      display: none;
-    }
-    
-    .featured-description {
-      display: block;
-      font-family: $font-family-chinese;
-      font-size: 14px;
-      color: $on-surface-variant;
-      line-height: 1.6;
-      margin-bottom: 16px;
-      text-align: left;
-    }
-    
-    .featured-action-fifth {
-      text-align: left;
-      margin-top: 0;
-      
-      text {
-        font-family: $font-family-chinese;
-        font-size: 14px;
-        color: $primary;
-        font-weight: 600;
-        letter-spacing: 0.3px;
-      }
-    }
-  }
-}
-
-// 第六个商品的特殊样式（靠右显示）
-.featured-card-sixth {
-  .featured-info-sixth {
-    text-align: right;
-    
-    .featured-price {
-      display: none;
-    }
-    
-    .featured-name {
-      text-align: right;
-    }
-    
-    .featured-subtitle {
-      text-align: right;
-    }
-    
-    .featured-description {
-      display: block;
-      font-family: $font-family-chinese;
-      font-size: 14px;
-      color: $on-surface-variant;
-      line-height: 1.6;
-      margin-bottom: 16px;
-      text-align: right;
-    }
-    
-    .featured-action-sixth {
-      text-align: right;
-      margin-top: 0;
-      
-      text {
-        font-family: $font-family-chinese;
-        font-size: 14px;
-        color: $primary;
-        font-weight: 600;
-        letter-spacing: 0.3px;
+        display: inline-block;
+        text-align: right;
       }
     }
   }
