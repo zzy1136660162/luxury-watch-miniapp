@@ -73,6 +73,16 @@ public class Product {
      */
     private String strap;
 
+    /**
+     * 是否可用积分兑换：0-否，1-是
+     */
+    private Integer canRedeemPoints;
+
+    /**
+     * 品牌故事（富文本 HTML）
+     */
+    private String brandStory;
+
     @TableLogic
     @TableField("is_deleted")
     private Integer isDeleted;

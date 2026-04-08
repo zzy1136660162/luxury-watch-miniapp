@@ -29,6 +29,16 @@ export default defineConfig(({ mode, command }) => {
           changeOrigin: command === 'serve' && env.VITE_OPEN_PROXY === 'true',
           rewrite: (path: Rewrite) => path.replace(/^\/proxy/, ''),
         },
+        '/images': {
+          target: env.VITE_APP_API_BASEURL,
+          changeOrigin: true,
+          rewrite: (path: Rewrite) => path.replace(/^\/images/, '/images'),
+        },
+        '/api/images': {
+          target: env.VITE_APP_API_BASEURL,
+          changeOrigin: true,
+          rewrite: (path: Rewrite) => path.replace(/^\/api\/images/, '/api/images'),
+        },
       },
     },
     // 构建选项 https://cn.vitejs.dev/config/build-options

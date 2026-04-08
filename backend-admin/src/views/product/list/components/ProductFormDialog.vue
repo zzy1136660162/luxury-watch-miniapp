@@ -59,6 +59,14 @@
             </el-radio-group>
           </el-form-item>
         </el-col>
+        <el-col :span="12">
+          <el-form-item label="积分兑换" prop="canRedeemPoints">
+            <el-radio-group v-model="form.canRedeemPoints">
+              <el-radio :label="1">是</el-radio>
+              <el-radio :label="0">否</el-radio>
+            </el-radio-group>
+          </el-form-item>
+        </el-col>
       </el-row>
 
       <el-form-item label="商品图片" prop="image">
@@ -117,6 +125,26 @@
           placeholder="请输入商品描述，此描述将会展示在商品卡中作为商品介绍"
         />
       </el-form-item>
+
+      <el-form-item label="品牌故事" prop="brandStory">
+        <Editor
+          v-model="form.brandStory"
+          license-key="gpl"
+          :tinymce-script-src="'/tinymce/tinymce.min.js'"
+          :init="{
+            height: 400,
+            menubar: true,
+            plugins: 'anchor lists advlist autolink charmap code media help link image',
+            toolbar: 'undo redo | styles | bold italic underline | alignleft aligncenter alignright | bullist numlist outdent indent | link image',
+            branding: false,
+            content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px } img { max-width: 100%; height: auto; }',
+            images_upload_handler: handleImageUpload,
+            convert_urls: false,
+            relative_urls: false,
+            remove_script_host: false,
+          }"
+        />
+      </el-form-item>
     </el-form>
 
     <template #footer>
@@ -135,6 +163,8 @@ import type { FormInstance } from 'element-plus'
 import type { Product } from '@/types'
 import api from '@/api'
 import ImagesUpload from '@/components/ImagesUpload.vue'
+import Editor from '@tinymce/tinymce-vue'
+import axios from 'axios'
 
 interface CategoryOption {
   id: number
@@ -197,7 +227,39 @@ const form = reactive<Partial<Product>>({
   waterResistance: undefined as number | undefined,
   material: '',
   strap: '',
+  canRedeemPoints: 0,
+  brandStory: '',
 })
+
+// 图片上传处理函数
+const baseUrl = import.meta.env.VITE_APP_API_BASEURL || 'http://localhost:8081'
+const isProxy = import.meta.env.DEV && import.meta.env.VITE_OPEN_PROXY
+const uploadUrl = isProxy ? '/proxy/api/upload/image' : '/api/upload/image'
+
+const handleImageUpload = (blobInfo: any, progress: any): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const formData = new FormData()
+    formData.append('file', blobInfo.blob(), blobInfo.filename())
+    
+    axios.post(uploadUrl, formData, {
+      headers: { 
+        'Content-Type': 'multipart/form-data',
+        'Authorization': localStorage.getItem('token') || ''
+      }
+    }).then(res => {
+      if (res.data && res.data.code === 200) {
+        // 后端返回完整URL，直接使用
+        const uploadedUrl = res.data.data.url
+        resolve(uploadedUrl)
+      } else {
+        reject(new Error(res.data?.msg || res.data?.message || '上传失败'))
+      }
+    }).catch(err => {
+      console.error('图片上传失败:', err)
+      reject(new Error(err.response?.data?.msg || err.message || '上传失败'))
+    })
+  })
+}
 
 // 表单校验规则
 const rules = {
@@ -253,6 +315,8 @@ watch(
       form.waterResistance = undefined
       form.material = ''
       form.strap = ''
+      form.canRedeemPoints = 0
+      form.brandStory = ''
     }
   }
 )
