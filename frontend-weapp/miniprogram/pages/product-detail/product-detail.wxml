@@ -64,7 +64,24 @@
       </view>
 
       <!-- 5. Brand Story -->
-      <view class="brand-story-section">
+      <view class="brand-story-section" wx:if="{{brandStory}}">
+        <view class="brand-story-card">
+          <view class="brand-story-header" id="brandstoryheader">
+            <text class="brand-story-title">品牌故事</text>
+            <text class="brand-story-subtitle">Brand Story</text>
+          </view>
+          <view class="brand-story-content" id="brandstorycontent">
+            <rich-text nodes="{{brandStory}}"></rich-text>
+          </view>
+          <!-- <view class="imga">
+          <image src="http://localhost:8081/api/images/unnamed%20(3).png" mode="aspectFill" />
+          </view> -->
+          <button id="brandstorybtn" class="brand-story-btn" bindtap="onExploreHeritage" style="margin-top: 5vh;">探索品牌</button>
+        </view>
+      </view>
+
+      <!-- 品牌故事默认内容（无brandStory时） -->
+      <view class="brand-story-section" wx:else>
         <view class="brand-story-card">
           <view class="brand-story-header" id="brandstoryheader">
             <text class="brand-story-title">品牌故事</text>

@@ -19,6 +19,8 @@ Component({
       specifications: [] as any[]
     },
 
+    brandStory: '',
+
     loading: true
   },
 
@@ -124,10 +126,29 @@ Component({
             specifications
           };
 
+          // 处理品牌故事图片样式和路径
+          let processedBrandStory = product.brandStory || ''
+          if (processedBrandStory) {
+            const imageBaseUrl = 'http://localhost:8081'
+            // 处理图片URL，添加完整前缀
+            processedBrandStory = processedBrandStory.replace(/src=["'](\/api\/images\/[^"']+)["']/g, `src="${imageBaseUrl}$1"`)
+            processedBrandStory = processedBrandStory.replace(/src=["'](\/images\/[^"']+)["']/g, `src="${imageBaseUrl}$1"`)
+            processedBrandStory = processedBrandStory.replace(/src=["'](images\/[^"']+)["']/g, `src="${imageBaseUrl}/api/$1"`)
+            processedBrandStory = processedBrandStory.replace(/src=["']([^"']+\.(jpg|jpeg|png|gif|webp))["']/gi, (match, p1) => {
+              if (p1.startsWith('http://') || p1.startsWith('https://')) {
+                return match
+              }
+              return `src="${imageBaseUrl}/api/images/${p1}"`
+            })
+            // 添加图片样式
+            processedBrandStory = processedBrandStory.replace(/<img/g, '<img style="max-width:80vw;height:auto;"')
+          }
+
           this.setData({
             product,
             productImages,
             productInfo,
+            brandStory: processedBrandStory,
             loading: false
           });
 
