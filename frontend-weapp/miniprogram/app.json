@@ -11,7 +11,9 @@
     "pages/profile/profile",
     "pages/reward-detail/reward-detail",
     "pages/index/index",
-    "pages/logs/logs"
+    "pages/logs/logs",
+    "pages/appointment/appointment",
+    "pages/appointment-list/appointment-list"
   ],
   "window": {
     "navigationBarTextStyle": "black",

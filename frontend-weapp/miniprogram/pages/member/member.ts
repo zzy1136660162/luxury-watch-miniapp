@@ -109,6 +109,14 @@ Component({
       if (!this.checkLogin()) return;
 
       const type = e.currentTarget.dataset.type;
+      
+      if (type === 'priority') {
+        wx.navigateTo({
+          url: '/pages/appointment/appointment'
+        });
+        return;
+      }
+      
       wx.showModal({
         title: '尊享权益',
         content: `正在打开 ${type} 功能`,
@@ -141,11 +149,25 @@ Component({
       if (!this.checkLogin()) return;
 
       const type = e.currentTarget.dataset.type;
-      wx.showModal({
-        title: '服务功能',
-        content: `正在打开 ${type} 功能`,
-        confirmText: '确定'
-      });
+      
+      switch (type) {
+        case 'appointments':
+          wx.navigateTo({
+            url: '/pages/appointment-list/appointment-list'
+          });
+          break;
+        case 'records':
+          wx.showToast({ title: '功能开发中', icon: 'none' });
+          break;
+        case 'consultant':
+          wx.showToast({ title: '功能开发中', icon: 'none' });
+          break;
+        case 'address':
+          wx.showToast({ title: '功能开发中', icon: 'none' });
+          break;
+        default:
+          wx.showToast({ title: '功能开发中', icon: 'none' });
+      }
     },
 
     onTabChange(e: any) {

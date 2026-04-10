@@ -10,14 +10,20 @@ const baseUrl = 'http://127.0.0.1:8081';
  */
 const request = (options: any): Promise<any> => {
   return new Promise((resolve, reject) => {
+    const token = wx.getStorageSync('token');
+    const headers: any = {
+      'Content-Type': 'application/json',
+      ...options.header
+    };
+    if (token) {
+      headers['Authorization'] = token;
+    }
+    
     wx.request({
       url: baseUrl + options.url,
       method: options.method || 'GET',
       data: options.data || {},
-      header: {
-        'Content-Type': 'application/json',
-        ...options.header
-      },
+      header: headers,
       success: (res: any) => {
         if (res.statusCode === 200) {
           resolve(res.data);
@@ -140,9 +146,62 @@ export const collectionApi = {
   }
 };
 
+/**
+ * 门店相关API
+ */
+export const storeApi = {
+  /**
+   * 获取门店列表
+   */
+  getList: () => {
+    return request({
+      url: '/api/appointment/stores',
+      method: 'GET'
+    });
+  }
+};
+
+/**
+ * 预约相关API
+ */
+export const appointmentApi = {
+  /**
+   * 创建预约
+   */
+  create: (data: { storeId: number; appointmentDate: string; appointmentTime: string; remark?: string }) => {
+    return request({
+      url: '/api/appointment',
+      method: 'POST',
+      data
+    });
+  },
+
+  /**
+   * 获取我的预约列表
+   */
+  getMyList: () => {
+    return request({
+      url: '/api/appointment/my',
+      method: 'GET'
+    });
+  },
+
+  /**
+   * 取消预约
+   */
+  cancel: (id: number) => {
+    return request({
+      url: `/api/appointment/${id}/cancel`,
+      method: 'PUT'
+    });
+  }
+};
+
 export default {
   request,
   productApi,
   homeApi,
-  collectionApi
+  collectionApi,
+  storeApi,
+  appointmentApi
 };

@@ -193,10 +193,24 @@ Component({
     },
 
     onBook() {
-      wx.showModal({
-        title: '预约到店',
-        content: '请选择您想要预约的时间和门店',
-        confirmText: '确定'
+      const token = wx.getStorageSync('token');
+      if (!token) {
+        wx.showModal({
+          title: '提示',
+          content: '请先登录后再预约',
+          confirmText: '去登录',
+          success: (res) => {
+            if (res.confirm) {
+              wx.navigateTo({
+                url: '/pages/login/login'
+              });
+            }
+          }
+        });
+        return;
+      }
+      wx.navigateTo({
+        url: '/pages/appointment/appointment'
       });
     },
 
