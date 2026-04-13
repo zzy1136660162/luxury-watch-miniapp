@@ -36,6 +36,7 @@
 
 .content {
   padding: 20rpx;
+  height: 85vh;
 }
 
 .form-section {
@@ -63,6 +64,8 @@
   }
 }
 .store-list {
+  overflow: auto;
+  height: 25vh;
   .store-item {
     display: flex;
     align-items: center;
@@ -153,6 +156,8 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 20rpx;
+  overflow: auto;
+  height: 10vh;
 
   .time-item {
     padding: 24rpx;

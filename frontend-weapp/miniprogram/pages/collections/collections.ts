@@ -9,13 +9,17 @@ Component({
       if (tabBar) {
         tabBar.setSelectedIndex(1);
       }
+      // 页面显示时重新计算导航栏位置
+      setTimeout(() => {
+        this.calculateNavPosition();
+      }, 100);
     }
   },
 
   data: {
     currentCategory: 'all',
     isNavFixed: false,
-    navTop: 0,
+    navTop: 1000, // 初始值设置为很大的数，等待真实值计算
 
     // Hero轮播图
     heroImage: '',
@@ -60,10 +64,20 @@ Component({
       const query = wx.createSelectorQuery();
       query.select('#hero-banner').boundingClientRect();
       query.exec((res: any) => {
-        if (res && res[0]) {
+        if (res && res[0] && res[0].height > 0) {
+          // hero-banner高度 + 1px 作为阈值
+          const heroHeight = res[0].height;
           this.setData({
-            navTop: res[0].height + 1
+            navTop: heroHeight + 1
           });
+          console.log('导航栏阈值设置:', heroHeight + 1);
+        } else {
+          // 如果获取不到，使用默认值（80vh 约等于屏幕高度的80%）
+          const defaultHeight = wx.getSystemInfoSync().windowHeight * 0.8;
+          this.setData({
+            navTop: defaultHeight + 1
+          });
+          console.log('使用默认导航栏阈值:', defaultHeight + 1);
         }
       });
     },
@@ -87,7 +101,12 @@ Component({
         
         if (res.code === 200 && res.data) {
           const heroImage = res.data.collectionHeroImage ? getFullImageUrl(res.data.collectionHeroImage) : '';
-          this.setData({ heroImage });
+          this.setData({ heroImage }, () => {
+            // 图片加载后重新计算导航栏位置
+            setTimeout(() => {
+              this.calculateNavPosition();
+            }, 100);
+          });
         }
       } catch (error) {
         console.error('加载Hero图片失败:', error);
