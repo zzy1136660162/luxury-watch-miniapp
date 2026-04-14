@@ -16,8 +16,8 @@ Component({
         selectedIconPath: '/assets/iconfont/watch_24dp_D4AF37_FILL0_wght400_GRAD0_opsz24.png'
       },
       {
-        pagePath: '/pages/heritage/heritage',
-        text: '品牌馆',
+        pagePath: '/pages/privileges/privileges',
+        text: '礼遇',
         iconPath: '/assets/iconfont/history_edu_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.png',
         selectedIconPath: '/assets/iconfont/history_edu_24dp_D4AF37_FILL0_wght400_GRAD0_opsz24.png'
       },

@@ -135,6 +135,7 @@ $font-family-english: 'Manrope', sans-serif;
 }
 
 .description-section,
+.phone-section,
 .notice-section {
   margin-bottom: 20px;
 }
@@ -146,6 +147,26 @@ $font-family-english: 'Manrope', sans-serif;
   font-weight: bold;
   color: $on-surface;
   margin-bottom: 12px;
+}
+
+.phone-input {
+  width: 100%;
+  padding: 12px 16px;
+  background-color: $surface-container-lowest;
+  border: 1px solid rgba($outline-variant, 0.3);
+  border-radius: 8px;
+  font-family: $font-family-english;
+  font-size: 15px;
+  color: $on-surface;
+  box-sizing: border-box;
+
+  &::placeholder {
+    color: rgba($secondary, 0.6);
+  }
+
+  &:focus {
+    border-color: $tertiary;
+  }
 }
 
 .description-text {

@@ -5,6 +5,7 @@
     "pages/heritage/heritage",
     "pages/member/member",
     "pages/privileges/privileges",
+    "pages/exchange-records/exchange-records",
     "pages/product-detail/product-detail",
     "pages/login/login",
     "pages/settings/settings",
@@ -39,8 +40,8 @@
         "selectedIconPath": "assets/tabbar/collections-active.png"
       },
       {
-        "pagePath": "pages/heritage/heritage",
-        "text": "品牌馆",
+        "pagePath": "pages/privileges/privileges",
+        "text": "礼遇",
         "iconPath": "assets/tabbar/collections.png",
         "selectedIconPath": "assets/tabbar/collections-active.png"
       },
