@@ -1,0 +1,200 @@
+$primary: #000000;
+$surface: #f9f9f9;
+$surface-container: #eeeeee;
+$surface-container-lowest: #ffffff;
+$secondary: #5d5e5f;
+$tertiary: #D4AF37;
+$on-surface: #1a1c1c;
+$outline-variant: #c4c7c7;
+$font-family-chinese: 'Noto Serif SC', serif;
+$font-family-english: 'Manrope', sans-serif;
+
+.page {
+  width: 100vw;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: $surface;
+  box-sizing: border-box;
+  padding-top: calc(2vh + 40px);
+}
+
+.content {
+  flex: 1;
+  padding: 0px 16px;
+}
+.record-text{
+  font-weight: bold;
+  text-align: center;
+  width: 100vw;
+  font-size: 20px;
+}
+// Empty State
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 120px 32px;
+  text-align: center;
+
+  .empty-title {
+    font-family: $font-family-chinese;
+    font-size: 18px;
+    color: $on-surface;
+    margin-bottom: 12px;
+  }
+
+  .empty-desc {
+    font-family: $font-family-english;
+    font-size: 14px;
+    color: $secondary;
+  }
+}
+
+// Records Section
+.records-section {
+  .section-header {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 24px;
+    padding: 0 4px;
+
+    .back-btn {
+      position: absolute;
+      left: 0;
+      top: -10px;
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      &:active {
+        opacity: 0.6;
+      }
+
+      .back-arrow {
+        font-size: 32px;
+        color: $on-surface;
+        font-weight: bold;
+        line-height: 1;
+      }
+    }
+
+    .record-text {
+      font-family: $font-family-chinese;
+      font-size: 20px;
+      font-weight: bold;
+      color: $on-surface;
+      margin-bottom: 4px;
+    }
+
+    .record-count {
+      font-family: $font-family-english;
+      font-size: 14px;
+      color: $secondary;
+    }
+  }
+}
+
+// Record Card
+.record-card {
+  background-color: $surface-container-lowest;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+
+  .record-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba($outline-variant, 0.2);
+  }
+
+  .record-info {
+    flex: 1;
+    margin-right: 16px;
+
+    .record-product-name {
+      display: block;
+      font-family: $font-family-chinese;
+      font-size: 16px;
+      font-weight: 600;
+      color: $on-surface;
+      margin-bottom: 6px;
+    }
+
+    .record-time {
+      font-family: $font-family-english;
+      font-size: 12px;
+      color: $secondary;
+    }
+  }
+
+  .record-status {
+    padding: 4px 12px;
+    border-radius: 16px;
+    flex-shrink: 0;
+
+    .status-text {
+      font-family: $font-family-english;
+      font-size: 12px;
+    }
+
+    &.status-pending {
+      background-color: rgba(#E6A23C, 0.1);
+      color: #E6A23C;
+    }
+
+    &.status-completed {
+      background-color: rgba(#67C23A, 0.1);
+      color: #67C23A;
+    }
+
+    &.status-cancelled {
+      background-color: rgba($secondary, 0.1);
+      color: $secondary;
+    }
+  }
+
+  .record-details {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+
+    .detail-item {
+      min-width: 120px;
+
+      &.full-width {
+        width: 100%;
+        flex-basis: 100%;
+      }
+
+      .detail-label {
+        display: block;
+        font-family: $font-family-english;
+        font-size: 12px;
+        color: $secondary;
+        margin-bottom: 4px;
+      }
+
+      .detail-value {
+        display: block;
+        font-family: $font-family-chinese;
+        font-size: 14px;
+        color: $on-surface;
+
+        &.points {
+          color: $tertiary;
+          font-weight: 600;
+        }
+      }
+    }
+  }
+}

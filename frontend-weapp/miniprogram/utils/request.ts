@@ -208,11 +208,65 @@ export const appointmentApi = {
   }
 };
 
+/**
+ * 用户相关API
+ */
+export const userApi = {
+  /**
+   * 获取当前用户信息（包含积分）
+   */
+  getCurrentUser: () => {
+    return request({
+      url: '/api/user/current',
+      method: 'GET'
+    });
+  },
+
+  /**
+   * 获取当前用户的兑换记录列表
+   */
+  getExchangeRecords: () => {
+    return request({
+      url: '/api/user/exchange-records',
+      method: 'GET'
+    });
+  }
+};
+
+/**
+ * 积分兑换相关API
+ */
+export const rewardApi = {
+  /**
+   * 获取可积分兑换的商品列表
+   */
+  getRedeemableProducts: (params?: { page?: number; size?: number }) => {
+    return request({
+      url: '/api/product/redeemable',
+      method: 'GET',
+      data: params
+    });
+  },
+
+  /**
+   * 积分兑换商品
+   */
+  exchange: (data: { productId: number; phone?: string }) => {
+    return request({
+      url: '/api/exchange',
+      method: 'POST',
+      data
+    });
+  }
+};
+
 export default {
   request,
   productApi,
   homeApi,
   collectionApi,
   storeApi,
-  appointmentApi
+  appointmentApi,
+  userApi,
+  rewardApi
 };

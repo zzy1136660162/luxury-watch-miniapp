@@ -36,6 +36,8 @@ export interface Product {
   sales?: number
   description?: string
   status: number
+  canRedeemPoints?: number
+  pointsCost?: number
   createTime?: string
   updateTime?: string
 }

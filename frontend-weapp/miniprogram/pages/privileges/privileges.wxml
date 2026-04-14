@@ -5,8 +5,8 @@
 
   <scroll-view class="content" scroll-y type="list" enhanced="{{true}}" bounces="{{false}}">
     <!-- Hero Section -->
-    <view class="hero-section">
-      <image class="hero-image" src="{{heroImage}}" mode="aspectFill" />
+    <view class="hero-section {{heroImage ? '' : 'hero-no-image'}}">
+      <image wx:if="{{heroImage}}" class="hero-image" src="{{heroImage}}" mode="aspectFill" binderror="onImageError" data-type="hero" />
       <view class="hero-overlay"></view>
       <view class="hero-content">
         <text class="hero-label">EXCLUSIVE PRIVILEGES</text>
@@ -18,102 +18,37 @@
       </view>
     </view>
 
-    <!-- Navigation Tabs -->
-    <view class="tabs-nav">
-      <scroll-view class="tabs-scroll" scroll-x enhanced="{{true}}" show-scrollbar="{{false}}">
-        <view class="tabs-track">
-          <view 
-            class="tab-item {{currentTab === 'classic' ? 'tab-active' : ''}}" 
-            bindtap="onTabTap" 
-            data-tab="classic"
-          >
-            <text>经典礼赞</text>
-          </view>
-          <view 
-            class="tab-item {{currentTab === 'accessories' ? 'tab-active' : ''}}" 
-            bindtap="onTabTap" 
-            data-tab="accessories"
-          >
-            <text>品牌周边</text>
-          </view>
-          <view 
-            class="tab-item {{currentTab === 'offline' ? 'tab-active' : ''}}" 
-            bindtap="onTabTap" 
-            data-tab="offline"
-          >
-            <text>线下邀约</text>
-          </view>
-          <view 
-            class="tab-item {{currentTab === 'services' ? 'tab-active' : ''}}" 
-            bindtap="onTabTap" 
-            data-tab="services"
-          >
-            <text>服务特权</text>
-          </view>
-        </view>
-      </scroll-view>
-    </view>
-
-    <!-- Rewards Bento Grid -->
+    <!-- Rewards Section -->
     <view class="rewards-section">
-      <!-- Main Featured Card -->
-      <view class="featured-card" bindtap="onProductTap" data-id="featured1">
-        <view class="featured-image-wrapper">
-          <image class="featured-image" src="{{featuredProduct.image}}" mode="aspectFill" />
-        </view>
-        <view class="featured-content">
-          <text class="featured-tag">ACCESSORIES</text>
-          <text class="featured-title">高级鳄鱼皮表带</text>
-          <text class="featured-desc">甄选密西西比鳄鱼腹皮，纯手工缝制，呈现无与伦比的质感与耐用性。</text>
-          <view class="featured-footer">
-            <text class="featured-points">8,000 <text class="points-unit">POINTS</text></text>
-            <button class="redeem-btn" data-id="featured1">立即兑换</button>
-          </view>
-        </view>
+      <!-- Empty State -->
+      <view wx:if="{{products.length === 0}}" class="empty-state">
+        <text class="empty-title">暂无可兑换商品</text>
+        <text class="empty-desc">敬请期待更多精彩礼遇</text>
       </view>
 
-      <!-- Two-Column Grid -->
-      <view class="rewards-grid">
-        <!-- Silk Scarf Card -->
-        <view class="reward-card" bindtap="onProductTap" data-id="silk1">
-          <view class="reward-image-wrapper">
-            <image class="reward-image" src="{{silkScarf.image}}" mode="aspectFill" />
+      <!-- Products List -->
+      <block wx:for="{{products}}" wx:key="id">
+        <!-- Product Card -->
+        <view class="product-card" bindtap="onProductTap" data-id="{{item.id}}">
+          <view class="product-image-wrapper {{item.image ? '' : 'image-placeholder'}}">
+            <image wx:if="{{item.image}}" class="product-image" src="{{item.image}}" mode="aspectFill" binderror="onImageError" data-index="{{index}}" />
           </view>
-          <view class="reward-content">
-            <view class="reward-header">
-              <view class="reward-info">
-                <text class="reward-tag">LIMITED EDITION</text>
-                <text class="reward-title">周年限量丝巾</text>
-              </view>
-              <text class="reward-points">5,000 <text class="points-unit">PTS</text></text>
+          <view class="product-content">
+            <view class="product-header">
+              <text class="product-tag">{{item.tag}}</text>
+              <text class="product-title">{{item.title}}</text>
             </view>
-            <text class="reward-desc">与先锋艺术家联名创作，将时间的律动化为指尖的丝滑艺术。</text>
-            <view class="reward-link">
-              <text>DISCOVER MORE</text>
+            <text class="product-desc">{{item.desc}}</text>
+            <view class="product-footer">
+              <view class="product-points">
+                <text class="points-value">{{item.points}}</text>
+                <text class="points-unit">POINTS</text>
+              </view>
+              <button class="redeem-btn" catchtap="onRedeem" data-id="{{item.id}}">立即兑换</button>
             </view>
           </view>
         </view>
-
-        <!-- Private Event Card -->
-        <view class="reward-card" bindtap="onProductTap" data-id="event1">
-          <view class="reward-image-wrapper">
-            <image class="reward-image" src="{{privateEvent.image}}" mode="aspectFill" />
-          </view>
-          <view class="reward-content">
-            <view class="reward-header">
-              <view class="reward-info">
-                <text class="reward-tag">OFFLINE EXPERIENCE</text>
-                <text class="reward-title">私人品鉴会邀请函</text>
-              </view>
-              <text class="reward-points reward-points-gold">12,000 <text class="points-unit">PTS</text></text>
-            </view>
-            <text class="reward-desc">亲临品牌年度私密晚宴，与制表大师面对面交流，探索未公开的传世新作。</text>
-            <view class="reward-link">
-              <text>RESERVE SEAT</text>
-            </view>
-          </view>
-        </view>
-      </view>
+      </block>
     </view>
 
     <!-- Secondary Info Section -->
@@ -129,8 +64,8 @@
           <view class="link-item">
             <text>积分说明 | RULES</text>
           </view>
-          <view class="link-item">
-            <text>兑换历史 | HISTORY</text>
+          <view class="link-item" bindtap="onViewExchangeRecords">
+            <text>兑换记录 | RECORDS</text>
           </view>
         </view>
 

@@ -115,6 +115,14 @@
             </el-tag>
           </template>
         </el-table-column>
+        <el-table-column label="兑换积分" width="120">
+          <template #default="{ row }">
+            <span v-if="row.canRedeemPoints === 1" class="points-cost">
+              {{ row.pointsCost || 0 }}
+            </span>
+            <span v-else class="points-none">-</span>
+          </template>
+        </el-table-column>
         <el-table-column prop="createTime" label="创建时间" width="180" />
         <el-table-column label="操作" width="150" fixed="right">
           <template #default="{ row }">
@@ -407,6 +415,15 @@ onMounted(() => {
 .price {
   color: var(--el-color-danger);
   font-weight: 500;
+}
+
+.points-cost {
+  color: var(--el-color-warning);
+  font-weight: 600;
+}
+
+.points-none {
+  color: var(--el-text-color-placeholder);
 }
 
 .pagination-wrapper {

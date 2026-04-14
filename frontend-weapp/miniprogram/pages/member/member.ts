@@ -157,7 +157,9 @@ Component({
           });
           break;
         case 'records':
-          wx.showToast({ title: '功能开发中', icon: 'none' });
+          wx.navigateTo({
+            url: '/pages/exchange-records/exchange-records'
+          });
           break;
         case 'consultant':
           wx.showToast({ title: '功能开发中', icon: 'none' });

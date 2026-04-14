@@ -1,15 +1,22 @@
 package com.luxurywatch.controller;
 
+import cn.dev33.satoken.stp.StpUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.luxurywatch.common.R;
+import com.luxurywatch.entity.ExchangeRecord;
 import com.luxurywatch.entity.Product;
 import com.luxurywatch.entity.ProductCategory;
+import com.luxurywatch.entity.WxUser;
+import com.luxurywatch.service.ExchangeRecordService;
 import com.luxurywatch.service.ProductService;
 import com.luxurywatch.service.ProductCategoryService;
+import com.luxurywatch.service.WxUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -25,6 +32,12 @@ public class MiniAppController {
 
     @Autowired
     private ProductCategoryService productCategoryService;
+
+    @Autowired
+    private WxUserService wxUserService;
+
+    @Autowired
+    private ExchangeRecordService exchangeRecordService;
 
     /**
      * 获取首页数据
@@ -265,6 +278,159 @@ public class MiniAppController {
         } catch (Exception e) {
             e.printStackTrace();
             return R.error("获取商品详情失败: " + e.getMessage());
+        }
+    }
+
+    /**
+     * 获取当前登录用户信息（包含积分）
+     */
+    @GetMapping("/user/current")
+    public R<WxUser> getCurrentUser() {
+        try {
+            // 检查是否登录
+            if (!StpUtil.isLogin()) {
+                return R.error("用户未登录");
+            }
+
+            // 获取当前登录用户ID
+            Long userId = StpUtil.getLoginIdAsLong();
+
+            // 查询用户信息
+            WxUser user = wxUserService.getById(userId);
+            if (user == null) {
+                return R.error("用户不存在");
+            }
+
+            // 返回用户信息（可以只返回必要的字段，增强安全性）
+            return R.success(user);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return R.error("获取用户信息失败: " + e.getMessage());
+        }
+    }
+
+    /**
+     * 获取可积分兑换的商品列表
+     */
+    @GetMapping("/product/redeemable")
+    public R<List<Product>> getRedeemableProducts() {
+        try {
+            QueryWrapper<Product> wrapper = new QueryWrapper<>();
+            wrapper.eq("status", 1)  // 只查询上架的商品
+                   .eq("can_redeem_points", 1)  // 只查询可积分兑换的商品
+                   .orderByDesc("sort", "create_time");
+
+            List<Product> products = productService.list(wrapper);
+            return R.success(products != null ? products : new ArrayList<>());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return R.error("获取可兑换商品列表失败: " + e.getMessage());
+        }
+    }
+
+    /**
+     * 积分兑换商品
+     */
+    @PostMapping("/exchange")
+    @Transactional(rollbackFor = Exception.class)
+    public R<String> exchangeProduct(@RequestBody Map<String, Object> params) {
+        try {
+            // 检查用户是否登录
+            if (!StpUtil.isLogin()) {
+                return R.error("用户未登录");
+            }
+
+            // 获取参数
+            Object productIdObj = params.get("productId");
+            if (productIdObj == null) {
+                return R.error("商品ID不能为空");
+            }
+            Long productId = Long.valueOf(productIdObj.toString());
+
+            // 获取当前登录用户
+            Long userId = StpUtil.getLoginIdAsLong();
+            WxUser user = wxUserService.getById(userId);
+            if (user == null) {
+                return R.error("用户不存在");
+            }
+
+            // 查询商品信息
+            Product product = productService.getById(productId);
+            if (product == null) {
+                return R.error("商品不存在");
+            }
+
+            // 检查商品是否可兑换
+            if (product.getCanRedeemPoints() == null || product.getCanRedeemPoints() != 1) {
+                return R.error("该商品不可积分兑换");
+            }
+
+            // 检查积分是否足够
+            Integer pointsCost = product.getPointsCost();
+            if (pointsCost == null || pointsCost <= 0) {
+                return R.error("商品积分设置错误，请联系管理员");
+            }
+
+            Integer userPoints = user.getPoints();
+            if (userPoints == null) {
+                userPoints = 0;
+            }
+
+            if (userPoints < pointsCost) {
+                return R.error("积分不足，当前积分：" + userPoints + "，需要积分：" + pointsCost);
+            }
+
+            // 扣除用户积分
+            user.setPoints(userPoints - pointsCost);
+            wxUserService.updateById(user);
+
+            // 创建兑换记录，使用用户已保存的信息
+            ExchangeRecord record = new ExchangeRecord();
+            record.setUserId(userId);
+            record.setUserName(user.getNickname() != null ? user.getNickname() : user.getUsername());
+            record.setProductId(productId);
+            record.setProductName(product.getName());
+            record.setProductImage(product.getImage());
+            record.setPoints(pointsCost);
+            record.setPhone(user.getPhone());
+            record.setExchangeTime(LocalDateTime.now());
+            record.setStatus(0);  // 待处理
+            exchangeRecordService.save(record);
+
+            return R.success("兑换成功");
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            return R.error("商品ID格式错误");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return R.error("兑换失败: " + e.getMessage());
+        }
+    }
+
+    /**
+     * 获取当前用户的兑换记录列表
+     */
+    @GetMapping("/user/exchange-records")
+    public R<List<ExchangeRecord>> getUserExchangeRecords() {
+        try {
+            // 检查用户是否登录
+            if (!StpUtil.isLogin()) {
+                return R.error("用户未登录");
+            }
+
+            // 获取当前登录用户ID
+            Long userId = StpUtil.getLoginIdAsLong();
+
+            // 查询用户的兑换记录
+            QueryWrapper<ExchangeRecord> wrapper = new QueryWrapper<>();
+            wrapper.eq("user_id", userId)
+                   .orderByDesc("exchange_time");
+
+            List<ExchangeRecord> records = exchangeRecordService.list(wrapper);
+            return R.success(records != null ? records : new ArrayList<>());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return R.error("获取兑换记录失败: " + e.getMessage());
         }
     }
 }
