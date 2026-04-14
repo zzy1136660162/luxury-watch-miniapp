@@ -6,6 +6,9 @@
         <el-form-item label="商品名称">
           <el-input v-model="searchForm.name" placeholder="请输入商品名称" clearable />
         </el-form-item>
+        <el-form-item label="商品品牌">
+          <el-input v-model="searchForm.brand" placeholder="请输入品牌名称" clearable style="width: 160px" />
+        </el-form-item>
         <el-form-item label="商品分类">
           <el-select v-model="searchForm.category" placeholder="请选择分类" clearable style="width: 160px">
             <el-option-group label="腕表">
@@ -84,6 +87,11 @@
         <el-table-column prop="category" label="分类" width="100">
           <template #default="{ row }">
             <el-tag>{{ getCategoryText(row.category) }}</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column prop="brand" label="品牌" width="120">
+          <template #default="{ row }">
+            <el-tag type="warning">{{ row.brand || '-' }}</el-tag>
           </template>
         </el-table-column>
         <el-table-column prop="price" label="价格" width="120">
@@ -182,6 +190,7 @@ const getFirstImage = (imageStr: string) => {
 // 搜索表单
 const searchForm = reactive({
   name: '',
+  brand: '',
   category: '',
   status: undefined as number | undefined,
 })
@@ -246,6 +255,7 @@ const handleSearch = () => {
 // 重置
 const handleReset = () => {
   searchForm.name = ''
+  searchForm.brand = ''
   searchForm.category = ''
   searchForm.status = undefined
   handleSearch()

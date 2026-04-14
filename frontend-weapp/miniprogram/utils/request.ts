@@ -66,7 +66,7 @@ export const productApi = {
   /**
    * 获取上架商品列表（小程序专用）
    */
-  getOnlineList: (params?: { page?: number; size?: number; category?: string }) => {
+  getOnlineList: (params?: { page?: number; size?: number; category?: string; brand?: string }) => {
     return request({
       url: '/api/product/online/list',
       method: 'GET',
@@ -77,9 +77,20 @@ export const productApi = {
   /**
    * 获取精选商品
    */
-  getFeatured: () => {
+  getFeatured: (params?: { brand?: string }) => {
     return request({
       url: '/api/product/featured',
+      method: 'GET',
+      data: params
+    });
+  },
+
+  /**
+   * 获取所有品牌列表
+   */
+  getAllBrands: () => {
+    return request({
+      url: '/api/brands',
       method: 'GET'
     });
   }

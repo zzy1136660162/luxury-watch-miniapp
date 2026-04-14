@@ -9,6 +9,9 @@
         <if test="name != null and name != ''">
             AND name LIKE CONCAT('%', #{name}, '%')
         </if>
+        <if test="brand != null and brand != ''">
+            AND brand LIKE CONCAT('%', #{brand}, '%')
+        </if>
         <if test="category != null and category != ''">
             AND category = #{category}
         </if>

@@ -166,7 +166,8 @@ public class MiniAppController {
     public R<Map<String, Object>> getOnlineProductList(
             @RequestParam(defaultValue = "1") Integer page,
             @RequestParam(defaultValue = "10") Integer size,
-            @RequestParam(required = false) String category) {
+            @RequestParam(required = false) String category,
+            @RequestParam(required = false) String brand) {
         try {
             Page<Product> productPage = new Page<>(page, size);
             QueryWrapper<Product> wrapper = new QueryWrapper<>();
@@ -174,6 +175,10 @@ public class MiniAppController {
             
             if (category != null && !category.isEmpty() && !"all".equalsIgnoreCase(category)) {
                 wrapper.eq("category", category);
+            }
+            
+            if (brand != null && !brand.isEmpty() && !"all".equalsIgnoreCase(brand)) {
+                wrapper.eq("brand", brand);
             }
             
             wrapper.orderByDesc("sort", "create_time");
@@ -193,14 +198,49 @@ public class MiniAppController {
     }
 
     /**
-     * 获取精选商品
+     * 获取所有品牌列表
      */
-    @GetMapping("/product/featured")
-    public R<List<Product>> getFeaturedProducts() {
+    @GetMapping("/brands")
+    public R<List<String>> getAllBrands() {
         try {
             QueryWrapper<Product> wrapper = new QueryWrapper<>();
             wrapper.eq("status", 1)
-                   .orderByDesc("sales", "sort")
+                   .isNotNull("brand")
+                   .ne("brand", "")
+                   .select("DISTINCT brand");
+            List<Product> products = productService.list(wrapper);
+            
+            List<String> brands = new ArrayList<>();
+            if (products != null) {
+                for (Product product : products) {
+                    if (product.getBrand() != null && !product.getBrand().isEmpty()) {
+                        brands.add(product.getBrand());
+                    }
+                }
+            }
+            Collections.sort(brands);
+            
+            return R.success(brands);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return R.error("获取品牌列表失败: " + e.getMessage());
+        }
+    }
+
+    /**
+     * 获取精选商品
+     */
+    @GetMapping("/product/featured")
+    public R<List<Product>> getFeaturedProducts(@RequestParam(required = false) String brand) {
+        try {
+            QueryWrapper<Product> wrapper = new QueryWrapper<>();
+            wrapper.eq("status", 1);
+            
+            if (brand != null && !brand.isEmpty() && !"all".equalsIgnoreCase(brand)) {
+                wrapper.eq("brand", brand);
+            }
+            
+            wrapper.orderByDesc("sales", "sort")
                    .last("LIMIT 6");
             
             List<Product> products = productService.list(wrapper);

@@ -27,6 +27,12 @@ Component({
     // 分类列表
     categories: [] as any[],
 
+    // 品牌列表
+    brands: [] as string[],
+
+    // 当前品牌
+    currentBrand: 'all',
+
     // 当前分类的产品列表
     products: [] as any[],
 
@@ -48,6 +54,8 @@ Component({
     this.loadHeroImage();
     // 加载分类数据
     this.loadCategories();
+    // 加载品牌列表
+    this.loadBrands();
     // 加载精选产品
     this.loadFeaturedProducts();
     // 加载产品列表
@@ -128,10 +136,31 @@ Component({
       }
     },
 
+    // 加载品牌列表
+    async loadBrands() {
+      try {
+        const res: any = await productApi.getAllBrands();
+        
+        if (res.code === 200) {
+          this.setData({
+            brands: res.data || []
+          });
+          console.log('加载品牌列表:', res.data);
+        }
+      } catch (error) {
+        console.error('加载品牌列表失败:', error);
+      }
+    },
+
     // 加载精选产品
     async loadFeaturedProducts() {
       try {
-        const res: any = await productApi.getFeatured();
+        const params: any = {};
+        if (this.data.currentBrand !== 'all') {
+          params.brand = this.data.currentBrand;
+        }
+        
+        const res: any = await productApi.getFeatured(params);
         
         if (res.code === 200) {
           const featuredProducts = (res.data || []).map((item: any) => ({
@@ -162,11 +191,20 @@ Component({
         
         this.setData({ loading: true });
         
-        const res: any = await productApi.getOnlineList({
+        const params: any = {
           page: this.data.page,
-          size: this.data.size,
-          category: this.data.currentCategory
-        });
+          size: this.data.size
+        };
+        
+        if (this.data.currentCategory !== 'all') {
+          params.category = this.data.currentCategory;
+        }
+        
+        if (this.data.currentBrand !== 'all') {
+          params.brand = this.data.currentBrand;
+        }
+        
+        const res: any = await productApi.getOnlineList(params);
         
         if (res.code === 200) {
           const data = res.data;
@@ -208,6 +246,22 @@ Component({
         hasMore: true
       }, () => {
         this.loadProducts(true);
+      });
+    },
+
+    // 品牌点击
+    onBrandTap(e: any) {
+      const brand = e.currentTarget.dataset.brand;
+      console.log('点击品牌按钮:', brand);
+      
+      this.setData({
+        currentBrand: brand,
+        page: 1,
+        products: [],
+        hasMore: true
+      }, () => {
+        this.loadProducts(true);
+        this.loadFeaturedProducts();
       });
     },
 

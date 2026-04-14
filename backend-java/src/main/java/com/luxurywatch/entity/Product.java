@@ -28,6 +28,11 @@ public class Product {
 
     private String category;
 
+    /**
+     * 品牌（如：劳力士、欧米茄、天梭等）
+     */
+    private String brand;
+
     private String image;
 
     private String images;

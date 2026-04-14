@@ -10,17 +10,96 @@
   overflow-x: hidden;
   padding-bottom: 10vh;
 }
+
 #nomore{
   margin-top: 5vh;
   display: flex;
   align-items: center;
   justify-content: center;
 }
+
 .content {
   flex: 1;
   padding-top: 0;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
+}
+
+// 带侧边栏的内容区域
+.content-with-sidebar {
+  display: flex;
+  flex-direction: row;
+  min-height: calc(100vh - 10vh);
+}
+
+// 左侧品牌侧边栏
+.brand-sidebar, .brand-sidebar-fixed-v2 {
+  width: 80px;
+  background-color: rgba($surface-container, 0.98);
+  border-right: 1rpx solid rgba($secondary-fixed, 0.15);
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+
+.brand-sidebar-title, .brand-sidebar-fixed-v2 .brand-sidebar-title {
+  padding: 24px 16px 16px;
+  border-bottom: 1rpx solid rgba($secondary-fixed, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  .sidebar-title-text {
+    font-family: $font-family-chinese;
+    font-size: 15px;
+    font-weight: 600;
+    color: $on-surface;
+  }
+}
+
+.brand-sidebar-scroll, .brand-sidebar-fixed-v2 .brand-sidebar-scroll {
+  height: calc(100vh - 10vh - 80px);
+}
+
+.brand-sidebar-track, .brand-sidebar-fixed-v2 .brand-sidebar-track {
+  padding: 16px 0;
+}
+
+.brand-sidebar-item, .brand-sidebar-fixed-v2 .brand-sidebar-item {
+  padding: 12px 16px;
+  font-size: 15px;
+  cursor: pointer;
+  opacity: 0.5;
+  transition: all 0.2s ease;
+  border-left: 4px solid transparent;
+
+  &:active, &.brand-sidebar-active {
+    opacity: 1;
+  }
+
+  &.brand-sidebar-active {
+    background-color: rgba($primary, 0.08);
+    border-left-color: $primary;
+    
+    .brand-sidebar-name {
+      color: $primary;
+      font-size: 15px;
+      font-weight: 600;
+    }
+  }
+
+  .brand-sidebar-name {
+    font-family: $font-family-chinese;
+    font-size: 15px;
+    color: $on-surface;
+  }
+}
+
+// 右侧产品列表区域
+.products-area {
+  flex: 1;
+  min-width: 0;
+  height: 80vh;
+  overflow: auto;
 }
 
 // Hero Banner
@@ -104,21 +183,43 @@
 // 固定在顶部的导航栏
 .category-nav-fixed {
   position: fixed;
-  height: 10vh;
   top: 0;
-  left: 0;
+  left: 80px;
   right: 0;
   z-index: 100;
   margin-top: 2vh;
   background-color: rgba($surface, 0.9);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  padding-top: 2.5%;
+  padding: 11px 0;
   opacity: 0;
   transition: opacity 0s ease;
 
   &.show {
     opacity: 1;
+  }
+}
+
+// 固定在左侧的品牌导航栏（滚动时显示）
+.brand-sidebar-fixed-v2 {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 80px;
+  height: 90vh;
+  margin-top: 10.3vh;
+  background-color: rgba($surface-container, 0.98);
+  border-right: 1rpx solid rgba($secondary-fixed, 0.15);
+  box-sizing: border-box;
+  z-index: 99;
+  // padding-top: 10vh;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0s ease;
+
+  &.show {
+    opacity: 1;
+    pointer-events: auto;
   }
 }
 

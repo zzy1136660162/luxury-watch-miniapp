@@ -19,13 +19,18 @@
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="商品编码" prop="code">
-            <el-input v-model="form.code" placeholder="请输入商品编码" />
+          <el-form-item label="商品品牌" :prop="type === 'add' ? 'brand' : 'brand'">
+            <el-input v-model="form.brand" placeholder="请输入品牌名称，如：劳力士、欧米茄" />
           </el-form-item>
         </el-col>
       </el-row>
 
       <el-row :gutter="20">
+        <el-col :span="12">
+          <el-form-item label="商品编码" prop="code">
+            <el-input v-model="form.code" placeholder="请输入商品编码" />
+          </el-form-item>
+        </el-col>
         <el-col :span="12">
           <el-form-item label="商品分类" prop="category_id">
             <el-cascader
@@ -38,6 +43,9 @@
             />
           </el-form-item>
         </el-col>
+      </el-row>
+
+      <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item label="商品价格" prop="price">
             <el-input-number v-model="form.price" :min="0" :precision="2" style="width: 100%" />
@@ -217,6 +225,7 @@ const form = reactive<Partial<Product>>({
   code: '',
   category: '',
   category_id: undefined,
+  brand: '',
   price: 0,
   stock: 0,
   image: '',
@@ -240,9 +249,9 @@ const handleImageUpload = (blobInfo: any, progress: any): Promise<string> => {
   return new Promise((resolve, reject) => {
     const formData = new FormData()
     formData.append('file', blobInfo.blob(), blobInfo.filename())
-    
+
     axios.post(uploadUrl, formData, {
-      headers: { 
+      headers: {
         'Content-Type': 'multipart/form-data',
         'Authorization': localStorage.getItem('token') || ''
       }
@@ -266,6 +275,7 @@ const rules = {
   name: [{ required: true, message: '请输入商品名称', trigger: 'blur' }],
   code: [{ required: true, message: '请输入商品编码', trigger: 'blur' }],
   category_id: [{ required: true, message: '请选择商品分类', trigger: 'change' }],
+  brand: [{ required: true, message: '请输入品牌名称', trigger: 'blur' }],
   price: [{ required: true, message: '请输入商品价格', trigger: 'blur' }],
   stock: [{ required: true, message: '请输入库存数量', trigger: 'blur' }],
   waterResistance: [{ type: 'number', message: '请输入数字', trigger: 'blur' }],
@@ -305,6 +315,7 @@ watch(
       form.code = ''
       form.category = ''
       form.category_id = undefined
+      form.brand = ''
       form.price = 0
       form.stock = 0
       form.image = ''
