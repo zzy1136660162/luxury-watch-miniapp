@@ -93,6 +93,11 @@
         </el-table-column>
         <el-table-column prop="stock" label="库存" width="100" />
         <el-table-column prop="sales" label="销量" width="100" />
+        <el-table-column label="积分" width="100">
+          <template #default="{ row }">
+            <span>{{ row.points || 1000 }}</span>
+          </template>
+        </el-table-column>
         <el-table-column label="状态" width="100">
           <template #default="{ row }">
             <el-tag :type="row.status === 1 ? 'success' : 'info'">
@@ -228,9 +233,10 @@ const fetchList = async () => {
       size: pagination.size,
       ...searchForm,
     })
-    tableData.value = res.data.list
-    pagination.total = res.data.total
+    tableData.value = res.list
+    pagination.total = res.total
   } catch (error) {
+    console.error('获取商品列表失败:', error)
     ElMessage.error('获取商品列表失败')
   } finally {
     loading.value = false

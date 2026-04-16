@@ -1,3 +1,6 @@
+// 导入积分管理工具类
+import { PointsManager } from '../../utils/pointsManager';
+
 Component({
   pageLifetimes: {
     show() {
@@ -61,6 +64,9 @@ Component({
       const wechatAvatar = wx.getStorageSync('wechatAvatar');
 
       if (token && userInfo) {
+        // 初始化积分（如果未设置）
+        PointsManager.initPoints();
+        
         const level = userInfo.memberLevel || 1;
         const levelInfo = this.data.levelInfo[level as keyof typeof this.data.levelInfo] || this.data.levelInfo[1];
 
@@ -86,10 +92,13 @@ Component({
         this.calculateNextLevel();
       } else {
         this.setData!({
-          isLoggedIn: false
+          isLoggedIn: false,
+          pointsRecords: []
         });
       }
     },
+
+
 
     calculateNextLevel() {
       const level = this.data.currentLevel;
@@ -181,7 +190,8 @@ Component({
               memberLevelName: '普通会员',
               memberLevelEn: 'Regular Member',
               userName: '游客',
-              userId: ''
+              userId: '',
+              pointsRecords: []
             });
             wx.showToast({
               title: '已退出登录',
@@ -210,6 +220,70 @@ Component({
         return false;
       }
       return true;
+    },
+
+    // 点击积分记录按钮
+    onPointsRecordTap() {
+      if (!this.checkLogin()) return;
+      
+      wx.navigateTo({
+        url: '/pages/points-record/points-record'
+      });
+    },
+
+    // 点击兑换按钮
+    async onRedeemTap(e: any) {
+      if (!this.checkLogin()) return;
+      
+      const rewardId = e.currentTarget.dataset.id;
+      let rewardData = null;
+      let points = 0;
+      
+      if (rewardId === 'reward1') {
+        rewardData = this.data.reward1;
+        points = parseInt(rewardData.points.replace(/,/g, ''));
+      } else if (rewardId === 'reward2') {
+        rewardData = this.data.reward2;
+        points = parseInt(rewardData.points.replace(/,/g, ''));
+      } else if (rewardId === 'reward3') {
+        rewardData = this.data.reward3;
+        points = parseInt(rewardData.points.replace(/,/g, ''));
+      }
+      
+      if (rewardData) {
+        const userInfo = wx.getStorageSync('userInfo');
+        const currentPoints = userInfo?.points || 0;
+        
+        if (currentPoints < points) {
+          wx.showToast({
+            title: '积分不足',
+            icon: 'none'
+          });
+          return;
+        }
+        
+        wx.showModal({
+          title: '确认兑换',
+          content: `确定要使用 ${points} 积分兑换 ${rewardData.title} 吗？`,
+          success: async (res) => {
+            if (res.confirm) {
+              try {
+                const newPoints = await PointsManager.deductPoints(points, PointsManager.POINTS_TYPE.EXCHANGE, `兑换 ${rewardData.title}`);
+                this.setData!({ memberPoints: newPoints.toString() });
+                wx.showToast({
+                  title: '兑换成功',
+                  icon: 'success'
+                });
+              } catch (error) {
+                wx.showToast({
+                  title: '兑换失败',
+                  icon: 'none'
+                });
+              }
+            }
+          }
+        });
+      }
     }
   }
 });

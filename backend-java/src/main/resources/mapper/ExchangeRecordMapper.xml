@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.luxurywatch.mapper.ExchangeRecordMapper">
+
+    <!-- 根据条件查询兑换记录 -->
+    <select id="selectByCondition" resultType="java.util.HashMap">
+        SELECT
+            er.id,
+            er.user_id as userId,
+            er.user_name as userName,
+            er.product_id as productId,
+            er.product_name as productName,
+            er.product_image as productImage,
+            er.points,
+            er.phone,
+            er.status,
+            er.exchange_time as exchangeTime
+        FROM exchange_record er
+        WHERE 1=1
+        <if test="userId != null">
+            AND er.user_id = #{userId}
+        </if>
+        <if test="status != null">
+            AND er.status = #{status}
+        </if>
+        <if test="productName != null and productName != ''">
+            AND er.product_name LIKE CONCAT('%', #{productName}, '%')
+        </if>
+        <if test="phone != null and phone != ''">
+            AND er.phone LIKE CONCAT('%', #{phone}, '%')
+        </if>
+        ORDER BY er.exchange_time DESC
+    </select>
+
+</mapper>

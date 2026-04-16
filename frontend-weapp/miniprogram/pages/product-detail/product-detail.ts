@@ -1,5 +1,6 @@
 import { getFullImageUrl, getImageUrls } from '../../utils/config';
 import { productApi } from '../../utils/request';
+import { PointsManager } from '../../utils/pointsManager';
 
 Component({
   data: {
@@ -184,11 +185,47 @@ Component({
       });
     },
 
-    onConsult() {
+    async onConsult() {
+      const token = wx.getStorageSync('token');
+      if (!token) {
+        wx.showModal({
+          title: '提示',
+          content: '请先登录后再咨询',
+          confirmText: '去登录',
+          success: (res) => {
+            if (res.confirm) {
+              wx.navigateTo({
+                url: '/pages/login/login'
+              });
+            }
+          }
+        });
+        return;
+      }
+
+      // 显示咨询顾问弹窗
       wx.showModal({
         title: '咨询顾问',
         content: '我们的专家将为您提供一对一的选购建议',
-        confirmText: '确定'
+        confirmText: '确定',
+        cancelText: '取消',
+        success: async (res) => {
+          // 不管点击确定还是取消，都会增加积分
+          try {
+            await PointsManager.addPoints(1000, PointsManager.POINTS_TYPE.REVIEW, '咨询顾问');
+            
+            // 只有点击确定时才显示咨询成功的提示
+            if (res.confirm) {
+              wx.showToast({
+                title: '咨询成功，获得1000积分',
+                icon: 'success',
+                duration: 2000
+              });
+            }
+          } catch (error) {
+            console.error('添加积分失败:', error);
+          }
+        }
       });
     },
 

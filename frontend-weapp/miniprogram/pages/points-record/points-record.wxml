@@ -1,0 +1,37 @@
+<import src="/components/navigation-bar/navigation-bar.wxml" />
+
+<view class="page">
+  <navigation-bar title="积分中心" back="{{true}}" color="black" background="#ffffff" />
+
+  <scroll-view class="content" scroll-y type="list" enhanced="{{true}}" bounces="{{false}}">
+    <!-- Points Summary -->
+    <view class="points-summary">
+      <view class="summary-card">
+        <text class="summary-label">当前积分</text>
+        <text class="summary-value">{{currentPoints}}</text>
+      </view>
+    </view>
+
+    <!-- Points Records -->
+    <view class="tab-content">
+      <view class="records-list">
+        <block wx:if="{{pointsRecords.length > 0}}">
+          <view wx:for="{{pointsRecords}}" wx:key="{{item.id}}" class="record-item">
+            <view class="record-left">
+              <text class="record-description">{{item.description}}</text>
+              <text class="record-time">{{item.timestamp.substring(0, 10)}} {{item.timestamp.substring(11, 19)}}</text>
+            </view>
+            <text class="record-amount {{item.action === 'increase' ? 'record-amount-increase' : 'record-amount-decrease'}}">
+              {{item.action === 'increase' ? '+' : '-'}}{{item.amount}}
+            </text>
+          </view>
+        </block>
+        <block wx:else>
+          <view class="no-records">
+            <text>暂无积分记录</text>
+          </view>
+        </block>
+      </view>
+    </view>
+  </scroll-view>
+</view>

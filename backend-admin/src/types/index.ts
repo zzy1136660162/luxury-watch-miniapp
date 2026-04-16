@@ -33,6 +33,7 @@ export interface Product {
   price: number
   stock: number
   sales?: number
+  points?: number
   description?: string
   status: number
   createTime?: string
@@ -198,6 +199,71 @@ export interface MemberPointsRecord {
   points: number
   description?: string
   createTime?: string
+}
+
+// 积分兑换记录
+export interface ExchangeRecord {
+  id: number
+  userId: number
+  userName?: string
+  productId: number
+  productName: string
+  productImage?: string
+  points: number
+  phone?: string
+  exchangeTime?: string
+  status: number
+}
+
+// ==================== 订单相关 ====================
+
+// 订单
+export interface Order {
+  id: number
+  orderNo: string
+  userId: number
+  userName?: string
+  totalAmount: number
+  status: number
+  createTime?: string
+  updateTime?: string
+  orderItems?: OrderItem[]
+}
+
+// 订单项
+export interface OrderItem {
+  id: number
+  orderId: number
+  productId: number
+  productName: string
+  productImage?: string
+  price: number
+  quantity: number
+  createTime?: string
+}
+
+// 订单状态
+export enum OrderStatus {
+  PENDING = 1,    // 待支付
+  PAID = 2,       // 已支付
+  COMPLETED = 3,  // 已完成
+  CANCELLED = 4,  // 已取消
+}
+
+// 订单状态文本
+export const OrderStatusText: Record<number, string> = {
+  [OrderStatus.PENDING]: '待支付',
+  [OrderStatus.PAID]: '已支付',
+  [OrderStatus.COMPLETED]: '已完成',
+  [OrderStatus.CANCELLED]: '已取消',
+}
+
+// 订单状态类型
+export const OrderStatusType: Record<number, string> = {
+  [OrderStatus.PENDING]: 'warning',
+  [OrderStatus.PAID]: 'success',
+  [OrderStatus.COMPLETED]: 'info',
+  [OrderStatus.CANCELLED]: 'danger',
 }
 
 // 预约

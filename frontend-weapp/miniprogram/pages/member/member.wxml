@@ -104,13 +104,18 @@
     <!-- Rewards Section -->
     <view class="rewards-section">
       <view class="rewards-header">
-        <view class="section-title">
-          <text class="title-cn">会员礼遇</text>
-          <text class="title-en">Rewards</text>
+        <view class="rewards-header-top">
+          <view class="section-title">
+            <text class="title-cn">会员礼遇</text>
+            <text class="title-en">Rewards</text>
+          </view>
+          <view class="points-display">
+            <text class="points-label">积分:</text>
+            <text class="points-value">{{memberPoints}}</text>
+          </view>
         </view>
-        <view class="points-display">
-          <text class="points-label">积分:</text>
-          <text class="points-value">{{memberPoints}}</text>
+        <view class="points-record-btn-wrapper">
+          <button class="points-record-btn" bindtap="onPointsRecordTap">积分记录</button>
         </view>
       </view>
 
@@ -144,7 +149,7 @@
               <text class="reward-subtitle">{{reward1.subtitle}}</text>
               <text class="reward-points">{{reward1.points}} 积分</text>
             </view>
-            <button class="redeem-btn">兑换</button>
+            <button class="redeem-btn" catchtap="onRedeemTap" data-id="reward1">兑换</button>
           </view>
         </view>
 
@@ -158,7 +163,7 @@
               <text class="reward-subtitle">{{reward2.subtitle}}</text>
               <text class="reward-points">{{reward2.points}} 积分</text>
             </view>
-            <button class="redeem-btn">兑换</button>
+            <button class="redeem-btn" catchtap="onRedeemTap" data-id="reward2">兑换</button>
           </view>
         </view>
 
@@ -175,11 +180,13 @@
               <text class="reward-subtitle">{{reward3.subtitle}}</text>
               <text class="reward-points">{{reward3.points}} 积分</text>
             </view>
-            <button class="redeem-btn">申请</button>
+            <button class="redeem-btn" catchtap="onRedeemTap" data-id="reward3">申请</button>
           </view>
         </view>
       </view>
     </view>
+
+
 
     <!-- Services Section -->
     <view class="services-section">

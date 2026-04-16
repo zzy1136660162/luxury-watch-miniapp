@@ -1,9 +1,11 @@
 import axios from 'axios'
 // import qs from 'qs'
 import { toast } from 'vue-sonner'
+import { useUserStore } from '@/store/modules/user'
 
 // 导入 API 模块
 import product from './modules/product'
+import order from './modules/order'
 
 // 调试模式
 const DEBUG = true
@@ -21,6 +23,15 @@ declare module 'axios' {
 
   export interface AxiosInstance {
     product: typeof product
+    order: typeof order
+    // 重写get方法的类型定义
+    get<T = any>(url: string, config?: AxiosRequestConfig): Promise<T>
+    // 重写post方法的类型定义
+    post<T = any>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T>
+    // 重写put方法的类型定义
+    put<T = any>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T>
+    // 重写delete方法的类型定义
+    delete<T = any>(url: string, config?: AxiosRequestConfig): Promise<T>
   }
 }
 
@@ -93,7 +104,8 @@ api.interceptors.response.use(
      */
     if (typeof response.data === 'object') {
       if (response.data.code === 200) {
-        // 成功，不做处理
+        // 成功，返回data字段
+        return Promise.resolve(response.data.data)
       }
       else {
         // 业务错误
@@ -103,7 +115,6 @@ api.interceptors.response.use(
         })
         return Promise.reject(response.data)
       }
-      return Promise.resolve(response.data)
     }
     else {
       return Promise.reject(response.data)
@@ -134,5 +145,6 @@ api.interceptors.response.use(
 
 // 将模块挂载到 api 实例上
 api.product = product
+api.order = order
 
 export default api

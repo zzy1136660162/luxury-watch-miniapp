@@ -12,6 +12,8 @@ public class PageResult<T> implements Serializable {
 
     private long total;
     private List<T> list;
+    private int page;
+    private int size;
 
     public PageResult() {
     }
@@ -19,5 +21,12 @@ public class PageResult<T> implements Serializable {
     public PageResult(List<T> list, long total) {
         this.list = list;
         this.total = total;
+    }
+
+    public PageResult(List<T> list, long total, int page, int size) {
+        this.list = list;
+        this.total = total;
+        this.page = page;
+        this.size = size;
     }
 }

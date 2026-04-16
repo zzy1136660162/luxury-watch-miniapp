@@ -46,10 +46,10 @@
     "tabIndent": "insertSpaces",
     "tabSize": 2
   },
-  "libVersion": "2.32.3",
+  "libVersion": "3.15.0",
   "packOptions": {
     "ignore": [],
     "include": []
   },
-  "appid": "wx0003a800014a746f"
+  "appid": "touristappid"
 }

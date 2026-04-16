@@ -1,5 +1,9 @@
 import apiAdmin from '@/api/modules/admin'
 import router from '@/router'
+import { useSettingsStore } from './settings'
+import { useRouteStore } from './route'
+import { useMenuStore } from './menu'
+import { useTabbarStore } from './tabbar'
 
 // 调试模式
 const DEBUG = true
@@ -41,19 +45,19 @@ export const useUserStore = defineStore(
       DEBUG && console.log('[UserStore] login 成功, 响应:', res)
 
       // 保存 token 和用户信息
-      localStorage.setItem('token', res.data.token)
+      localStorage.setItem('token', res.token)
       localStorage.setItem('account', data.account)
-      localStorage.setItem('avatar', res.data.userInfo.avatar || '')
-      localStorage.setItem('nickname', res.data.userInfo.nickname || '')
+      localStorage.setItem('avatar', res.userInfo.avatar || '')
+      localStorage.setItem('nickname', res.userInfo.nickname || '')
 
-      token.value = res.data.token
+      token.value = res.token
       account.value = data.account
-      avatar.value = res.data.userInfo.avatar || ''
-      nickname.value = res.data.userInfo.nickname || ''
+      avatar.value = res.userInfo.avatar || ''
+      nickname.value = res.userInfo.nickname || ''
 
       // 如果有用户信息中的角色，设置为权限
-      if (res.data.userInfo.roles) {
-        permissions.value = res.data.userInfo.roles
+      if (res.userInfo.roles) {
+        permissions.value = res.userInfo.roles
       }
 
       DEBUG && console.log('[UserStore] login 完成, token:', token.value, 'isLogin:', isLogin.value)
@@ -121,10 +125,10 @@ export const useUserStore = defineStore(
       try {
         const res: any = await apiAdmin.getPermission()
         DEBUG && console.log('[UserStore] getPermissions 成功:', res)
-        permissions.value = res.data.permissions || []
+        permissions.value = res.permissions || []
         // 也保存角色信息
-        if (res.data.roles) {
-          permissions.value = [...permissions.value, ...res.data.roles]
+        if (res.roles) {
+          permissions.value = [...permissions.value, ...res.roles]
         }
         DEBUG && console.log('[UserStore] permissions:', permissions.value)
       } catch (error) {
@@ -139,12 +143,12 @@ export const useUserStore = defineStore(
       try {
         const res: any = await apiAdmin.getUserInfo()
         DEBUG && console.log('[UserStore] getUserInfo 成功:', res)
-        if (res.data) {
-          localStorage.setItem('avatar', res.data.avatar || '')
-          localStorage.setItem('nickname', res.data.nickname || '')
-          avatar.value = res.data.avatar || ''
-          nickname.value = res.data.nickname || ''
-          account.value = res.data.username || account.value
+        if (res) {
+          localStorage.setItem('avatar', res.avatar || '')
+          localStorage.setItem('nickname', res.nickname || '')
+          avatar.value = res.avatar || ''
+          nickname.value = res.nickname || ''
+          account.value = res.username || account.value
         }
       } catch (error) {
         DEBUG && console.error('[UserStore] getUserInfo 失败:', error)

@@ -6,6 +6,7 @@ import MemberMenu from './modules/member'
 import HomeMenu from './modules/home'
 import ProductMenu from './modules/product'
 import SystemMenu from './modules/system'
+import OrderMenu from './modules/order'
 
 const menu: Menu.recordMainRaw[] = [
   // 首页配置
@@ -14,6 +15,8 @@ const menu: Menu.recordMainRaw[] = [
   ...SystemMenu,
   // 商品管理
   ...ProductMenu,
+  // 订单管理
+  ...OrderMenu,
   // 腕表管理
   ...WatchMenu,
   // 品牌管理

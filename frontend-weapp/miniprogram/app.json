@@ -10,6 +10,7 @@
     "pages/settings/settings",
     "pages/profile/profile",
     "pages/reward-detail/reward-detail",
+    "pages/points-record/points-record",
     "pages/index/index",
     "pages/logs/logs"
   ],

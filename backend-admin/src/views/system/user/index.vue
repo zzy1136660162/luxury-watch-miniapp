@@ -195,9 +195,9 @@ const loadWxUserList = async () => {
       status: searchForm.status
     })
     if (response.code === 200) {
-      tableData.value = response.data.list || []
+      tableData.value = response.data?.list || []
     } else {
-      ElMessage.error(response.data.msg || '获取用户列表失败')
+      ElMessage.error(response.data?.msg || '获取用户列表失败')
     }
   } catch (error) {
     ElMessage.error('网络错误，请稍后重试')

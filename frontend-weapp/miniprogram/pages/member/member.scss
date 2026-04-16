@@ -370,9 +370,16 @@ $font-family-english: 'Manrope', sans-serif;
 
 .rewards-header {
   display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.rewards-header-top {
+  display: flex;
   justify-content: space-between;
   align-items: baseline;
-  margin-bottom: 32px;
+  width: 100%;
 }
 
 .points-display {
@@ -394,6 +401,31 @@ $font-family-english: 'Manrope', sans-serif;
   font-size: 16px;
   color: $primary;
   font-weight: bold;
+}
+
+.points-record-btn-wrapper {
+  margin-top: 12px;
+  width: 100%;
+}
+
+.points-record-btn {
+  width: 100%;
+  padding: 12px;
+  background-color: $surface-container;
+  border: 1px solid $outline-variant;
+  border-radius: 6px;
+  font-family: $font-family-english;
+  font-size: 12px;
+  color: $on-surface;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+
+  &:active {
+    background-color: $tertiary;
+    color: $on-primary;
+    border-color: $tertiary;
+  }
 }
 
 .rewards-tabs {
@@ -550,6 +582,75 @@ $font-family-english: 'Manrope', sans-serif;
   &:active {
     background-color: $tertiary;
   }
+}
+
+// Points Records Section
+.points-records-section {
+  padding: 0 24px 48px;
+}
+
+.points-records-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background-color: $surface-container;
+  border-radius: 12px;
+  padding: 24px;
+  border: 1px solid rgba($outline-variant, 0.3);
+}
+
+.points-record-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 0;
+  border-bottom: 1px solid rgba($outline-variant, 0.2);
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.record-left {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.record-description {
+  font-family: $font-family-chinese;
+  font-size: 14px;
+  color: $on-surface;
+}
+
+.record-time {
+  font-family: $font-family-english;
+  font-size: 10px;
+  color: $secondary;
+  letter-spacing: 0.05em;
+}
+
+.record-amount {
+  font-family: $font-family-english;
+  font-size: 14px;
+  font-weight: bold;
+  letter-spacing: 0.05em;
+}
+
+.record-amount-increase {
+  color: #10b981; // 绿色
+}
+
+.record-amount-decrease {
+  color: #ef4444; // 红色
+}
+
+.no-records {
+  text-align: center;
+  padding: 48px 0;
+  color: $secondary;
+  font-family: $font-family-chinese;
+  font-size: 14px;
 }
 
 // Services Section

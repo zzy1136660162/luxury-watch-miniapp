@@ -177,13 +177,12 @@ export const useRouteStore = defineStore(
       console.log('[Route] 开始调用 routeList API')
       await apiApp.routeList().then((res) => {
         console.log('[Route] API response:', res)
-        console.log('[Route] res.data:', res.data)
-        if (!res.data || !Array.isArray(res.data)) {
-          console.error('[Route] API返回的data不是有效数组:', res.data)
-          throw new Error('API返回的data不是有效数组')
+        if (!res || !Array.isArray(res)) {
+          console.error('[Route] API返回的不是有效数组:', res)
+          throw new Error('API返回的不是有效数组')
         }
         // 设置 routes 数据
-        routesRaw.value = formatBackRoutes(res.data) as any
+        routesRaw.value = formatBackRoutes(res) as any
         console.log('[Route] routesRaw after format:', routesRaw.value)
         // 创建路由匹配器 - 需要包含父路由和完整的嵌套结构
         const flatRoutes: RouteRecordRaw[] = []

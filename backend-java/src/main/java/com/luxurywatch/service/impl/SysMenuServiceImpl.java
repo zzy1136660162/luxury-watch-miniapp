@@ -57,23 +57,31 @@ public class SysMenuServiceImpl implements SysMenuService {
         // 递归构建树
         return rootMenus.stream()
                 .sorted(Comparator.comparingInt(m -> m.getSort() == null ? 0 : m.getSort()))
-                .map(menu -> buildMenuNode(menu, groupByParent, true))
+                .map(menu -> buildMenuNode(menu, groupByParent, true, ""))
                 .collect(Collectors.toList());
     }
 
     /**
      * 构建单个菜单节点
      * @param isRoot 是否为根节点
+     * @param parentPath 父菜单路径
      */
-    private Map<String, Object> buildMenuNode(SysMenu menu, Map<Long, List<SysMenu>> groupByParent, boolean isRoot) {
+    private Map<String, Object> buildMenuNode(SysMenu menu, Map<Long, List<SysMenu>> groupByParent, boolean isRoot, String parentPath) {
         Map<String, Object> node = new LinkedHashMap<>();
         
-        // 处理路径：非根节点且路径不以 / 开头时，添加 /
+        // 构建完整路径
         String path = menu.getPath();
-        if (!isRoot && StringUtils.hasText(path) && !path.startsWith("/")) {
-            path = "/" + path;
+        String fullPath;
+        if (isRoot) {
+            fullPath = path;
+        } else {
+            if (parentPath.endsWith("/")) {
+                fullPath = parentPath + path;
+            } else {
+                fullPath = parentPath + "/" + path;
+            }
         }
-        node.put("path", path);
+        node.put("path", fullPath);
 
         // 构建 meta 信息
         Map<String, Object> meta = new LinkedHashMap<>();
@@ -93,7 +101,7 @@ public class SysMenuServiceImpl implements SysMenuService {
             // 有子菜单
             List<Map<String, Object>> childNodes = children.stream()
                     .sorted(Comparator.comparingInt(m -> m.getSort() == null ? 0 : m.getSort()))
-                    .map(child -> buildMenuNode(child, groupByParent, false))
+                    .map(child -> buildMenuNode(child, groupByParent, false, fullPath))
                     .collect(Collectors.toList());
             node.put("children", childNodes);
 
