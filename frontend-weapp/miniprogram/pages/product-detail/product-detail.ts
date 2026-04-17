@@ -118,7 +118,7 @@ Component({
           }
 
           const productInfo = {
-            series: product.category || 'CHRONOS 系列',
+            series: product.series || '',
             name: product.name,
             subtitle: product.code || '',
             price: product.price ? `¥${product.price}` : '价格面议',

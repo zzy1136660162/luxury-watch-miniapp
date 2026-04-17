@@ -26,7 +26,7 @@
 
       <!-- 2. Title & Series -->
       <view class="title-section">
-        <text class="product-series">{{productInfo.series}}</text>
+        <text class="product-series" wx:if="{{productInfo.series}}">{{productInfo.series}}系列</text>
         <text class="product-title">{{productInfo.name}}</text>
         <text class="product-subtitle">{{productInfo.subtitle}}</text>
         <text class="product-price">{{productInfo.price}}</text>
@@ -73,9 +73,6 @@
           <view class="brand-story-content" id="brandstorycontent">
             <rich-text nodes="{{brandStory}}"></rich-text>
           </view>
-          <!-- <view class="imga">
-          <image src="http://localhost:8081/api/images/unnamed%20(3).png" mode="aspectFill" />
-          </view> -->
           <button id="brandstorybtn" class="brand-story-btn" bindtap="onExploreHeritage" style="margin-top: 5vh;">探索品牌</button>
         </view>
       </view>

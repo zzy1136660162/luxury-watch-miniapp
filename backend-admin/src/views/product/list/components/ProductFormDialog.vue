@@ -19,7 +19,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="商品品牌" :prop="type === 'add' ? 'brand' : 'brand'">
+          <el-form-item label="商品品牌" prop="brand">
             <el-input v-model="form.brand" placeholder="请输入品牌名称，如：劳力士、欧米茄" />
           </el-form-item>
         </el-col>
@@ -27,10 +27,79 @@
 
       <el-row :gutter="20">
         <el-col :span="12">
-          <el-form-item label="商品编码" prop="code">
-            <el-input v-model="form.code" placeholder="请输入商品编码" />
+          <el-form-item label="商品系列" prop="series">
+            <el-input v-model="form.series" placeholder="请输入系列名称，如：Submariner、Seamaster" @blur="handleSeriesBlur" />
           </el-form-item>
         </el-col>
+        <el-col :span="12">
+          <el-form-item label="机芯编码" prop="code">
+            <el-input v-model="form.code" placeholder="请输入机芯编码" />
+          </el-form-item>
+        </el-col>
+      </el-row>
+
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <el-form-item label="系列Logo" prop="seriesLogo">
+            <div class="series-logo-upload">
+              <div v-if="form.seriesLogo" class="logo-preview">
+                <el-image
+                  :src="form.seriesLogo"
+                  fit="contain"
+                  class="logo-image"
+                  :preview-src-list="[form.seriesLogo]"
+                />
+                <div class="logo-actions">
+                  <el-button size="small" type="primary" @click="triggerLogoUpload">更换</el-button>
+                  <el-button size="small" type="danger" @click="form.seriesLogo = ''">删除</el-button>
+                </div>
+              </div>
+              <div v-else class="logo-placeholder" @click="triggerLogoUpload">
+                <el-icon class="upload-icon"><Plus /></el-icon>
+                <span>上传Logo</span>
+              </div>
+              <input
+                ref="logoInputRef"
+                type="file"
+                accept="image/*"
+                style="display: none"
+                @change="handleLogoChange"
+              />
+            </div>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="品牌图片" prop="brandImage">
+            <div class="series-logo-upload">
+              <div v-if="form.brandImage" class="logo-preview">
+                <el-image
+                  :src="form.brandImage"
+                  fit="contain"
+                  class="logo-image"
+                  :preview-src-list="[form.brandImage]"
+                />
+                <div class="logo-actions">
+                  <el-button size="small" type="primary" @click="triggerBrandImageUpload">更换</el-button>
+                  <el-button size="small" type="danger" @click="form.brandImage = ''">删除</el-button>
+                </div>
+              </div>
+              <div v-else class="logo-placeholder" @click="triggerBrandImageUpload">
+                <el-icon class="upload-icon"><Plus /></el-icon>
+                <span>上传品牌图片</span>
+              </div>
+              <input
+                ref="brandImageInputRef"
+                type="file"
+                accept="image/*"
+                style="display: none"
+                @change="handleBrandImageChange"
+              />
+            </div>
+          </el-form-item>
+        </el-col>
+      </el-row>
+
+      <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item label="商品分类" prop="category_id">
             <el-cascader
@@ -184,6 +253,7 @@ import api from '@/api'
 import ImagesUpload from '@/components/ImagesUpload.vue'
 import Editor from '@tinymce/tinymce-vue'
 import axios from 'axios'
+import { Plus } from '@element-plus/icons-vue'
 
 interface CategoryOption {
   id: number
@@ -212,6 +282,8 @@ const visible = computed({
 const formRef = ref<FormInstance>()
 const submitting = ref(false)
 const categoryValue = ref<number>()
+const logoInputRef = ref<HTMLInputElement>()
+const brandImageInputRef = ref<HTMLInputElement>()
 
 // 分类选项数据
 const categoryOptions = ref<CategoryOption[]>([
@@ -237,6 +309,9 @@ const form = reactive<Partial<Product>>({
   category: '',
   category_id: undefined,
   brand: '',
+  series: '',
+  seriesLogo: '',
+  brandImage: '',
   price: 0,
   stock: 0,
   image: '',
@@ -285,7 +360,7 @@ const handleImageUpload = (blobInfo: any, progress: any): Promise<string> => {
 // 表单校验规则
 const rules = {
   name: [{ required: true, message: '请输入商品名称', trigger: 'blur' }],
-  code: [{ required: true, message: '请输入商品编码', trigger: 'blur' }],
+  code: [{ required: true, message: '请输入机芯编码', trigger: 'blur' }],
   category_id: [{ required: true, message: '请选择商品分类', trigger: 'change' }],
   brand: [{ required: true, message: '请输入品牌名称', trigger: 'blur' }],
   price: [{ required: true, message: '请输入商品价格', trigger: 'blur' }],
@@ -313,6 +388,123 @@ const handleCategoryChange = (value: number) => {
   }
 }
 
+// 系列输入框失焦时查询logo
+const handleSeriesBlur = async () => {
+  if (form.brand && form.series) {
+    try {
+      const res = await api.product.getSeriesLogo(form.brand, form.series)
+      if (res.data && res.data.code === 200 && res.data.data) {
+        form.seriesLogo = res.data.data
+        ElMessage.success('已自动匹配到系列Logo')
+      }
+    } catch (error) {
+      console.error('查询系列Logo失败:', error)
+    }
+  }
+}
+
+// 触发logo上传
+const triggerLogoUpload = () => {
+  logoInputRef.value?.click()
+}
+
+// 触发品牌图片上传
+const triggerBrandImageUpload = () => {
+  brandImageInputRef.value?.click()
+}
+
+// 处理品牌图片上传
+const handleBrandImageChange = (event: Event) => {
+  const target = event.target as HTMLInputElement
+  const file = target.files?.[0]
+
+  if (!file) return
+
+  // 验证文件类型
+  if (!file.type.startsWith('image/')) {
+    ElMessage.error('请选择图片文件')
+    return
+  }
+
+  // 验证文件大小（限制5MB）
+  if (file.size > 5 * 1024 * 1024) {
+    ElMessage.error('图片大小不能超过5MB')
+    return
+  }
+
+  // 创建FormData上传
+  const formData = new FormData()
+  formData.append('file', file)
+
+  axios.post(uploadUrl, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+      'Authorization': localStorage.getItem('token') || ''
+    }
+  }).then(res => {
+    if (res.data && res.data.code === 200) {
+      form.brandImage = res.data.data.url
+      ElMessage.success('品牌图片上传成功')
+    } else {
+      ElMessage.error(res.data?.msg || '上传失败')
+    }
+  }).catch(err => {
+    console.error('品牌图片上传失败:', err)
+    ElMessage.error(err.response?.data?.msg || '上传失败')
+  }).finally(() => {
+    // 清空input
+    if (target) {
+      target.value = ''
+    }
+  })
+}
+
+// 处理logo上传
+const handleLogoChange = (event: Event) => {
+  const target = event.target as HTMLInputElement
+  const file = target.files?.[0]
+
+  if (!file) return
+
+  // 验证文件类型
+  if (!file.type.startsWith('image/')) {
+    ElMessage.error('请选择图片文件')
+    return
+  }
+
+  // 验证文件大小（限制5MB）
+  if (file.size > 5 * 1024 * 1024) {
+    ElMessage.error('图片大小不能超过5MB')
+    return
+  }
+
+  // 创建FormData上传
+  const formData = new FormData()
+  formData.append('file', file)
+
+  axios.post(uploadUrl, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+      'Authorization': localStorage.getItem('token') || ''
+    }
+  }).then(res => {
+    if (res.data && res.data.code === 200) {
+      form.seriesLogo = res.data.data.url
+      ElMessage.success('Logo上传成功')
+    } else {
+      ElMessage.error(res.data?.msg || '上传失败')
+    }
+  }).catch(err => {
+    console.error('Logo上传失败:', err)
+    ElMessage.error(err.response?.data?.msg || '上传失败')
+  }).finally(() => {
+    // 清空input
+    if (target) {
+      target.value = ''
+    }
+  })
+}
+
 // 初始化表单数据
 watch(
   () => props.visible,
@@ -328,6 +520,9 @@ watch(
       form.category = ''
       form.category_id = undefined
       form.brand = ''
+      form.series = ''
+      form.seriesLogo = ''
+      form.brandImage = ''
       form.price = 0
       form.stock = 0
       form.image = ''
@@ -381,5 +576,53 @@ const handleSubmit = async () => {
   max-height: 60vh;
   overflow-y: auto;
   padding-right: 10px;
+}
+
+.series-logo-upload {
+  .logo-preview {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    .logo-image {
+      width: 80px;
+      height: 80px;
+      border: 1px solid #dcdfe6;
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .logo-actions {
+      display: flex;
+      gap: 8px;
+    }
+  }
+
+  .logo-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 80px;
+    height: 80px;
+    border: 1px dashed #dcdfe6;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s;
+
+    &:hover {
+      border-color: #409eff;
+      color: #409eff;
+    }
+
+    .upload-icon {
+      font-size: 24px;
+      margin-bottom: 4px;
+    }
+
+    span {
+      font-size: 12px;
+    }
+  }
 }
 </style>

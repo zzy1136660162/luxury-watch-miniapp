@@ -35,6 +35,35 @@ public class Product {
      */
     private String brand;
 
+    /**
+     * 品牌ID（对应brand表）
+     */
+    @TableField("brand_id")
+    private Integer brandId;
+
+    /**
+     * 系列ID（对应series表）
+     */
+    @TableField("series_id")
+    private Integer seriesId;
+
+    /**
+     * 系列名称（冗余字段，方便查询）
+     */
+    private String series;
+
+    /**
+     * 系列Logo（URL）
+     */
+    @TableField("series_logo")
+    private String seriesLogo;
+
+    /**
+     * 品牌图片（URL）
+     */
+    @TableField("brand_image")
+    private String brandImage;
+
     private String image;
 
     private String images;

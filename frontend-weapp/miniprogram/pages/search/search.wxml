@@ -1,0 +1,87 @@
+<view class="page">
+<view class="b-nav">
+    <view class="back-btn" bindtap="onBack">
+      <text class="back-arrow" style="font-size: 25px;">‹</text>
+    </view>
+    <text class="text">品牌</text>
+</view>
+  <!-- 搜索头部 -->
+  <view class="search-header">
+    <view class="search-input-wrapper">
+      <input style="width: 100%;" type="text" placeholder="点击搜索" value="{{searchKey}}" bindinput="onSearchInput" bindconfirm="onSearchConfirm"/>
+      <image class="input-image" src="/assets/iconfont/search.png" mode="aspectFit" bindtap="onSearchIconTap" />
+    </view>
+  </view>
+
+  <!-- 内容区域 -->
+  <scroll-view class="content-wrapper" scroll-y enhanced="{{true}}" scroll-into-view="{{scrollIntoViewId}}" scroll-with-animation="{{true}}" bindscroll="onScroll">
+    <!-- 热门推荐 -->
+    <view class="hot-brands-section">
+      <view class="section-title">
+        <text class="title-text">热门推荐</text>
+        <text class="title-en">HOT BRANDS</text>
+      </view>
+      <view class="hot-brands-grid">
+        <view class="hot-brand-item" wx:for="{{hotBrands}}" wx:key="index" bindtap="onBrandTap" data-brand="{{item.name}}">
+          <image class="brand-image" src="{{item.image}}" mode="aspectFit" wx:if="{{item.image}}" />
+          <view class="brand-image-placeholder" wx:else>
+            <text class="placeholder-text">{{item.name[0]}}</text>
+          </view>
+          <text class="brand-name">{{item.name}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 热门系列 -->
+    <view class="hot-series-section" wx:if="{{hotSeries.length > 0}}">
+      <view class="section-title">
+        <text class="title-text">热门系列</text>
+        <text class="title-en">HOT SERIES</text>
+      </view>
+      <view class="hot-series-grid">
+        <view class="hot-series-item" wx:for="{{hotSeries}}" wx:key="index" bindtap="onSeriesTap" data-brand="{{item.brand}}" data-series="{{item.series}}">
+          <image class="series-logo" src="{{item.logo}}" mode="aspectFit" wx:if="{{item.logo}}" />
+          <view class="series-info">
+            <text class="series-brand">{{item.brand}}</text>
+            <text class="series-name">{{item.series}}系列</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 品牌列表 -->
+    <view class="brands-section">
+      <view class="section-title">
+        <text class="title-text">全部品牌</text>
+        <text class="title-en">ALL BRANDS</text>
+      </view>
+
+      <!-- 品牌列表 -->
+      <view class="brands-list">
+        <block wx:for="{{brandGroups}}" wx:key="letter">
+          <view id="brand-{{item.letter}}" style="margin-top: 3vh;border-bottom: 1px solid #d7d7d7;padding-bottom: 10px;">
+            <view class="brand-letter">
+              <text class="letter-title">{{item.letter}}</text>
+            </view>
+            <view class="brand-items">
+              <view class="brand-item" wx:for="{{item.brands}}" wx:key="index" wx:for-item="brand" bindtap="onBrandTap" data-brand="{{brand.name}}">
+                <image class="brand-item-image" src="{{brand.image}}" mode="aspectFit" wx:if="{{brand.image}}" />
+                <view class="brand-item-placeholder" wx:else>
+                  <text class="placeholder-text">{{brand.name[0]}}</text>
+                </view>
+                <text class="brand-name">{{brand.name}}</text>
+              </view>
+            </view>
+          </view>
+        </block>
+      </view>
+    </view>
+  </scroll-view>
+
+  <!-- 字母导航 -->
+  <view class="letter-nav">
+    <view class="letter-item {{currentLetter === item ? 'active' : ''}}" wx:for="{{allLetters}}" wx:key="index" bindtap="onLetterTap" data-letter="{{item}}">
+      <text class="letter-text">{{item}}</text>
+    </view>
+  </view>
+</view>

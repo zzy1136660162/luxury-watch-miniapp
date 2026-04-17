@@ -3,7 +3,9 @@ package com.luxurywatch.controller;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.luxurywatch.common.R;
+import com.luxurywatch.entity.Brand;
 import com.luxurywatch.entity.Product;
+import com.luxurywatch.entity.Series;
 import com.luxurywatch.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -148,5 +150,32 @@ public class ProductController {
             return R.success();
         }
         return R.error("库存更新失败");
+    }
+
+    /**
+     * 获取所有品牌列表（用于前端下拉选择）
+     */
+    @GetMapping("/brands")
+    public R<List<Brand>> getBrands() {
+        List<Brand> brands = productService.getAllBrands();
+        return R.success(brands);
+    }
+
+    /**
+     * 根据品牌ID获取系列列表
+     */
+    @GetMapping("/series")
+    public R<List<Series>> getSeriesByBrand(@RequestParam Integer brandId) {
+        List<Series> series = productService.getSeriesByBrandId(brandId);
+        return R.success(series);
+    }
+
+    /**
+     * 根据品牌和系列名查询已存在的系列Logo
+     */
+    @GetMapping("/series-logo")
+    public R<String> getSeriesLogo(@RequestParam String brand, @RequestParam String series) {
+        String logo = productService.getSeriesLogo(brand, series);
+        return R.success(logo);
     }
 }

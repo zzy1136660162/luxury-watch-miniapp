@@ -28,21 +28,22 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         String imagePath = uploadConfig.getImagePath();
         
-        if (!imagePath.endsWith("/")) {
-            imagePath = imagePath + "/";
+        // 移除末尾的斜杠
+        if (imagePath.endsWith("/")) {
+            imagePath = imagePath.substring(0, imagePath.length() - 1);
         }
         
         // 同时映射 /api/images/** 和 /images/** 到图片存储目录
         registry.addResourceHandler("/api/images/**")
-                .addResourceLocations("file:" + imagePath);
+                .addResourceLocations("file:" + imagePath + "/");
         
         registry.addResourceHandler("/images/**")
-                .addResourceLocations("file:" + imagePath);
+                .addResourceLocations("file:" + imagePath + "/");
         
         System.out.println("===== 图片静态资源映射配置 =====");
         System.out.println("映射路径: /api/images/** 和 /images/**");
         System.out.println("物理路径: " + imagePath);
-        System.out.println("访问示例: http://localhost:8081/api/images/heroImage.jpg");
+        System.out.println("访问示例: http://localhost:8081/images/2026-04/file.png -> file:" + imagePath + "/2026-04/file.png");
         System.out.println("================================");
     }
 }

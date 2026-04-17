@@ -6,6 +6,8 @@
     "pages/member/member",
     "pages/privileges/privileges",
     "pages/exchange-records/exchange-records",
+    "pages/search/search",
+    "pages/search-result/search-result",
     "pages/product-detail/product-detail",
     "pages/login/login",
     "pages/settings/settings",

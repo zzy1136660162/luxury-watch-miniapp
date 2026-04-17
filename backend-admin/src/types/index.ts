@@ -30,6 +30,9 @@ export interface Product {
   code: string
   category: string
   brand?: string
+  series?: string
+  seriesLogo?: string
+  brandImage?: string
   image?: string
   price: number
   stock: number

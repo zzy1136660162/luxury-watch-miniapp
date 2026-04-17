@@ -66,7 +66,18 @@ export const productApi = {
   /**
    * 获取上架商品列表（小程序专用）
    */
-  getOnlineList: (params?: { page?: number; size?: number; category?: string; brand?: string }) => {
+  getOnlineList: (params?: {
+    page?: number;
+    size?: number;
+    category?: string;
+    brand?: string;
+    price?: string;
+    caseSize?: string;
+    material?: string;
+    strap?: string;
+    waterResistance?: string;
+    powerReserve?: string;
+  }) => {
     return request({
       url: '/api/product/online/list',
       method: 'GET',
@@ -92,6 +103,79 @@ export const productApi = {
     return request({
       url: '/api/brands',
       method: 'GET'
+    });
+  },
+
+  /**
+   * 获取热门系列
+   */
+  getHotSeries: () => {
+    return request({
+      url: '/api/series/hot',
+      method: 'GET'
+    });
+  },
+
+  /**
+   * 获取所有系列列表（去重）
+   */
+  getAllSeriesList: () => {
+    return request({
+      url: '/api/series/all',
+      method: 'GET'
+    });
+  },
+
+  /**
+   * 根据品牌名称获取该品牌的所有系列
+   */
+  getSeriesByBrandName: (brand: string) => {
+    return request({
+      url: '/api/series/by-brand',
+      method: 'GET',
+      data: { brand }
+    });
+  },
+
+  /**
+   * 搜索商品
+   */
+  search: (params: { keyword: string }) => {
+    return request({
+      url: '/api/product/search',
+      method: 'GET',
+      data: params
+    });
+  },
+
+  /**
+   * 高级筛选商品
+   */
+  advancedFilter: (params: {
+    brand?: string;
+    series?: string;
+    price?: string;
+    caseSize?: string;
+    material?: string;
+    strap?: string;
+    waterResistance?: string;
+    powerReserve?: string;
+  }) => {
+    return request({
+      url: '/api/product/filter',
+      method: 'GET',
+      data: params
+    });
+  },
+
+  /**
+   * 根据品牌获取商品列表
+   */
+  getProductsByBrand: (brand: string, params?: { page?: number; size?: number }) => {
+    return request({
+      url: '/api/product/online/list',
+      method: 'GET',
+      data: { brand, ...params }
     });
   }
 };

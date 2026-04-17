@@ -33,4 +33,17 @@ export default {
 
   // 更新商品库存
   updateProductStock: (id: number, stock: number) => api.put<ApiResponse<void>>(`/product/${id}/stock`, { stock }),
+
+  // ==================== 品牌和系列 ====================
+
+  // 获取所有品牌列表
+  getBrands: () => api.get<ApiResponse<any[]>>('/product/brands'),
+
+  // 根据品牌ID获取系列列表
+  getSeriesByBrand: (brandId: number) => api.get<ApiResponse<any[]>>('/product/series', { params: { brandId } }),
+
+  // 根据品牌和系列名查询已存在的系列Logo
+  getSeriesLogo: (brand: string, series: string) => api.get<ApiResponse<string | null>>('/product/series-logo', {
+    params: { brand, series }
+  }),
 }

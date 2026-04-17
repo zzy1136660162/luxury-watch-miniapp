@@ -30,11 +30,6 @@ const getFullImageUrl = (relativePath: string | undefined | null): string => {
     relativePath = relativePath.split(',')[0];
   }
 
-  // 去除可能存在的 /api 前缀
-  if (relativePath.startsWith('/api/')) {
-    relativePath = relativePath.substring(4);
-  }
-
   // 拼接完整URL
   return `${imageConfig.baseUrl}${relativePath}`;
 };
