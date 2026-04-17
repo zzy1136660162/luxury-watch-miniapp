@@ -82,7 +82,7 @@
         <!-- 系列列表（根据品牌显示） -->
         <view class="series-section" wx:if="{{categorySeries.length > 0}}">
           <view class="section-title">
-            <text class="title-text">系列列表</text>
+            <text class="title-text">精选系列</text>
             <text class="title-en">SERIES LIST</text>
           </view>
           <view class="series-grid">

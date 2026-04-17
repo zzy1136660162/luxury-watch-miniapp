@@ -246,6 +246,7 @@ $font-family-english: 'Manrope', sans-serif;
 
   .product-footer {
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
     align-items: center;
     padding-top: 24px;
@@ -255,6 +256,7 @@ $font-family-english: 'Manrope', sans-serif;
   .product-points {
     font-family: $font-family-chinese;
     font-size: 18px;
+    margin-bottom: 2vh;
     color: $on-surface;
 
     .points-unit {
@@ -282,7 +284,7 @@ $font-family-english: 'Manrope', sans-serif;
 
 // Info Section
 .info-section {
-  padding: 96px 32px 48px;
+  padding: 46px 32px 48px;
   border-top: 1px solid rgba($outline-variant, 0.2);
   display: flex;
   flex-direction: column;

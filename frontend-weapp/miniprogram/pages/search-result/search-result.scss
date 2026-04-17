@@ -135,13 +135,13 @@
   border-radius: 16rpx;
   overflow: hidden;
   width: calc(50% - 10rpx);
-  height: 40vh;
+  height: 30vh;
   display: flex;
   flex-direction: column;
 
   .product-image, .product-image-placeholder {
     width: 100%;
-    height: 55%;
+    height: 67%;
     object-fit: cover;
     display: block;
   }
@@ -160,10 +160,11 @@
 
   .product-info {
     padding: 16rpx;
-    flex: 1;
+    box-sizing: border-box;
+    // flex: 1;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    // justify-content: space-between;
 
     .product-name {
       font-size: 26rpx;
