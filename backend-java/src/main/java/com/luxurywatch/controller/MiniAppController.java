@@ -1,15 +1,23 @@
 package com.luxurywatch.controller;
 
+import cn.dev33.satoken.stp.StpUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.luxurywatch.common.R;
+import com.luxurywatch.entity.ExchangeRecord;
 import com.luxurywatch.entity.Product;
 import com.luxurywatch.entity.ProductCategory;
+import com.luxurywatch.entity.WxUser;
+import com.luxurywatch.service.ExchangeRecordService;
 import com.luxurywatch.service.ProductService;
 import com.luxurywatch.service.ProductCategoryService;
+import com.luxurywatch.service.WxUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -25,6 +33,12 @@ public class MiniAppController {
 
     @Autowired
     private ProductCategoryService productCategoryService;
+
+    @Autowired
+    private WxUserService wxUserService;
+
+    @Autowired
+    private ExchangeRecordService exchangeRecordService;
 
     /**
      * 获取首页数据
@@ -166,7 +180,14 @@ public class MiniAppController {
     public R<Map<String, Object>> getOnlineProductList(
             @RequestParam(defaultValue = "1") Integer page,
             @RequestParam(defaultValue = "10") Integer size,
-            @RequestParam(required = false) String category) {
+            @RequestParam(required = false) String category,
+            @RequestParam(required = false) String brand,
+            @RequestParam(required = false) String price,
+            @RequestParam(required = false) String caseSize,
+            @RequestParam(required = false) String material,
+            @RequestParam(required = false) String strap,
+            @RequestParam(required = false) String waterResistance,
+            @RequestParam(required = false) String powerReserve) {
         try {
             Page<Product> productPage = new Page<>(page, size);
             QueryWrapper<Product> wrapper = new QueryWrapper<>();
@@ -174,6 +195,40 @@ public class MiniAppController {
             
             if (category != null && !category.isEmpty() && !"all".equalsIgnoreCase(category)) {
                 wrapper.eq("category", category);
+            }
+            
+            if (brand != null && !brand.isEmpty() && !"all".equalsIgnoreCase(brand)) {
+                wrapper.eq("brand", brand);
+            }
+            
+            // 价格筛选
+            if (price != null && !price.isEmpty()) {
+                wrapper = parsePriceRange(wrapper, price);
+            }
+            
+            // 表盘直径筛选
+            if (caseSize != null && !caseSize.isEmpty()) {
+                wrapper = parseCaseSizeRange(wrapper, caseSize);
+            }
+            
+            // 材质筛选
+            if (material != null && !material.isEmpty()) {
+                wrapper.like("material", material);
+            }
+            
+            // 表带筛选
+            if (strap != null && !strap.isEmpty()) {
+                wrapper.like("strap", strap);
+            }
+            
+            // 防水筛选
+            if (waterResistance != null && !waterResistance.isEmpty()) {
+                wrapper = parseWaterResistanceRange(wrapper, waterResistance);
+            }
+            
+            // 动力储备筛选
+            if (powerReserve != null && !powerReserve.isEmpty()) {
+                wrapper = parsePowerReserveRange(wrapper, powerReserve);
             }
             
             wrapper.orderByDesc("sort", "create_time");
@@ -193,14 +248,193 @@ public class MiniAppController {
     }
 
     /**
-     * 获取精选商品
+     * 获取所有品牌列表
      */
-    @GetMapping("/product/featured")
-    public R<List<Product>> getFeaturedProducts() {
+    @GetMapping("/brands")
+    public R<List<String>> getAllBrands() {
+        try {
+            // 先查询所有有品牌名称的商品
+            QueryWrapper<Product> wrapper = new QueryWrapper<>();
+            wrapper.eq("status", 1)
+                   .isNotNull("brand")
+                   .ne("brand", "");
+            
+            List<Product> products = productService.list(wrapper);
+            
+            // 使用 Set 去重
+            Set<String> brandSet = new LinkedHashSet<>();
+            if (products != null) {
+                for (Product product : products) {
+                    if (product.getBrand() != null && !product.getBrand().isEmpty()) {
+                        brandSet.add(product.getBrand());
+                    }
+                }
+            }
+            
+            List<String> brands = new ArrayList<>(brandSet);
+            Collections.sort(brands);
+            
+            // 限制返回数量
+            if (brands.size() > 20) {
+                brands = brands.subList(0, 20);
+            }
+            
+            return R.success(brands);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return R.error("获取品牌列表失败: " + e.getMessage());
+        }
+    }
+
+    /**
+     * 根据品牌名称获取该品牌的所有系列
+     */
+    @GetMapping("/series/by-brand")
+    public R<List<String>> getSeriesByBrand(@RequestParam String brand) {
         try {
             QueryWrapper<Product> wrapper = new QueryWrapper<>();
             wrapper.eq("status", 1)
-                   .orderByDesc("sales", "sort")
+                   .eq("brand", brand)
+                   .isNotNull("series")
+                   .ne("series", "");
+            
+            List<Product> products = productService.list(wrapper);
+            
+            // 使用 Set 去重
+            Set<String> seriesSet = new LinkedHashSet<>();
+            if (products != null) {
+                for (Product product : products) {
+                    if (product.getSeries() != null && !product.getSeries().isEmpty()) {
+                        seriesSet.add(product.getSeries());
+                    }
+                }
+            }
+            
+            List<String> series = new ArrayList<>(seriesSet);
+            Collections.sort(series);
+            
+            return R.success(series);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return R.error("获取品牌系列失败: " + e.getMessage());
+        }
+    }
+
+    /**
+     * 获取所有系列列表（去重）
+     */
+    @GetMapping("/series/all")
+    public R<List<Map<String, String>>> getAllSeries() {
+        try {
+            QueryWrapper<Product> wrapper = new QueryWrapper<>();
+            wrapper.eq("status", 1)
+                   .isNotNull("brand")
+                   .ne("brand", "")
+                   .isNotNull("series")
+                   .ne("series", "")
+                   .select("brand", "series", "series_logo")
+                   .orderByDesc("sales", "sort");
+            
+            List<Product> products = productService.list(wrapper);
+            
+            // 使用 Map 来存储每个品牌-系列组合，优先选择有logo的商品
+            Map<String, Product> seriesMap = new LinkedHashMap<>();
+            
+            for (Product product : products) {
+                String key = product.getBrand() + "-" + product.getSeries();
+                Product existing = seriesMap.get(key);
+                
+                // 如果这个组合还没有，或者当前商品有logo但之前的没有，则更新
+                if (existing == null) {
+                    seriesMap.put(key, product);
+                } else if ((existing.getSeriesLogo() == null || existing.getSeriesLogo().isEmpty()) 
+                           && product.getSeriesLogo() != null && !product.getSeriesLogo().isEmpty()) {
+                    seriesMap.put(key, product);
+                }
+            }
+            
+            // 转换为返回格式
+            List<Map<String, String>> seriesList = new ArrayList<>();
+            for (Product product : seriesMap.values()) {
+                Map<String, String> item = new LinkedHashMap<>();
+                item.put("brand", product.getBrand());
+                item.put("series", product.getSeries());
+                if (product.getSeriesLogo() != null && !product.getSeriesLogo().isEmpty()) {
+                    item.put("logo", product.getSeriesLogo());
+                }
+                seriesList.add(item);
+            }
+            
+            return R.success(seriesList);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return R.error("获取系列列表失败: " + e.getMessage());
+        }
+    }
+
+    /**
+     * 获取热门系列
+     */
+    @GetMapping("/series/hot")
+    public R<List<Map<String, String>>> getHotSeries() {
+        try {
+            // 先查询所有有品牌、系列和logo的商品（优先有logo的）
+            QueryWrapper<Product> wrapper = new QueryWrapper<>();
+            wrapper.eq("status", 1)
+                   .isNotNull("brand")
+                   .ne("brand", "")
+                   .isNotNull("series")
+                   .ne("series", "")
+                   .orderByDesc("series_logo")  // 优先有logo的
+                   .orderByDesc("sales", "sort");
+
+            List<Product> products = productService.list(wrapper);
+
+            // 使用 Set 来去重，保持插入顺序
+            Set<String> seen = new LinkedHashSet<>();
+            List<Map<String, String>> hotSeries = new ArrayList<>();
+
+            for (Product product : products) {
+                String key = product.getBrand() + "-" + product.getSeries();
+                if (!seen.contains(key)) {
+                    seen.add(key);
+                    Map<String, String> item = new LinkedHashMap<>();
+                    item.put("brand", product.getBrand());
+                    item.put("series", product.getSeries());
+                    // 添加logo字段
+                    if (product.getSeriesLogo() != null && !product.getSeriesLogo().isEmpty()) {
+                        item.put("logo", product.getSeriesLogo());
+                    }
+                    hotSeries.add(item);
+
+                    // 只保留前5个
+                    if (hotSeries.size() >= 5) {
+                        break;
+                    }
+                }
+            }
+
+            return R.success(hotSeries);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return R.error("获取热门系列失败: " + e.getMessage());
+        }
+    }
+
+    /**
+     * 获取精选商品
+     */
+    @GetMapping("/product/featured")
+    public R<List<Product>> getFeaturedProducts(@RequestParam(required = false) String brand) {
+        try {
+            QueryWrapper<Product> wrapper = new QueryWrapper<>();
+            wrapper.eq("status", 1);
+            
+            if (brand != null && !brand.isEmpty() && !"all".equalsIgnoreCase(brand)) {
+                wrapper.eq("brand", brand);
+            }
+            
+            wrapper.orderByDesc("sales", "sort")
                    .last("LIMIT 6");
             
             List<Product> products = productService.list(wrapper);
@@ -226,5 +460,419 @@ public class MiniAppController {
             e.printStackTrace();
             return R.error("获取商品详情失败: " + e.getMessage());
         }
+    }
+
+    /**
+     * 获取当前登录用户信息（包含积分）
+     */
+    @GetMapping("/user/current")
+    public R<WxUser> getCurrentUser() {
+        try {
+            // 检查是否登录
+            if (!StpUtil.isLogin()) {
+                return R.error("用户未登录");
+            }
+
+            // 获取当前登录用户ID
+            Long userId = StpUtil.getLoginIdAsLong();
+
+            // 查询用户信息
+            WxUser user = wxUserService.getById(userId);
+            if (user == null) {
+                return R.error("用户不存在");
+            }
+
+            // 返回用户信息（可以只返回必要的字段，增强安全性）
+            return R.success(user);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return R.error("获取用户信息失败: " + e.getMessage());
+        }
+    }
+
+    /**
+     * 获取可积分兑换的商品列表
+     */
+    @GetMapping("/product/redeemable")
+    public R<List<Product>> getRedeemableProducts() {
+        try {
+            QueryWrapper<Product> wrapper = new QueryWrapper<>();
+            wrapper.eq("status", 1)  // 只查询上架的商品
+                   .eq("can_redeem_points", 1)  // 只查询可积分兑换的商品
+                   .orderByDesc("sort", "create_time");
+
+            List<Product> products = productService.list(wrapper);
+            return R.success(products != null ? products : new ArrayList<>());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return R.error("获取可兑换商品列表失败: " + e.getMessage());
+        }
+    }
+
+    /**
+     * 积分兑换商品
+     */
+    @PostMapping("/exchange")
+    @Transactional(rollbackFor = Exception.class)
+    public R<String> exchangeProduct(@RequestBody Map<String, Object> params) {
+        try {
+            // 检查用户是否登录
+            if (!StpUtil.isLogin()) {
+                return R.error("用户未登录");
+            }
+
+            // 获取参数
+            Object productIdObj = params.get("productId");
+            if (productIdObj == null) {
+                return R.error("商品ID不能为空");
+            }
+            Long productId = Long.valueOf(productIdObj.toString());
+
+            // 获取当前登录用户
+            Long userId = StpUtil.getLoginIdAsLong();
+            WxUser user = wxUserService.getById(userId);
+            if (user == null) {
+                return R.error("用户不存在");
+            }
+
+            // 查询商品信息
+            Product product = productService.getById(productId);
+            if (product == null) {
+                return R.error("商品不存在");
+            }
+
+            // 检查商品是否可兑换
+            if (product.getCanRedeemPoints() == null || product.getCanRedeemPoints() != 1) {
+                return R.error("该商品不可积分兑换");
+            }
+
+            // 检查积分是否足够
+            Integer pointsCost = product.getPointsCost();
+            if (pointsCost == null || pointsCost <= 0) {
+                return R.error("商品积分设置错误，请联系管理员");
+            }
+
+            Integer userPoints = user.getPoints();
+            if (userPoints == null) {
+                userPoints = 0;
+            }
+
+            if (userPoints < pointsCost) {
+                return R.error("积分不足，当前积分：" + userPoints + "，需要积分：" + pointsCost);
+            }
+
+            // 扣除用户积分
+            user.setPoints(userPoints - pointsCost);
+            wxUserService.updateById(user);
+
+            // 创建兑换记录，使用用户已保存的信息
+            ExchangeRecord record = new ExchangeRecord();
+            record.setUserId(userId);
+            record.setUserName(user.getNickname() != null ? user.getNickname() : user.getUsername());
+            record.setProductId(productId);
+            record.setProductName(product.getName());
+            record.setProductImage(product.getImage());
+            record.setPoints(pointsCost);
+            record.setPhone(user.getPhone());
+            record.setExchangeTime(LocalDateTime.now());
+            record.setStatus(0);  // 待处理
+            exchangeRecordService.save(record);
+
+            return R.success("兑换成功");
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            return R.error("商品ID格式错误");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return R.error("兑换失败: " + e.getMessage());
+        }
+    }
+
+    /**
+     * 获取当前用户的兑换记录列表
+     */
+    @GetMapping("/user/exchange-records")
+    public R<List<ExchangeRecord>> getUserExchangeRecords() {
+        try {
+            // 检查用户是否登录
+            if (!StpUtil.isLogin()) {
+                return R.error("用户未登录");
+            }
+
+            // 获取当前登录用户ID
+            Long userId = StpUtil.getLoginIdAsLong();
+
+            // 查询用户的兑换记录
+            QueryWrapper<ExchangeRecord> wrapper = new QueryWrapper<>();
+            wrapper.eq("user_id", userId)
+                   .orderByDesc("exchange_time");
+
+            List<ExchangeRecord> records = exchangeRecordService.list(wrapper);
+            return R.success(records != null ? records : new ArrayList<>());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return R.error("获取兑换记录失败: " + e.getMessage());
+        }
+    }
+
+    /**
+     * 搜索商品
+     */
+    @GetMapping("/product/search")
+    public R<List<Product>> searchProducts(@RequestParam String keyword) {
+        try {
+            if (keyword == null || keyword.trim().isEmpty()) {
+                return R.error("搜索关键词不能为空");
+            }
+
+            // 模糊查询商品
+            QueryWrapper<Product> wrapper = new QueryWrapper<>();
+            wrapper.like("name", keyword.trim())
+                   .or()
+                   .like("name_en", keyword.trim())
+                   .or()
+                   .like("code", keyword.trim())
+                   .or()
+                   .like("brand", keyword.trim())
+                   .or()
+                   .like("series", keyword.trim())
+                   .or()
+                   .like("description", keyword.trim())
+                   .eq("status", 1)  // 只查询上架的商品
+                   .orderByDesc("sort", "create_time");
+
+            List<Product> products = productService.list(wrapper);
+            return R.success(products != null ? products : new ArrayList<>());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return R.error("搜索失败: " + e.getMessage());
+        }
+    }
+
+    /**
+     * 高级筛选商品
+     */
+    @GetMapping("/product/filter")
+    public R<List<Product>> filterProducts(
+            @RequestParam(required = false) String brand,
+            @RequestParam(required = false) String series,
+            @RequestParam(required = false) String price,
+            @RequestParam(required = false) String caseSize,
+            @RequestParam(required = false) String material,
+            @RequestParam(required = false) String strap,
+            @RequestParam(required = false) String waterResistance,
+            @RequestParam(required = false) String powerReserve) {
+        try {
+            QueryWrapper<Product> wrapper = new QueryWrapper<>();
+            wrapper.eq("status", 1);
+
+            if (brand != null && !brand.trim().isEmpty()) {
+                wrapper.eq("brand", brand.trim());
+            }
+
+            if (series != null && !series.trim().isEmpty()) {
+                wrapper.eq("series", series.trim());
+            }
+
+            if (price != null && !price.trim().isEmpty()) {
+                wrapper = parsePriceRange(wrapper, price.trim());
+            }
+
+            if (caseSize != null && !caseSize.trim().isEmpty()) {
+                wrapper = parseCaseSizeRange(wrapper, caseSize.trim());
+            }
+
+            if (material != null && !material.trim().isEmpty()) {
+                wrapper.like("material", material.trim());
+            }
+
+            if (strap != null && !strap.trim().isEmpty()) {
+                wrapper.like("strap", strap.trim());
+            }
+
+            if (waterResistance != null && !waterResistance.trim().isEmpty()) {
+                wrapper = parseWaterResistanceRange(wrapper, waterResistance.trim());
+            }
+
+            if (powerReserve != null && !powerReserve.trim().isEmpty()) {
+                wrapper = parsePowerReserveRange(wrapper, powerReserve.trim());
+            }
+
+            wrapper.orderByDesc("sort", "create_time");
+
+            List<Product> products = productService.list(wrapper);
+            return R.success(products != null ? products : new ArrayList<>());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return R.error("筛选失败: " + e.getMessage());
+        }
+    }
+
+    /**
+     * 解析价格区间
+     */
+    private QueryWrapper<Product> parsePriceRange(QueryWrapper<Product> wrapper, String priceRange) {
+        BigDecimal minPrice, maxPrice;
+
+        switch (priceRange) {
+            case "0-5000":
+                minPrice = BigDecimal.ZERO;
+                maxPrice = new BigDecimal("5000");
+                break;
+            case "5000-10000":
+                minPrice = new BigDecimal("5000");
+                maxPrice = new BigDecimal("10000");
+                break;
+            case "10000-20000":
+                minPrice = new BigDecimal("10000");
+                maxPrice = new BigDecimal("20000");
+                break;
+            case "20000-50000":
+                minPrice = new BigDecimal("20000");
+                maxPrice = new BigDecimal("50000");
+                break;
+            case "50000-150000":
+                minPrice = new BigDecimal("50000");
+                maxPrice = new BigDecimal("150000");
+                break;
+            case "150000-300000":
+                minPrice = new BigDecimal("150000");
+                maxPrice = new BigDecimal("300000");
+                break;
+            case "300000-1000000":
+                minPrice = new BigDecimal("300000");
+                maxPrice = new BigDecimal("1000000");
+                break;
+            case "1000000+":
+                minPrice = new BigDecimal("1000000");
+                maxPrice = null;
+                break;
+            default:
+                return wrapper;
+        }
+
+        wrapper.ge("price", minPrice);
+        if (maxPrice != null) {
+            wrapper.le("price", maxPrice);
+        }
+
+        return wrapper;
+    }
+
+    /**
+     * 解析表盘直径区间
+     */
+    private QueryWrapper<Product> parseCaseSizeRange(QueryWrapper<Product> wrapper, String caseSizeRange) {
+        Integer minSize, maxSize;
+
+        switch (caseSizeRange) {
+            case "0-36":
+                minSize = 0;
+                maxSize = 36;
+                break;
+            case "36-39":
+                minSize = 36;
+                maxSize = 39;
+                break;
+            case "39-42":
+                minSize = 39;
+                maxSize = 42;
+                break;
+            case "42-45":
+                minSize = 42;
+                maxSize = 45;
+                break;
+            case "45+":
+                minSize = 45;
+                maxSize = null;
+                break;
+            default:
+                return wrapper;
+        }
+
+        wrapper.apply("CAST(REGEXP_REPLACE(case_size, '[^0-9]', '') AS UNSIGNED) >= {0}", minSize);
+        if (maxSize != null) {
+            wrapper.apply("CAST(REGEXP_REPLACE(case_size, '[^0-9]', '') AS UNSIGNED) <= {0}", maxSize);
+        }
+
+        return wrapper;
+    }
+
+    /**
+     * 解析防水性能区间
+     */
+    private QueryWrapper<Product> parseWaterResistanceRange(QueryWrapper<Product> wrapper, String waterRange) {
+        Integer minWater, maxWater;
+
+        switch (waterRange) {
+            case "0":
+                minWater = 0;
+                maxWater = 0;
+                break;
+            case "0-100":
+                minWater = 0;
+                maxWater = 100;
+                break;
+            case "100-300":
+                minWater = 100;
+                maxWater = 300;
+                break;
+            case "300-1000":
+                minWater = 300;
+                maxWater = 1000;
+                break;
+            case "1000-3000":
+                minWater = 1000;
+                maxWater = 3000;
+                break;
+            case "3000+":
+                minWater = 3000;
+                maxWater = null;
+                break;
+            default:
+                return wrapper;
+        }
+
+        wrapper.ge("water_resistance", minWater);
+        if (maxWater != null) {
+            wrapper.le("water_resistance", maxWater);
+        }
+
+        return wrapper;
+    }
+
+    /**
+     * 解析动力储备区间
+     */
+    private QueryWrapper<Product> parsePowerReserveRange(QueryWrapper<Product> wrapper, String powerRange) {
+        Integer minPower, maxPower;
+
+        switch (powerRange) {
+            case "0-40":
+                minPower = 0;
+                maxPower = 40;
+                break;
+            case "40-80":
+                minPower = 40;
+                maxPower = 80;
+                break;
+            case "80-120":
+                minPower = 80;
+                maxPower = 120;
+                break;
+            case "120+":
+                minPower = 120;
+                maxPower = null;
+                break;
+            default:
+                return wrapper;
+        }
+
+        wrapper.apply("CAST(REGEXP_REPLACE(power_reserve, '[^0-9]', '') AS UNSIGNED) >= {0}", minPower);
+        if (maxPower != null) {
+            wrapper.apply("CAST(REGEXP_REPLACE(power_reserve, '[^0-9]', '') AS UNSIGNED) <= {0}", maxPower);
+        }
+
+        return wrapper;
     }
 }

@@ -119,7 +119,7 @@ Component({
           }
 
           const productInfo = {
-            series: product.category || 'CHRONOS 系列',
+            series: product.series || '',
             name: product.name,
             subtitle: product.code || '',
             price: product.price ? `¥${product.price}` : '价格面议',
@@ -230,10 +230,24 @@ Component({
     },
 
     onBook() {
-      wx.showModal({
-        title: '预约到店',
-        content: '请选择您想要预约的时间和门店',
-        confirmText: '确定'
+      const token = wx.getStorageSync('token');
+      if (!token) {
+        wx.showModal({
+          title: '提示',
+          content: '请先登录后再预约',
+          confirmText: '去登录',
+          success: (res) => {
+            if (res.confirm) {
+              wx.navigateTo({
+                url: '/pages/login/login'
+              });
+            }
+          }
+        });
+        return;
+      }
+      wx.navigateTo({
+        url: '/pages/appointment/appointment'
       });
     },
 

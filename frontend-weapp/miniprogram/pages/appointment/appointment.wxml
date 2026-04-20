@@ -1,0 +1,75 @@
+<view class="container">
+  <view class="header">
+    <view class="back-btn" bindtap="onBack">
+      <text>‹</text>
+    </view>
+    <text class="page-title">预约到店</text>
+  </view>
+
+  <view class="content">
+    <view class="form-section">
+      <!-- 门店选择 -->
+      <view class="form-section">
+        <view class="section-title">
+          <text class="title-cn">选择门店</text>
+          <text class="title-en">Select Store</text>
+        </view>
+        <view class="store-list">
+          <view 
+            class="store-item {{selectedStoreId === item.id ? 'selected' : ''}}" 
+            wx:for="{{stores}}" 
+            wx:key="id"
+            bindtap="onStoreSelect"
+            data-store="{{item}}"
+          >
+            <view class="store-info">
+              <text class="store-name">{{item.name}}</text>
+              <text class="store-address">{{item.address}}</text>
+            </view>
+            <view class="store-check">
+              <text wx:if="{{selectedStoreId === item.id}}">✓</text>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <!-- 日期选择 -->
+      <view class="form-section">
+        <view class="section-title">
+          <text class="title-cn">选择日期</text>
+          <text class="title-en">Select Date</text>
+        </view>
+        <picker mode="date" bindchange="onDateChange" start="{{tomorrowDate}}">
+          <view class="date-picker">
+            <text>{{selectedDate ? selectedDate : '请选择预约日期'}}</text>
+            <text class="arrow">›</text>
+          </view>
+        </picker>
+      </view>
+
+      <!-- 时间选择 -->
+      <view class="form-section">
+        <view class="section-title">
+          <text class="title-cn">选择时间</text>
+          <text class="title-en">Select Time</text>
+        </view>
+        <view class="time-grid">
+          <view 
+            class="time-item {{selectedTime === item ? 'selected' : ''}}" 
+            wx:for="{{timeSlots}}" 
+            wx:key="index"
+            bindtap="onTimeSelect"
+            data-time="{{item}}"
+          >
+            <text>{{item}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 提交按钮 -->
+      <button class="submit-btn" bindtap="onSubmitBooking">
+        <text>确认预约</text>
+      </button>
+    </view>
+  </view>
+</view>

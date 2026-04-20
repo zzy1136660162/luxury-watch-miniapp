@@ -29,6 +29,10 @@ export interface Product {
   name: string
   code: string
   category: string
+  brand?: string
+  series?: string
+  seriesLogo?: string
+  brandImage?: string
   image?: string
   price: number
   stock: number
@@ -36,6 +40,8 @@ export interface Product {
   points?: number
   description?: string
   status: number
+  canRedeemPoints?: number
+  pointsCost?: number
   createTime?: string
   updateTime?: string
 }

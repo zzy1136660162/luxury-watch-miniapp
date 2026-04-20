@@ -1,0 +1,47 @@
+<view class="container">
+  <view class="header">
+    <view class="back-btn" bindtap="onBack">
+      <text>‹</text>
+    </view>
+    <text class="page-title">我的预约</text>
+  </view>
+
+  <view class="content">
+    <view class="loading" wx:if="{{loading}}">
+      <text>加载中...</text>
+    </view>
+
+    <view class="appointment-list" wx:if="{{!loading && appointments.length > 0}}">
+      <view class="appointment-item" wx:for="{{appointments}}" wx:key="id">
+        <view class="appointment-header">
+          <text class="appointment-status status-{{item.status}}">{{item.statusText}}</text>
+        </view>
+        <view class="appointment-content">
+          <view class="store-info">
+            <text class="store-name">{{item.storeName}}</text>
+            <text class="store-address">{{item.storeAddress}}</text>
+          </view>
+          <view class="appointment-time">
+            <view class="time-row">
+              <text class="label">预约日期</text>
+              <text class="value">{{item.appointmentDate}}</text>
+            </view>
+            <view class="time-row">
+              <text class="label">预约时间</text>
+              <text class="value">{{item.appointmentTime}}</text>
+            </view>
+          </view>
+        </view>
+        <view class="appointment-actions" wx:if="{{item.status === 0}}">
+          <button class="cancel-btn" catchtap="onCancelAppointment" data-id="{{item.id}}">取消预约</button>
+        </view>
+      </view>
+    </view>
+
+    <view class="empty-state" wx:if="{{!loading && appointments.length === 0}}">
+      <image class="empty-icon" src="https://cdn.jsdelivr.net/npm/@material-design-icons/svg@0.14.15/filled/event_busy.svg" mode="aspectFit" />
+      <text class="empty-text">暂无预约记录</text>
+      <button class="book-btn" bindtap="onGoBooking">去预约</button>
+    </view>
+  </view>
+</view>

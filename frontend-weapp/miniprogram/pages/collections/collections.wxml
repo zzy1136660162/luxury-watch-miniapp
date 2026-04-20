@@ -3,8 +3,8 @@
 <view class="page">
   <navigation-bar title="时全饰美" back="{{false}}" color="black" background="#ffffff" showMenu="{{true}}" />
 
-  <!-- 固定在顶部的导航栏（滚动时显示） -->
-  <view class="category-nav-fixed {{isNavFixed ? 'show' : ''}}">
+  <!-- 固定在顶部的分类导航栏（滚动时显示） -->
+  <!-- <view class="category-nav-fixed {{isNavFixed ? 'show' : ''}}">
     <scroll-view class="category-scroll" scroll-x enhanced="{{true}}" show-scrollbar="{{false}}">
       <view class="category-track">
         <view class="category-item {{currentCategory === 'all' ? 'category-active' : ''}}" bindtap="onCategoryTap" data-category="all">
@@ -14,6 +14,20 @@
         <view class="category-item {{currentCategory === item.code ? 'category-active' : ''}}" wx:for="{{categories}}" wx:key="id" bindtap="onCategoryTap" data-category="{{item.code}}">
           <text class="category-name">{{item.name}}</text>
           <text class="category-name-en">{{item.nameEn || item.name}}</text>
+        </view>
+      </view>
+    </scroll-view>
+  </view> -->
+
+  <!-- 固定在左侧的品牌导航栏（滚动时显示） -->
+  <view class="brand-sidebar-fixed-v2 {{isNavFixed ? 'show' : ''}}">
+    <view class="brand-sidebar-title" bindtap="onSearchTap">
+      <image class="search-icon" src="/assets/iconfont/search.png" mode="aspectFit" />
+    </view>
+    <scroll-view class="brand-sidebar-scroll" scroll-y enhanced="{{true}}" show-scrollbar="{{false}}">
+      <view class="brand-sidebar-track">
+        <view class="brand-sidebar-item {{currentBrand === item ? 'brand-sidebar-active' : ''}}" wx:for="{{brands}}" wx:key="index" bindtap="onBrandTap" data-brand="{{item}}">
+          <text class="brand-sidebar-name">{{item}}</text>
         </view>
       </view>
     </scroll-view>
@@ -31,85 +45,55 @@
       </view>
     </view>
 
-    <!-- Category Navigation（元素内导航栏，初始显示） -->
-    <view class="category-nav" id="category-nav">
-      <scroll-view class="category-scroll" scroll-x enhanced="{{true}}" show-scrollbar="{{false}}">
-        <view class="category-track">
-          <view class="category-item {{currentCategory === 'all' ? 'category-active' : ''}}" bindtap="onCategoryTap" data-category="all">
-            <text class="category-name">全部</text>
-            <text class="category-name-en">All</text>
-          </view>
-          <view class="category-item {{currentCategory === item.code ? 'category-active' : ''}}" wx:for="{{categories}}" wx:key="id" bindtap="onCategoryTap" data-category="{{item.code}}">
-            <text class="category-name">{{item.name}}</text>
-            <text class="category-name-en">{{item.nameEn || item.name}}</text>
-          </view>
-        </view>
-      </scroll-view>
+    <!-- 带侧边栏的内容区域 -->
+    <view class="content-with-sidebar">
+      <!-- 左侧品牌导航栏 -->
+      <view class="brand-sidebar">
+      <view class="brand-sidebar-title" bindtap="onSearchTap">
+      <image class="search-icon" src="/assets/iconfont/search.png" mode="aspectFit" />
     </view>
-
-    <!-- Featured Products -->
-    <view class="featured-section" wx:if="{{featuredProducts.length > 0 && currentCategory === 'all'}}">
-      <view class="section-header">
-        <text class="section-title">精选系列</text>
-        <text class="section-subtitle">Featured Collections</text>
-      </view>
-      <view class="featured-grid">
-        <view class="product-item" wx:for="{{featuredProducts}}" wx:key="id" bindtap="onProductTap" data-id="{{item.id}}">
-          <view class="product-image-wrapper">
-            <image class="product-image" src="{{item.image}}" mode="aspectFill" />
+        <scroll-view class="brand-sidebar-scroll" scroll-y enhanced="{{true}}" show-scrollbar="{{false}}">
+          <view class="brand-sidebar-track">
+            <view class="brand-sidebar-item {{currentBrand === item ? 'brand-sidebar-active' : ''}}" wx:for="{{brands}}" wx:key="index" bindtap="onBrandTap" data-brand="{{item}}">
+              <text class="brand-sidebar-name">{{item}}</text>
+            </view>
           </view>
-          <view class="product-content">
-            <text class="product-code">{{item.code}}</text>
-            <text class="product-name">{{item.name}}</text>
-            <text class="product-name-en" wx:if="{{item.nameEn}}">{{item.nameEn}}</text>
-            <text class="product-intro" wx:if="{{item.intro}}">{{item.intro}}</text>
-            <view class="product-action">
-              <view class="view-details-btn">
-                <text>查看详情</text>
+        </scroll-view>
+      </view>
+
+      <!-- 右侧产品列表 -->
+      <view class="products-area">
+        <!-- Category Navigation（元素内导航栏，初始显示） -->
+        <!-- <view class="category-nav" id="category-nav">
+          <scroll-view class="category-scroll" scroll-x enhanced="{{true}}" show-scrollbar="{{false}}">
+            <view class="category-track">
+              <view class="category-item {{currentCategory === 'all' ? 'category-active' : ''}}" bindtap="onCategoryTap" data-category="all">
+                <text class="category-name">全部</text>
+                <text class="category-name-en">All</text>
+              </view>
+              <view class="category-item {{currentCategory === item.code ? 'category-active' : ''}}" wx:for="{{categories}}" wx:key="id" bindtap="onCategoryTap" data-category="{{item.code}}">
+                <text class="category-name">{{item.name}}</text>
+                <text class="category-name-en">{{item.nameEn || item.name}}</text>
+              </view>
+            </view>
+          </scroll-view>
+        </view> -->
+
+        <!-- 系列列表（根据品牌显示） -->
+        <view class="series-section" wx:if="{{categorySeries.length > 0}}">
+          <view class="section-title">
+            <text class="title-text">精选系列</text>
+            <text class="title-en">SERIES LIST</text>
+          </view>
+          <view class="series-grid">
+            <view class="series-item" wx:for="{{categorySeries}}" wx:key="index" bindtap="onSeriesItemTap" data-brand="{{item.brand}}" data-series="{{item.series}}">
+              <view class="series-content">
+                <image class="series-logo" src="{{item.logo}}" mode="aspectFit" wx:if="{{item.logo}}" />
+                <text class="series-name">{{item.brand}} - {{item.series}}</text>
               </view>
             </view>
           </view>
         </view>
-      </view>
-    </view>
-
-    <!-- Product List -->
-    <view class="product-list-section">
-      <!-- <view class="section-header">
-        <text class="section-title">产品列表</text>
-        <text class="section-subtitle">Products</text>
-      </view> -->
-
-      <view class="loading-state" wx:if="{{loading && products.length === 0}}">
-        <text>加载中...</text>
-      </view>
-
-      <view class="empty-state" wx:elif="{{products.length === 0 && !loading}}">
-        <text>暂无产品</text>
-      </view>
-
-      <view class="product-grid" wx:else>
-        <view class="product-item" wx:for="{{products}}" wx:key="id" bindtap="onProductTap" data-id="{{item.id}}">
-          <view class="product-image-wrapper">
-            <image class="product-image" src="{{item.image}}" mode="aspectFill" />
-          </view>
-          <view class="product-content">
-            <text class="product-code">{{item.code}}</text>
-            <text class="product-name">{{item.name}}</text>
-            <text class="product-name-en" wx:if="{{item.nameEn}}">{{item.nameEn}}</text>
-            <text class="product-intro" wx:if="{{item.intro}}">{{item.intro}}</text>
-            <view class="product-action">
-              <view class="view-details-btn">
-                <text>查看详情</text>
-              </view>
-            </view>
-          </view>
-        </view>
-      </view>
-
-      <view id="loadmore" class="load-more" wx:if="{{products.length > 0}}">
-        <text wx:if="{{loading && products.length > 0}}">加载中...</text>
-        <text wx:elif="{{!hasMore}}">没有更多了</text>
       </view>
     </view>
   </scroll-view>

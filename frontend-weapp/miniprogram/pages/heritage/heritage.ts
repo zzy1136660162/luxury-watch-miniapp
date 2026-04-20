@@ -1,13 +1,4 @@
 Component({
-  pageLifetimes: {
-    show() {
-      const tabBar = this.getTabBar();
-      if (tabBar) {
-        tabBar.setSelectedIndex(2);
-      }
-    }
-  },
-
   data: {
     heroImage: 'http://localhost:8081/api/images/unnamed%20(5).png',
 

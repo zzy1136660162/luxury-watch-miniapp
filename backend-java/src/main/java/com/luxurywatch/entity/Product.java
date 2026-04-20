@@ -18,15 +18,51 @@ public class Product {
 
     private String name;
 
+    @TableField("name_en")
     private String nameEn;
 
     private String intro;
 
     private String code;
 
+    @TableField("category_id")
     private Long categoryId;
 
     private String category;
+
+    /**
+     * 品牌（如：劳力士、欧米茄、天梭等）
+     */
+    private String brand;
+
+    /**
+     * 品牌ID（对应brand表）
+     */
+    @TableField("brand_id")
+    private Integer brandId;
+
+    /**
+     * 系列ID（对应series表）
+     */
+    @TableField("series_id")
+    private Integer seriesId;
+
+    /**
+     * 系列名称（冗余字段，方便查询）
+     */
+    private String series;
+
+    /**
+     * 系列Logo（URL）
+     */
+    @TableField("series_logo")
+    private String seriesLogo;
+
+    /**
+     * 品牌图片（URL）
+     */
+    @TableField("brand_image")
+    private String brandImage;
 
     private String image;
 
@@ -34,6 +70,7 @@ public class Product {
 
     private BigDecimal price;
 
+    @TableField("original_price")
     private BigDecimal originalPrice;
 
     private Integer stock;
@@ -51,16 +88,19 @@ public class Product {
     /**
      * 动力储存（如：72小时）
      */
+    @TableField("power_reserve")
     private String powerReserve;
 
     /**
      * 防水性能（米），可选值：25, 50, 100, 150
      */
+    @TableField("water_resistance")
     private Integer waterResistance;
 
     /**
      * 表壳尺寸（如：40毫米/10毫米厚度）
      */
+    @TableField("case_size")
     private String caseSize;
 
     /**
@@ -76,7 +116,14 @@ public class Product {
     /**
      * 是否可用积分兑换：0-否，1-是
      */
+    @TableField("can_redeem_points")
     private Integer canRedeemPoints;
+
+    /**
+     * 积分兑换所需积分
+     */
+    @TableField("points_cost")
+    private Integer pointsCost;
 
     /**
      * 品牌故事（富文本 HTML）

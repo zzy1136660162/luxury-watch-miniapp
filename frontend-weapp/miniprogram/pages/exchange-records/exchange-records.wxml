@@ -1,0 +1,51 @@
+<!-- <import src="/components/navigation-bar/navigation-bar.wxml" /> -->
+
+<view class="page">
+  <!-- <navigation-bar title="兑换记录" back="{{true}}" color="black" background="#ffffff" /> -->
+
+  <scroll-view class="content" scroll-y type="list" enhanced="{{true}}" bounces="{{false}}">
+    <!-- Empty State -->
+    <view wx:if="{{records.length === 0 && !loading}}" class="empty-state">
+      <text class="empty-title">暂无兑换记录</text>
+      <text class="empty-desc">快去兑换心仪的礼品吧</text>
+    </view>
+
+    <!-- Records List -->
+    <view wx:if="{{records.length > 0}}" class="records-section">
+      <view class="section-header">
+        <view class="back-btn" bindtap="onBack">
+          <text class="back-arrow">‹</text>
+        </view>
+        <text class="record-text">兑换记录</text>
+        <text class="record-count">共 {{records.length}} 条</text>
+      </view>
+
+      <view class="record-card" wx:for="{{records}}" wx:key="id">
+        <view class="record-header">
+          <view class="record-info">
+            <text class="record-product-name">{{item.productName}}</text>
+            <text class="record-time">{{item.exchangeTime}}</text>
+          </view>
+          <view class="record-status {{getStatusClass(item.status)}}">
+            <text class="status-text">{{getStatusText(item.status)}}</text>
+          </view>
+        </view>
+
+        <view class="record-details">
+          <view class="detail-item">
+            <text class="detail-label">消耗积分</text>
+            <text class="detail-value points">{{item.points}}</text>
+          </view>
+          <view class="detail-item">
+            <text class="detail-label">联系电话</text>
+            <text class="detail-value">{{item.phone || '未填写'}}</text>
+          </view>
+          <view wx:if="{{item.remark}}" class="detail-item full-width">
+            <text class="detail-label">备注</text>
+            <text class="detail-value">{{item.remark}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </scroll-view>
+</view>

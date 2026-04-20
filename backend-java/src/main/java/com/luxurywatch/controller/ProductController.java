@@ -3,7 +3,9 @@ package com.luxurywatch.controller;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.luxurywatch.common.R;
+import com.luxurywatch.entity.Brand;
 import com.luxurywatch.entity.Product;
+import com.luxurywatch.entity.Series;
 import com.luxurywatch.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -31,10 +33,12 @@ public class ProductController {
             @RequestParam(defaultValue = "1") Integer page,
             @RequestParam(defaultValue = "10") Integer size,
             @RequestParam(required = false) String name,
+            @RequestParam(required = false) String brand,
+            @RequestParam(required = false) String series,
             @RequestParam(required = false) String category,
             @RequestParam(required = false) Integer status) {
 
-        IPage<Product> productPage = productService.getProductPage(page, size, name, category, status);
+        IPage<Product> productPage = productService.getProductPage(page, size, name, brand, series, category, status);
 
         Map<String, Object> result = new HashMap<>();
         result.put("list", productPage.getRecords());
@@ -147,5 +151,44 @@ public class ProductController {
             return R.success();
         }
         return R.error("库存更新失败");
+    }
+
+    /**
+     * 获取所有品牌列表（用于前端下拉选择）
+     */
+    @GetMapping("/brands")
+    public R<List<Brand>> getBrands() {
+        List<Brand> brands = productService.getAllBrands();
+        return R.success(brands);
+    }
+
+    /**
+     * 根据品牌ID获取系列列表
+     */
+    @GetMapping("/series")
+    public R<List<Series>> getSeriesByBrand(@RequestParam Integer brandId) {
+        List<Series> series = productService.getSeriesByBrandId(brandId);
+        return R.success(series);
+    }
+
+    /**
+     * 根据品牌和系列名查询已存在的系列Logo
+     */
+    @GetMapping("/series-logo")
+    public R<String> getSeriesLogo(@RequestParam String brand, @RequestParam String series) {
+        String logo = productService.getSeriesLogo(brand, series);
+        return R.success(logo);
+    }
+
+    /**
+     * 根据品牌名称查询品牌信息（是否存在、品牌图片）
+     */
+    @GetMapping("/brand-info")
+    public R<Map<String, Object>> getBrandInfo(@RequestParam String brand) {
+        Map<String, Object> info = new HashMap<>();
+        info.put("exists", productService.existsByBrand(brand));
+        String brandImage = productService.getBrandImage(brand);
+        info.put("brandImage", brandImage != null ? brandImage : "");
+        return R.success(info);
     }
 }

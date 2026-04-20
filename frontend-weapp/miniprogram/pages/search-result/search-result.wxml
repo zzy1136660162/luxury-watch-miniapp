@@ -1,0 +1,235 @@
+<view class="page">
+  <view class="nav-bar">
+    <view class="back-btn" bindtap="onBack">
+      <text class="back-arrow">‹</text>
+    </view>
+    <view class="nav-title" style="padding-top: 5px;">
+      <text class="brand-name">{{keyword ? (keyword.includes('-') ? keyword : '搜索结果') : (series ? (brand + '-' + series) : (brand || '搜索结果'))}}</text>
+      <text wx:if="{{keyword && !keyword.includes('-')}}" class="keyword-text">"{{keyword}}"</text>
+      <view wx:if="{{activeFilters.length > 0}}" class="filter-tags">
+        <text wx:for="{{activeFilters}}" wx:key="index" class="filter-tag">{{item.label}}</text>
+      </view>
+    </view>
+    <view class="filter-btn-wrapper" bindtap="onOpenFilter">
+      <image class="filter-icon" src="/assets/iconfont/search_input.png" mode="aspectFit" />
+      <view wx:if="{{filterCount > 0}}" class="filter-badge">{{filterCount}}</view>
+    </view>
+  </view>
+
+  <scroll-view class="content" scroll-y>
+    <view wx:if="{{loading}}" class="loading">加载中...</view>
+    
+    <view wx:if="{{products.length === 0}}" class="empty-state">
+      <text class="empty-text">暂无符合条件的商品</text>
+    </view>
+
+    <view wx:else class="product-grid">
+      <view class="product-item" wx:for="{{products}}" wx:key="id" bindtap="onProductTap" data-id="{{item.id}}">
+        <image wx:if="{{item.productImage}}" class="product-image" src="{{item.productImage}}" mode="aspectFill" />
+        <view wx:else class="product-image-placeholder">
+          <text class="placeholder-text">暂无图片</text>
+        </view>
+        <view class="product-info">
+          <text class="product-name">{{item.name}}</text>
+          <text wx:if="{{item.series}}" class="product-series">{{item.series}}系列</text>
+          <text wx:if="{{item.price}}" class="product-price">¥{{item.price}}</text>
+        </view>
+      </view>
+    </view>
+  </scroll-view>
+
+  <!-- 高级筛选弹窗 -->
+  <view class="filter-modal {{showFilter ? 'show' : ''}}" catchtouchmove="preventTouchMove">
+    <view class="filter-overlay" bindtap="onCloseFilter"></view>
+    <view class="filter-content">
+      <view class="filter-header">
+        <text class="filter-title">高级筛选</text>
+        <view class="filter-close" bindtap="onCloseFilter">
+          <text class="close-text">×</text>
+        </view>
+      </view>
+
+      <scroll-view class="filter-body" scroll-y>
+        <!-- 分类筛选 -->
+        <view class="filter-section">
+          <text class="filter-section-title">腕表分类</text>
+          <view class="filter-tags">
+            <view class="filter-tag {{filters.category === 'classic' ? 'active' : ''}}" bindtap="onFilterSelect" data-type="category" data-value="classic">
+              <text>经典</text>
+            </view>
+            <view class="filter-tag {{filters.category === 'sport' ? 'active' : ''}}" bindtap="onFilterSelect" data-type="category" data-value="sport">
+              <text>运动</text>
+            </view>
+            <view class="filter-tag {{filters.category === 'complex' ? 'active' : ''}}" bindtap="onFilterSelect" data-type="category" data-value="complex">
+              <text>复杂功能</text>
+            </view>
+            <view class="filter-tag {{filters.category === 'ladies' ? 'active' : ''}}" bindtap="onFilterSelect" data-type="category" data-value="ladies">
+              <text>女士</text>
+            </view>
+          </view>
+        </view>
+
+        <!-- 品牌系列筛选（仅在有品牌时显示） -->
+        <view class="filter-section" wx:if="{{brandSeries.length > 0}}">
+          <text class="filter-section-title">系列</text>
+          <view class="filter-tags">
+            <view class="filter-tag {{filters.series === '' ? 'active' : ''}}" bindtap="onSeriesSelect" data-value="">
+              <text>全部</text>
+            </view>
+            <view class="filter-tag {{filters.series === item ? 'active' : ''}}" wx:for="{{brandSeries}}" wx:key="index" bindtap="onSeriesSelect" data-value="{{item}}">
+              <text>{{item}}</text>
+            </view>
+          </view>
+        </view>
+
+        <!-- 价格筛选 -->
+        <view class="filter-section">
+          <text class="filter-section-title">价格区间</text>
+          <view class="filter-tags">
+            <view class="filter-tag {{filters.price === '0-5000' ? 'active' : ''}}" bindtap="onFilterSelect" data-type="price" data-value="0-5000">
+              <text>5千以下</text>
+            </view>
+            <view class="filter-tag {{filters.price === '5000-10000' ? 'active' : ''}}" bindtap="onFilterSelect" data-type="price" data-value="5000-10000">
+              <text>5千-1万</text>
+            </view>
+            <view class="filter-tag {{filters.price === '10000-20000' ? 'active' : ''}}" bindtap="onFilterSelect" data-type="price" data-value="10000-20000">
+              <text>1万-2万</text>
+            </view>
+            <view class="filter-tag {{filters.price === '20000-50000' ? 'active' : ''}}" bindtap="onFilterSelect" data-type="price" data-value="20000-50000">
+              <text>2万-5万</text>
+            </view>
+            <view class="filter-tag {{filters.price === '50000-150000' ? 'active' : ''}}" bindtap="onFilterSelect" data-type="price" data-value="50000-150000">
+              <text>5万-15万</text>
+            </view>
+            <view class="filter-tag {{filters.price === '150000-300000' ? 'active' : ''}}" bindtap="onFilterSelect" data-type="price" data-value="150000-300000">
+              <text>15万-30万</text>
+            </view>
+            <view class="filter-tag {{filters.price === '300000-1000000' ? 'active' : ''}}" bindtap="onFilterSelect" data-type="price" data-value="300000-1000000">
+              <text>30万-100万</text>
+            </view>
+            <view class="filter-tag {{filters.price === '1000000+' ? 'active' : ''}}" bindtap="onFilterSelect" data-type="price" data-value="1000000+">
+              <text>100万以上</text>
+            </view>
+          </view>
+        </view>
+
+        <!-- 表盘直径 -->
+        <view class="filter-section">
+          <text class="filter-section-title">表盘直径</text>
+          <view class="filter-tags">
+            <view class="filter-tag {{filters.caseSize === '0-36' ? 'active' : ''}}" bindtap="onFilterSelect" data-type="caseSize" data-value="0-36">
+              <text>36mm以下</text>
+            </view>
+            <view class="filter-tag {{filters.caseSize === '36-39' ? 'active' : ''}}" bindtap="onFilterSelect" data-type="caseSize" data-value="36-39">
+              <text>36-39mm</text>
+            </view>
+            <view class="filter-tag {{filters.caseSize === '39-42' ? 'active' : ''}}" bindtap="onFilterSelect" data-type="caseSize" data-value="39-42">
+              <text>39-42mm</text>
+            </view>
+            <view class="filter-tag {{filters.caseSize === '42-45' ? 'active' : ''}}" bindtap="onFilterSelect" data-type="caseSize" data-value="42-45">
+              <text>42-45mm</text>
+            </view>
+            <view class="filter-tag {{filters.caseSize === '45+' ? 'active' : ''}}" bindtap="onFilterSelect" data-type="caseSize" data-value="45+">
+              <text>45mm以上</text>
+            </view>
+          </view>
+        </view>
+
+        <!-- 表壳材质 -->
+        <view class="filter-section">
+          <text class="filter-section-title">表壳材质</text>
+          <view class="filter-tags">
+            <view class="filter-tag {{filters.material === 'steel' ? 'active' : ''}}" bindtap="onFilterSelect" data-type="material" data-value="steel">
+              <text>精钢</text>
+            </view>
+            <view class="filter-tag {{filters.material === 'gold' ? 'active' : ''}}" bindtap="onFilterSelect" data-type="material" data-value="gold">
+              <text>18K金</text>
+            </view>
+            <view class="filter-tag {{filters.material === 'rose_gold' ? 'active' : ''}}" bindtap="onFilterSelect" data-type="material" data-value="rose_gold">
+              <text>玫瑰金</text>
+            </view>
+            <view class="filter-tag {{filters.material === 'titanium' ? 'active' : ''}}" bindtap="onFilterSelect" data-type="material" data-value="titanium">
+              <text>钛金属</text>
+            </view>
+            <view class="filter-tag {{filters.material === 'ceramic' ? 'active' : ''}}" bindtap="onFilterSelect" data-type="material" data-value="ceramic">
+              <text>陶瓷</text>
+            </view>
+          </view>
+        </view>
+
+        <!-- 表带材质 -->
+        <view class="filter-section">
+          <text class="filter-section-title">表带材质</text>
+          <view class="filter-tags">
+            <view class="filter-tag {{filters.strap === 'leather' ? 'active' : ''}}" bindtap="onFilterSelect" data-type="strap" data-value="leather">
+              <text>真皮</text>
+            </view>
+            <view class="filter-tag {{filters.strap === 'steel' ? 'active' : ''}}" bindtap="onFilterSelect" data-type="strap" data-value="steel">
+              <text>钢带</text>
+            </view>
+            <view class="filter-tag {{filters.strap === 'rubber' ? 'active' : ''}}" bindtap="onFilterSelect" data-type="strap" data-value="rubber">
+              <text>橡胶</text>
+            </view>
+            <view class="filter-tag {{filters.strap === 'fabric' ? 'active' : ''}}" bindtap="onFilterSelect" data-type="strap" data-value="fabric">
+              <text>织物</text>
+            </view>
+          </view>
+        </view>
+
+        <!-- 防水性能 -->
+        <view class="filter-section">
+          <text class="filter-section-title">防水性能</text>
+          <view class="filter-tags">
+            <view class="filter-tag {{filters.waterResistance === '0' ? 'active' : ''}}" bindtap="onFilterSelect" data-type="waterResistance" data-value="0">
+              <text>不防水</text>
+            </view>
+            <view class="filter-tag {{filters.waterResistance === '0-100' ? 'active' : ''}}" bindtap="onFilterSelect" data-type="waterResistance" data-value="0-100">
+              <text>100m以下</text>
+            </view>
+            <view class="filter-tag {{filters.waterResistance === '100-300' ? 'active' : ''}}" bindtap="onFilterSelect" data-type="waterResistance" data-value="100-300">
+              <text>100-300m</text>
+            </view>
+            <view class="filter-tag {{filters.waterResistance === '300-1000' ? 'active' : ''}}" bindtap="onFilterSelect" data-type="waterResistance" data-value="300-1000">
+              <text>300-1000m</text>
+            </view>
+            <view class="filter-tag {{filters.waterResistance === '1000-3000' ? 'active' : ''}}" bindtap="onFilterSelect" data-type="waterResistance" data-value="1000-3000">
+              <text>1000-3000m</text>
+            </view>
+            <view class="filter-tag {{filters.waterResistance === '3000+' ? 'active' : ''}}" bindtap="onFilterSelect" data-type="waterResistance" data-value="3000+">
+              <text>3000m以上</text>
+            </view>
+          </view>
+        </view>
+
+        <!-- 动力储备 -->
+        <view class="filter-section">
+          <text class="filter-section-title">动力储备</text>
+          <view class="filter-tags">
+            <view class="filter-tag {{filters.powerReserve === '0-40' ? 'active' : ''}}" bindtap="onFilterSelect" data-type="powerReserve" data-value="0-40">
+              <text>40小时以下</text>
+            </view>
+            <view class="filter-tag {{filters.powerReserve === '40-80' ? 'active' : ''}}" bindtap="onFilterSelect" data-type="powerReserve" data-value="40-80">
+              <text>40-80小时</text>
+            </view>
+            <view class="filter-tag {{filters.powerReserve === '80-120' ? 'active' : ''}}" bindtap="onFilterSelect" data-type="powerReserve" data-value="80-120">
+              <text>80-120小时</text>
+            </view>
+            <view class="filter-tag {{filters.powerReserve === '120+' ? 'active' : ''}}" bindtap="onFilterSelect" data-type="powerReserve" data-value="120+">
+              <text>120小时以上</text>
+            </view>
+          </view>
+        </view>
+      </scroll-view>
+
+      <!-- 底部按钮 -->
+      <view class="filter-footer">
+        <view class="filter-btn reset" bindtap="onResetFilter">
+          <text>重置</text>
+        </view>
+        <view class="filter-btn confirm" bindtap="onConfirmFilter">
+          <text>确定</text>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

@@ -41,7 +41,6 @@ public class ExchangeRecord {
     private String productImage;
 
     /**
-     * 兑换积分
      */
     private Integer points;
 
@@ -51,17 +50,9 @@ public class ExchangeRecord {
     private String phone;
 
     /**
-     * 兑换状态：0-待处理，1-已完成，2-已取消
-     */
-    private Integer status;
-
-    /**
      * 兑换时间
      */
     @TableField("exchange_time")
     private LocalDateTime exchangeTime;
-
-
-
 
 }

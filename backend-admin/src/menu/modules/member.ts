@@ -29,6 +29,13 @@ const memberMenu: Menu.recordMainRaw[] = [
         },
       },
       {
+        path: '/member/store',
+        meta: {
+          title: '门店管理',
+          icon: 'i-ant-design:shop-twotone',
+        },
+      },
+      {
         path: '/member/appointment',
         meta: {
           title: '预约管理',

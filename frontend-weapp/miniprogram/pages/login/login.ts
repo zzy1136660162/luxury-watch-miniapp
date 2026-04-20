@@ -52,7 +52,7 @@ Page({
     const token = wx.getStorageSync('token');
     if (token) {
       wx.switchTab({
-        url: '/pages/member/member'
+        url: '/pages/home/home'
       });
     }
   },
@@ -300,7 +300,7 @@ Page({
               wx.navigateBack();
             } else {
               wx.switchTab({
-                url: '/pages/member/member'
+                url: '/pages/home/home'
               });
             }
           }, 2000);

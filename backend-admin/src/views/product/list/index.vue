@@ -6,6 +6,12 @@
         <el-form-item label="商品名称">
           <el-input v-model="searchForm.name" placeholder="请输入商品名称" clearable />
         </el-form-item>
+        <el-form-item label="商品品牌">
+          <el-input v-model="searchForm.brand" placeholder="请输入品牌名称" clearable style="width: 160px" />
+        </el-form-item>
+        <el-form-item label="商品系列">
+          <el-input v-model="searchForm.series" placeholder="请输入系列名称" clearable style="width: 160px" />
+        </el-form-item>
         <el-form-item label="商品分类">
           <el-select v-model="searchForm.category" placeholder="请选择分类" clearable style="width: 160px">
             <el-option-group label="腕表">
@@ -86,6 +92,11 @@
             <el-tag>{{ getCategoryText(row.category) }}</el-tag>
           </template>
         </el-table-column>
+        <el-table-column prop="brand" label="品牌" width="120">
+          <template #default="{ row }">
+            <el-tag type="warning">{{ row.brand || '-' }}</el-tag>
+          </template>
+        </el-table-column>
         <el-table-column prop="price" label="价格" width="120">
           <template #default="{ row }">
             <span class="price">¥{{ row.price.toLocaleString() }}</span>
@@ -110,6 +121,14 @@
             <el-tag :type="row.canRedeemPoints === 1 ? 'warning' : 'info'">
               {{ row.canRedeemPoints === 1 ? '是' : '否' }}
             </el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column label="兑换积分" width="120">
+          <template #default="{ row }">
+            <span v-if="row.canRedeemPoints === 1" class="points-cost">
+              {{ row.pointsCost || 0 }}
+            </span>
+            <span v-else class="points-none">-</span>
           </template>
         </el-table-column>
         <el-table-column prop="createTime" label="创建时间" width="180" />
@@ -187,6 +206,8 @@ const getFirstImage = (imageStr: string) => {
 // 搜索表单
 const searchForm = reactive({
   name: '',
+  brand: '',
+  series: '',
   category: '',
   status: undefined as number | undefined,
 })
@@ -252,6 +273,8 @@ const handleSearch = () => {
 // 重置
 const handleReset = () => {
   searchForm.name = ''
+  searchForm.brand = ''
+  searchForm.series = ''
   searchForm.category = ''
   searchForm.status = undefined
   handleSearch()
@@ -403,6 +426,15 @@ onMounted(() => {
 .price {
   color: var(--el-color-danger);
   font-weight: 500;
+}
+
+.points-cost {
+  color: var(--el-color-warning);
+  font-weight: 600;
+}
+
+.points-none {
+  color: var(--el-text-color-placeholder);
 }
 
 .pagination-wrapper {

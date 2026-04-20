@@ -136,7 +136,7 @@ Component({
     },
 
     onExploreHeritage() {
-      wx.switchTab({
+      wx.navigateTo({
         url: '/pages/heritage/heritage'
       });
     },

@@ -5,6 +5,9 @@
     "pages/heritage/heritage",
     "pages/member/member",
     "pages/privileges/privileges",
+    "pages/exchange-records/exchange-records",
+    "pages/search/search",
+    "pages/search-result/search-result",
     "pages/product-detail/product-detail",
     "pages/login/login",
     "pages/settings/settings",
@@ -12,7 +15,9 @@
     "pages/reward-detail/reward-detail",
     "pages/points-record/points-record",
     "pages/index/index",
-    "pages/logs/logs"
+    "pages/logs/logs",
+    "pages/appointment/appointment",
+    "pages/appointment-list/appointment-list"
   ],
   "window": {
     "navigationBarTextStyle": "black",
@@ -38,8 +43,8 @@
         "selectedIconPath": "assets/tabbar/collections-active.png"
       },
       {
-        "pagePath": "pages/heritage/heritage",
-        "text": "品牌馆",
+        "pagePath": "pages/privileges/privileges",
+        "text": "礼遇",
         "iconPath": "assets/tabbar/collections.png",
         "selectedIconPath": "assets/tabbar/collections-active.png"
       },

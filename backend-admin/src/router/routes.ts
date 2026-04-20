@@ -36,9 +36,19 @@ const systemRoutes: RouteRecordRaw[] = [
     children: [
       {
         path: '',
+        component: () => import('@/views/product/list/index.vue'),
+        meta: {
+          title: '商品管理',
+          icon: 'i-ant-design:shop-twotone',
+          breadcrumb: false,
+        },
+      },
+      {
+        path: 'home',
+        name: 'home',
         component: () => import('@/views/index.vue'),
         meta: {
-          title: () => useSettingsStore().settings.home.title,
+          title: '主页',
           icon: 'i-ant-design:home-twotone',
           breadcrumb: false,
         },
