@@ -1,4 +1,8 @@
-import pinyin from 'wl-pinyin'
+const pinyinModule = require('wl-pinyin')
+const pinyin = (pinyinModule as any).default || pinyinModule
+
+console.log('wl-pinyin module:', pinyinModule)
+console.log('pinyin object:', pinyin)
 
 export function getPinyinFirstLetter(chinese: string): string {
   if (!chinese || chinese.length === 0) return '#';
@@ -8,7 +12,12 @@ export function getPinyinFirstLetter(chinese: string): string {
   if (/[0-9]/.test(firstChar)) return '#';
 
   try {
-    const result = pinyin.getFirstLetter(firstChar);
+    let result = ''
+    if (typeof pinyin.getFirstLetter === 'function') {
+      result = pinyin.getFirstLetter(firstChar)
+    } else if (typeof (pinyin as any).pinyin === 'function') {
+      result = (pinyin as any).pinyin(firstChar).charAt(0).toUpperCase()
+    }
     if (result) {
       return result.toUpperCase();
     }

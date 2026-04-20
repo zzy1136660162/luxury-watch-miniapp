@@ -51,14 +51,31 @@ public class ExchangeRecordController {
         if (productName != null && !productName.trim().isEmpty()) {
             wrapper.like(ExchangeRecord::getProductName, productName);
         }
+        if (phone != null && !phone.trim().isEmpty()) {
+            wrapper.eq(ExchangeRecord::getPhone, phone);
+        }
 
+        // 执行分页查询
+        Page<ExchangeRecord> resultPage = exchangeRecordService.page(pageParam, wrapper);
 
-
-        // 执行查询
-        List<Map<String, Object>> list = exchangeRecordService.getExchangeRecordList(userId, status, productName, phone);
+        // 转换为Map列表
+        List<Map<String, Object>> list = resultPage.getRecords().stream().map(record -> {
+            Map<String, Object> map = new java.util.HashMap<>();
+            map.put("id", record.getId());
+            map.put("userId", record.getUserId());
+            map.put("userName", record.getUserName());
+            map.put("productId", record.getProductId());
+            map.put("productName", record.getProductName());
+            map.put("productImage", record.getProductImage());
+            map.put("points", record.getPoints());
+            map.put("phone", record.getPhone());
+            map.put("status", record.getStatus());
+            map.put("exchangeTime", record.getExchangeTime());
+            return map;
+        }).collect(Collectors.toList());
 
         // 构建分页结果
-        PageResult<Map<String, Object>> result = new PageResult<>(list, list.size(), page, size);
+        PageResult<Map<String, Object>> result = new PageResult<>(list, resultPage.getTotal(), page, size);
 
         return R.success(result);
     }
@@ -98,7 +115,12 @@ public class ExchangeRecordController {
             return R.error("状态不能为空");
         }
 
-        boolean success = exchangeRecordService.updateStatus(id, status);
+        ExchangeRecord record = exchangeRecordService.getById(id);
+        if (record == null) {
+            return R.error("记录不存在");
+        }
+        record.setStatus(status);
+        boolean success = exchangeRecordService.updateById(record);
         if (success) {
             return R.success();
         } else {
@@ -120,7 +142,11 @@ public class ExchangeRecordController {
         }
 
         for (Long id : ids) {
-            exchangeRecordService.updateStatus(id, status);
+            ExchangeRecord record = exchangeRecordService.getById(id);
+            if (record != null) {
+                record.setStatus(status);
+                exchangeRecordService.updateById(record);
+            }
         }
 
         return R.success();
@@ -149,7 +175,7 @@ public class ExchangeRecordController {
             return R.error("ID列表不能为空");
         }
 
-        boolean success = exchangeRecordService.batchDelete(ids);
+        boolean success = exchangeRecordService.removeByIds(ids);
         if (success) {
             return R.success();
         } else {

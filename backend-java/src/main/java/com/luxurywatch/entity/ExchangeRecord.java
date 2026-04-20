@@ -55,4 +55,9 @@ public class ExchangeRecord {
     @TableField("exchange_time")
     private LocalDateTime exchangeTime;
 
+    /**
+     * 状态：1-待审核，2-已兑换，3-已拒绝
+     */
+    private Integer status;
+
 }
