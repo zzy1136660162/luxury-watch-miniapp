@@ -20,6 +20,7 @@ public interface ProductMapper extends BaseMapper<Product> {
     IPage<Product> selectProductPage(Page<Product> page,
                                       @Param("name") String name,
                                       @Param("brand") String brand,
+                                      @Param("series") String series,
                                       @Param("category") String category,
                                       @Param("status") Integer status);
 

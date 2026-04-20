@@ -34,10 +34,11 @@ public class ProductController {
             @RequestParam(defaultValue = "10") Integer size,
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String brand,
+            @RequestParam(required = false) String series,
             @RequestParam(required = false) String category,
             @RequestParam(required = false) Integer status) {
 
-        IPage<Product> productPage = productService.getProductPage(page, size, name, brand, category, status);
+        IPage<Product> productPage = productService.getProductPage(page, size, name, brand, series, category, status);
 
         Map<String, Object> result = new HashMap<>();
         result.put("list", productPage.getRecords());

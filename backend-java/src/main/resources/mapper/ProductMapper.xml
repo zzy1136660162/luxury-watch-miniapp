@@ -12,6 +12,9 @@
         <if test="brand != null and brand != ''">
             AND brand LIKE CONCAT('%', #{brand}, '%')
         </if>
+        <if test="series != null and series != ''">
+            AND series LIKE CONCAT('%', #{series}, '%')
+        </if>
         <if test="category != null and category != ''">
             AND category = #{category}
         </if>

@@ -30,9 +30,9 @@ public class ProductService extends ServiceImpl<ProductMapper, Product> {
     /**
      * 分页查询商品列表
      */
-    public IPage<Product> getProductPage(Integer page, Integer size, String name, String brand, String category, Integer status) {
+    public IPage<Product> getProductPage(Integer page, Integer size, String name, String brand, String series, String category, Integer status) {
         Page<Product> pageParam = new Page<>(page, size);
-        return baseMapper.selectProductPage(pageParam, name, brand, category, status);
+        return baseMapper.selectProductPage(pageParam, name, brand, series, category, status);
     }
 
     /**

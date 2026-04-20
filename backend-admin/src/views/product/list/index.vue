@@ -9,6 +9,9 @@
         <el-form-item label="商品品牌">
           <el-input v-model="searchForm.brand" placeholder="请输入品牌名称" clearable style="width: 160px" />
         </el-form-item>
+        <el-form-item label="商品系列">
+          <el-input v-model="searchForm.series" placeholder="请输入系列名称" clearable style="width: 160px" />
+        </el-form-item>
         <el-form-item label="商品分类">
           <el-select v-model="searchForm.category" placeholder="请选择分类" clearable style="width: 160px">
             <el-option-group label="腕表">
@@ -199,6 +202,7 @@ const getFirstImage = (imageStr: string) => {
 const searchForm = reactive({
   name: '',
   brand: '',
+  series: '',
   category: '',
   status: undefined as number | undefined,
 })
@@ -264,6 +268,7 @@ const handleSearch = () => {
 const handleReset = () => {
   searchForm.name = ''
   searchForm.brand = ''
+  searchForm.series = ''
   searchForm.category = ''
   searchForm.status = undefined
   handleSearch()

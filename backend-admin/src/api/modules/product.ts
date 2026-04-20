@@ -3,12 +3,14 @@ import type { Product, PageResult, ApiResponse } from '@/types'
 
 export default {
   // ==================== 商品管理 ====================
-  
+
   // 获取商品列表
   getProductList: (params: {
     page?: number
     size?: number
     name?: string
+    brand?: string
+    series?: string
     category?: string
     status?: number
   }) => api.get<ApiResponse<PageResult<Product>>>('/product/list', { params }),
