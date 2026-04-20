@@ -46,4 +46,9 @@ export default {
   getSeriesLogo: (brand: string, series: string) => api.get<ApiResponse<string | null>>('/product/series-logo', {
     params: { brand, series }
   }),
+
+  // 根据品牌名查询品牌信息（是否存在、品牌图片）
+  getBrandInfo: (brand: string) => api.get<ApiResponse<{ exists: boolean; brandImage: string }>>('/product/brand-info', {
+    params: { brand }
+  }),
 }

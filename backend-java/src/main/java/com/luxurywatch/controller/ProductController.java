@@ -178,4 +178,16 @@ public class ProductController {
         String logo = productService.getSeriesLogo(brand, series);
         return R.success(logo);
     }
+
+    /**
+     * 根据品牌名称查询品牌信息（是否存在、品牌图片）
+     */
+    @GetMapping("/brand-info")
+    public R<Map<String, Object>> getBrandInfo(@RequestParam String brand) {
+        Map<String, Object> info = new HashMap<>();
+        info.put("exists", productService.existsByBrand(brand));
+        String brandImage = productService.getBrandImage(brand);
+        info.put("brandImage", brandImage != null ? brandImage : "");
+        return R.success(info);
+    }
 }

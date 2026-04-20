@@ -20,7 +20,12 @@
         </el-col>
         <el-col :span="12">
           <el-form-item label="商品品牌" prop="brand">
-            <el-input v-model="form.brand" placeholder="请输入品牌名称，如：劳力士、欧米茄" />
+            <div class="input-with-search">
+              <el-input v-model="form.brand" placeholder="请输入品牌名称，如：劳力士、欧米茄" />
+              <el-button class="search-btn" @click="handleBrandSearch">
+                <el-icon><Search /></el-icon>
+              </el-button>
+            </div>
           </el-form-item>
         </el-col>
       </el-row>
@@ -28,7 +33,12 @@
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item label="商品系列" prop="series">
-            <el-input v-model="form.series" placeholder="请输入系列名称，如：Submariner、Seamaster" @blur="handleSeriesBlur" />
+            <div class="input-with-search">
+              <el-input v-model="form.series" placeholder="请输入系列名称，如：Submariner、Seamaster" />
+              <el-button class="search-btn" @click="handleSeriesSearch" :disabled="!form.brand">
+                <el-icon><Search /></el-icon>
+              </el-button>
+            </div>
           </el-form-item>
         </el-col>
         <el-col :span="12">
@@ -253,7 +263,7 @@ import api from '@/api'
 import ImagesUpload from '@/components/ImagesUpload.vue'
 import Editor from '@tinymce/tinymce-vue'
 import axios from 'axios'
-import { Plus } from '@element-plus/icons-vue'
+import { Plus, Search } from '@element-plus/icons-vue'
 
 interface CategoryOption {
   id: number
@@ -388,18 +398,80 @@ const handleCategoryChange = (value: number) => {
   }
 }
 
+// 品牌输入框失焦时查询
+const handleBrandBlur = async () => {
+  if (form.brand) {
+    await searchBrand()
+  }
+}
+
+// 品牌搜索按钮点击
+const handleBrandSearch = async () => {
+  if (!form.brand) {
+    ElMessage.warning('请先输入品牌名称')
+    return
+  }
+  await searchBrand()
+}
+
+// 搜索品牌
+const searchBrand = async () => {
+  try {
+    const res: any = await api.product.getBrandInfo(form.brand)
+    if (res.code === 200) {
+      const data = res.data
+      if (data.exists) {
+        if (data.brandImage) {
+          form.brandImage = data.brandImage
+          ElMessage({ message: `品牌已存在，品牌图片已自动匹配`, type: 'success', duration: 3000 })
+        } else {
+          ElMessage({ message: '品牌已存在', type: 'success', duration: 3000 })
+        }
+      } else {
+        ElMessage({ message: '品牌不存在，是否添加新品牌？', type: 'warning', duration: 3000 })
+      }
+    }
+  } catch (error) {
+    console.error('查询品牌失败:', error)
+    ElMessage({ message: '查询失败', type: 'error', duration: 3000 })
+  }
+}
+
+// 系列搜索按钮点击
+const handleSeriesSearch = async () => {
+  if (!form.brand) {
+    ElMessage.warning('请先输入品牌名称')
+    return
+  }
+  if (!form.series) {
+    ElMessage.warning('请先输入系列名称')
+    return
+  }
+  await searchSeries()
+}
+
+// 搜索系列
+const searchSeries = async () => {
+  try {
+    const res: any = await api.product.getSeriesLogo(form.brand, form.series)
+    if (res.code === 200) {
+      if (res.data) {
+        form.seriesLogo = res.data
+        ElMessage({ message: '系列已存在，Logo已自动匹配', type: 'success', duration: 3000 })
+      } else {
+        ElMessage({ message: '系列不存在，是否添加新系列？', type: 'warning', duration: 3000 })
+      }
+    }
+  } catch (error) {
+    console.error('查询系列失败:', error)
+    ElMessage({ message: '查询失败', type: 'error', duration: 3000 })
+  }
+}
+
 // 系列输入框失焦时查询logo
 const handleSeriesBlur = async () => {
   if (form.brand && form.series) {
-    try {
-      const res = await api.product.getSeriesLogo(form.brand, form.series)
-      if (res.data && res.data.code === 200 && res.data.data) {
-        form.seriesLogo = res.data.data
-        ElMessage.success('已自动匹配到系列Logo')
-      }
-    } catch (error) {
-      console.error('查询系列Logo失败:', error)
-    }
+    await searchSeries()
   }
 }
 
@@ -622,6 +694,42 @@ const handleSubmit = async () => {
 
     span {
       font-size: 12px;
+    }
+  }
+}
+
+.input-with-search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  .el-input {
+    flex: 1;
+  }
+
+  .search-btn {
+    padding: 8px 12px;
+    border: 1px solid #dcdfe6;
+    border-radius: 4px;
+    background: #f5f7fa;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+
+    &:hover {
+      background: #e9eef3;
+      border-color: #409eff;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .el-icon {
+      font-size: 14px;
     }
   }
 }

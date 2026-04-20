@@ -122,4 +122,27 @@ public class ProductService extends ServiceImpl<ProductMapper, Product> {
         Product product = baseMapper.selectOne(wrapper);
         return product != null ? product.getSeriesLogo() : null;
     }
+
+    /**
+     * 检查品牌是否存在
+     */
+    public boolean existsByBrand(String brand) {
+        LambdaQueryWrapper<Product> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Product::getBrand, brand);
+        return baseMapper.selectCount(wrapper) > 0;
+    }
+
+    /**
+     * 获取品牌的品牌图片
+     */
+    public String getBrandImage(String brand) {
+        LambdaQueryWrapper<Product> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Product::getBrand, brand)
+               .isNotNull(Product::getBrandImage)
+               .ne(Product::getBrandImage, "")
+               .orderByDesc(Product::getId)
+               .last("LIMIT 1");
+        Product product = baseMapper.selectOne(wrapper);
+        return product != null ? product.getBrandImage() : null;
+    }
 }
