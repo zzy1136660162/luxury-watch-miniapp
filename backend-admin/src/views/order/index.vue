@@ -67,16 +67,7 @@
         </el-table-column>
         <el-table-column label="商品信息" min-width="200">
           <template #default="{ row }">
-            <div class="product-info">
-              <el-image
-                v-if="row.productImage"
-                :src="row.productImage"
-                :preview-src-list="[row.productImage]"
-                fit="cover"
-                class="product-image"
-              />
-              <div class="product-name">{{ row.productName }}</div>
-            </div>
+            <div class="product-name">{{ row.productName }}</div>
           </template>
         </el-table-column>
         <el-table-column prop="points" label="兑换积分" width="100">

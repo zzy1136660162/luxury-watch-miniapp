@@ -48,10 +48,8 @@ const loadData = async () => {
       page: pagination.value.page,
       size: pagination.value.pageSize
     })
-    if (res.code === 200) {
-      data.value = res.data.list
-      pagination.value.total = res.data.total
-    }
+    data.value = res.list || []
+    pagination.value.total = res.total || 0
   } catch (error) {
     console.error('加载数据失败:', error)
     ElMessage.error('加载数据失败')
@@ -90,19 +88,14 @@ const handleSubmit = async () => {
   }
 
   try {
-    let res: any
     if (isEdit.value) {
-      res = await storeApi.update(formData.value.id, formData.value)
+      await storeApi.update(formData.value.id, formData.value)
     } else {
-      res = await storeApi.create(formData.value)
+      await storeApi.create(formData.value)
     }
-    if (res.code === 200) {
-      ElMessage.success(isEdit.value ? '更新成功' : '创建成功')
-      showDialog.value = false
-      loadData()
-    } else {
-      ElMessage.error(res.msg || '操作失败')
-    }
+    ElMessage.success(isEdit.value ? '更新成功' : '创建成功')
+    showDialog.value = false
+    loadData()
   } catch (error) {
     ElMessage.error('操作失败')
   }
@@ -110,13 +103,9 @@ const handleSubmit = async () => {
 
 const handleDelete = async (id: number) => {
   try {
-    const res: any = await storeApi.delete(id)
-    if (res.code === 200) {
-      ElMessage.success('删除成功')
-      loadData()
-    } else {
-      ElMessage.error(res.msg || '删除失败')
-    }
+    await storeApi.delete(id)
+    ElMessage.success('删除成功')
+    loadData()
   } catch (error) {
     ElMessage.error('删除失败')
   }

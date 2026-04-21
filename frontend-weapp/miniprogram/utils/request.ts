@@ -6,6 +6,17 @@
 const baseUrl = 'http://127.0.0.1:8081';
 
 /**
+ * 处理登录过期
+ */
+const handleUnauthorized = () => {
+  wx.removeStorageSync('token');
+  wx.removeStorageSync('userInfo');
+  wx.redirectTo({
+    url: '/pages/login/login'
+  });
+};
+
+/**
  * 封装wx.request请求
  */
 const request = (options: any): Promise<any> => {
@@ -18,13 +29,23 @@ const request = (options: any): Promise<any> => {
     if (token) {
       headers['Authorization'] = token;
     }
-    
+
     wx.request({
       url: baseUrl + options.url,
       method: options.method || 'GET',
       data: options.data || {},
       header: headers,
       success: (res: any) => {
+        // 检查登录过期
+        if (res.statusCode === 401 || (res.data && res.data.code === 401)) {
+          wx.showToast({
+            title: '登录已过期，请重新登录',
+            icon: 'none'
+          });
+          handleUnauthorized();
+          reject(res);
+          return;
+        }
         if (res.statusCode === 200) {
           resolve(res.data);
         } else {

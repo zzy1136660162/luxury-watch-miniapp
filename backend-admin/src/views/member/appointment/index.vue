@@ -28,10 +28,8 @@ const loadData = async () => {
       params.status = queryParams.value.status
     }
     const res: any = await appointmentApi.list(params)
-    if (res.code === 200) {
-      data.value = res.data.list
-      pagination.value.total = res.data.total
-    }
+    data.value = res.list || []
+    pagination.value.total = res.total || 0
   } catch (error) {
     console.error('加载数据失败:', error)
     ElMessage.error('加载数据失败')
@@ -42,13 +40,9 @@ const loadData = async () => {
 
 const handleConfirm = async (id: number) => {
   try {
-    const res: any = await appointmentApi.confirm(id)
-    if (res.code === 200) {
-      ElMessage.success('已确认到店')
-      loadData()
-    } else {
-      ElMessage.error(res.msg || '操作失败')
-    }
+    await appointmentApi.confirm(id)
+    ElMessage.success('已确认到店')
+    loadData()
   } catch (error) {
     ElMessage.error('操作失败')
   }

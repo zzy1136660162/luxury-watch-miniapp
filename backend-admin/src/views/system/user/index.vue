@@ -188,17 +188,13 @@ const getGenderText = (gender: number) => {
 const loadWxUserList = async () => {
   try {
     loading.value = true
-    const response = await wxUserApi.getWxUserList({
+    const response: any = await wxUserApi.getWxUserList({
       keyword: searchForm.username,
       phone: searchForm.phone,
       memberLevel: searchForm.memberLevel,
       status: searchForm.status
     })
-    if (response.code === 200) {
-      tableData.value = response.data?.list || []
-    } else {
-      ElMessage.error(response.data?.msg || '获取用户列表失败')
-    }
+    tableData.value = response?.list || []
   } catch (error) {
     ElMessage.error('网络错误，请稍后重试')
     console.error('加载小程序用户列表失败:', error)
@@ -252,13 +248,9 @@ const handlePointsAdjust = (row: WxUser) => {
   })
     .then(async ({ value }) => {
       try {
-        const response = await wxUserApi.adjustWxUserPoints(row.id, parseInt(value), '后台手动调整')
-        if (response.code === 200) {
-          ElMessage.success('积分调整成功')
-          loadWxUserList()
-        } else {
-          ElMessage.error(response.data.msg || '积分调整失败')
-        }
+        await wxUserApi.adjustWxUserPoints(row.id, parseInt(value), '后台手动调整')
+        ElMessage.success('积分调整成功')
+        loadWxUserList()
       } catch (error) {
         ElMessage.error('积分调整失败')
       }
@@ -275,13 +267,9 @@ const handleDelete = (row: WxUser) => {
   })
     .then(async () => {
       try {
-        const response = await wxUserApi.deleteWxUser(row.id)
-        if (response.code === 200) {
-          ElMessage.success('删除成功')
-          loadWxUserList()
-        } else {
-          ElMessage.error(response.data.msg || '删除失败')
-        }
+        await wxUserApi.deleteWxUser(row.id)
+        ElMessage.success('删除成功')
+        loadWxUserList()
       } catch (error) {
         ElMessage.error('删除失败')
       }

@@ -166,15 +166,11 @@ onMounted(() => {
 const loadAdminList = async () => {
   loading.value = true
   try {
-    const res = await adminApi.getAdminUsers({
+    const res: any = await adminApi.getAdminUsers({
       keyword: searchForm.username || undefined,
       status: searchForm.status ?? undefined
     })
-    if (res.code === 200) {
-      tableData.value = res.data || []
-    } else {
-      ElMessage.error(res.msg || '加载失败')
-    }
+    tableData.value = res || []
   } catch (error) {
     ElMessage.error('加载管理员列表失败')
   } finally {
@@ -236,13 +232,9 @@ const handleDelete = async (row: AdminData) => {
       }
     )
 
-    const res = await adminApi.deleteAdminUser(row.id)
-    if (res.code === 200) {
-      ElMessage.success('删除成功')
-      loadAdminList()
-    } else {
-      ElMessage.error(res.msg || '删除失败')
-    }
+    await adminApi.deleteAdminUser(row.id)
+    ElMessage.success('删除成功')
+    loadAdminList()
   } catch (error: any) {
     if (error !== 'cancel') {
       ElMessage.error(error.message || '删除失败')
@@ -267,24 +259,19 @@ const handleSubmit = async () => {
       status: formData.status
     }
 
-    let res
     if (isEdit.value) {
       if (formData.password) {
         data.password = formData.password
       }
-      res = await adminApi.updateAdminUser(formData.id, data)
+      await adminApi.updateAdminUser(formData.id, data)
     } else {
       data.password = formData.password
-      res = await adminApi.createAdminUser(data)
+      await adminApi.createAdminUser(data)
     }
 
-    if (res.code === 200) {
-      ElMessage.success(isEdit.value ? '编辑成功' : '新增成功')
-      dialogVisible.value = false
-      loadAdminList()
-    } else {
-      ElMessage.error(res.msg || '操作失败')
-    }
+    ElMessage.success(isEdit.value ? '编辑成功' : '新增成功')
+    dialogVisible.value = false
+    loadAdminList()
   } catch (error: any) {
     ElMessage.error(error.message || '操作失败')
   } finally {
