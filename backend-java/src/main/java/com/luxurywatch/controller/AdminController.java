@@ -14,6 +14,7 @@ import com.luxurywatch.vo.UserInfoVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -80,9 +81,12 @@ public class AdminController {
 
         // 获取角色列表
         List<SysRole> roles = sysRoleMapper.selectByUserId(userId);
-        List<String> roleCodes = roles.stream()
-                .map(SysRole::getRoleCode)
-                .collect(Collectors.toList());
+        List<String> roleCodes = new ArrayList<>();
+        if (roles != null && !roles.isEmpty()) {
+            roleCodes = roles.stream()
+                    .map(SysRole::getRoleCode)
+                    .collect(Collectors.toList());
+        }
 
         // 获取权限列表
         PermissionVO vo = new PermissionVO();

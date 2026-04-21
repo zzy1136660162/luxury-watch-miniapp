@@ -20,7 +20,7 @@ public class SysMenuServiceImpl implements SysMenuService {
     public List<Map<String, Object>> getUserMenus(Long userId) {
         // 获取用户所有菜单
         List<SysMenu> allMenus = sysMenuMapper.selectByUserId(userId);
-        if (allMenus.isEmpty()) {
+        if (allMenus == null || allMenus.isEmpty()) {
             return new ArrayList<>();
         }
 

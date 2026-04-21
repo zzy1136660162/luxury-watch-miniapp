@@ -92,10 +92,14 @@ function setupRoutes(router: Router) {
           routeStore.setCurrentRemoveRoutes(removeRoutes)
           DEBUG && console.log('[Router] 路由生成完成')
         }
-        catch (error) {
+        catch (error: any) {
           DEBUG && console.error('[Router] 路由生成失败:', error)
-          // 路由生成失败时不调用 logout，避免循环问题
-          // 清除登录状态，让用户重新登录
+          // 如果是 401 错误，让 API 拦截器的 handleError 统一处理，避免重复跳转
+          if (error?.response?.status === 401 || error?.code === 401) {
+            DEBUG && console.log('[Router] 收到 401 错误，API 拦截器将处理')
+            throw error
+          }
+          // 其他错误才在路由守卫中处理
           localStorage.removeItem('token')
           return {
             name: 'login',
