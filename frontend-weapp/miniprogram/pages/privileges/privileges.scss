@@ -183,12 +183,14 @@ $font-family-english: 'Manrope', sans-serif;
   display: flex;
   flex-direction: column;
   cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
 
   .product-image-wrapper {
     width: 100%;
     height: 300px;
     overflow: hidden;
     background-color: $surface-container;
+    -webkit-tap-highlight-color: transparent;
 
     &.image-placeholder {
       background: linear-gradient(135deg, $surface-container 0%, darken($surface-container, 10%) 100%);

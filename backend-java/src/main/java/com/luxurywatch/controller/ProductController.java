@@ -5,7 +5,9 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.luxurywatch.common.R;
 import com.luxurywatch.entity.Brand;
 import com.luxurywatch.entity.Product;
+import com.luxurywatch.entity.ProductCategory;
 import com.luxurywatch.entity.Series;
+import com.luxurywatch.service.ProductCategoryService;
 import com.luxurywatch.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +25,9 @@ public class ProductController {
 
     @Autowired
     private ProductService productService;
+
+    @Autowired
+    private ProductCategoryService productCategoryService;
 
     /**
      * 获取商品列表（分页）
@@ -190,5 +195,86 @@ public class ProductController {
         String brandImage = productService.getBrandImage(brand);
         info.put("brandImage", brandImage != null ? brandImage : "");
         return R.success(info);
+    }
+
+    // ==================== 商品分类管理 ====================
+
+    /**
+     * 获取商品分类列表
+     */
+    @GetMapping("/category/list")
+    @SaCheckPermission("product:list")
+    public R<List<ProductCategory>> getCategoryList() {
+        List<ProductCategory> list = productCategoryService.list();
+        return R.success(list);
+    }
+
+    /**
+     * 获取商品分类详情
+     */
+    @GetMapping("/category/{id}")
+    @SaCheckPermission("product:list")
+    public R<ProductCategory> getCategoryDetail(@PathVariable Long id) {
+        ProductCategory category = productCategoryService.getById(id);
+        if (category == null) {
+            return R.error("分类不存在");
+        }
+        return R.success(category);
+    }
+
+    /**
+     * 创建商品分类
+     */
+    @PostMapping("/category")
+    @SaCheckPermission("product:add")
+    public R<Void> createCategory(@RequestBody ProductCategory category) {
+        // 如果没有传入code，自动生成
+        if (category.getCode() == null || category.getCode().trim().isEmpty()) {
+            category.setCode(generateCode(category.getName()));
+        }
+        productCategoryService.save(category);
+        return R.success();
+    }
+
+    /**
+     * 根据分类名称生成编码
+     */
+    private String generateCode(String name) {
+        if (name == null || name.trim().isEmpty()) {
+            return "CATEGORY_" + System.currentTimeMillis();
+        }
+        // 取拼音首字母 + 时间戳
+        StringBuilder code = new StringBuilder();
+        for (char c : name.toCharArray()) {
+            if (Character.isLetter(c)) {
+                code.append(Character.toUpperCase(c));
+                if (code.length() >= 4) break;
+            }
+        }
+        if (code.length() == 0) {
+            code.append("CAT");
+        }
+        return code.toString() + "_" + System.currentTimeMillis();
+    }
+
+    /**
+     * 更新商品分类
+     */
+    @PutMapping("/category/{id}")
+    @SaCheckPermission("product:edit")
+    public R<Void> updateCategory(@PathVariable Long id, @RequestBody ProductCategory category) {
+        category.setId(id);
+        productCategoryService.updateById(category);
+        return R.success();
+    }
+
+    /**
+     * 删除商品分类
+     */
+    @DeleteMapping("/category/{id}")
+    @SaCheckPermission("product:delete")
+    public R<Void> deleteCategory(@PathVariable Long id) {
+        productCategoryService.removeById(id);
+        return R.success();
     }
 }

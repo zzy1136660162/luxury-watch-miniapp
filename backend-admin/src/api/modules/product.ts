@@ -33,4 +33,21 @@ export default {
 
   // 更新商品库存
   updateProductStock: (id: number, stock: number) => api.put<ApiResponse<void>>(`/product/${id}/stock`, { stock }),
+
+  // ==================== 商品分类管理 ====================
+
+  // 获取商品分类列表
+  getCategoryList: () => api.get<ApiResponse<any[]>>('/product/category/list'),
+
+  // 获取商品分类详情
+  getCategoryDetail: (id: number) => api.get<ApiResponse<any>>(`/product/category/${id}`),
+
+  // 创建商品分类
+  createCategory: (data: any) => api.post<ApiResponse<void>>('/product/category', data),
+
+  // 更新商品分类
+  updateCategory: (id: number, data: any) => api.put<ApiResponse<void>>(`/product/category/${id}`, data),
+
+  // 删除商品分类
+  deleteCategory: (id: number) => api.delete<ApiResponse<void>>(`/product/category/${id}`),
 }

@@ -1,4 +1,18 @@
 /**app.wxss**/
+
+/* 去除点击时的蓝色填充效果 */
+page {
+  -webkit-tap-highlight-color: transparent;
+}
+
+view,
+text,
+image,
+button,
+navigator {
+  -webkit-tap-highlight-color: transparent;
+}
+
 page {
   box-sizing: border-box;
   width: 100vw;

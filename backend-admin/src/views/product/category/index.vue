@@ -34,7 +34,7 @@
 
       <el-table
         v-loading="loading"
-        :data="tableData"
+        :data="categoryDisplayTree"
         stripe
         row-key="id"
         :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
@@ -123,6 +123,7 @@
 import { ref, reactive, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Search, Plus, Edit, Delete } from '@element-plus/icons-vue'
+import api from '@/api'
 
 // 搜索表单
 const searchForm = reactive({
@@ -133,6 +134,7 @@ const searchForm = reactive({
 // 表格数据
 const loading = ref(false)
 const tableData = ref<any[]>([])
+const categoryDisplayTree = ref<any[]>([])
 
 // 对话框
 const dialogVisible = ref(false)
@@ -162,39 +164,50 @@ const rules = {
 const fetchData = async () => {
   loading.value = true
   try {
-    // TODO: 调用API获取数据
-    // const res = await apiCategory.getList(searchForm)
-    // tableData.value = res.data
-    
-    // 模拟数据
-    tableData.value = [
-      {
-        id: 1,
-        name: '腕表',
-        icon: '',
-        sort: 1,
-        status: 1,
-        createTime: '2026-03-30 10:00:00',
-        children: [
-          { id: 11, name: '机械表', icon: '', sort: 1, status: 1, createTime: '2026-03-30 10:00:00' },
-          { id: 12, name: '石英表', icon: '', sort: 2, status: 1, createTime: '2026-03-30 10:00:00' },
-        ],
-      },
-      {
-        id: 2,
-        name: '配件',
-        icon: '',
-        sort: 2,
-        status: 1,
-        createTime: '2026-03-30 10:00:00',
-      },
-    ]
-    categoryTree.value = [{ id: 0, name: '顶级分类', children: tableData.value }]
+    const res = await api.product.getCategoryList()
+    tableData.value = res || []
+    // 构建树形结构（用于表格展示）
+    categoryDisplayTree.value = buildTree(res || [])
+    // 构建下拉选择树（添加顶级分类选项）
+    categoryTree.value = [{ id: 0, name: '顶级分类', children: buildTree(res || []) }]
   } catch (error) {
     console.error('获取分类列表失败:', error)
   } finally {
     loading.value = false
   }
+}
+
+// 构建树形结构
+const buildTree = (list: any[]): any[] => {
+  const result: any[] = []
+  const map = new Map<number | string, any>()
+
+  // 先把所有分类转成带 children 的对象
+  list.forEach(item => {
+    map.set(item.id, { ...item, children: [] })
+  })
+
+  // 遍历构建父子关系
+  list.forEach(item => {
+    const node = map.get(item.id)
+    const parentId = item.parentId
+
+    if (parentId === 0 || parentId === null || parentId === undefined) {
+      // 没有父级或父级为0，作为顶级分类
+      result.push(node)
+    } else {
+      // 找到父节点，添加到父节点的 children
+      const parent = map.get(parentId)
+      if (parent) {
+        parent.children.push(node)
+      } else {
+        // 父节点不存在，也作为顶级分类
+        result.push(node)
+      }
+    }
+  })
+
+  return result
 }
 
 // 搜索
@@ -240,8 +253,7 @@ const handleDelete = (row: any) => {
     cancelButtonText: '取消',
     type: 'warning',
   }).then(async () => {
-    // TODO: 调用API删除
-    // await apiCategory.delete(row.id)
+    await api.product.deleteCategory(row.id)
     ElMessage.success('删除成功')
     fetchData()
   }).catch(() => {})
@@ -252,12 +264,11 @@ const handleSubmit = async () => {
   await formRef.value.validate()
   submitting.value = true
   try {
-    // TODO: 调用API保存
-    // if (dialogType.value === 'add') {
-    //   await apiCategory.create(form)
-    // } else {
-    //   await apiCategory.update(form)
-    // }
+    if (dialogType.value === 'add') {
+      await api.product.createCategory(form)
+    } else {
+      await api.product.updateCategory(form.id!, form)
+    }
     ElMessage.success(dialogType.value === 'add' ? '新增成功' : '修改成功')
     dialogVisible.value = false
     fetchData()

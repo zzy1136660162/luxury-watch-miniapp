@@ -94,16 +94,13 @@ function setupRoutes(router: Router) {
         }
         catch (error: any) {
           DEBUG && console.error('[Router] 路由生成失败:', error)
-          // 如果是 401 错误，让 API 拦截器的 handleError 统一处理，避免重复跳转
-          if (error?.response?.status === 401 || error?.code === 401) {
-            DEBUG && console.log('[Router] 收到 401 错误，API 拦截器将处理')
-            throw error
-          }
-          // 其他错误才在路由守卫中处理
+          // 清除 token 并重定向到登录页
           localStorage.removeItem('token')
-          return {
-            name: 'login',
-            query: { redirect: to.fullPath },
+          if (to.name !== 'login') {
+            return {
+              name: 'login',
+              query: { redirect: to.fullPath },
+            }
           }
         }
         // 动态路由生成并注册后，重新进入当前路由
