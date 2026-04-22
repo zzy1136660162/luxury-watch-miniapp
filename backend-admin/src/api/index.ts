@@ -107,8 +107,17 @@ api.interceptors.response.use(
         // 成功，返回data字段
         return Promise.resolve(response.data.data)
       }
+      else if (response.data.code === 401) {
+        // 登录过期，清除 token 并跳转到登录页
+        DEBUG && console.warn('[API] 登录已过期:', response.data.msg)
+        const userStore = useUserStore()
+        localStorage.removeItem('token')
+        userStore.token = ''
+        window.location.href = '/login'
+        return Promise.reject(response.data)
+      }
       else {
-        // 业务错误
+        // 其他业务错误
         DEBUG && console.warn('[API] 业务错误:', response.data.code, response.data.msg)
         toast.error('Error', {
           description: response.data.msg || '请求失败',

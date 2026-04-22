@@ -44,15 +44,12 @@ function setupRoutes(router: Router) {
         }
       }
       else {
-        DEBUG && console.log('[Router] 路由未生成，开始获取权限和生成路由')
+        DEBUG && console.log('[Router] 路由未生成，开始生成路由')
         DEBUG && console.log('[Router] enablePermission:', settingsStore.settings.app.enablePermission)
         DEBUG && console.log('[Router] routeBaseOn:', settingsStore.settings.app.routeBaseOn)
+
+        // 先生成路由，不管 token 是否有效
         try {
-          // 获取用户权限
-          if (settingsStore.settings.app.enablePermission) {
-            DEBUG && console.log('[Router] 获取用户权限')
-            await userStore.getPermissions()
-          }
           // 生成动态路由
           switch (settingsStore.settings.app.routeBaseOn) {
             case 'frontend':
@@ -76,33 +73,36 @@ function setupRoutes(router: Router) {
               }
               break
           }
-          // 注册并记录路由数据
-          // 记录的数据会在登出时会使用到，不使用 router.removeRoute 是考虑配置的路由可能不一定有设置 name ，则通过调用 router.addRoute() 返回的回调进行删除
-          const removeRoutes: (() => void)[] = []
-          routeStore.routes.forEach((route) => {
-            if (!/^(?:https?:|mailto:|tel:)/.test(route.path)) {
-              removeRoutes.push(router.addRoute(route as RouteRecordRaw))
-            }
+        }
+        catch (error) {
+          DEBUG && console.error('[Router] 生成路由出错，继续生成路由')
+        }
+
+        // 注册并记录路由数据
+        const removeRoutes: (() => void)[] = []
+        routeStore.routes.forEach((route) => {
+          if (!/^(?:https?:|mailto:|tel:)/.test(route.path)) {
+            removeRoutes.push(router.addRoute(route as RouteRecordRaw))
+          }
+        })
+        if (settingsStore.settings.app.routeBaseOn !== 'filesystem') {
+          routeStore.systemRoutes.forEach((route) => {
+            removeRoutes.push(router.addRoute(route as RouteRecordRaw))
           })
-          if (settingsStore.settings.app.routeBaseOn !== 'filesystem') {
-            routeStore.systemRoutes.forEach((route) => {
-              removeRoutes.push(router.addRoute(route as RouteRecordRaw))
-            })
-          }
-          routeStore.setCurrentRemoveRoutes(removeRoutes)
-          DEBUG && console.log('[Router] 路由生成完成')
         }
-        catch (error: any) {
-          DEBUG && console.error('[Router] 路由生成失败:', error)
-          // 清除 token 并重定向到登录页
-          localStorage.removeItem('token')
-          if (to.name !== 'login') {
-            return {
-              name: 'login',
-              query: { redirect: to.fullPath },
-            }
+        routeStore.setCurrentRemoveRoutes(removeRoutes)
+        routeStore.isGenerate = true
+        DEBUG && console.log('[Router] 路由生成完成')
+
+        // 如果用户未登录（token无效或不存在），直接跳转到登录页
+        if (!userStore.isLogin) {
+          DEBUG && console.log('[Router] token无效，跳转到登录页')
+          // 直接重定向到 /login
+          return {
+            path: '/login',
           }
         }
+
         // 动态路由生成并注册后，重新进入当前路由
         DEBUG && console.log('[Router] 重新进入当前路由')
         return {
@@ -114,7 +114,9 @@ function setupRoutes(router: Router) {
     }
     else {
       DEBUG && console.log('[Router] 用户未登录')
-      if (to.name !== 'login') {
+      // 检查是否在登录页（兼容首次加载时 to.name 为 undefined 的情况）
+      const isLoginPage = to.name === 'login' || to.path === '/login' || to.path.includes('login')
+      if (!isLoginPage) {
         DEBUG && console.log('[Router] 未登录且不在登录页，重定向到登录页')
         return {
           name: 'login',
