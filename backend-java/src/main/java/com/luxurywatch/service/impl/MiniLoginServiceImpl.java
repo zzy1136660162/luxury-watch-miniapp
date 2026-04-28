@@ -95,6 +95,7 @@ public class MiniLoginServiceImpl implements MiniLoginService {
         response.setGrowthValue(user.getGrowthValue() != null ? user.getGrowthValue() : 0);
         response.setMemberLevel(user.getMemberLevel() != null ? user.getMemberLevel() : 1);
         response.setMemberLevelName(getMemberLevelName(user.getMemberLevel()));
+        response.setAddress(user.getAddress());
         if (token != null) {
             response.setToken(token);
         }

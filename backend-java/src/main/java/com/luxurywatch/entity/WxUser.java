@@ -40,6 +40,8 @@ public class WxUser implements Serializable {
 
     private Integer gender;
 
+    private String address;
+
     private Integer status;
 
     private LocalDateTime lastLoginTime;

@@ -49,4 +49,62 @@
       <button class="exchange-btn" bindtap="onExchange">立即兑换</button>
     </view>
   </view>
+
+  <!-- 地址选择弹窗 -->
+  <view wx:if="{{showAddressDialog}}" class="dialog-mask" bindtap="onCloseAddressDialog">
+    <view class="dialog-content" catchtap="onDialogTap">
+      <view class="dialog-header">
+        <text class="dialog-title">选择收货地址</text>
+        <text class="dialog-close" bindtap="onCloseAddressDialog">×</text>
+      </view>
+      <view class="dialog-body">
+        <view wx:if="{{addressList.length === 0}}" class="no-address">
+          <text>暂无收货地址，请新增</text>
+        </view>
+        <view wx:else class="address-list">
+          <view wx:for="{{addressList}}" wx:key="index" class="address-item {{selectedAddressIndex === index ? 'selected' : ''}}" bindtap="onSelectAddress" data-index="{{index}}">
+            <view class="address-info">
+              <text class="address-name">{{item.name}}</text>
+              <text class="address-phone">{{item.phone}}</text>
+            </view>
+            <text class="address-detail">{{item.address}}</text>
+          </view>
+        </view>
+        <view class="add-address-btn" bindtap="onShowAddAddress">
+          <text>+ 新增收货地址</text>
+        </view>
+      </view>
+      <view class="dialog-footer">
+        <button class="btn-confirm" bindtap="onConfirmAddress">确认</button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 新增地址弹窗 -->
+  <view wx:if="{{showAddAddressDialog}}" class="dialog-mask" bindtap="onCloseAddAddressDialog">
+    <view class="dialog-content" catchtap="onDialogTap">
+      <view class="dialog-header">
+        <text class="dialog-title">新增收货地址</text>
+        <text class="dialog-close" bindtap="onCloseAddAddressDialog">×</text>
+      </view>
+      <view class="dialog-body">
+        <view class="form-item">
+          <text class="form-label">收货人</text>
+          <input class="form-input" value="{{newAddress.name}}" placeholder="请输入收货人姓名" bindinput="onInputName" />
+        </view>
+        <view class="form-item">
+          <text class="form-label">联系电话</text>
+          <input class="form-input" value="{{newAddress.phone}}" placeholder="请输入联系电话" bindinput="onInputPhone" type="number" maxlength="11" />
+        </view>
+        <view class="form-item">
+          <text class="form-label">详细地址</text>
+          <textarea class="form-textarea" value="{{newAddress.address}}" placeholder="请输入详细地址" bindinput="onInputAddress" />
+        </view>
+      </view>
+      <view class="dialog-footer">
+        <button class="btn-cancel" bindtap="onCloseAddAddressDialog">取消</button>
+        <button class="btn-confirm" bindtap="onSaveNewAddress">保存</button>
+      </view>
+    </view>
+  </view>
 </view>

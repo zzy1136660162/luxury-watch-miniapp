@@ -54,7 +54,7 @@
         <el-table-column label="用户信息" min-width="150">
           <template #default="{ row }">
             <div class="user-info">
-              <div class="user-id">用户ID: {{ row.userId }}</div>
+              <!-- <div class="user-id">用户ID: {{ row.userId }}</div> -->
               <div v-if="row.userName" class="user-name">{{ row.userName }}</div>
             </div>
           </template>
@@ -82,10 +82,16 @@
             </el-tag>
           </template>
         </el-table-column>
+        <el-table-column label="收货地址" min-width="180">
+          <template #default="{ row }">
+            {{ formatAddress(row.address) }}
+          </template>
+        </el-table-column>
         <el-table-column prop="exchangeTime" label="兑换时间" width="180" />
 
         <el-table-column label="操作" width="200" fixed="right">
           <template #default="{ row }">
+            <el-button link type="primary" @click="handleView(row)">查看</el-button>
             <el-button v-if="row.status === 0" link type="success" @click="handleCompleteExchange(row)">完成兑换</el-button>
             <el-button link type="danger" @click="handleDelete(row)">删除</el-button>
           </template>
@@ -105,6 +111,47 @@
         />
       </div>
     </el-card>
+
+    <!-- 查看详情弹窗 -->
+    <el-dialog v-model="detailVisible" title="兑换详情" width="500px" destroy-on-close style="caret-color: transparent;">
+      <div class="detail-content" v-if="currentRecord">
+        <div class="detail-item">
+          <span class="detail-label">记录ID：</span>
+          <span class="detail-value">{{ currentRecord.id }}</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">用户名：</span>
+          <span class="detail-value">{{ currentRecord.userName || '-' }}</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">联系电话：</span>
+          <span class="detail-value">{{ currentRecord.phone || '-' }}</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">商品名称：</span>
+          <span class="detail-value">{{ currentRecord.productName || '-' }}</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">兑换积分：</span>
+          <span class="detail-value points">{{ currentRecord.points }}</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">兑换状态：</span>
+          <el-tag :type="getStatusType(currentRecord.status)">{{ getStatusText(currentRecord.status) }}</el-tag>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">收货地址：</span>
+          <span class="detail-value">{{ formatAddress(currentRecord.address) }}</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">兑换时间：</span>
+          <span class="detail-value">{{ currentRecord.exchangeTime || '-' }}</span>
+        </div>
+      </div>
+      <template #footer>
+        <el-button @click="detailVisible = false">关闭</el-button>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
@@ -149,9 +196,26 @@ const pagination = reactive({
   total: 0,
 })
 
+// 详情弹窗
+const detailVisible = ref(false)
+const currentRecord = ref<ExchangeRecord | null>(null)
+
+// 查看详情
+const handleView = (row: ExchangeRecord) => {
+  currentRecord.value = row
+  detailVisible.value = true
+}
+
 // 获取状态文本
 const getStatusText = (status: number) => {
   return StatusText[status] || '未知'
+}
+
+// 格式化地址（用户名|电话号|地址 只显示地址部分）
+const formatAddress = (address: string | undefined) => {
+  if (!address) return '-'
+  const parts = address.split('|')
+  return parts.length >= 3 ? parts[2] : address
 }
 
 // 获取状态类型
@@ -281,9 +345,36 @@ onMounted(() => {
 .page-container {
   padding: 20px;
 }
-
 .search-card {
   margin-bottom: 20px;
+}
+
+.detail-content {
+  .detail-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid #eee;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    .detail-label {
+      width: 100px;
+      color: #666;
+    }
+
+    .detail-value {
+      flex: 1;
+      color: #333;
+
+      &.points {
+        color: #D4AF37;
+        font-weight: bold;
+      }
+    }
+  }
 }
 
 .table-card {

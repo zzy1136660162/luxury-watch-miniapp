@@ -1,0 +1,61 @@
+<import src="/components/navigation-bar/navigation-bar.wxml" />
+
+<view class="page">
+  <navigation-bar title="收货地址" back="{{true}}" color="black" background="#ffffff" />
+
+  <view class="add-btn" bindtap="onAddAddress">
+    <text class="add-icon">+</text>
+  </view>
+
+  <scroll-view class="content" scroll-y type="list" enhanced="{{true}}" bounces="{{false}}">
+    <!-- 空状态 -->
+    <view wx:if="{{addresses.length === 0}}" class="empty-state">
+      <text class="empty-text">还没有收货地址</text>
+    </view>
+
+    <!-- 地址列表 -->
+    <view wx:else class="address-list">
+      <view wx:for="{{addresses}}" wx:key="index" class="address-item" catchtap="onEditAddress" data-index="{{index}}">
+        <view class="address-info">
+          <view class="address-user">
+            <text class="user-name">{{item.name}}</text>
+            <text class="user-phone">{{item.phone}}</text>
+          </view>
+          <text class="address-detail">{{item.address}}</text>
+        </view>
+        <view class="address-actions">
+          <text class="edit-btn" catchtap="onEditAddress" data-index="{{index}}">编辑</text>
+          <text class="delete-btn" catchtap="onDeleteAddress" data-index="{{index}}">删除</text>
+        </view>
+      </view>
+    </view>
+  </scroll-view>
+
+  <!-- 新增/编辑地址弹窗 -->
+  <view wx:if="{{showDialog}}" class="dialog-mask" bindtap="onCloseDialog">
+    <view class="dialog-content" catchtap="onDialogTap">
+      <view class="dialog-header">
+        <text class="dialog-title">{{isEdit ? '编辑地址' : '新增地址'}}</text>
+        <text class="dialog-close" bindtap="onCloseDialog">×</text>
+      </view>
+      <view class="dialog-body">
+        <view class="form-item">
+          <text class="form-label">收货人</text>
+          <input class="form-input" value="{{formData.name}}" placeholder="请输入收货人姓名" bindinput="onInputName" />
+        </view>
+        <view class="form-item">
+          <text class="form-label">联系电话</text>
+          <input class="form-input" value="{{formData.phone}}" placeholder="请输入联系电话" bindinput="onInputPhone" type="number" maxlength="11" />
+        </view>
+        <view class="form-item">
+          <text class="form-label">详细地址</text>
+          <textarea style="font-size: 15px;" class="form-textarea" value="{{formData.address}}" placeholder="请输入详细地址" bindinput="onInputAddress" />
+        </view>
+      </view>
+      <view class="dialog-footer">
+        <button class="btn-cancel" bindtap="onCloseDialog">取消</button>
+        <button class="btn-confirm" bindtap="onSaveAddress">保存</button>
+      </view>
+    </view>
+  </view>
+</view>

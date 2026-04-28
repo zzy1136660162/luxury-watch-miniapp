@@ -25,5 +25,7 @@ public class MiniLoginResponse implements Serializable {
 
     private String memberLevelName;
 
+    private String address;
+
     private String token;
 }

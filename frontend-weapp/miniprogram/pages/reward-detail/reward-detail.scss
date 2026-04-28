@@ -220,3 +220,174 @@ $font-family-english: 'Manrope', sans-serif;
     opacity: 0.8;
   }
 }
+
+// 地址选择弹窗样式
+.dialog-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+
+  .dialog-content {
+    width: 100%;
+    max-height: 70vh;
+    background-color: $surface-container-lowest;
+    border-radius: 24px 24px 0 0;
+    overflow: hidden;
+    animation: slideUp 0.3s ease;
+
+    .dialog-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 15px;
+      border-bottom: 1px solid $surface-container;
+
+      .dialog-title {
+        font-size: 16px;
+        font-weight: bold;
+        color: $on-surface;
+      }
+
+      .dialog-close {
+        font-size: 24px;
+        color: $secondary;
+        padding: 8px;
+      }
+    }
+
+    .dialog-body {
+      padding: 24px;
+      max-height: 50vh;
+      overflow-y: auto;
+
+      .no-address {
+        text-align: center;
+        color: $secondary;
+        padding: 40px 0;
+        font-size: 14px;
+      }
+
+      .address-list {
+        .address-item {
+          padding: 20px;
+          background-color: $surface;
+          border-radius: 12px;
+          margin-bottom: 16px;
+
+          &.selected {
+            background-color: rgba($tertiary, 0.1);
+            border: 1px solid $tertiary;
+          }
+
+          .address-info {
+            display: flex;
+            margin-bottom: 8px;
+
+            .address-name {
+              font-size: 15px;
+              font-weight: bold;
+              color: $on-surface;
+              margin-right: 16px;
+            }
+
+            .address-phone {
+              font-size: 14px;
+              color: $secondary;
+            }
+          }
+
+          .address-detail {
+            font-size: 13px;
+            color: $secondary;
+          }
+        }
+      }
+
+      .add-address-btn {
+        text-align: center;
+        padding: 20px;
+        color: $tertiary;
+        font-size: 14px;
+        border: 1px dashed $tertiary;
+        border-radius: 12px;
+        margin-top: 16px;
+      }
+
+      .form-item {
+        margin-bottom: 20px;
+
+        .form-label {
+          display: block;
+          font-size: 13px;
+          color: $secondary;
+          margin-bottom: 8px;
+        }
+
+        .form-input {
+          width: 100%;
+          height: 44px;
+          background-color: $surface;
+          border-radius: 8px;
+          padding: 0 12px;
+          font-size: 14px;
+          box-sizing: border-box;
+        }
+
+        .form-textarea {
+          width: 100%;
+          height: 80px;
+          background-color: $surface;
+          border-radius: 8px;
+          padding: 12px;
+          font-size: 14px;
+          box-sizing: border-box;
+        }
+      }
+    }
+
+    .dialog-footer {
+      display: flex;
+      padding: 15px;
+      gap: 16px;
+
+      .btn-cancel, .btn-confirm {
+        flex: 1;
+        height: 44px;
+        border-radius: 22px;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: none;
+        margin: 0;
+        margin-bottom: 2vh;
+      }
+
+      .btn-cancel {
+        background-color: $surface;
+        color: $secondary;
+      }
+
+      .btn-confirm {
+        background-color: $primary;
+        color: $surface-container-lowest;
+      }
+    }
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}

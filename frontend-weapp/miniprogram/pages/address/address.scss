@@ -1,0 +1,229 @@
+$primary-color: #D4AF37;
+$text-primary: #333333;
+$text-secondary: #666666;
+$text-tertiary: #999999;
+$border-color: #E5E5E5;
+$background: #F5F5F5;
+
+.page {
+  height: 95vh;
+  background-color: $background;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.add-btn {
+  position: fixed;
+  right: 32px;
+  top: 90vh;
+  transform: translateY(-50%);
+  width: 50px;
+  height: 50px;
+  background-color: $primary-color;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(212, 175, 55, 0.4);
+  z-index: 100;
+
+  .add-icon {
+    font-size: 20px;
+    color: #FFFFFF;
+    font-weight: 300;
+    line-height: 1;
+  }
+}
+
+.content {
+  // height: 100%;
+  padding: 24px;
+  overflow: auto;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  // padding-top: 200px;
+
+  .empty-text {
+    font-size: 15px;
+    color: $text-tertiary;
+  }
+}
+
+.address-list {
+  .address-item {
+    background-color: #FFFFFF;
+    width: 88vw;
+    height: 21vh;
+    border-radius: 10px;
+    padding: 32px;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+
+    .address-info {
+      margin-bottom: 16px;
+
+      .address-user {
+        display: flex;
+        align-items: center;
+        margin-bottom: 12px;
+
+        .user-name {
+          font-size: 20px;
+          color: $text-primary;
+          font-weight: 500;
+          margin-right: 24px;
+        }
+
+        .user-phone {
+          font-size: 20px;
+          color: $text-secondary;
+        }
+      }
+
+      .address-detail {
+        font-size: 20px;
+        color: $text-secondary;
+        line-height: 1.5;
+      }
+    }
+
+    .address-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 32px;
+      padding-top: 16px;
+      border-top: 1px solid $border-color;
+
+      .edit-btn, .delete-btn {
+        font-size: 18px;
+        color: $text-tertiary;
+      }
+
+      .delete-btn {
+        color: #FF4D4F;
+      }
+    }
+  }
+}
+
+.dialog-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+
+  .dialog-content {
+    width: 100%;
+    max-height: 80vh;
+    background-color: #FFFFFF;
+    // border-radius: 32px 32px 0 0;
+    overflow: hidden;
+    animation: slideUp 0.3s ease;
+
+    .dialog-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 15px;
+      border-bottom: 1px solid $border-color;
+
+      .dialog-title {
+        font-size: 20px;
+        color: $text-primary;
+        font-weight: 500;
+      }
+
+      .dialog-close {
+        font-size: 30px;
+        color: $text-tertiary;
+        line-height: 1;
+      }
+    }
+
+    .dialog-body {
+      // padding: 32px;
+      padding: 10px 20px 5px;
+
+      .form-item {
+        margin-bottom: 32px;
+
+        .form-label {
+          display: block;
+          font-size: 20px;
+          color: $text-secondary;
+          margin-bottom: 16px;
+        }
+
+        .form-input {
+          width: 100%;
+          height: 50px;
+          background-color: $background;
+          border-radius: 10px;
+          padding: 0 24px;
+          font-size: 15px;
+          color: $text-primary;
+          box-sizing: border-box;
+        }
+
+        .form-textarea {
+          width: 100%;
+          height: 160px;
+          background-color: $background;
+          border-radius: 16px;
+          padding: 24px;
+          font-size: 15px;
+          color: $text-primary;
+          box-sizing: border-box;
+        }
+      }
+    }
+
+    .dialog-footer {
+      display: flex;
+      padding: 24px 32px;
+      padding-bottom: calc(24px + env(safe-area-inset-bottom));
+      gap: 24px;
+
+      .btn-cancel, .btn-confirm {
+        flex: 1;
+        height: 50px;
+        border-radius: 44px;
+        font-size: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0;
+      }
+
+      .btn-cancel {
+        background-color: $background;
+        color: $text-secondary;
+      }
+
+      .btn-confirm {
+        background-color: $primary-color;
+        color: #FFFFFF;
+      }
+    }
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}

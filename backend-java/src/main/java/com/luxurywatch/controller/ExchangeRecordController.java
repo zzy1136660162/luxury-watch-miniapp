@@ -69,6 +69,7 @@ public class ExchangeRecordController {
             map.put("productImage", record.getProductImage());
             map.put("points", record.getPoints());
             map.put("phone", record.getPhone());
+            map.put("address", record.getAddress());
             map.put("status", record.getStatus());
             map.put("exchangeTime", record.getExchangeTime());
             return map;
@@ -99,6 +100,7 @@ public class ExchangeRecordController {
         map.put("productImage", record.getProductImage());
         map.put("points", record.getPoints());
         map.put("phone", record.getPhone());
+        map.put("address", record.getAddress());
         map.put("status", record.getStatus());
         map.put("exchangeTime", record.getExchangeTime());
 

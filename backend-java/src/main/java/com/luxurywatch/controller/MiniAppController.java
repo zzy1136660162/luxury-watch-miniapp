@@ -573,7 +573,10 @@ public class MiniAppController {
             record.setProductName(product.getName());
             record.setProductImage(product.getImage());
             record.setPoints(pointsCost);
-            record.setPhone(user.getPhone());
+            // 优先使用传入的地址，其次使用用户已保存的地址
+            String address = params.get("address") != null ? params.get("address").toString() : user.getAddress();
+            record.setPhone(params.get("phone") != null ? params.get("phone").toString() : user.getPhone());
+            record.setAddress(address);
             record.setExchangeTime(LocalDateTime.now());
             record.setStatus(0);  // 待处理
             exchangeRecordService.save(record);
@@ -612,6 +615,40 @@ public class MiniAppController {
         } catch (Exception e) {
             e.printStackTrace();
             return R.error("获取兑换记录失败: " + e.getMessage());
+        }
+    }
+
+    /**
+     * 更新用户信息
+     */
+    @PostMapping("/user/update")
+    public R<Boolean> updateUserInfo(@RequestBody Map<String, String> params) {
+        try {
+            // 检查用户是否登录
+            if (!StpUtil.isLogin()) {
+                return R.error("用户未登录");
+            }
+
+            // 获取当前登录用户ID
+            Long userId = StpUtil.getLoginIdAsLong();
+
+            // 获取用户信息
+            WxUser user = wxUserService.getById(userId);
+            if (user == null) {
+                return R.error("用户不存在");
+            }
+
+            // 更新地址
+            if (params.containsKey("address")) {
+                user.setAddress(params.get("address"));
+            }
+
+            // 保存更新
+            boolean success = wxUserService.updateById(user);
+            return R.success(success);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return R.error("更新用户信息失败: " + e.getMessage());
         }
     }
 

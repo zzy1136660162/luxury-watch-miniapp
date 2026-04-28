@@ -285,7 +285,8 @@ Page({
             points: userInfo.points,
             growthValue: userInfo.growthValue,
             memberLevel: userInfo.memberLevel,
-            memberLevelName: userInfo.memberLevelName
+            memberLevelName: userInfo.memberLevelName,
+            address: userInfo.address || ''
           });
 
           wx.showToast({

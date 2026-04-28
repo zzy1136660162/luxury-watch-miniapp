@@ -50,6 +50,11 @@ public class ExchangeRecord {
     private String phone;
 
     /**
+     * 收货地址
+     */
+    private String address;
+
+    /**
      * 兑换时间
      */
     @TableField("exchange_time")

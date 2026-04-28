@@ -17,7 +17,8 @@
     "pages/index/index",
     "pages/logs/logs",
     "pages/appointment/appointment",
-    "pages/appointment-list/appointment-list"
+    "pages/appointment-list/appointment-list",
+    "pages/address/address"
   ],
   "window": {
     "navigationBarTextStyle": "black",

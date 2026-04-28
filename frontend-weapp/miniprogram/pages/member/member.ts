@@ -174,7 +174,9 @@ Component({
           wx.showToast({ title: '功能开发中', icon: 'none' });
           break;
         case 'address':
-          wx.showToast({ title: '功能开发中', icon: 'none' });
+          wx.navigateTo({
+            url: '/pages/address/address'
+          });
           break;
         default:
           wx.showToast({ title: '功能开发中', icon: 'none' });

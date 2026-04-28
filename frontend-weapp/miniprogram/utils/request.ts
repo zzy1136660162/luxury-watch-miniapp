@@ -335,6 +335,17 @@ export const userApi = {
       url: '/api/user/exchange-records',
       method: 'GET'
     });
+  },
+
+  /**
+   * 更新用户信息
+   */
+  updateUserInfo: (data: { address?: string }) => {
+    return request({
+      url: '/api/user/update',
+      method: 'POST',
+      data
+    });
   }
 };
 

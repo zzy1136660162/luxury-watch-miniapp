@@ -17,6 +17,10 @@ export default antfu(
         allowShortCircuit: true,
         allowTernary: true,
       }],
+      'vue/block-order': 'off',
+      'vue/component-tags-order': 'off',
+      'style indentation': 'off',
+      'prettier/prettier': 'off',
     },
   },
   {
@@ -24,9 +28,7 @@ export default antfu(
       'src/**/*.vue',
     ],
     rules: {
-      'vue/block-order': ['error', {
-        order: ['route', 'script', 'template', 'style'],
-      }],
+      'vue/block-order': 'off',
     },
   },
 )
