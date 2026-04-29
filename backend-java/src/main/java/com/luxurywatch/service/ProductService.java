@@ -12,8 +12,12 @@ import com.luxurywatch.mapper.ProductMapper;
 import com.luxurywatch.mapper.SeriesMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 商品服务类
@@ -107,20 +111,121 @@ public class ProductService extends ServiceImpl<ProductMapper, Product> {
     }
 
     /**
-     * 根据品牌和系列名查询已存在的系列Logo
-     * 如果存在多个，返回第一个
+     * 搜索品牌列表（用于Autocomplete）
+     * 返回品牌名称和该品牌下的商品数量
+     * 支持根据query模糊搜索
+     */
+    public List<Map<String, Object>> searchBrands(String query) {
+        List<Map<String, Object>> result = new ArrayList<>();
+        
+        try {
+            // 使用原生SQL查询所有不同的品牌
+            List<Map<String, Object>> brands = baseMapper.selectDistinctBrands();
+            
+            for (Map<String, Object> brandMap : brands) {
+                String brandName = (String) brandMap.get("brand");
+                
+                // 如果有查询条件，进行模糊匹配
+                if (StringUtils.hasText(query) && !brandName.toLowerCase().contains(query.toLowerCase())) {
+                    continue;
+                }
+                
+                // 统计该品牌的商品数量
+                Long count = baseMapper.selectCount(
+                    new LambdaQueryWrapper<Product>()
+                        .eq(Product::getBrand, brandName)
+                        .eq(Product::getIsDeleted, 0)
+                );
+
+                Map<String, Object> item = new HashMap<>();
+                item.put("name", brandName);
+                item.put("count", count.intValue());
+                result.add(item);
+            }
+        } catch (Exception e) {
+            System.err.println("[ProductService] searchBrands error: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
+    /**
+     * 搜索系列列表（用于Autocomplete）
+     * 如果传入品牌，则筛选该品牌下的系列
+     * 如果不传品牌，则搜索所有系列
+     * 支持根据query模糊搜索
+     */
+    public List<Map<String, Object>> searchSeries(String brand, String query) {
+        List<Map<String, Object>> result = new ArrayList<>();
+        
+        try {
+            List<Map<String, Object>> seriesList;
+            
+            // 如果有品牌条件，使用品牌筛选的查询
+            if (StringUtils.hasText(brand)) {
+                seriesList = baseMapper.selectDistinctSeriesByBrand(brand);
+            } else {
+                // 否则查询所有系列
+                seriesList = baseMapper.selectDistinctSeries();
+            }
+            
+            for (Map<String, Object> seriesMap : seriesList) {
+                String seriesName = (String) seriesMap.get("series");
+                
+                // 如果有查询条件，进行模糊匹配
+                if (StringUtils.hasText(query) && !seriesName.toLowerCase().contains(query.toLowerCase())) {
+                    continue;
+                }
+                
+                // 统计该系列的商品数量
+                LambdaQueryWrapper<Product> countWrapper = new LambdaQueryWrapper<>();
+                countWrapper.eq(Product::getSeries, seriesName)
+                           .eq(Product::getIsDeleted, 0);
+                
+                // 如果有品牌筛选条件，也添加到计数查询中
+                if (StringUtils.hasText(brand)) {
+                    countWrapper.eq(Product::getBrand, brand);
+                }
+                
+                Long count = baseMapper.selectCount(countWrapper);
+
+                Map<String, Object> item = new HashMap<>();
+                item.put("name", seriesName);
+                item.put("count", count.intValue());
+                result.add(item);
+            }
+        } catch (Exception e) {
+            System.err.println("[ProductService] searchSeries error: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
+    /**
+     * 根据品牌和系列名从系列表查询Logo
      */
     public String getSeriesLogo(String brand, String series) {
-        LambdaQueryWrapper<Product> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(Product::getBrand, brand)
-               .eq(Product::getSeries, series)
-               .isNotNull(Product::getSeriesLogo)
-               .ne(Product::getSeriesLogo, "")
-               .orderByDesc(Product::getId)  // 最新添加的优先
-               .last("LIMIT 1");
-        
-        Product product = baseMapper.selectOne(wrapper);
-        return product != null ? product.getSeriesLogo() : null;
+        // 先查找品牌ID
+        List<Brand> brands = brandMapper.selectList(
+                new LambdaQueryWrapper<Brand>().eq(Brand::getName, brand)
+        );
+        if (brands.isEmpty()) {
+            return null;
+        }
+        Integer brandId = brands.get(0).getId();
+
+        // 再查找系列Logo
+        List<Series> seriesList = seriesMapper.selectList(
+                new LambdaQueryWrapper<Series>()
+                        .eq(Series::getBrandId, brandId)
+                        .eq(Series::getName, series)
+                        .isNotNull(Series::getLogo)
+                        .ne(Series::getLogo, "")
+        );
+
+        return seriesList.isEmpty() ? null : seriesList.get(0).getLogo();
     }
 
     /**
@@ -133,16 +238,15 @@ public class ProductService extends ServiceImpl<ProductMapper, Product> {
     }
 
     /**
-     * 获取品牌的品牌图片
+     * 从品牌表获取品牌图片
      */
     public String getBrandImage(String brand) {
-        LambdaQueryWrapper<Product> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(Product::getBrand, brand)
-               .isNotNull(Product::getBrandImage)
-               .ne(Product::getBrandImage, "")
-               .orderByDesc(Product::getId)
-               .last("LIMIT 1");
-        Product product = baseMapper.selectOne(wrapper);
-        return product != null ? product.getBrandImage() : null;
+        List<Brand> brands = brandMapper.selectList(
+                new LambdaQueryWrapper<Brand>()
+                        .eq(Brand::getName, brand)
+                        .isNotNull(Brand::getLogo)
+                        .ne(Brand::getLogo, "")
+        );
+        return brands.isEmpty() ? null : brands.get(0).getLogo();
     }
 }

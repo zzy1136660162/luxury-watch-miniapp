@@ -159,20 +159,24 @@ public class ProductController {
     }
 
     /**
-     * 获取所有品牌列表（用于前端下拉选择）
+     * 获取品牌列表（用于Autocomplete搜索）
+     * 支持根据query模糊搜索，返回品牌名称和商品数量
      */
     @GetMapping("/brands")
-    public R<List<Brand>> getBrands() {
-        List<Brand> brands = productService.getAllBrands();
+    public R<List<Map<String, Object>>> getBrands(@RequestParam(required = false) String query) {
+        List<Map<String, Object>> brands = productService.searchBrands(query);
         return R.success(brands);
     }
 
     /**
-     * 根据品牌ID获取系列列表
+     * 获取系列列表（用于Autocomplete搜索）
+     * 根据品牌筛选，支持根据query模糊搜索，返回系列名称和商品数量
      */
     @GetMapping("/series")
-    public R<List<Series>> getSeriesByBrand(@RequestParam Integer brandId) {
-        List<Series> series = productService.getSeriesByBrandId(brandId);
+    public R<List<Map<String, Object>>> getSeries(
+            @RequestParam String brand,
+            @RequestParam(required = false) String query) {
+        List<Map<String, Object>> series = productService.searchSeries(brand, query);
         return R.success(series);
     }
 

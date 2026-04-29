@@ -3,7 +3,6 @@ import type { RouteRecordRaw, RouterMatcher } from 'vue-router'
 import { cloneDeep } from 'es-toolkit'
 import { createRouterMatcher } from 'vue-router'
 import apiApp from '@/api/modules/app'
-import { systemRoutes as systemRoutesRaw } from '@/router/routes'
 
 export const useRouteStore = defineStore(
   // 唯一ID
@@ -55,16 +54,7 @@ export const useRouteStore = defineStore(
       }
       return returnRoutes
     })
-    // 系统路由
-    const systemRoutes = computed(() => {
-      const routes = [...systemRoutesRaw]
-      routes.forEach((item) => {
-        if (item.children) {
-          item.children = deleteMiddleRouteComponent(item.children)
-        }
-      })
-      return routes
-    })
+
     // 删除路由中间层级对应的组件
     function deleteMiddleRouteComponent(routes: RouteRecordRaw[]) {
       const res: RouteRecordRaw[] = []
@@ -122,6 +112,7 @@ export const useRouteStore = defineStore(
       routesMatcher.value = createRouterMatcher(routes, {})
       isGenerate.value = true
     }
+
     // 格式化后端路由数据
     function formatBackRoutes(routes: any, views = import.meta.glob('../../views/**/*.vue')): Route.recordMainRaw[] {
       if (!routes || !Array.isArray(routes)) {
@@ -172,6 +163,7 @@ export const useRouteStore = defineStore(
         return route
       }).filter((r: any) => r !== null)
     }
+
     // 生成路由（后端获取）
     async function generateRoutesAtBack() {
       console.log('[Route] 开始调用 routeList API')
@@ -229,16 +221,19 @@ export const useRouteStore = defineStore(
         isGenerate.value = true
       })
     }
+
     // 生成路由（文件系统生成）
     function generateRoutesAtFilesystem(asyncRoutes: RouteRecordRaw[]) {
       // 设置 routes 数据
       filesystemRoutesRaw.value = cloneDeep(asyncRoutes) as any
       isGenerate.value = true
     }
+
     // 记录 accessRoutes 路由，用于登出时删除路由
     function setCurrentRemoveRoutes(routes: (() => void)[]) {
       currentRemoveRoutes.value = routes
     }
+
     // 清空动态路由
     function removeRoutes() {
       isGenerate.value = false
@@ -255,7 +250,6 @@ export const useRouteStore = defineStore(
       routesRaw,
       currentRemoveRoutes,
       routes,
-      systemRoutes,
       getRouteMatchedByPath,
       generateRoutesAtFront,
       generateRoutesAtBack,

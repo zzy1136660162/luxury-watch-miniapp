@@ -6,6 +6,7 @@
     <view class="nav-title" style="padding-top: 5px;">
       <text class="brand-name">{{keyword ? (keyword.includes('-') ? keyword : '搜索结果') : (series ? (brand + '-' + series) : (brand || '搜索结果'))}}</text>
       <text wx:if="{{keyword && !keyword.includes('-')}}" class="keyword-text">"{{keyword}}"</text>
+      <view wx:if="{{activeFilters.length > 0}}" class="cha"></view>
       <view wx:if="{{activeFilters.length > 0}}" class="filter-tags">
         <text wx:for="{{activeFilters}}" wx:key="index" class="filter-tag">{{item.label}}</text>
       </view>

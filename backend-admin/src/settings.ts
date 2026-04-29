@@ -7,11 +7,11 @@ const globalSettings: Settings.all = {
   // 应用配置
   app: {
     enablePermission: true, // 开启权限控制
-    routeBaseOn: 'backend', // 从后端获取路由
+    routeBaseOn: 'filesystem', // 使用文件系统路由（静态路由）
   },
   // 菜单配置
   menu: {
-    baseOn: 'backend', // 从后端获取菜单
+    baseOn: 'frontend', // 从前端获取菜单（静态菜单）
   },
 }
 

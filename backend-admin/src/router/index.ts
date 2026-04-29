@@ -3,12 +3,11 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 import pinia from '@/store'
 import setupExtensions from './extensions'
 import setupGuards from './guards'
-// 路由相关数据
-import { constantRoutes, constantRoutesByFilesystem } from './routes'
+import { constantRoutes, mainRoutes } from './routes'
 
 const router = createRouter({
   history: createWebHashHistory(),
-  routes: useSettingsStore(pinia).settings.app.routeBaseOn === 'filesystem' ? constantRoutesByFilesystem : constantRoutes,
+  routes: [...constantRoutes, ...mainRoutes],
 })
 
 setupGuards(router)

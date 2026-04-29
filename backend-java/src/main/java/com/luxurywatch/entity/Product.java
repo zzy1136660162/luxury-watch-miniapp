@@ -52,18 +52,6 @@ public class Product {
      */
     private String series;
 
-    /**
-     * 系列Logo（URL）
-     */
-    @TableField("series_logo")
-    private String seriesLogo;
-
-    /**
-     * 品牌图片（URL）
-     */
-    @TableField("brand_image")
-    private String brandImage;
-
     private String image;
 
     private String images;

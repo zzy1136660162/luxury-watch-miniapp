@@ -4,10 +4,14 @@ import cn.dev33.satoken.stp.StpUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.luxurywatch.common.R;
+import com.luxurywatch.entity.Brand;
 import com.luxurywatch.entity.ExchangeRecord;
 import com.luxurywatch.entity.Product;
 import com.luxurywatch.entity.ProductCategory;
+import com.luxurywatch.entity.Series;
 import com.luxurywatch.entity.WxUser;
+import com.luxurywatch.mapper.BrandMapper;
+import com.luxurywatch.mapper.SeriesMapper;
 import com.luxurywatch.service.ExchangeRecordService;
 import com.luxurywatch.service.ProductService;
 import com.luxurywatch.service.ProductCategoryService;
@@ -19,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 小程序API控制器
@@ -39,6 +44,12 @@ public class MiniAppController {
 
     @Autowired
     private ExchangeRecordService exchangeRecordService;
+
+    @Autowired
+    private BrandMapper brandMapper;
+
+    @Autowired
+    private SeriesMapper seriesMapper;
 
     /**
      * 获取首页数据
@@ -248,37 +259,13 @@ public class MiniAppController {
     }
 
     /**
-     * 获取所有品牌列表
+     * 获取所有品牌列表（从 brand 表）
      */
     @GetMapping("/brands")
-    public R<List<String>> getAllBrands() {
+    public R<List<Brand>> getAllBrands() {
         try {
-            // 先查询所有有品牌名称的商品
-            QueryWrapper<Product> wrapper = new QueryWrapper<>();
-            wrapper.eq("status", 1)
-                   .isNotNull("brand")
-                   .ne("brand", "");
-            
-            List<Product> products = productService.list(wrapper);
-            
-            // 使用 Set 去重
-            Set<String> brandSet = new LinkedHashSet<>();
-            if (products != null) {
-                for (Product product : products) {
-                    if (product.getBrand() != null && !product.getBrand().isEmpty()) {
-                        brandSet.add(product.getBrand());
-                    }
-                }
-            }
-            
-            List<String> brands = new ArrayList<>(brandSet);
-            Collections.sort(brands);
-            
-            // 限制返回数量
-            if (brands.size() > 20) {
-                brands = brands.subList(0, 20);
-            }
-            
+            // 从 brand 表查询所有品牌
+            List<Brand> brands = brandMapper.selectList(null);
             return R.success(brands);
         } catch (Exception e) {
             e.printStackTrace();
@@ -321,51 +308,42 @@ public class MiniAppController {
     }
 
     /**
-     * 获取所有系列列表（去重）
+     * 获取所有系列列表（从 series 表）
      */
     @GetMapping("/series/all")
-    public R<List<Map<String, String>>> getAllSeries() {
+    public R<List<Map<String, Object>>> getAllSeries() {
         try {
-            QueryWrapper<Product> wrapper = new QueryWrapper<>();
-            wrapper.eq("status", 1)
-                   .isNotNull("brand")
-                   .ne("brand", "")
-                   .isNotNull("series")
-                   .ne("series", "")
-                   .select("brand", "series", "series_logo")
-                   .orderByDesc("sales", "sort");
-            
-            List<Product> products = productService.list(wrapper);
-            
-            // 使用 Map 来存储每个品牌-系列组合，优先选择有logo的商品
-            Map<String, Product> seriesMap = new LinkedHashMap<>();
-            
-            for (Product product : products) {
-                String key = product.getBrand() + "-" + product.getSeries();
-                Product existing = seriesMap.get(key);
-                
-                // 如果这个组合还没有，或者当前商品有logo但之前的没有，则更新
-                if (existing == null) {
-                    seriesMap.put(key, product);
-                } else if ((existing.getSeriesLogo() == null || existing.getSeriesLogo().isEmpty()) 
-                           && product.getSeriesLogo() != null && !product.getSeriesLogo().isEmpty()) {
-                    seriesMap.put(key, product);
-                }
+            List<Series> seriesList = seriesMapper.selectList(null);
+
+            // 获取品牌名称映射
+            List<Integer> brandIds = seriesList.stream()
+                    .map(Series::getBrandId)
+                    .distinct()
+                    .collect(Collectors.toList());
+
+            Map<Integer, String> brandNameMap = new HashMap<>();
+            if (!brandIds.isEmpty()) {
+                List<Brand> brands = brandMapper.selectBatchIds(brandIds);
+                brandNameMap = brands.stream()
+                        .collect(Collectors.toMap(Brand::getId, Brand::getName));
             }
-            
+
             // 转换为返回格式
-            List<Map<String, String>> seriesList = new ArrayList<>();
-            for (Product product : seriesMap.values()) {
-                Map<String, String> item = new LinkedHashMap<>();
-                item.put("brand", product.getBrand());
-                item.put("series", product.getSeries());
-                if (product.getSeriesLogo() != null && !product.getSeriesLogo().isEmpty()) {
-                    item.put("logo", product.getSeriesLogo());
+            List<Map<String, Object>> result = new ArrayList<>();
+            for (Series series : seriesList) {
+                Map<String, Object> item = new LinkedHashMap<>();
+                item.put("id", series.getId());
+                item.put("brandId", series.getBrandId());
+                item.put("brand", brandNameMap.getOrDefault(series.getBrandId(), ""));
+                item.put("series", series.getName());
+                item.put("name", series.getName());
+                if (series.getLogo() != null && !series.getLogo().isEmpty()) {
+                    item.put("logo", series.getLogo());
                 }
-                seriesList.add(item);
+                result.add(item);
             }
-            
-            return R.success(seriesList);
+
+            return R.success(result);
         } catch (Exception e) {
             e.printStackTrace();
             return R.error("获取系列列表失败: " + e.getMessage());
@@ -373,48 +351,47 @@ public class MiniAppController {
     }
 
     /**
-     * 获取热门系列
+     * 获取热门系列（从 series 表，有logo的）
      */
     @GetMapping("/series/hot")
-    public R<List<Map<String, String>>> getHotSeries() {
+    public R<List<Map<String, Object>>> getHotSeries() {
         try {
-            // 先查询所有有品牌、系列和logo的商品（优先有logo的）
-            QueryWrapper<Product> wrapper = new QueryWrapper<>();
-            wrapper.eq("status", 1)
-                   .isNotNull("brand")
-                   .ne("brand", "")
-                   .isNotNull("series")
-                   .ne("series", "")
-                   .orderByDesc("series_logo")  // 优先有logo的
-                   .orderByDesc("sales", "sort");
+            // 查询有logo的系列
+            List<Series> seriesList = seriesMapper.selectList(
+                    new com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper<Series>()
+                            .isNotNull(Series::getLogo)
+                            .ne(Series::getLogo, "")
+                            .orderByDesc(Series::getId)
+                            .last("LIMIT 10")
+            );
 
-            List<Product> products = productService.list(wrapper);
+            // 获取品牌名称映射
+            List<Integer> brandIds = seriesList.stream()
+                    .map(Series::getBrandId)
+                    .distinct()
+                    .collect(Collectors.toList());
 
-            // 使用 Set 来去重，保持插入顺序
-            Set<String> seen = new LinkedHashSet<>();
-            List<Map<String, String>> hotSeries = new ArrayList<>();
-
-            for (Product product : products) {
-                String key = product.getBrand() + "-" + product.getSeries();
-                if (!seen.contains(key)) {
-                    seen.add(key);
-                    Map<String, String> item = new LinkedHashMap<>();
-                    item.put("brand", product.getBrand());
-                    item.put("series", product.getSeries());
-                    // 添加logo字段
-                    if (product.getSeriesLogo() != null && !product.getSeriesLogo().isEmpty()) {
-                        item.put("logo", product.getSeriesLogo());
-                    }
-                    hotSeries.add(item);
-
-                    // 只保留前5个
-                    if (hotSeries.size() >= 5) {
-                        break;
-                    }
-                }
+            Map<Integer, String> brandNameMap = new HashMap<>();
+            if (!brandIds.isEmpty()) {
+                List<Brand> brands = brandMapper.selectBatchIds(brandIds);
+                brandNameMap = brands.stream()
+                        .collect(Collectors.toMap(Brand::getId, Brand::getName));
             }
 
-            return R.success(hotSeries);
+            // 转换为返回格式
+            List<Map<String, Object>> result = new ArrayList<>();
+            for (Series series : seriesList) {
+                Map<String, Object> item = new LinkedHashMap<>();
+                item.put("id", series.getId());
+                item.put("brandId", series.getBrandId());
+                item.put("brand", brandNameMap.getOrDefault(series.getBrandId(), ""));
+                item.put("series", series.getName());
+                item.put("name", series.getName());
+                item.put("logo", series.getLogo());
+                result.add(item);
+            }
+
+            return R.success(result);
         } catch (Exception e) {
             e.printStackTrace();
             return R.error("获取热门系列失败: " + e.getMessage());

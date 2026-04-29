@@ -3,8 +3,9 @@ import { sortByPinyin } from '../../utils/pinyin';
 import { getFullImageUrl } from '../../utils/config';
 
 interface BrandItem {
+  id: number;
   name: string;
-  image?: string;
+  logo?: string;
 }
 
 interface BrandGroup {
@@ -13,8 +14,17 @@ interface BrandGroup {
 }
 
 interface HotBrand {
+  id: number;
   name: string;
-  image?: string;
+  logo?: string;
+}
+
+interface HotSeriesItem {
+  id: number;
+  brandId: number;
+  name: string;
+  logo?: string;
+  brandName?: string;
 }
 
 const ALL_LETTERS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
@@ -28,7 +38,7 @@ Page({
     currentLetter: '',
     scrollIntoViewId: '',
     searchKey: '',
-    hotSeries: [] as { brand: string; series: string; logo?: string }[]
+    hotSeries: [] as HotSeriesItem[]
   },
 
   onLoad() {
@@ -44,7 +54,12 @@ Page({
     try {
       const res: any = await productApi.getAllBrands();
       if (res && res.code === 200 && res.data) {
-        const brands = res.data.slice(0, 20);
+        // 后端返回的是 Brand 对象数组，包含 id, name, logo
+        const brands: BrandItem[] = res.data.map((item: any) => ({
+          id: item.id,
+          name: item.name,
+          logo: item.logo ? getFullImageUrl(item.logo) : ''
+        }));
         this.processBrands(brands);
       }
     } catch (err) {
@@ -52,61 +67,36 @@ Page({
     }
   },
 
-  async processBrands(brands: string[]) {
-    const hotBrandNames = brands.slice(0, 10);
-    const sortedGroups = sortByPinyin(brands);
+  async processBrands(brands: BrandItem[]) {
+    // 取前10个作为热门品牌
+    const hotBrands = brands.slice(0, 10);
 
-    // 为所有品牌加载图片
-    const allBrandImages = await this.loadBrandImages(brands);
-    const brandImageMap = new Map(allBrandImages.map(b => [b.name, b.image]));
+    // 按品牌名称拼音分组
+    const brandNames = brands.map(b => b.name);
+    const sortedGroups = sortByPinyin(brandNames);
+
+    // 创建品牌名称到品牌对象的映射
+    const brandMap = new Map(brands.map(b => [b.name, b]));
 
     const brandGroups: BrandGroup[] = sortedGroups.map(group => ({
       letter: group.letter,
-      brands: group.items.map(name => ({
-        name,
-        image: brandImageMap.get(name) || ''
-      }))
+      brands: group.items.map(name => {
+        const brand = brandMap.get(name);
+        return {
+          id: brand?.id || 0,
+          name,
+          logo: brand?.logo || ''
+        };
+      })
     }));
 
     const letters = brandGroups.map(group => group.letter);
-
-    // 获取热门品牌的图片
-    const hotBrands: HotBrand[] = hotBrandNames.map(name => ({
-      name,
-      image: brandImageMap.get(name) || ''
-    }));
 
     this.setData({
       hotBrands,
       brandGroups,
       letters
     });
-  },
-
-  // 加载品牌图片
-  async loadBrandImages(brandNames: string[]): Promise<HotBrand[]> {
-    const hotBrands: HotBrand[] = [];
-
-    for (const name of brandNames) {
-      try {
-        // 查询该品牌的商品获取品牌图片
-        const res: any = await productApi.getProductsByBrand(name);
-        let image = '';
-        if (res && res.code === 200 && res.data && res.data.list && res.data.list.length > 0) {
-          // 找到有品牌图片的商品
-          const productWithImage = res.data.list.find((p: any) => p.brandImage);
-          if (productWithImage) {
-            image = getFullImageUrl(productWithImage.brandImage);
-          }
-        }
-        hotBrands.push({ name, image });
-      } catch (err) {
-        console.error(`加载品牌[${name}]图片失败:`, err);
-        hotBrands.push({ name });
-      }
-    }
-
-    return hotBrands;
   },
 
   onSearchInput(e: any) {
@@ -145,7 +135,7 @@ Page({
       const parts = keyword.split('-');
       const brand = parts[0].trim();
       const series = parts.slice(1).join('-').trim();
-      
+
       if (brand && series) {
         wx.navigateTo({
           url: `/pages/search-result/search-result?brand=${encodeURIComponent(brand)}&series=${encodeURIComponent(series)}`
@@ -153,7 +143,7 @@ Page({
         return;
       }
     }
-    
+
     // 否则作为普通关键词搜索
     wx.navigateTo({
       url: `/pages/search-result/search-result?keyword=${encodeURIComponent(keyword)}`
@@ -171,13 +161,14 @@ Page({
     try {
       const res: any = await productApi.getHotSeries();
       if (res && res.code === 200 && res.data) {
-        // 处理logo字段，添加完整URL
-        const hotSeries = res.data.map((item: any) => {
-          if (item.logo) {
-            item.logo = getFullImageUrl(item.logo);
-          }
-          return item;
-        });
+        // 新接口返回的是 Series 对象数组
+        const hotSeries: HotSeriesItem[] = res.data.map((item: any) => ({
+          id: item.id,
+          brandId: item.brandId,
+          name: item.name,
+          logo: item.logo ? getFullImageUrl(item.logo) : '',
+          brandName: item.brandName || item.brand || ''
+        }));
         this.setData({
           hotSeries: hotSeries
         });
@@ -197,25 +188,13 @@ Page({
 
   onLetterTap(e: any) {
     const letter = e.currentTarget.dataset.letter;
-    const letters = this.data.letters;
-    
-    if (letters.includes(letter)) {
-      this.setData({
-        currentLetter: letter,
-        scrollIntoViewId: 'brand-' + letter
-      });
-      
-      setTimeout(() => {
-        this.setData({ scrollIntoViewId: '' });
-      }, 500);
-    } else {
-      wx.showToast({
-        title: '暂无该字母品牌',
-        icon: 'none'
-      });
-    }
+    this.setData({
+      currentLetter: letter,
+      scrollIntoViewId: `brand-${letter}`
+    });
   },
 
-  onScroll() {
+  onScroll(e: any) {
+    // 可以在这里实现滚动时更新当前字母的逻辑
   }
 });

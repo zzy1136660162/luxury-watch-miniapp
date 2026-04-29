@@ -30,26 +30,14 @@ Component({
     // 品牌列表
     brands: [] as string[],
 
-    // 当前品牌
-    currentBrand: 'all',
+    // 当前品牌（用于高亮左侧导航）
+    currentBrand: '',
 
-    // 当前分类的产品列表
-    products: [] as any[],
+    // 滚动到指定位置
+    scrollIntoView: '',
 
-    // 精选产品列表（用于避免重复显示）
-    featuredProducts: [] as any[],
-
-    // 系列列表
-    categorySeries: [] as { brand: string; series: string; logo?: string }[],
-    
-    // 所有系列列表（原始数据）
-    allSeriesList: [] as { brand: string; series: string; logo?: string }[],
-
-    // 分页
-    page: 1,
-    size: 10,
-    total: 0,
-    hasMore: true,
+    // 按品牌分组的系列列表
+    brandSeriesList: [] as { brand: string; series: { name: string; logo?: string }[] }[],
 
     // 加载状态
     loading: true
@@ -60,8 +48,8 @@ Component({
     this.loadHeroImage();
     // 加载分类数据
     this.loadCategories();
-    // 加载品牌列表（会同时加载第一个品牌的产品和系列列表）
-    this.loadBrands();
+    // 加载品牌列表和系列列表
+    this.loadBrandsAndSeries();
     // 计算导航栏位置
     setTimeout(() => {
       this.calculateNavPosition();
@@ -102,94 +90,106 @@ Component({
       } else if (scrollTop < navTop && isNavFixed) {
         this.setData({ isNavFixed: false });
       }
+
+      // 根据滚动位置更新当前选中的品牌
+      this.updateCurrentBrandByScroll(scrollTop);
     },
 
-    // 加载Hero图片（使用系列页面专用图）
-    async loadHeroImage() {
-      try {
-        const res: any = await homeApi.getHomeData();
-        
-        if (res.code === 200 && res.data) {
-          const heroImage = res.data.collectionHeroImage ? getFullImageUrl(res.data.collectionHeroImage) : '';
-          this.setData({ heroImage }, () => {
-            // 图片加载后重新计算导航栏位置
-            setTimeout(() => {
-              this.calculateNavPosition();
-            }, 100);
-          });
-        }
-      } catch (error) {
-        console.error('加载Hero图片失败:', error);
-      }
-    },
+    // 根据滚动位置更新当前品牌
+    updateCurrentBrandByScroll(scrollTop: number) {
+      const { brandSeriesList } = this.data;
+      if (brandSeriesList.length === 0) return;
 
-    // 加载分类数据
-    async loadCategories() {
-      try {
-        const res: any = await collectionApi.getAllCollections();
-        
-        if (res.code === 200) {
-          this.setData({
-            categories: res.data || []
-          });
-        }
-      } catch (error) {
-        console.error('加载分类失败:', error);
-      }
-    },
+      // 获取每个品牌区域的位置
+      const query = wx.createSelectorQuery().in(this);
+      brandSeriesList.forEach((_, index) => {
+        query.select(`#brand-${index}`).boundingClientRect();
+      });
 
-    // 加载品牌列表
-    async loadBrands() {
-      try {
-        const res: any = await productApi.getAllBrands();
-        
-        if (res.code === 200) {
-          const brands = res.data || [];
-          // 默认选中第一个品牌
-          const defaultBrand = brands.length > 0 ? brands[0] : 'all';
-          this.setData({
-            brands: brands,
-            currentBrand: defaultBrand
-          });
-          console.log('加载品牌列表:', brands, '默认选中:', defaultBrand);
-          // 如果有默认品牌，重新加载产品列表
-          if (defaultBrand !== 'all') {
-            this.loadProducts(true);
+      query.exec((res: any[]) => {
+        if (!res || res.length === 0) return;
+
+        // 找到当前在视口中的品牌
+        for (let i = 0; i < res.length; i++) {
+          const rect = res[i];
+          if (rect && rect.top <= 150 && rect.bottom >= 150) {
+            const brand = brandSeriesList[i]?.brand;
+            if (brand && brand !== this.data.currentBrand) {
+              this.setData({ currentBrand: brand });
+            }
+            break;
           }
-          // 加载系列列表（使用当前的 currentBrand 进行过滤）
-          this.loadCategorySeries();
         }
-      } catch (error) {
-        console.error('加载品牌列表失败:', error);
-      }
+      });
     },
 
-    // 加载系列列表
-    async loadCategorySeries() {
+    // 加载品牌列表和系列列表
+    async loadBrandsAndSeries() {
       try {
-        const res: any = await productApi.getAllSeriesList();
-        
-        if (res.code === 200 && res.data) {
-          const allSeries = res.data;
-          // 处理logo字段，添加完整URL
+        this.setData({ loading: true });
+
+        // 并行加载品牌和系列
+        const [brandsRes, seriesRes] = await Promise.all([
+          productApi.getAllBrands(),
+          productApi.getAllSeriesList()
+        ]);
+
+        if (brandsRes.code === 200 && seriesRes.code === 200) {
+          // 处理品牌数据
+          const brandObjects = brandsRes.data || [];
+          const brands = brandObjects.map((item: any) => item.name || item);
+
+          // 处理系列数据
+          const allSeries = seriesRes.data || [];
           allSeries.forEach((item: any) => {
             if (item.logo) {
               item.logo = getFullImageUrl(item.logo);
             }
           });
-          // 根据当前品牌过滤系列
-          const currentBrand = this.data.currentBrand;
-          const filteredSeries = currentBrand === 'all' 
-            ? allSeries 
-            : allSeries.filter((item: { brand: string; series: string; logo?: string }) => item.brand === currentBrand);
-          
-          this.setData({ 
-            categorySeries: filteredSeries,
-            allSeriesList: allSeries // 保存完整列表用于切换品牌时使用
+
+          // 按品牌分组系列
+          const brandSeriesList = brands.map((brand: string) => {
+            const series = allSeries
+              .filter((item: any) => item.brand === brand || item.brandName === brand)
+              .map((item: any) => ({
+                name: item.series || item.name,
+                logo: item.logo
+              }));
+            return { brand, series };
+          }).filter((item: any) => item.series.length > 0); // 只保留有系列的品牌
+
+          this.setData({
+            brands,
+            brandSeriesList,
+            currentBrand: brands.length > 0 ? brands[0] : '',
+            loading: false
           });
+
+          console.log('加载品牌系列列表:', brandSeriesList);
         }
       } catch (error) {
-        console.error('加载系列列表失败:', error);
+        console.error('加载品牌系列列表失败:', error);
+        this.setData({ loading: false });
+      }
+    },
+
+    // 点击品牌导航
+    onBrandTap(e: any) {
+      const brand = e.currentTarget.dataset.brand;
+      const { brands } = this.data;
+
+      // 找到品牌对应的索引
+      const index = brands.indexOf(brand);
+      if (index !== -1) {
+        this.setData({
+          currentBrand: brand,
+          scrollIntoView: `brand-${index}`
+        });
+
+        // 清除 scrollIntoView，以便下次可以再次触发
+        setTimeout(() => {
+          this.setData({ scrollIntoView: '' });
+        }, 300);
       }
     },
 
@@ -202,158 +202,46 @@ Component({
       });
     },
 
-    // 加载产品列表
-    async loadProducts(refresh = false) {
+    // 加载Hero图片
+    async loadHeroImage() {
       try {
-        if (refresh) {
-          this.setData({ page: 1, products: [], hasMore: true });
-        }
-        
-        if (!this.data.hasMore) return;
-        
-        this.setData({ loading: true });
-        
-        const params: any = {
-          page: this.data.page,
-          size: this.data.size
-        };
-        
-        if (this.data.currentCategory !== 'all') {
-          params.category = this.data.currentCategory;
-        }
-        
-        if (this.data.currentBrand !== 'all') {
-          params.brand = this.data.currentBrand;
-        }
-        
-        const res: any = await productApi.getOnlineList(params);
-        
-        if (res.code === 200) {
-          const data = res.data;
-          let newProducts = (data.list || []).map((item: any) => ({
-            id: item.id,
-            name: item.name,
-            nameEn: item.nameEn,
-            intro: item.intro,
-            code: item.code,
-            price: item.price,
-            image: getFullImageUrl(item.image),
-            category: item.category,
-            series: item.series || ''
-          }));
-          
-          // 过滤掉精选商品，避免重复显示
-          if (this.data.featuredProducts.length > 0 && this.data.currentCategory === 'all') {
-            const featuredIds = new Set(this.data.featuredProducts.map((item: any) => item.id));
-            newProducts = newProducts.filter((item: any) => !featuredIds.has(item.id));
-          }
-          
+        const res: any = await homeApi.getHomeData();
+        if (res.code === 200 && res.data) {
           this.setData({
-            products: refresh ? newProducts : [...this.data.products, ...newProducts],
-            total: data.total,
-            hasMore: this.data.products.length + newProducts.length < data.total,
-            loading: false
+            heroImage: res.data.collectionHeroImage || ''
           });
-        } else {
-          this.setData({ loading: false });
         }
       } catch (error) {
-        console.error('加载产品失败:', error);
-        this.setData({ loading: false });
+        console.error('加载Hero图片失败:', error);
       }
     },
 
-    // 分类点击
-    onCategoryTap(e: any) {
-      const category = e.currentTarget.dataset.category;
-      console.log('点击分类按钮:', category);
-      
-      this.setData({
-        currentCategory: category,
-        page: 1,
-        products: [],
-        hasMore: true
-      }, () => {
-        this.loadProducts(true);
-      });
-    },
-
-    // 搜索点击
-    onSearchTap() {
-      wx.navigateTo({
-        url: '/pages/search/search'
-      });
-    },
-
-    // 品牌点击
-    onBrandTap(e: any) {
-      const brand = e.currentTarget.dataset.brand;
-      console.log('点击品牌按钮:', brand);
-      
-      // 根据当前品牌过滤系列列表
-      const allSeries = this.data.allSeriesList;
-      const filteredSeries = brand === 'all' 
-        ? allSeries 
-        : allSeries.filter((item: { brand: string; series: string; logo?: string }) => item.brand === brand);
-      
-      this.setData({
-        currentBrand: brand,
-        categorySeries: filteredSeries,
-        page: 1,
-        products: [],
-        hasMore: true
-      }, () => {
-        this.loadProducts(true);
-      });
-    },
-
-    // 产品点击
-    onProductTap(e: any) {
-      const productId = e.currentTarget.dataset.id;
-      if (productId) {
-        wx.navigateTo({
-          url: `/pages/product-detail/product-detail?id=${productId}`
-        });
-      }
-    },
-
-    // 请求目录
-    onRequestCatalogue() {
-      wx.showModal({
-        title: '产品目录',
-        content: '正在为您准备产品目录，请稍候...',
-        confirmText: '确定'
-      });
-    },
-
-    // 查找精品店
-    onLocateBoutique() {
-      wx.showModal({
-        title: '精品店定位',
-        content: '正在查找附近的精品店...',
-        confirmText: '确定'
-      });
-    },
-
-    // 下拉加载更多
-    onReachBottom() {
-      if (!this.data.loading && this.data.hasMore) {
-        this.setData({
-          page: this.data.page + 1
-        }, () => {
-          this.loadProducts();
-        });
+    // 加载分类数据
+    async loadCategories() {
+      try {
+        const res: any = await collectionApi.getAllCollections();
+        if (res.code === 200) {
+          this.setData({
+            categories: res.data || []
+          });
+        }
+      } catch (error) {
+        console.error('加载分类失败:', error);
       }
     },
 
     // 下拉刷新
     onPullDownRefresh() {
-      Promise.all([
-        this.loadCategories(),
-        this.loadCategorySeries(),
-        this.loadProducts(true)
-      ]).then(() => {
+      this.loadBrandsAndSeries();
+      setTimeout(() => {
         wx.stopPullDownRefresh();
+      }, 1000);
+    },
+
+    // 点击搜索
+    onSearchTap() {
+      wx.navigateTo({
+        url: '/pages/search/search'
       });
     }
   }

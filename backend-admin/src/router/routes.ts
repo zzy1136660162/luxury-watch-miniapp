@@ -1,10 +1,5 @@
-import type { Route } from '#/global'
 import type { RouteRecordRaw } from 'vue-router'
-import generatedRoutes from 'virtual:generated-pages'
-import { setupLayouts } from 'virtual:meta-layouts'
-import MultilevelMenuExample from './modules/multilevel.menu.example'
 
-// 固定路由（默认路由）
 const constantRoutes: RouteRecordRaw[] = [
   {
     path: '/login',
@@ -24,33 +19,112 @@ const constantRoutes: RouteRecordRaw[] = [
   },
 ]
 
-// 系统路由
-const systemRoutes: RouteRecordRaw[] = [
+const mainRoutes: RouteRecordRaw[] = [
   {
     path: '/',
     component: () => import('@/layouts/index.vue'),
     meta: {
-      title: () => useSettingsStore().settings.home.title,
       breadcrumb: false,
     },
     children: [
       {
         path: '',
+        name: 'product-list',
         component: () => import('@/views/product/list/index.vue'),
         meta: {
-          title: '商品管理',
-          icon: 'i-ant-design:shop-twotone',
+          title: '商品列表',
+          icon: 'i-ant-design:unordered-list-outlined',
           breadcrumb: false,
         },
       },
       {
-        path: 'home',
-        name: 'home',
-        component: () => import('@/views/index.vue'),
+        path: 'store',
+        name: 'store',
+        component: () => import('@/views/member/store/index.vue'),
         meta: {
-          title: '主页',
-          icon: 'i-ant-design:home-twotone',
-          breadcrumb: false,
+          title: '门店管理',
+          icon: 'i-ant-design:shop-twotone',
+        },
+      },
+      {
+        path: 'appointment',
+        name: 'appointment',
+        component: () => import('@/views/member/appointment/index.vue'),
+        meta: {
+          title: '预约管理',
+          icon: 'i-ant-design:calendar-outlined',
+        },
+      },
+      {
+        path: 'product/list',
+        name: 'product-list-page',
+        component: () => import('@/views/product/list/index.vue'),
+        meta: {
+          title: '商品列表',
+          icon: 'i-ant-design:unordered-list-outlined',
+        },
+      },
+      {
+        path: 'product/category',
+        name: 'product-category',
+        component: () => import('@/views/product/category/index.vue'),
+        meta: {
+          title: '商品分类',
+          icon: 'i-ant-design:appstore-outlined',
+        },
+      },
+      {
+        path: 'product/brand',
+        name: 'product-brand',
+        component: () => import('@/views/product/brand/index.vue'),
+        meta: {
+          title: '品牌管理',
+          icon: 'i-ant-design: Trademark-circle-outlined',
+        },
+      },
+      {
+        path: 'product/series',
+        name: 'product-series',
+        component: () => import('@/views/product/series/index.vue'),
+        meta: {
+          title: '系列管理',
+          icon: 'i-ant-design: appstore-twotone',
+        },
+      },
+      {
+        path: 'exchange',
+        name: 'exchange',
+        component: () => import('@/views/exchange/index.vue'),
+        meta: {
+          title: '兑换管理',
+          icon: 'i-ant-design:gift-outlined',
+        },
+      },
+      {
+        path: 'system/user',
+        name: 'system-user',
+        component: () => import('@/views/system/user/index.vue'),
+        meta: {
+          title: '用户管理',
+          icon: 'i-ant-design:team-outlined',
+        },
+      },
+      {
+        path: 'system/admin',
+        name: 'system-admin',
+        component: () => import('@/views/system/admin/index.vue'),
+        meta: {
+          title: '管理员管理',
+          icon: 'i-ant-design:user-outlined',
+        },
+      },
+      {
+        path: 'system/menu',
+        name: 'system-menu',
+        component: () => import('@/views/system/menu/index.vue'),
+        meta: {
+          title: '菜单管理',
+          icon: 'i-ant-design:menu-twotone',
         },
       },
       {
@@ -66,31 +140,16 @@ const systemRoutes: RouteRecordRaw[] = [
   },
 ]
 
-// 动态路由（异步路由、导航栏路由）
-const asyncRoutes: Route.recordMainRaw[] = [
-  {
-    meta: {
-      title: '演示',
-      icon: 'i-uim:box',
-    },
-    children: [
-      MultilevelMenuExample,
-    ],
-  },
-]
+const asyncRoutes: Route.recordMainRaw[] = []
 
-const constantRoutesByFilesystem = generatedRoutes.filter((item) => {
-  return item.meta?.enabled !== false && item.meta?.constant === true
-})
+const constantRoutesByFilesystem: RouteRecordRaw[] = []
 
-const asyncRoutesByFilesystem = [...setupLayouts(generatedRoutes.filter((item) => {
-  return item.meta?.enabled !== false && item.meta?.constant !== true && item.meta?.layout !== false
-}))]
+const asyncRoutesByFilesystem: RouteRecordRaw[] = []
 
 export {
   asyncRoutes,
   asyncRoutesByFilesystem,
   constantRoutes,
   constantRoutesByFilesystem,
-  systemRoutes,
+  mainRoutes,
 }

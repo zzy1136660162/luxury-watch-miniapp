@@ -25,6 +25,11 @@ public class Series {
      */
     private String name;
 
+    /**
+     * 系列Logo
+     */
+    private String logo;
+
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createdAt;
 }
