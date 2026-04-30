@@ -10,4 +10,6 @@ public interface ImageUploadService {
     ImageUploadDTO uploadImage(MultipartFile file);
     
     List<ImageUploadDTO> uploadImages(MultipartFile[] files);
+
+    ImageUploadDTO uploadVideo(MultipartFile file);
 }

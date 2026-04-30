@@ -241,6 +241,7 @@ interface CategoryOption {
 interface SuggestionItem {
   value: string
   count: number
+  id?: number
 }
 
 interface Props {
@@ -286,7 +287,9 @@ const form = reactive<Partial<Product>>({
   category: '',
   category_id: undefined,
   brand: '',
+  brandId: undefined as number | undefined,
   series: '',
+  seriesId: undefined as number | undefined,
   price: 0,
   stock: 0,
   image: '',
@@ -334,7 +337,8 @@ const rules = {
   name: [{ required: true, message: '请输入商品名称', trigger: 'blur' }],
   code: [{ required: true, message: '请输入机芯编码', trigger: 'blur' }],
   category_id: [{ required: true, message: '请选择商品分类', trigger: 'change' }],
-  brand: [{ required: true, message: '请输入品牌名称', trigger: 'blur' }],
+  brandId: [{ required: true, message: '请选择品牌', trigger: 'change' }],
+  seriesId: [{ required: true, message: '请选择系列', trigger: 'change' }],
   price: [{ required: true, message: '请输入商品价格', trigger: 'blur' }],
   stock: [{ required: true, message: '请输入库存数量', trigger: 'blur' }],
   waterResistance: [{ type: 'number', message: '请输入数字', trigger: 'blur' }],
@@ -350,8 +354,9 @@ const querySearchBrand = (queryString: string, callback: (data: SuggestionItem[]
 
     if (Array.isArray(dataArray) && dataArray.length > 0) {
       const results: SuggestionItem[] = dataArray.map((item: any) => ({
-        value: item.brand || item.name || '',
+        value: item.name || '',
         count: item.count || 0,
+        id: item.id
       }))
       console.log('处理后的品牌列表:', results)
       callback(results)
@@ -375,8 +380,9 @@ const querySearchSeries = (queryString: string, callback: (data: SuggestionItem[
 
     if (Array.isArray(dataArray) && dataArray.length > 0) {
       const results: SuggestionItem[] = dataArray.map((item: any) => ({
-        value: item.series || item.name || '',
-        count: item.count || 0
+        value: item.name || '',
+        count: item.count || 0,
+        id: item.id
       }))
       console.log('处理后的系列列表:', results)
       callback(results)
@@ -394,12 +400,14 @@ const querySearchSeries = (queryString: string, callback: (data: SuggestionItem[
 const handleSelectBrand = (item: SuggestionItem) => {
   console.log('选中的品牌:', item)
   form.brand = item.value
+  form.brandId = item.id
 }
 
 // 系列选中
 const handleSelectSeries = (item: SuggestionItem) => {
   console.log('选中的系列:', item)
   form.series = item.value
+  form.seriesId = item.id
 }
 
 // 分类选择变化处理
@@ -435,7 +443,9 @@ watch(
       form.category = ''
       form.category_id = undefined
       form.brand = ''
+      form.brandId = undefined
       form.series = ''
+      form.seriesId = undefined
       form.price = 0
       form.stock = 0
       form.image = ''

@@ -242,7 +242,15 @@ Component({
       const brand = e.currentTarget.dataset.brand;
       const series = e.currentTarget.dataset.series;
       wx.navigateTo({
-        url: `/pages/search-result/search-result?brand=${encodeURIComponent(brand)}&series=${encodeURIComponent(series)}`
+        url: `/pages/series-detail/series-detail?brand=${encodeURIComponent(brand)}&series=${encodeURIComponent(series)}`
+      });
+    },
+
+    // 点击品牌标题，跳转到系列介绍页
+    onBrandTitleTap(e: any) {
+      const brand = e.currentTarget.dataset.brand;
+      wx.navigateTo({
+        url: `/pages/series-detail/series-detail?brand=${encodeURIComponent(brand)}&series=${encodeURIComponent(brand)}`
       });
     },
 

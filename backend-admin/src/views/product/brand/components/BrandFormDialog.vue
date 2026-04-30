@@ -4,6 +4,7 @@ import { ElMessage } from 'element-plus'
 import type { FormInstance } from 'element-plus'
 import axios from 'axios'
 import api from '@/api'
+import Editor from '@tinymce/tinymce-vue'
 
 interface Props {
   modelValue: boolean
@@ -30,7 +31,8 @@ const fileInputRef = ref<HTMLInputElement>()
 const form = reactive({
   id: null as number | null,
   name: '',
-  logo: ''
+  logo: '',
+  content: ''
 })
 
 const rules = {
@@ -42,6 +44,31 @@ const baseUrl = import.meta.env.VITE_APP_API_BASEURL || 'http://localhost:8081'
 const isProxy = import.meta.env.DEV && import.meta.env.VITE_OPEN_PROXY
 const uploadUrl = isProxy ? '/proxy/api/upload/image' : '/api/upload/image'
 
+// 富文本图片上传
+const handleImageUpload = (blobInfo: any, progress: any): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const formData = new FormData()
+    formData.append('file', blobInfo.blob(), blobInfo.filename())
+
+    axios.post(uploadUrl, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        'Authorization': localStorage.getItem('token') || ''
+      }
+    }).then(res => {
+      if (res.data && res.data.code === 200) {
+        const uploadedUrl = res.data.data.url
+        resolve(uploadedUrl)
+      } else {
+        reject(new Error(res.data?.msg || res.data?.message || '上传失败'))
+      }
+    }).catch(err => {
+      console.error('图片上传失败:', err)
+      reject(new Error(err.response?.data?.msg || err.message || '上传失败'))
+    })
+  })
+}
+
 watch(
   () => props.modelValue,
   (val) => {
@@ -52,6 +79,7 @@ watch(
       form.id = null
       form.name = ''
       form.logo = ''
+      form.content = ''
     }
   }
 )
@@ -143,7 +171,7 @@ const handleSubmit = async () => {
   <el-dialog
     v-model="visible"
     :title="isEdit ? '编辑品牌' : '新增品牌'"
-    width="500px"
+    width="700px"
     destroy-on-close
   >
     <el-form
@@ -185,6 +213,26 @@ const handleSubmit = async () => {
             @change="handleFileChange"
           />
         </div>
+      </el-form-item>
+
+      <el-form-item label="品牌介绍" prop="content">
+        <Editor
+          v-model="form.content"
+          license-key="gpl"
+          :tinymce-script-src="'/tinymce/tinymce.min.js'"
+          :init="{
+            height: 400,
+            menubar: true,
+            plugins: 'anchor lists advlist autolink charmap code media help link image',
+            toolbar: 'undo redo | styles | bold italic underline | alignleft aligncenter alignright | bullist numlist outdent indent | link image',
+            branding: false,
+            content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px } img { max-width: 100%; height: auto; }',
+            images_upload_handler: handleImageUpload,
+            convert_urls: false,
+            relative_urls: false,
+            remove_script_host: false,
+          }"
+        />
       </el-form-item>
     </el-form>
 
@@ -238,24 +286,12 @@ const handleSubmit = async () => {
     .upload-icon {
       font-size: 24px;
       margin-bottom: 4px;
-
-      &.is-loading {
-        animation: rotating 2s linear infinite;
-      }
     }
 
     span {
       font-size: 12px;
+      color: #909399;
     }
-  }
-}
-
-@keyframes rotating {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
   }
 }
 </style>

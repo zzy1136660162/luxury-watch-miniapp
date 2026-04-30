@@ -117,4 +117,63 @@ public class ImageUploadServiceImpl implements ImageUploadService {
         
         return results;
     }
+
+    @Override
+    public ImageUploadDTO uploadVideo(MultipartFile file) {
+        if (file == null || file.isEmpty()) {
+            throw new RuntimeException("上传文件不能为空");
+        }
+
+        String originalFilename = file.getOriginalFilename();
+
+        String[] allowedExtensions = {"mp4", "avi", "mov", "wmv", "flv", "mkv", "webm"};
+        if (!FileUtil.isAllowedExtension(originalFilename, allowedExtensions)) {
+            throw new RuntimeException("不支持的视频格式，仅支持：mp4, avi, mov, wmv, flv, mkv, webm");
+        }
+
+        long maxSize = 500L * 1024 * 1024; // 500MB
+        if (file.getSize() > maxSize) {
+            throw new RuntimeException("视频大小超过限制，最大支持 500MB");
+        }
+
+        String subDirectory = "videos/" + FileUtil.generateSubDirectory();
+        String uniqueFilename = FileUtil.generateUniqueFilename(originalFilename);
+
+        String relativePath = subDirectory + "/" + uniqueFilename;
+
+        String rootPath = uploadConfig.getImagePath();
+        if (!rootPath.endsWith("/")) {
+            rootPath = rootPath + "/";
+        }
+
+        String fullDirectory = rootPath + subDirectory;
+        File directory = new File(fullDirectory);
+        if (!directory.exists()) {
+            boolean created = directory.mkdirs();
+            log.info("创建视频上传目录: {}, 结果: {}", fullDirectory, created);
+        }
+
+        String fullPath = fullDirectory + "/" + uniqueFilename;
+        File destFile = new File(fullPath);
+
+        try {
+            file.transferTo(destFile);
+            log.info("视频上传成功: {}", fullPath);
+        } catch (IOException e) {
+            log.error("视频保存失败: {}", fullPath, e);
+            throw new RuntimeException("视频保存失败：" + e.getMessage());
+        }
+
+        String accessUrl = uploadConfig.getBaseUrl() + "/" + relativePath;
+
+        ImageUploadDTO result = new ImageUploadDTO();
+        result.setUrl(accessUrl);
+        result.setFilename(uniqueFilename);
+        result.setSize(file.getSize());
+        result.setUploadTime(LocalDateTime.now());
+        result.setOriginalFilename(originalFilename);
+        result.setFileType(FileUtil.getFileExtension(originalFilename));
+
+        return result;
+    }
 }

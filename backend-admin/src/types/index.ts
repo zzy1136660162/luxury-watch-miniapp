@@ -29,11 +29,15 @@ export interface Product {
   name: string
   code: string
   category: string
+  category_id?: number
   brand?: string
+  brandId?: number
   series?: string
+  seriesId?: number
   seriesLogo?: string
   brandImage?: string
   image?: string
+  images?: string
   price: number
   stock: number
   sales?: number
@@ -44,6 +48,16 @@ export interface Product {
   pointsCost?: number
   createTime?: string
   updateTime?: string
+  intro?: string
+  name_en?: string
+  original_price?: number
+  sort?: number
+  content?: string
+  caseSize?: string
+  material?: string
+  strap?: string
+  powerReserve?: string
+  waterResistance?: number
 }
 
 // ==================== 腕表相关 ====================

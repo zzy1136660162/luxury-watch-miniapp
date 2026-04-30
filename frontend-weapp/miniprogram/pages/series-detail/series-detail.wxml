@@ -1,0 +1,108 @@
+<import src="/components/navigation-bar/navigation-bar.wxml" />
+
+<view class="page">
+  <navigation-bar title="{{brandName}}腕表" back="{{true}}" color="black" background="#ffffff" showMenu="{{true}}" />
+
+  <scroll-view class="content" scroll-y bounces="{{false}}">
+    <!-- 轮播图 -->
+    <view class="banner-section">
+      <swiper class="banner-swiper" indicator-dots="{{bannerImages.length > 1}}" autoplay="{{true}}" interval="3000" circular="{{true}}">
+        <swiper-item wx:for="{{bannerImages}}" wx:key="index">
+          <image class="banner-image" src="{{item}}" mode="aspectFill"/>
+        </swiper-item>
+      </swiper>
+    </view>
+
+    <!-- Tab按钮 -->
+    <view class="tab-bar">
+      <view class="tab-btn {{currentTab === 'home' ? 'active' : ''}}" bindtap="onTabClick" data-tab="home">首页</view>
+      <view class="tab-btn {{currentTab === 'watches' ? 'active' : ''}}" bindtap="onTabClick" data-tab="watches">{{brandName}}腕表</view>
+      <view class="tab-btn {{currentTab === 'brand' ? 'active' : ''}}" bindtap="onTabClick" data-tab="brand">{{brandName}}品牌</view>
+    </view>
+
+    <!-- 内容区域 -->
+    <view class="content-area">
+      <!-- 腕表Tab内容 -->
+      <block wx:if="{{currentTab === 'watches'}}">
+        <!-- 当前点击的系列 -->
+        <view class="current-series" wx:if="{{currentSeries}}">
+          <text class="series-name">{{currentSeries.name}}</text>
+
+          <!-- 视频播放器（有视频时显示） -->
+          <view class="video-wrapper" wx:if="{{currentSeries.videoUrl}}">
+            <video class="video-player" src="{{currentSeries.videoUrl}}" controls autoplay="{{false}}" show-center-play-btn="{{true}}"></video>
+          </view>
+
+          <!-- 系列Logo（无视频但有logo时显示） -->
+          <view class="series-image-wrapper" wx:elif="{{currentSeries.logo}}">
+            <image class="series-image" src="{{currentSeries.logo}}" mode="aspectFill" />
+          </view>
+
+          <!-- 占位符（都没有时显示） -->
+          <view class="series-placeholder" wx:else>
+            <text class="placeholder-text">{{currentSeries.name[0]}}</text>
+          </view>
+
+          <!-- 系列商品 -->
+          <view class="products-section" wx:if="{{currentSeries.products && currentSeries.products.length > 0}}">
+            <text class="section-title">系列腕表</text>
+            <view class="products-grid">
+              <view class="product-card" wx:for="{{currentSeries.products}}" wx:key="id" bindtap="onProductTap" data-id="{{item.id}}">
+                <image class="product-image" src="{{item.image}}" mode="aspectFill" />
+                <text class="product-name">{{item.name}}</text>
+              </view>
+            </view>
+          </view>
+          <view class="products-empty" wx:else>
+            <text class="empty-text">暂无相关腕表</text>
+          </view>
+        </view>
+
+        <!-- 其他系列 -->
+        <view class="other-series" wx:for="{{otherSeries}}" wx:key="id">
+          <text class="series-name">{{item.name}}</text>
+
+          <!-- 系列Logo（有logo时显示） -->
+          <view class="series-image-wrapper" wx:if="{{item.logo}}">
+            <image class="series-image" src="{{item.logo}}" mode="aspectFill" />
+          </view>
+
+          <!-- 占位符（无logo时显示） -->
+          <view class="series-placeholder" wx:else>
+            <text class="placeholder-text">{{item.name[0]}}</text>
+          </view>
+
+          <!-- 系列商品 -->
+          <view class="products-section" wx:if="{{item.products && item.products.length > 0}}">
+            <view class="products-grid">
+              <view class="product-card" wx:for="{{item.products}}" wx:key="id" wx:for-item="product" bindtap="onProductTap" data-id="{{product.id}}">
+                <image class="product-image" src="{{product.image}}" mode="aspectFill" />
+                <text class="product-name">{{product.name}}</text>
+              </view>
+            </view>
+          </view>
+          <view class="products-empty" wx:else>
+            <text class="empty-text">暂无相关腕表</text>
+          </view>
+        </view>
+      </block>
+
+      <!-- 首页Tab - 展示所有系列的富文本内容 -->
+      <block wx:if="{{currentTab === 'home'}}">
+        <view class="rich-content-section" wx:for="{{seriesList}}" wx:key="id">
+          <text class="series-title">{{item.name}}</text>
+          <rich-text class="rich-text-content" nodes="{{item.content}}" wx:if="{{item.content}}"></rich-text>
+          <text class="empty-content" wx:else>暂无内容</text>
+        </view>
+      </block>
+
+      <!-- 品牌Tab - 展示品牌富文本内容 -->
+      <block wx:if="{{currentTab === 'brand'}}">
+        <view class="brand-content">
+          <rich-text class="rich-text-content" nodes="{{brandInfo.content}}" wx:if="{{brandInfo && brandInfo.content}}"></rich-text>
+          <text class="empty-content" wx:else>暂无品牌介绍</text>
+        </view>
+      </block>
+    </view>
+  </scroll-view>
+</view>

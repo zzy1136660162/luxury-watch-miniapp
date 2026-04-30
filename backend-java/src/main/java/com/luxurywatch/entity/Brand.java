@@ -24,6 +24,11 @@ public class Brand {
      */
     private String logo;
 
+    /**
+     * 品牌介绍富文本
+     */
+    private String content;
+
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createdAt;
 }

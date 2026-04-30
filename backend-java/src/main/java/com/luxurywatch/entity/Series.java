@@ -30,6 +30,17 @@ public class Series {
      */
     private String logo;
 
+    /**
+     * 系列介绍视频URL
+     */
+    @TableField("video_url")
+    private String videoUrl;
+
+    /**
+     * 系列介绍富文本
+     */
+    private String content;
+
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createdAt;
 }

@@ -1,12 +1,15 @@
 package com.luxurywatch.controller;
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.luxurywatch.common.R;
 import com.luxurywatch.entity.Brand;
 import com.luxurywatch.entity.Product;
 import com.luxurywatch.entity.ProductCategory;
 import com.luxurywatch.entity.Series;
+import com.luxurywatch.mapper.BrandMapper;
+import com.luxurywatch.mapper.SeriesMapper;
 import com.luxurywatch.service.ProductCategoryService;
 import com.luxurywatch.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +31,12 @@ public class ProductController {
 
     @Autowired
     private ProductCategoryService productCategoryService;
+
+    @Autowired
+    private BrandMapper brandMapper;
+
+    @Autowired
+    private SeriesMapper seriesMapper;
 
     /**
      * 获取商品列表（分页）
@@ -73,6 +82,20 @@ public class ProductController {
     @PostMapping
     @SaCheckPermission("product:add")
     public R<Void> create(@RequestBody Product product) {
+        // 根据brandId获取品牌名称
+        if (product.getBrandId() != null) {
+            Brand brand = brandMapper.selectById(product.getBrandId());
+            if (brand != null) {
+                product.setBrand(brand.getName());
+            }
+        }
+        // 根据seriesId获取系列名称
+        if (product.getSeriesId() != null) {
+            Series series = seriesMapper.selectById(product.getSeriesId());
+            if (series != null) {
+                product.setSeries(series.getName());
+            }
+        }
         boolean success = productService.createProduct(product);
         if (success) {
             return R.success();
@@ -87,6 +110,20 @@ public class ProductController {
     @SaCheckPermission("product:edit")
     public R<Void> update(@PathVariable Long id, @RequestBody Product product) {
         product.setId(id);
+        // 根据brandId获取品牌名称
+        if (product.getBrandId() != null) {
+            Brand brand = brandMapper.selectById(product.getBrandId());
+            if (brand != null) {
+                product.setBrand(brand.getName());
+            }
+        }
+        // 根据seriesId获取系列名称
+        if (product.getSeriesId() != null) {
+            Series series = seriesMapper.selectById(product.getSeriesId());
+            if (series != null) {
+                product.setSeries(series.getName());
+            }
+        }
         boolean success = productService.updateProduct(product);
         if (success) {
             return R.success();

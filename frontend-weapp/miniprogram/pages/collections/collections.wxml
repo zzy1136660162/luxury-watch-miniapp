@@ -49,8 +49,8 @@
       <view class="products-area">
         <!-- 按品牌分组的系列列表 -->
         <view class="brand-series-section" wx:for="{{brandSeriesList}}" wx:key="brand" id="brand-{{index}}">
-          <!-- 品牌标题 -->
-          <view class="brand-title">
+          <!-- 品牌标题，点击跳转系列介绍页 -->
+          <view class="brand-title" bindtap="onBrandTitleTap" data-brand="{{item.brand}}">
             <text class="brand-name">{{item.brand}}</text>
           </view>
           <!-- 该品牌的系列网格 -->

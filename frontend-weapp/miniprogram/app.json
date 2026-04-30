@@ -2,6 +2,7 @@
   "pages": [
     "pages/home/home",
     "pages/collections/collections",
+    "pages/series-detail/series-detail",
     "pages/heritage/heritage",
     "pages/member/member",
     "pages/privileges/privileges",

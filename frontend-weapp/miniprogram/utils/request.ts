@@ -159,6 +159,17 @@ export const productApi = {
   },
 
   /**
+   * 获取品牌下所有系列详情（带商品）
+   */
+  getBrandSeriesDetail: (brand: string) => {
+    return request({
+      url: '/api/series/brand-detail',
+      method: 'GET',
+      data: { brand }
+    });
+  },
+
+  /**
    * 搜索商品
    */
   search: (params: { keyword: string }) => {

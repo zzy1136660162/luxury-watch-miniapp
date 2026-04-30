@@ -887,4 +887,93 @@ public class MiniAppController {
 
         return wrapper;
     }
+
+    /**
+     * 获取品牌下所有系列详情（带商品）
+     */
+    @GetMapping("/series/brand-detail")
+    public R<Map<String, Object>> getBrandSeriesDetail(@RequestParam String brand) {
+        try {
+            // URL解码品牌名
+            try {
+                brand = java.net.URLDecoder.decode(brand, "UTF-8");
+            } catch (Exception e) {
+                // 解码失败，使用原始值
+            }
+
+            // 获取品牌信息
+            Brand brandInfo = brandMapper.selectOne(
+                    new com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper<Brand>()
+                            .eq(Brand::getName, brand)
+            );
+
+            if (brandInfo == null) {
+                return R.error("品牌不存在");
+            }
+
+            Map<String, Object> result = new LinkedHashMap<>();
+
+            // 品牌信息
+            Map<String, Object> brandData = new LinkedHashMap<>();
+            brandData.put("id", brandInfo.getId());
+            brandData.put("name", brandInfo.getName());
+            brandData.put("logo", brandInfo.getLogo());
+            brandData.put("content", brandInfo.getContent());
+            result.put("brand", brandData);
+
+            // 获取该品牌下所有系列
+            List<Series> seriesList = seriesMapper.selectList(
+                    new com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper<Series>()
+                            .eq(Series::getBrandId, brandInfo.getId())
+                            .orderByAsc(Series::getId)
+            );
+
+            // 轮播图列表（使用系列logo）
+            List<String> bannerImages = seriesList.stream()
+                    .map(Series::getLogo)
+                    .filter(logo -> logo != null && !logo.isEmpty())
+                    .collect(Collectors.toList());
+            result.put("bannerImages", bannerImages);
+
+            // 系列详情列表
+            List<Map<String, Object>> seriesDetailList = new ArrayList<>();
+            for (Series series : seriesList) {
+                Map<String, Object> seriesItem = new LinkedHashMap<>();
+                seriesItem.put("id", series.getId());
+                seriesItem.put("name", series.getName());
+                seriesItem.put("logo", series.getLogo());
+                seriesItem.put("videoUrl", series.getVideoUrl());
+                seriesItem.put("content", series.getContent());
+
+                // 获取该系列的商品（前3个）
+                QueryWrapper<Product> productWrapper = new QueryWrapper<>();
+                productWrapper.eq("status", 1)
+                        .eq("series_id", series.getId())
+                        .orderByDesc("sales", "sort")
+                        .last("LIMIT 3");
+                List<Product> products = productService.list(productWrapper);
+
+                // 转换商品格式
+                List<Map<String, Object>> productList = products.stream().map(p -> {
+                    Map<String, Object> productMap = new LinkedHashMap<>();
+                    productMap.put("id", p.getId());
+                    productMap.put("name", p.getName());
+                    productMap.put("image", p.getImage());
+                    productMap.put("price", p.getPrice());
+                    return productMap;
+                }).collect(Collectors.toList());
+
+                seriesItem.put("products", productList);
+                seriesDetailList.add(seriesItem);
+            }
+
+            result.put("seriesList", seriesDetailList);
+            result.put("currentSeriesIndex", 0);
+
+            return R.success(result);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return R.error("获取品牌系列详情失败: " + e.getMessage());
+        }
+    }
 }

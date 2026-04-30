@@ -4,6 +4,7 @@ import { ElMessage } from 'element-plus'
 import type { FormInstance } from 'element-plus'
 import axios from 'axios'
 import api from '@/api'
+import Editor from '@tinymce/tinymce-vue'
 
 interface Props {
   modelValue: boolean
@@ -24,14 +25,18 @@ const visible = computed({
 
 const formRef = ref<FormInstance>()
 const submitting = ref(false)
-const uploading = ref(false)
-const fileInputRef = ref<HTMLInputElement>()
+const uploadingLogo = ref(false)
+const uploadingVideo = ref(false)
+const logoInputRef = ref<HTMLInputElement>()
+const videoInputRef = ref<HTMLInputElement>()
 
 const form = reactive({
   id: null as number | null,
   brandId: null as number | null,
   name: '',
-  logo: ''
+  logo: '',
+  videoUrl: '',
+  content: ''
 })
 
 const rules = {
@@ -43,6 +48,32 @@ const rules = {
 const baseUrl = import.meta.env.VITE_APP_API_BASEURL || 'http://localhost:8081'
 const isProxy = import.meta.env.DEV && import.meta.env.VITE_OPEN_PROXY
 const uploadUrl = isProxy ? '/proxy/api/upload/image' : '/api/upload/image'
+const uploadVideoUrl = isProxy ? '/proxy/api/upload/video' : '/api/upload/video'
+
+// 富文本图片上传
+const handleImageUpload = (blobInfo: any, progress: any): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const formData = new FormData()
+    formData.append('file', blobInfo.blob(), blobInfo.filename())
+
+    axios.post(uploadUrl, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        'Authorization': localStorage.getItem('token') || ''
+      }
+    }).then(res => {
+      if (res.data && res.data.code === 200) {
+        const uploadedUrl = res.data.data.url
+        resolve(uploadedUrl)
+      } else {
+        reject(new Error(res.data?.msg || res.data?.message || '上传失败'))
+      }
+    }).catch(err => {
+      console.error('图片上传失败:', err)
+      reject(new Error(err.response?.data?.msg || err.message || '上传失败'))
+    })
+  })
+}
 
 watch(
   () => props.modelValue,
@@ -55,17 +86,19 @@ watch(
       form.brandId = null
       form.name = ''
       form.logo = ''
+      form.videoUrl = ''
+      form.content = ''
     }
   }
 )
 
-// 触发文件选择
-const triggerUpload = () => {
-  fileInputRef.value?.click()
+// 触发Logo文件选择
+const triggerLogoUpload = () => {
+  logoInputRef.value?.click()
 }
 
-// 处理文件上传
-const handleFileChange = async (event: Event) => {
+// 处理Logo上传
+const handleLogoChange = async (event: Event) => {
   const target = event.target as HTMLInputElement
   const file = target.files?.[0]
   if (!file) return
@@ -82,7 +115,7 @@ const handleFileChange = async (event: Event) => {
     return
   }
 
-  uploading.value = true
+  uploadingLogo.value = true
 
   try {
     const formData = new FormData()
@@ -105,17 +138,74 @@ const handleFileChange = async (event: Event) => {
     console.error('上传失败:', error)
     ElMessage.error(error.response?.data?.msg || error.message || '上传失败')
   } finally {
-    uploading.value = false
-    // 清空 input，允许重复选择同一文件
-    if (fileInputRef.value) {
-      fileInputRef.value.value = ''
+    uploadingLogo.value = false
+    if (logoInputRef.value) {
+      logoInputRef.value.value = ''
     }
   }
 }
 
-// 删除 Logo
+// 删除Logo
 const handleRemoveLogo = () => {
   form.logo = ''
+}
+
+// 触发视频文件选择
+const triggerVideoUpload = () => {
+  videoInputRef.value?.click()
+}
+
+// 处理视频上传
+const handleVideoChange = async (event: Event) => {
+  const target = event.target as HTMLInputElement
+  const file = target.files?.[0]
+  if (!file) return
+
+  // 验证文件类型
+  if (!file.type.startsWith('video/')) {
+    ElMessage.error('请选择视频文件')
+    return
+  }
+
+  // 验证文件大小（最大 500MB）
+  if (file.size > 500 * 1024 * 1024) {
+    ElMessage.error('视频大小不能超过 500MB')
+    return
+  }
+
+  uploadingVideo.value = true
+
+  try {
+    const formData = new FormData()
+    formData.append('file', file)
+
+    const res = await axios.post(uploadVideoUrl, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        'Authorization': localStorage.getItem('token') || ''
+      }
+    })
+
+    if (res.data && res.data.code === 200) {
+      form.videoUrl = res.data.data.url
+      ElMessage.success('上传成功')
+    } else {
+      ElMessage.error(res.data?.msg || '上传失败')
+    }
+  } catch (error: any) {
+    console.error('上传失败:', error)
+    ElMessage.error(error.response?.data?.msg || error.message || '上传失败')
+  } finally {
+    uploadingVideo.value = false
+    if (videoInputRef.value) {
+      videoInputRef.value.value = ''
+    }
+  }
+}
+
+// 删除视频
+const handleRemoveVideo = () => {
+  form.videoUrl = ''
 }
 
 const handleSubmit = async () => {
@@ -146,7 +236,7 @@ const handleSubmit = async () => {
   <el-dialog
     v-model="visible"
     :title="isEdit ? '编辑系列' : '新增系列'"
-    width="500px"
+    width="700px"
     destroy-on-close
   >
     <el-form
@@ -173,25 +263,71 @@ const handleSubmit = async () => {
               :preview-src-list="[form.logo]"
             />
             <div class="logo-actions">
-              <el-button size="small" type="primary" @click="triggerUpload" :loading="uploading">
-                {{ uploading ? '上传中...' : '更换' }}
+              <el-button size="small" type="primary" @click="triggerLogoUpload" :loading="uploadingLogo">
+                {{ uploadingLogo ? '上传中...' : '更换' }}
               </el-button>
               <el-button size="small" type="danger" @click="handleRemoveLogo">删除</el-button>
             </div>
           </div>
-          <div v-else class="logo-placeholder" @click="triggerUpload">
-            <el-icon v-if="!uploading" class="upload-icon"><Plus /></el-icon>
+          <div v-else class="logo-placeholder" @click="triggerLogoUpload">
+            <el-icon v-if="!uploadingLogo" class="upload-icon"><Plus /></el-icon>
             <el-icon v-else class="upload-icon is-loading"><Loading /></el-icon>
-            <span>{{ uploading ? '上传中...' : '点击上传Logo' }}</span>
+            <span>{{ uploadingLogo ? '上传中...' : '点击上传Logo' }}</span>
           </div>
           <input
-            ref="fileInputRef"
+            ref="logoInputRef"
             type="file"
             accept="image/*"
             style="display: none"
-            @change="handleFileChange"
+            @change="handleLogoChange"
           />
         </div>
+      </el-form-item>
+
+      <el-form-item label="系列视频">
+        <div class="video-upload">
+          <div v-if="form.videoUrl" class="video-preview">
+            <video :src="form.videoUrl" class="video-player" controls />
+            <div class="video-actions">
+              <el-button size="small" type="primary" @click="triggerVideoUpload" :loading="uploadingVideo">
+                {{ uploadingVideo ? '上传中...' : '更换' }}
+              </el-button>
+              <el-button size="small" type="danger" @click="handleRemoveVideo">删除</el-button>
+            </div>
+          </div>
+          <div v-else class="video-placeholder" @click="triggerVideoUpload">
+            <el-icon v-if="!uploadingVideo" class="upload-icon"><VideoPlay /></el-icon>
+            <el-icon v-else class="upload-icon is-loading"><Loading /></el-icon>
+            <span>{{ uploadingVideo ? '上传中...' : '点击上传视频' }}</span>
+          </div>
+          <input
+            ref="videoInputRef"
+            type="file"
+            accept="video/*"
+            style="display: none"
+            @change="handleVideoChange"
+          />
+        </div>
+      </el-form-item>
+
+      <el-form-item label="系列介绍" prop="content">
+        <Editor
+          v-model="form.content"
+          license-key="gpl"
+          :tinymce-script-src="'/tinymce/tinymce.min.js'"
+          :init="{
+            height: 400,
+            menubar: true,
+            plugins: 'anchor lists advlist autolink charmap code media help link image',
+            toolbar: 'undo redo | styles | bold italic underline | alignleft aligncenter alignright | bullist numlist outdent indent | link image',
+            branding: false,
+            content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px } img { max-width: 100%; height: auto; }',
+            images_upload_handler: handleImageUpload,
+            convert_urls: false,
+            relative_urls: false,
+            remove_script_host: false,
+          }"
+        />
       </el-form-item>
     </el-form>
 
@@ -245,24 +381,61 @@ const handleSubmit = async () => {
     .upload-icon {
       font-size: 24px;
       margin-bottom: 4px;
-
-      &.is-loading {
-        animation: rotating 2s linear infinite;
-      }
     }
 
     span {
       font-size: 12px;
+      color: #909399;
     }
   }
 }
 
-@keyframes rotating {
-  from {
-    transform: rotate(0deg);
+.video-upload {
+  .video-preview {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    .video-player {
+      width: 200px;
+      height: 120px;
+      border: 1px solid #dcdfe6;
+      border-radius: 6px;
+      background-color: #000;
+    }
+
+    .video-actions {
+      display: flex;
+      gap: 8px;
+    }
   }
-  to {
-    transform: rotate(360deg);
+
+  .video-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 200px;
+    height: 120px;
+    border: 1px dashed #dcdfe6;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s;
+
+    &:hover {
+      border-color: #409eff;
+      color: #409eff;
+    }
+
+    .upload-icon {
+      font-size: 32px;
+      margin-bottom: 8px;
+    }
+
+    span {
+      font-size: 12px;
+      color: #909399;
+    }
   }
 }
 </style>

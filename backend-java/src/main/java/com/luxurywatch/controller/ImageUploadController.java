@@ -54,4 +54,17 @@ public class ImageUploadController {
             return R.error(e.getMessage());
         }
     }
+
+    @PostMapping("/video")
+    public R<ImageUploadDTO> uploadVideo(@RequestParam("file") MultipartFile file) {
+        try {
+            log.info("接收到视频上传请求: {}", file.getOriginalFilename());
+            ImageUploadDTO result = imageUploadService.uploadVideo(file);
+            log.info("视频上传成功: {}", result.getUrl());
+            return R.success(result);
+        } catch (Exception e) {
+            log.error("视频上传失败: {}", e.getMessage(), e);
+            return R.error(e.getMessage());
+        }
+    }
 }
