@@ -10,7 +10,7 @@
     </view>
     <scroll-view class="brand-sidebar-scroll" scroll-y enhanced="{{true}}" show-scrollbar="{{false}}">
       <view class="brand-sidebar-track">
-        <view class="brand-sidebar-item {{currentBrand === item ? 'brand-sidebar-active' : ''}}" wx:for="{{brands}}" wx:key="index" bindtap="onBrandTap" data-brand="{{item}}">
+        <view class="brand-sidebar-item {{currentBrand === item ? 'brand-sidebar-active' : ''}}" wx:for="{{brands}}" wx:key="index" bindtap="onBrandTap" data-brand="{{item}}" data-index="{{index}}">
           <text class="brand-sidebar-name">{{item}}</text>
         </view>
       </view>
@@ -38,7 +38,7 @@
         </view>
         <scroll-view class="brand-sidebar-scroll" scroll-y enhanced="{{true}}" show-scrollbar="{{false}}">
           <view class="brand-sidebar-track">
-            <view class="brand-sidebar-item {{currentBrand === item ? 'brand-sidebar-active' : ''}}" wx:for="{{brands}}" wx:key="index" bindtap="onBrandTap" data-brand="{{item}}">
+            <view class="brand-sidebar-item {{currentBrand === item ? 'brand-sidebar-active' : ''}}" wx:for="{{brands}}" wx:key="index" bindtap="onBrandTap" data-brand="{{item}}" data-index="{{index}}">
               <text class="brand-sidebar-name">{{item}}</text>
             </view>
           </view>
@@ -57,7 +57,16 @@
           <view class="series-grid" wx:if="{{item.series.length > 0}}">
             <view class="series-card" wx:for="{{item.series}}" wx:key="name" wx:for-item="seriesItem" bindtap="onSeriesItemTap" data-brand="{{item.brand}}" data-series="{{seriesItem.name}}">
               <view class="series-image-wrapper">
-                <image class="series-image" src="{{seriesItem.logo || '/assets/images/default-series.png'}}" mode="aspectFill" />
+                <!-- 有logo时显示图片 -->
+                <block wx:if="{{seriesItem.logo}}">
+                  <image class="series-image" src="{{seriesItem.logo}}" mode="aspectFill" binderror="onImageError" data-series="{{seriesItem.name}}" lazy-load="{{true}}" />
+                </block>
+                <!-- 无logo时显示占位符 -->
+                <block wx:else>
+                  <view class="series-image-placeholder">
+                    <text class="placeholder-text">{{seriesItem.name[0]}}</text>
+                  </view>
+                </block>
               </view>
               <text class="series-card-name">{{seriesItem.name}}</text>
             </view>

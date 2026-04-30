@@ -23,7 +23,7 @@
       </view>
       <view class="hot-brands-grid">
         <view class="hot-brand-item" wx:for="{{hotBrands}}" wx:key="index" bindtap="onBrandTap" data-brand="{{item.name}}">
-          <image class="brand-image" src="{{item.image}}" mode="aspectFit" wx:if="{{item.image}}" />
+          <image class="brand-image" src="{{item.logo}}" mode="aspectFit" wx:if="{{item.logo}}" />
           <view class="brand-image-placeholder" wx:else>
             <text class="placeholder-text">{{item.name[0]}}</text>
           </view>
@@ -38,13 +38,13 @@
         <text class="title-text">热门系列</text>
         <text class="title-en">HOT SERIES</text>
       </view>
-      <view class="hot-series-grid">
-        <view class="hot-series-item" wx:for="{{hotSeries}}" wx:key="index" bindtap="onSeriesTap" data-brand="{{item.brand}}" data-series="{{item.series}}">
-          <image class="series-logo" src="{{item.logo}}" mode="aspectFit" wx:if="{{item.logo}}" />
-          <view class="series-info">
-            <text class="series-brand">{{item.brand}}</text>
-            <text class="series-name">{{item.series}}系列</text>
+      <view class="hot-brands-grid">
+        <view class="hot-brand-item" wx:for="{{hotSeries}}" wx:key="index" bindtap="onSeriesTap" data-brand="{{item.brandName}}" data-series="{{item.name}}">
+          <image class="brand-image" src="{{item.logo}}" mode="aspectFit" wx:if="{{item.logo}}" />
+          <view class="brand-image-placeholder" wx:else>
+            <text class="placeholder-text">{{item.name[0]}}</text>
           </view>
+          <text class="brand-name">{{item.name}}</text>
         </view>
       </view>
     </view>
@@ -65,7 +65,7 @@
             </view>
             <view class="brand-items">
               <view class="brand-item" wx:for="{{item.brands}}" wx:key="index" wx:for-item="brand" bindtap="onBrandTap" data-brand="{{brand.name}}">
-                <image class="brand-item-image" src="{{brand.image}}" mode="aspectFit" wx:if="{{brand.image}}" />
+                <image class="brand-item-image" src="{{brand.logo}}" mode="aspectFit" wx:if="{{brand.logo}}" />
                 <view class="brand-item-placeholder" wx:else>
                   <text class="placeholder-text">{{brand.name[0]}}</text>
                 </view>

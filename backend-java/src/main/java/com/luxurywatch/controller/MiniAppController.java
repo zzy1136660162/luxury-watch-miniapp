@@ -351,16 +351,14 @@ public class MiniAppController {
     }
 
     /**
-     * 获取热门系列（从 series 表，有logo的）
+     * 获取热门系列（从 series 表，返回所有系列）
      */
     @GetMapping("/series/hot")
     public R<List<Map<String, Object>>> getHotSeries() {
         try {
-            // 查询有logo的系列
+            // 查询所有系列（不限于有logo的）
             List<Series> seriesList = seriesMapper.selectList(
                     new com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper<Series>()
-                            .isNotNull(Series::getLogo)
-                            .ne(Series::getLogo, "")
                             .orderByDesc(Series::getId)
                             .last("LIMIT 10")
             );

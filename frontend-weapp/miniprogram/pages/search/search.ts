@@ -52,7 +52,9 @@ Page({
 
   async loadBrands() {
     try {
+      console.log('开始加载品牌数据...');
       const res: any = await productApi.getAllBrands();
+      console.log('品牌数据响应:', res);
       if (res && res.code === 200 && res.data) {
         // 后端返回的是 Brand 对象数组，包含 id, name, logo
         const brands: BrandItem[] = res.data.map((item: any) => ({
@@ -60,10 +62,21 @@ Page({
           name: item.name,
           logo: item.logo ? getFullImageUrl(item.logo) : ''
         }));
+        console.log('处理后的品牌数据:', brands);
         this.processBrands(brands);
+      } else {
+        console.error('品牌数据格式错误:', res);
+        wx.showToast({
+          title: '品牌数据加载失败',
+          icon: 'none'
+        });
       }
     } catch (err) {
       console.error('加载品牌失败:', err);
+      wx.showToast({
+        title: '网络请求失败',
+        icon: 'none'
+      });
     }
   },
 
@@ -159,7 +172,9 @@ Page({
 
   async loadHotSeries() {
     try {
+      console.log('开始加载热门系列数据...');
       const res: any = await productApi.getHotSeries();
+      console.log('热门系列原始数据:', res);
       if (res && res.code === 200 && res.data) {
         // 新接口返回的是 Series 对象数组
         const hotSeries: HotSeriesItem[] = res.data.map((item: any) => ({
@@ -169,12 +184,19 @@ Page({
           logo: item.logo ? getFullImageUrl(item.logo) : '',
           brandName: item.brandName || item.brand || ''
         }));
+        console.log('处理后的热门系列:', hotSeries);
         this.setData({
           hotSeries: hotSeries
         });
+      } else {
+        console.error('热门系列数据格式错误:', res);
       }
     } catch (err) {
       console.error('加载热门系列失败:', err);
+      wx.showToast({
+        title: '热门系列加载失败',
+        icon: 'none'
+      });
     }
   },
 

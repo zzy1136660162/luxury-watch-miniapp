@@ -342,12 +342,12 @@ const rules = {
 
 // 品牌搜索
 const querySearchBrand = (queryString: string, callback: (data: SuggestionItem[]) => void) => {
-  api.product.getBrandList(queryString).then((res: any) => {
+  api.product.getBrandList({ page: 1, size: 100 }).then((res: any) => {
     console.log('品牌搜索结果:', res)
-    
-    // 处理两种响应格式：res.data 或直接是数组
-    let dataArray = res.data || res
-    
+
+    // 处理分页格式：res.list 或 res.data.list 或直接数组
+    let dataArray = res.list || res.data?.list || res.data || res
+
     if (Array.isArray(dataArray) && dataArray.length > 0) {
       const results: SuggestionItem[] = dataArray.map((item: any) => ({
         value: item.brand || item.name || '',
@@ -367,12 +367,12 @@ const querySearchBrand = (queryString: string, callback: (data: SuggestionItem[]
 
 // 系列搜索
 const querySearchSeries = (queryString: string, callback: (data: SuggestionItem[]) => void) => {
-  api.product.getSeriesList(form.brand || '', queryString).then((res: any) => {
+  api.product.getSeriesList({ page: 1, size: 100 }).then((res: any) => {
     console.log('系列搜索结果:', res)
-    
-    // 处理两种响应格式：res.data 或直接是数组
-    let dataArray = res.data || res
-    
+
+    // 处理分页格式：res.list 或 res.data.list 或直接数组
+    let dataArray = res.list || res.data?.list || res.data || res
+
     if (Array.isArray(dataArray) && dataArray.length > 0) {
       const results: SuggestionItem[] = dataArray.map((item: any) => ({
         value: item.series || item.name || '',
