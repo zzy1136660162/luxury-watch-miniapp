@@ -51,6 +51,7 @@
         <view class="brand-series-section" wx:for="{{brandSeriesList}}" wx:key="brand" id="brand-{{index}}">
           <!-- 品牌标题，点击跳转系列介绍页 -->
           <view class="brand-title" bindtap="onBrandTitleTap" data-brand="{{item.brand}}">
+            <image class="brand-title-logo" src="{{item.logo}}" mode="aspectFit" wx:if="{{item.logo}}" />
             <text class="brand-name">{{item.brand}}</text>
           </view>
           <!-- 该品牌的系列网格 -->

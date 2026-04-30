@@ -43,7 +43,7 @@ Component({
     scrollIntoView: '',
 
     // 按品牌分组的系列列表
-    brandSeriesList: [] as { brand: string; series: { name: string; logo?: string }[] }[],
+    brandSeriesList: [] as { brand: string; logo: string; series: { name: string; logo?: string }[] }[],
 
     // 加载状态
     loading: true
@@ -172,9 +172,15 @@ Component({
         console.log('系列数据:', seriesRes);
 
         if (brandsRes.code === 200 && seriesRes.code === 200) {
-          // 处理品牌数据
+          // 处理品牌数据，创建品牌名到logo的映射
           const brandObjects = brandsRes.data || [];
-          const brands = brandObjects.map((item: any) => item.name || item);
+          const brandLogoMap: Record<string, string> = {};
+          brandObjects.forEach((item: any) => {
+            if (item.name) {
+              brandLogoMap[item.name] = item.logo ? getFullImageUrl(item.logo) : '';
+            }
+          });
+          const brands = Object.keys(brandLogoMap);
 
           // 处理系列数据 - 处理logo路径
           const allSeries = (seriesRes.data || []).map((item: any) => ({
@@ -196,7 +202,7 @@ Component({
                 name: item.name,
                 logo: item.logo
               }));
-            return { brand, series };
+            return { brand, logo: brandLogoMap[brand] || '', series };
           }).filter((item: any) => item.series.length > 0); // 只保留有系列的品牌
 
           console.log('品牌系列列表:', brandSeriesList);
@@ -242,15 +248,18 @@ Component({
       const brand = e.currentTarget.dataset.brand;
       const series = e.currentTarget.dataset.series;
       wx.navigateTo({
-        url: `/pages/series-detail/series-detail?brand=${encodeURIComponent(brand)}&series=${encodeURIComponent(series)}`
+        url: `/pages/search-result/search-result?brand=${encodeURIComponent(brand)}&series=${encodeURIComponent(series)}`
       });
     },
 
     // 点击品牌标题，跳转到系列介绍页
     onBrandTitleTap(e: any) {
       const brand = e.currentTarget.dataset.brand;
+      // 找到该品牌的第一个系列
+      const brandData = this.data.brandSeriesList.find((item: any) => item.brand === brand);
+      const firstSeries = brandData?.series?.[0]?.name || brand;
       wx.navigateTo({
-        url: `/pages/series-detail/series-detail?brand=${encodeURIComponent(brand)}&series=${encodeURIComponent(brand)}`
+        url: `/pages/series-detail/series-detail?brand=${encodeURIComponent(brand)}&series=${encodeURIComponent(firstSeries)}`
       });
     },
 

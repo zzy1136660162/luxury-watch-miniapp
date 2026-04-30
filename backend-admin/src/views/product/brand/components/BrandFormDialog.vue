@@ -5,6 +5,7 @@ import type { FormInstance } from 'element-plus'
 import axios from 'axios'
 import api from '@/api'
 import Editor from '@tinymce/tinymce-vue'
+import ImagesUpload from '@/components/ImagesUpload.vue'
 
 interface Props {
   modelValue: boolean
@@ -32,6 +33,7 @@ const form = reactive({
   id: null as number | null,
   name: '',
   logo: '',
+  images: '',
   content: ''
 })
 
@@ -79,6 +81,7 @@ watch(
       form.id = null
       form.name = ''
       form.logo = ''
+      form.images = ''
       form.content = ''
     }
   }
@@ -213,6 +216,14 @@ const handleSubmit = async () => {
             @change="handleFileChange"
           />
         </div>
+      </el-form-item>
+
+      <el-form-item label="品牌轮播图" prop="images">
+        <ImagesUpload
+          v-model="form.images"
+          placeholder="点击上传"
+          tip="建议尺寸：750x400px，支持 jpg、png、gif、webp 格式，最多上传9张图片"
+        />
       </el-form-item>
 
       <el-form-item label="品牌介绍" prop="content">

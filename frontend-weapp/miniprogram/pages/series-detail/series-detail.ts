@@ -22,6 +22,7 @@ interface BrandInfo {
   id: number;
   name: string;
   logo?: string;
+  images?: string;
   content?: string;
 }
 
@@ -41,6 +42,8 @@ Page({
     otherSeries: [] as SeriesItem[],
     seriesList: [] as SeriesItem[],
     currentTab: 'watches',
+    tabContentAnimation: {} as WechatMiniprogram.AnimationExportResult,
+    isTabSwitching: false,
     loading: true
   },
 
@@ -61,9 +64,12 @@ Page({
 
       const res: any = await productApi.getBrandSeriesDetail(brand);
       console.log('系列详情数据:', res);
+      console.log('res.code:', res.code);
+      console.log('res.data:', res.data);
 
       if (res.code === 200 && res.data) {
         const data = res.data;
+        console.log('brand:', data.brand);
         console.log('seriesList:', data.seriesList);
 
         // 品牌信息
@@ -71,8 +77,10 @@ Page({
           id: data.brand.id,
           name: data.brand.name,
           logo: data.brand.logo ? getFullImageUrl(data.brand.logo) : '',
+          images: data.brand.images || '',
           content: data.brand.content || ''
         };
+        console.log('brandInfo:', brandInfo);
 
         // 处理图片路径
         const bannerImages = (data.bannerImages || []).map((img: string) =>
@@ -156,7 +164,36 @@ Page({
 
   onTabClick(e: any) {
     const tab = e.currentTarget.dataset.tab;
-    this.setData({ currentTab: tab });
+    const { currentTab, isTabSwitching } = this.data;
+
+    if (!tab || tab === currentTab || isTabSwitching) {
+      return;
+    }
+
+    const outAnimation = wx.createAnimation({
+      duration: 160,
+      timingFunction: 'ease-out'
+    });
+    outAnimation.opacity(0).translateY(10).step();
+
+    this.setData({
+      isTabSwitching: true,
+      tabContentAnimation: outAnimation.export()
+    });
+
+    setTimeout(() => {
+      const inAnimation = wx.createAnimation({
+        duration: 220,
+        timingFunction: 'ease-out'
+      });
+      inAnimation.opacity(1).translateY(0).step();
+
+      this.setData({
+        currentTab: tab,
+        tabContentAnimation: inAnimation.export(),
+        isTabSwitching: false
+      });
+    }, 170);
   },
 
   onProductTap(e: any) {

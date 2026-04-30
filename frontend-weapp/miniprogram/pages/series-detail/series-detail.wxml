@@ -15,22 +15,21 @@
 
     <!-- Tab按钮 -->
     <view class="tab-bar">
-      <view class="tab-btn {{currentTab === 'home' ? 'active' : ''}}" bindtap="onTabClick" data-tab="home">首页</view>
       <view class="tab-btn {{currentTab === 'watches' ? 'active' : ''}}" bindtap="onTabClick" data-tab="watches">{{brandName}}腕表</view>
       <view class="tab-btn {{currentTab === 'brand' ? 'active' : ''}}" bindtap="onTabClick" data-tab="brand">{{brandName}}品牌</view>
     </view>
 
     <!-- 内容区域 -->
-    <view class="content-area">
+    <view class="content-area tab-content" animation="{{tabContentAnimation}}">
       <!-- 腕表Tab内容 -->
-      <block wx:if="{{currentTab === 'watches'}}">
+      <view class="tab-panel active" wx:if="{{currentTab === 'watches'}}">
         <!-- 当前点击的系列 -->
         <view class="current-series" wx:if="{{currentSeries}}">
           <text class="series-name">{{currentSeries.name}}</text>
 
           <!-- 视频播放器（有视频时显示） -->
           <view class="video-wrapper" wx:if="{{currentSeries.videoUrl}}">
-            <video class="video-player" src="{{currentSeries.videoUrl}}" controls autoplay="{{false}}" show-center-play-btn="{{true}}"></video>
+            <video class="video-player" src="{{currentSeries.videoUrl}}" controls autoplay="{{true}}" show-center-play-btn="{{true}}"></video>
           </view>
 
           <!-- 系列Logo（无视频但有logo时显示） -->
@@ -85,24 +84,17 @@
             <text class="empty-text">暂无相关腕表</text>
           </view>
         </view>
-      </block>
-
-      <!-- 首页Tab - 展示所有系列的富文本内容 -->
-      <block wx:if="{{currentTab === 'home'}}">
-        <view class="rich-content-section" wx:for="{{seriesList}}" wx:key="id">
-          <text class="series-title">{{item.name}}</text>
-          <rich-text class="rich-text-content" nodes="{{item.content}}" wx:if="{{item.content}}"></rich-text>
-          <text class="empty-content" wx:else>暂无内容</text>
-        </view>
-      </block>
+      </view>
 
       <!-- 品牌Tab - 展示品牌富文本内容 -->
-      <block wx:if="{{currentTab === 'brand'}}">
+      <view class="tab-panel active" wx:elif="{{currentTab === 'brand'}}">
         <view class="brand-content">
-          <rich-text class="rich-text-content" nodes="{{brandInfo.content}}" wx:if="{{brandInfo && brandInfo.content}}"></rich-text>
+          <block wx:if="{{brandInfo && brandInfo.content && brandInfo.content.length > 0}}">
+            <rich-text class="rich-text-content" nodes="{{brandInfo.content}}"></rich-text>
+          </block>
           <text class="empty-content" wx:else>暂无品牌介绍</text>
         </view>
-      </block>
+      </view>
     </view>
   </scroll-view>
 </view>

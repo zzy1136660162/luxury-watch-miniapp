@@ -918,6 +918,7 @@ public class MiniAppController {
             brandData.put("id", brandInfo.getId());
             brandData.put("name", brandInfo.getName());
             brandData.put("logo", brandInfo.getLogo());
+            brandData.put("images", brandInfo.getImages());
             brandData.put("content", brandInfo.getContent());
             result.put("brand", brandData);
 
@@ -928,11 +929,17 @@ public class MiniAppController {
                             .orderByAsc(Series::getId)
             );
 
-            // 轮播图列表（使用系列logo）
-            List<String> bannerImages = seriesList.stream()
-                    .map(Series::getLogo)
-                    .filter(logo -> logo != null && !logo.isEmpty())
-                    .collect(Collectors.toList());
+            // 轮播图列表（使用品牌轮播图）
+            List<String> bannerImages = new ArrayList<>();
+            if (brandInfo.getImages() != null && !brandInfo.getImages().isEmpty()) {
+                // images 字段存储的是多个图片URL，用逗号分隔
+                String[] imagesArray = brandInfo.getImages().split(",");
+                for (String img : imagesArray) {
+                    if (img != null && !img.trim().isEmpty()) {
+                        bannerImages.add(img.trim());
+                    }
+                }
+            }
             result.put("bannerImages", bannerImages);
 
             // 系列详情列表

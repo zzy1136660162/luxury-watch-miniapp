@@ -1224,7 +1224,14 @@
     margin-bottom: 20px;
     padding-bottom: 12px;
     border-bottom: 2rpx solid $primary;
-    display: inline-block;
+    display: flex;
+    align-items: center;
+
+    .brand-title-logo {
+      width: 48px;
+      height: 48px;
+      margin-right: 12px;
+    }
 
     .brand-name {
       font-family: $font-family-chinese;
