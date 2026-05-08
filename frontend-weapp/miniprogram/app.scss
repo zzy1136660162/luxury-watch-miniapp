@@ -1,5 +1,10 @@
 /**app.wxss**/
-
+::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+  background: transparent;
+}
 /* 去除点击时的蓝色填充效果 */
 page {
   -webkit-tap-highlight-color: transparent;
