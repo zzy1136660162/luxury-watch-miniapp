@@ -17,6 +17,7 @@ Page({
     brand: '',
     series: '',
     keyword: '',
+    searchKey: '',
     activeFilters: [] as string[],
     products: [] as Product[],
     loading: false,
@@ -172,18 +173,16 @@ Page({
     return labels;
   },
 
-  async loadProducts(brand: string, series: string, params: any) {
+  async loadProducts(brand: string, series: string, params: any, keyword?: string) {
     this.setData({ loading: true });
 
     try {
       const queryParams: any = {};
       
-      // 品牌筛选（必须有）
       if (brand) {
         queryParams.brand = brand;
       }
       
-      // 合并所有筛选参数
       if (params.category) queryParams.category = params.category;
       if (params.price) queryParams.price = params.price;
       if (params.caseSize) queryParams.caseSize = params.caseSize;
@@ -194,19 +193,26 @@ Page({
       
       console.log('查询参数:', queryParams);
       
-      // 使用 getOnlineList API（已验证可以正常工作）
       const res: any = await productApi.getOnlineList(queryParams);
       console.log('查询结果:', res);
 
       if (res && res.code === 200) {
         let products = res.data.list || [];
         
-        // 如果有系列筛选，在前端过滤
         if (series) {
           products = products.filter((item: any) => item.series === series);
         }
         
-        // 处理图片
+        if (keyword && keyword.trim()) {
+          const kw = keyword.trim().toLowerCase();
+          products = products.filter((item: any) => {
+            const name = (item.name || '').toLowerCase();
+            const seriesName = (item.series || '').toLowerCase();
+            const code = (item.code || '').toLowerCase();
+            return name.includes(kw) || seriesName.includes(kw) || code.includes(kw);
+          });
+        }
+        
         products = products.map((item: any) => {
           let productImage = '';
           if (item.images) {
@@ -312,6 +318,28 @@ Page({
 
   onCloseFilter() {
     this.setData({ showFilter: false });
+  },
+
+  onSearchInput(e: any) {
+    this.setData({
+      searchKey: e.detail.value
+    });
+  },
+
+  onKeywordSearch() {
+    const { searchKey, brand, series, filters } = this.data;
+    if (!searchKey.trim()) return;
+
+    const params: any = {};
+    if (filters.category) params.category = filters.category;
+    if (filters.price) params.price = filters.price;
+    if (filters.caseSize) params.caseSize = filters.caseSize;
+    if (filters.material) params.material = filters.material;
+    if (filters.strap) params.strap = filters.strap;
+    if (filters.waterResistance) params.waterResistance = filters.waterResistance;
+    if (filters.powerReserve) params.powerReserve = filters.powerReserve;
+
+    this.loadProducts(brand, series, params, searchKey);
   },
 
   onFilterSelect(e: any) {

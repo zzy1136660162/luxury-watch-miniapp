@@ -3,20 +3,24 @@
     <view class="back-btn" bindtap="onBack">
       <text class="back-arrow">‹</text>
     </view>
-    <view class="nav-title" style="padding-top: 5px;">
-      <text class="brand-name">{{keyword ? (keyword.includes('-') ? keyword : '搜索结果') : (series ? (brand + '-' + series) : (brand || '搜索结果'))}}</text>
+    <view class="nav-title">
+      <text>{{keyword ? (keyword.includes('-') ? keyword : '搜索结果') : (series ? (brand + '-' + series) : (brand || '搜索结果'))}}</text>
       <text wx:if="{{keyword && !keyword.includes('-')}}" class="keyword-text">"{{keyword}}"</text>
-      <view wx:if="{{activeFilters.length > 0}}" class="cha"></view>
-      <view wx:if="{{activeFilters.length > 0}}" class="filter-tags">
-        <text wx:for="{{activeFilters}}" wx:key="index" class="filter-tag">{{item.label}}</text>
-      </view>
     </view>
+    <view class="nav-right"></view>
+  </view>
+  <view class="filter-search-bar">
     <view class="filter-btn-wrapper" bindtap="onOpenFilter">
-      <image class="filter-icon" src="/assets/iconfont/search_input.png" mode="aspectFit" />
+      <image class="filter-icon" src="/assets/iconfont/筛选.png" mode="aspectFit" />
+      <text>筛选</text>
       <view wx:if="{{filterCount > 0}}" class="filter-badge">{{filterCount}}</view>
     </view>
+    <view class="search-input-wrapper">
+      <input type="text" placeholder="搜索关键词..." value="{{searchKey}}" bindinput="onSearchInput" bindconfirm="onKeywordSearch"/>
+      <image class="search-icon" src="/assets/iconfont/search.png" mode="aspectFit" />
+    </view>
   </view>
-
+  <view class="section-divider"></view>
   <scroll-view class="content" scroll-y>
     <view wx:if="{{loading}}" class="loading">加载中...</view>
     

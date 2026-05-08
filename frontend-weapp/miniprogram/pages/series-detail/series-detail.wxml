@@ -1,7 +1,7 @@
 <import src="/components/navigation-bar/navigation-bar.wxml" />
 
 <view class="page">
-  <navigation-bar title="{{brandName}}腕表" back="{{true}}" color="black" background="#ffffff" showMenu="{{true}}" />
+  <navigation-bar title="{{brandName}}腕表" back="{{true}}" color="black" background="#ffffff" showMenu="{{true}}" style="position: fixed;z-index: 10000;"/>
 
   <scroll-view class="content" scroll-y bounces="{{false}}">
     <!-- 轮播图 -->
@@ -87,11 +87,9 @@
       </view>
 
       <!-- 品牌Tab - 展示品牌富文本内容 -->
-      <view class="tab-panel active" wx:elif="{{currentTab === 'brand'}}">
+      <view class="tab-panel {{currentTab === 'brand' ? 'active' : ''}}">
         <view class="brand-content">
-          <block wx:if="{{brandInfo && brandInfo.content && brandInfo.content.length > 0}}">
-            <rich-text class="rich-text-content" nodes="{{brandInfo.content}}"></rich-text>
-          </block>
+          <rich-text nodes="{{brandInfo.content}}" wx:if="{{brandInfo && brandInfo.content && brandInfo.content.length > 0}}"></rich-text>
           <text class="empty-content" wx:else>暂无品牌介绍</text>
         </view>
       </view>

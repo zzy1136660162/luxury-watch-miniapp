@@ -25,6 +25,8 @@ $font-family-english: 'Manrope', sans-serif;
   box-sizing: border-box;
 }
 .login-container {
+  position: absolute;
+  top: 3vh;
   flex: 1;
   display: flex;
   flex-direction: column;
