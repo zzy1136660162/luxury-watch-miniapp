@@ -82,6 +82,9 @@ public class ProductController {
     @PostMapping
     @SaCheckPermission("product:add")
     public R<Void> create(@RequestBody Product product) {
+        // 强制将id设为null，防止前端传递旧id导致重复插入
+        product.setId(null);
+        
         // 根据brandId获取品牌名称
         if (product.getBrandId() != null) {
             Brand brand = brandMapper.selectById(product.getBrandId());

@@ -17,6 +17,7 @@
 }
 
 .tab-panel {
+  margin-bottom: 10px;
   opacity: 0;
   visibility: hidden;
   height: 0;
@@ -152,6 +153,7 @@
 }
 
 .products-empty {
+  margin-bottom: 6vh;
   margin-top: 24rpx;
   padding: 40rpx 0;
   text-align: center;
@@ -214,7 +216,8 @@
 
 /* 其他系列 */
 .other-series {
-  margin-top: 56rpx;
+  margin-top: 70rpx;
+  margin-bottom: 70rpx;
   padding-top: 44rpx;
   border-top: 1rpx solid #ececec;
 }
