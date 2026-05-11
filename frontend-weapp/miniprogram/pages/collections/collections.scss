@@ -33,10 +33,20 @@
 }
 
 // 左侧品牌侧边栏
-.brand-sidebar, .brand-sidebar-fixed-v2 {
-  width: 80px;
-  background-color: rgba($surface-container, 0.98);
-  border-right: 1rpx solid rgba($secondary-fixed, 0.15);
+.brand-sidebar {
+  width: calc(100vw * 3 / 10);
+  background-color: #ffffff;
+  border-right: 2rpx solid #e0e0e0;
+  box-sizing: border-box;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.brand-sidebar-fixed-v2 {
+  width: calc(100vw * 3 / 10);
+  background-color: #ffffff;
+  border-right: 2rpx solid #e0e0e0;
   box-sizing: border-box;
   flex-shrink: 0;
   display: flex;
@@ -96,6 +106,7 @@
 }
 
 .brand-sidebar-track, .brand-sidebar-fixed-v2 .brand-sidebar-track {
+  width: calc(100vw * 3 / 10);
   padding: 16px 0;
   height: 85.5%;
   overflow: scroll;
@@ -103,24 +114,36 @@
 
 .brand-sidebar-item, .brand-sidebar-fixed-v2 .brand-sidebar-item {
   padding: 12px 16px;
-  font-size: 15px;
+  font-size: 16px;
   cursor: pointer;
   opacity: 0.5;
   transition: all 0.2s ease;
   border-left: 4px solid transparent;
+  position: relative;
 
   &:active, &.brand-sidebar-active {
     opacity: 1;
   }
 
   &.brand-sidebar-active {
-    background-color: #ffffff;
-    border-left-color: $primary;
+    background-color: #000000;
+    border-left-color: transparent;
 
     .brand-sidebar-name {
-      color: #000000 !important;
-      font-size: 15px;
+      color: #ffffff !important;
+      font-size: 16px;
       font-weight: 600;
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 3rpx;
+      height: 60%;
+      background-color: #000000;
     }
   }
 
@@ -241,11 +264,11 @@
   position: fixed;
   top: 0;
   left: 0;
-  width: 80px;
+  width: calc(100vw * 3 / 10);
   height: 90vh;
   margin-top: 10.3vh;
-  background-color: rgba($surface-container, 0.98);
-  border-right: 1rpx solid rgba($secondary-fixed, 0.15);
+  background-color: #ffffff;
+  border-right: 2rpx solid #e0e0e0;
   box-sizing: border-box;
   z-index: 99;
   // padding-top: 10vh;
@@ -1306,8 +1329,8 @@
       }
 
       .series-card-name {
-        font-family: $font-family-chinese;
-        font-size: 13px;
+        font-family: $font-family-english;
+        font-size: 15px;
         color: $on-surface;
         text-align: center;
         line-height: 1.4;

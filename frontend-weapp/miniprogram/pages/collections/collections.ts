@@ -46,7 +46,10 @@ Component({
     brandSeriesList: [] as { brand: string; logo: string; series: { name: string; logo?: string }[] }[],
 
     // 加载状态
-    loading: true
+    loading: true,
+
+    // 侧边栏指示器位置
+    indicatorTop: 80
   },
 
   attached() {
@@ -208,9 +211,12 @@ Component({
           console.log('品牌系列列表:', brandSeriesList);
 
           const availableBrands = brandSeriesList.map((item: any) => item.brand);
+          // 添加测试品牌
+          const testBrands = ['测试1', '测试2', '测试3'];
+          const allBrands = [...availableBrands, ...testBrands];
           this.setData({
             // 侧边栏只展示有系列内容的品牌，确保索引与锚点一一对应
-            brands: availableBrands,
+            brands: allBrands,
             brandSeriesList,
             currentBrand: availableBrands.length > 0 ? availableBrands[0] : '',
             loading: false

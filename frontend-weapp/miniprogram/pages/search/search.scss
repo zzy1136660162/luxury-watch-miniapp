@@ -192,7 +192,7 @@
 
 .brands-section {
   padding: 30rpx;
-  padding-right: 80rpx;
+  padding-right: 40rpx;
   background-color: #ffffff;
 
   .section-title {
@@ -228,16 +228,16 @@
     }
 
     .brand-item-image {
-      width: 80rpx;
-      height: 80rpx;
+      width: 25vw;
+      height: 25vw;
       margin-right: 20rpx;
       border-radius: 8rpx;
       flex-shrink: 0;
     }
 
     .brand-item-placeholder {
-      width: 80rpx;
-      height: 80rpx;
+      width: 25vw;
+      height: 25vw;
       margin-right: 20rpx;
       border-radius: 8rpx;
       background-color: #e0e0e0;
