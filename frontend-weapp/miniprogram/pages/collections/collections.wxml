@@ -69,7 +69,7 @@
                   </view>
                 </block>
               </view>
-              <text class="series-card-name">{{seriesItem.name}}</text>
+              <text class="series-card-name" style="font-size: 15px;">{{seriesItem.name}}</text>
             </view>
           </view>
           <view class="series-empty" wx:else>
