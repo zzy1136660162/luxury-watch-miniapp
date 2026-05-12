@@ -6,10 +6,20 @@
   <scroll-view class="content" scroll-y bounces="{{false}}">
     <!-- 轮播图 -->
     <view class="banner-section">
-      <swiper class="banner-swiper" indicator-dots="{{bannerImages.length > 1}}" autoplay="{{true}}" interval="3000" circular="{{true}}">
-        <swiper-item wx:for="{{bannerImages}}" wx:key="index">
-          <image class="banner-image" src="{{item}}" mode="aspectFill"/>
-        </swiper-item>
+      <swiper class="banner-swiper" indicator-dots="{{bannerMediaList.length > 1}}" autoplay="{{!isVideoPlaying}}" interval="3000" circular="{{true}}" bindchange="onSwiperChange">
+        <block wx:for="{{bannerMediaList}}" wx:key="index">
+          <swiper-item wx:if="{{item.isVideo}}">
+            <view class="video-container">
+              <video class="banner-video" src="{{item.url}}" muted="{{isMuted}}" autoplay="{{index === 0 && !hasPlayedVideo}}" show-center-play-btn="{{true}}" show-play-btn="{{true}}" enable-progress-gesture="{{true}}" object-fit="cover" bindended="onVideoEnded" bindplay="onVideoPlay" bindpause="onVideoPause"></video>
+              <view class="volume-control" bindtap="toggleBannerMute">
+                <text class="volume-icon-text">{{isMuted ? '🔇' : '🔊'}}</text>
+              </view>
+            </view>
+          </swiper-item>
+          <swiper-item wx:else>
+            <image class="banner-image" src="{{item.url}}" mode="aspectFill"/>
+          </swiper-item>
+        </block>
       </swiper>
     </view>
 
@@ -29,7 +39,12 @@
 
           <!-- 视频播放器（有视频时显示） -->
           <view class="video-wrapper" wx:if="{{currentSeries.videoUrl}}">
-            <video class="video-player" src="{{currentSeries.videoUrl}}" controls autoplay="{{true}}" show-center-play-btn="{{true}}"></video>
+            <view class="video-container">
+              <video class="video-player" src="{{currentSeries.videoUrl}}" controls autoplay="{{true}}" muted="{{currentSeriesMuted}}" show-center-play-btn="{{true}}" show-play-btn="{{true}}"></video>
+              <view class="volume-control" bindtap="toggleSeriesMute">
+                <text class="volume-icon-text">{{currentSeriesMuted ? '🔇' : '🔊'}}</text>
+              </view>
+            </view>
           </view>
 
           <!-- 系列Logo（无视频但有logo时显示） -->
@@ -61,8 +76,18 @@
         <view class="other-series" wx:for="{{otherSeries}}" wx:key="id">
           <text class="series-name">{{item.name}}</text>
 
-          <!-- 系列Logo（有logo时显示） -->
-          <view class="series-image-wrapper" wx:if="{{item.logo}}">
+          <!-- 视频播放器（有视频时显示，其他系列静音） -->
+          <view class="video-wrapper" wx:if="{{item.videoUrl}}">
+            <view class="video-container">
+              <video class="video-player" src="{{item.videoUrl}}" controls autoplay="{{false}}" muted="{{otherSeriesMuted}}" show-center-play-btn="{{true}}" show-play-btn="{{true}}"></video>
+              <view class="volume-control" bindtap="toggleOtherSeriesMute">
+                <text class="volume-icon-text">{{otherSeriesMuted ? '🔇' : '🔊'}}</text>
+              </view>
+            </view>
+          </view>
+
+          <!-- 系列Logo（无视频但有logo时显示） -->
+          <view class="series-image-wrapper" wx:elif="{{item.logo}}">
             <image class="series-image" src="{{item.logo}}" mode="aspectFill" />
           </view>
 

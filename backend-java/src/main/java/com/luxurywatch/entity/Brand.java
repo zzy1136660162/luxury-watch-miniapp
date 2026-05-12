@@ -30,6 +30,11 @@ public class Brand {
     private String images;
 
     /**
+     * 品牌视频
+     */
+    private String video;
+
+    /**
      * 品牌介绍富文本
      */
     private String content;

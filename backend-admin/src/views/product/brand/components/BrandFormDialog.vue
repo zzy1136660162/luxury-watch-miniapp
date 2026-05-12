@@ -5,7 +5,7 @@ import type { FormInstance } from 'element-plus'
 import axios from 'axios'
 import api from '@/api'
 import Editor from '@tinymce/tinymce-vue'
-import ImagesUpload from '@/components/ImagesUpload.vue'
+import MediasUpload from '@/components/MediasUpload.vue'
 
 interface Props {
   modelValue: boolean
@@ -28,12 +28,15 @@ const formRef = ref<FormInstance>()
 const submitting = ref(false)
 const uploading = ref(false)
 const fileInputRef = ref<HTMLInputElement>()
+const videoInputRef = ref<HTMLInputElement>()
+const uploadingVideo = ref(false)
 
 const form = reactive({
   id: null as number | null,
   name: '',
   logo: '',
   images: '',
+  video: '',
   content: ''
 })
 
@@ -82,6 +85,7 @@ watch(
       form.name = ''
       form.logo = ''
       form.images = ''
+      form.video = ''
       form.content = ''
     }
   }
@@ -146,9 +150,73 @@ const handleRemoveLogo = () => {
   form.logo = ''
 }
 
+// 触发视频上传
+const triggerVideoUpload = () => {
+  videoInputRef.value?.click()
+}
+
+// 处理视频上传
+const handleVideoChange = async (event: Event) => {
+  const target = event.target as HTMLInputElement
+  const file = target.files?.[0]
+  if (!file) return
+
+  // 验证文件类型
+  if (!file.type.startsWith('video/')) {
+    ElMessage.error('请选择视频文件')
+    return
+  }
+
+  // 验证文件大小（最大 500MB）
+  if (file.size > 500 * 1024 * 1024) {
+    ElMessage.error('视频大小不能超过 500MB')
+    return
+  }
+
+  uploadingVideo.value = true
+
+  try {
+    const formData = new FormData()
+    formData.append('file', file)
+
+    const isProxy = import.meta.env.DEV && import.meta.env.VITE_OPEN_PROXY
+    const uploadVideoUrl = isProxy ? '/proxy/api/upload/video' : '/api/upload/video'
+
+    const res = await axios.post(uploadVideoUrl, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        'Authorization': localStorage.getItem('token') || ''
+      }
+    })
+
+    if (res.data && res.data.code === 200) {
+      form.video = res.data.data.url
+      ElMessage.success('上传成功')
+    } else {
+      ElMessage.error(res.data?.msg || '上传失败')
+    }
+  } catch (error: any) {
+    console.error('上传失败:', error)
+    ElMessage.error(error.response?.data?.msg || error.message || '上传失败')
+  } finally {
+    uploadingVideo.value = false
+    if (videoInputRef.value) {
+      videoInputRef.value.value = ''
+    }
+  }
+}
+
+// 删除视频
+const handleRemoveVideo = () => {
+  form.video = ''
+}
+
 const handleSubmit = async () => {
   const valid = await formRef.value?.validate()
   if (!valid) return
+
+  console.log('提交表单，form.images:', form.images)
+  console.log('提交表单，完整form数据:', JSON.stringify(form))
 
   submitting.value = true
 
@@ -163,6 +231,7 @@ const handleSubmit = async () => {
     visible.value = false
     emit('success')
   } catch (error) {
+    console.error('提交失败:', error)
     ElMessage.error(props.isEdit ? '更新失败' : '创建失败')
   } finally {
     submitting.value = false
@@ -219,11 +288,35 @@ const handleSubmit = async () => {
       </el-form-item>
 
       <el-form-item label="品牌轮播图" prop="images">
-        <ImagesUpload
+        <MediasUpload
           v-model="form.images"
           placeholder="点击上传"
-          tip="建议尺寸：750x400px，支持 jpg、png、gif、webp 格式，最多上传9张图片"
+          tip="建议尺寸：750x400px，支持 jpg、png、gif、webp 格式图片，最多上传9张图片"
         />
+      </el-form-item>
+
+      <el-form-item label="品牌视频" prop="video">
+        <div class="video-upload">
+          <div v-if="form.video" class="video-preview">
+            <video class="video-player" :src="form.video" controls style="max-width: 300px; max-height: 200px;" />
+            <div class="video-actions">
+              <el-button size="small" type="danger" @click="handleRemoveVideo">删除</el-button>
+            </div>
+          </div>
+          <div v-else class="video-placeholder">
+            <el-button size="small" type="primary" @click="triggerVideoUpload">
+              上传视频
+            </el-button>
+            <div class="video-tip">支持 mp4、mov、avi 格式，最大 500MB</div>
+          </div>
+          <input
+            ref="videoInputRef"
+            type="file"
+            accept="video/mp4,video/quicktime,video/x-msvideo"
+            style="display: none"
+            @change="handleVideoChange"
+          />
+        </div>
       </el-form-item>
 
       <el-form-item label="品牌介绍" prop="content">
@@ -300,6 +393,37 @@ const handleSubmit = async () => {
     }
 
     span {
+      font-size: 12px;
+      color: #909399;
+    }
+  }
+}
+
+.video-upload {
+  .video-preview {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    .video-player {
+      border: 1px solid #dcdfe6;
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .video-actions {
+      display: flex;
+      gap: 8px;
+    }
+  }
+
+  .video-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+
+    .video-tip {
       font-size: 12px;
       color: #909399;
     }

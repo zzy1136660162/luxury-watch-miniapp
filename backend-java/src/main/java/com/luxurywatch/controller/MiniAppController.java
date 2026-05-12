@@ -919,6 +919,7 @@ public class MiniAppController {
             brandData.put("name", brandInfo.getName());
             brandData.put("logo", brandInfo.getLogo());
             brandData.put("images", brandInfo.getImages());
+            brandData.put("video", brandInfo.getVideo());
             brandData.put("content", brandInfo.getContent());
             result.put("brand", brandData);
 
