@@ -2,6 +2,8 @@ package com.luxurywatch.service.impl;
 
 import cn.dev33.satoken.stp.StpUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.luxurywatch.entity.AdminUser;
 import com.luxurywatch.entity.AdminUserRole;
@@ -10,6 +12,7 @@ import com.luxurywatch.mapper.AdminUserMapper;
 import com.luxurywatch.mapper.AdminUserRoleMapper;
 import com.luxurywatch.mapper.SysRoleMapper;
 import com.luxurywatch.service.AdminUserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @Service
 public class AdminUserServiceImpl extends ServiceImpl<AdminUserMapper, AdminUser> implements AdminUserService {
 
@@ -217,27 +221,40 @@ public class AdminUserServiceImpl extends ServiceImpl<AdminUserMapper, AdminUser
     @Override
     @Transactional
     public boolean deleteAdmin(Long id) {
+        log.info("开始删除管理员，ID: {}", id);
         AdminUser user = baseMapper.selectById(id);
         if (user == null) {
+            log.warn("管理员不存在，ID: {}", id);
             throw new RuntimeException("管理员不存在");
         }
+        log.info("找到管理员: {}", user.getUsername());
 
         // 不能删除自己
         Long currentUserId = StpUtil.getLoginIdAsLong();
+        log.info("当前登录用户ID: {}, 要删除的用户ID: {}", currentUserId, id);
         if (id.equals(currentUserId)) {
+            log.warn("不能删除自己");
             throw new RuntimeException("不能删除自己");
         }
 
-        // 逻辑删除
-        user.setDeleted(1);
-        user.setUpdateTime(LocalDateTime.now());
-        baseMapper.updateById(user);
+        // 逻辑删除 - 使用UpdateWrapper确保deleted字段被更新
+        log.info("执行逻辑删除，设置deleted=1");
+        UpdateWrapper<AdminUser> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq("id", id)
+                    .eq("deleted", 0)
+                    .set("deleted", 1)
+                    .set("update_time", LocalDateTime.now());
+        int updateResult = baseMapper.update(null, updateWrapper);
+        log.info("更新结果: {}", updateResult);
 
         // 删除用户角色关联
+        log.info("删除用户角色关联");
         LambdaQueryWrapper<AdminUserRole> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(AdminUserRole::getUserId, id);
-        adminUserRoleMapper.delete(wrapper);
+        int deleteResult = adminUserRoleMapper.delete(wrapper);
+        log.info("删除角色关联结果: {}", deleteResult);
 
+        log.info("删除管理员成功，ID: {}", id);
         return true;
     }
 

@@ -110,7 +110,19 @@ public class WxUserController {
         if (!StpUtil.isLogin()) {
             return R.error("未登录");
         }
-        
+
         return R.success(wxUserService.resetPassword(id));
+    }
+
+    /**
+     * 删除小程序用户
+     */
+    @DeleteMapping("/{id}")
+    public R<Boolean> delete(@PathVariable Long id) {
+        if (!StpUtil.isLogin()) {
+            return R.error("未登录");
+        }
+
+        return R.success(wxUserService.removeById(id));
     }
 }

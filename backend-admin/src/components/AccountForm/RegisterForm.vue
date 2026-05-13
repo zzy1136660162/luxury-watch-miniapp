@@ -41,18 +41,15 @@ const form = useForm({
 const onSubmit = form.handleSubmit(async (values) => {
   loading.value = true
   try {
-    const response = await adminApi.register({
+    await adminApi.register({
       username: values.account,
       password: values.password,
     })
-    if (response.code === 200) {
-      ElMessage.success('注册成功，请登录')
-      emits('onLogin', values.account)
-    } else {
-      ElMessage.error(response.msg || '注册失败')
-    }
+    ElMessage.success('注册成功，请登录')
+    emits('onLogin', values.account)
   } catch (error: any) {
-    ElMessage.error(error.message || '注册失败，请稍后重试')
+    console.error('注册失败:', error)
+    ElMessage.error(error?.msg || error?.message || '注册失败，请稍后重试')
   } finally {
     loading.value = false
   }

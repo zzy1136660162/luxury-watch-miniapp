@@ -41,6 +41,7 @@ public class ExchangeRecord {
     private String productImage;
 
     /**
+     * 消耗积分
      */
     private Integer points;
 
@@ -61,7 +62,7 @@ public class ExchangeRecord {
     private LocalDateTime exchangeTime;
 
     /**
-     * 状态：1-待审核，2-已兑换，3-已拒绝
+     * 状态：0-待处理，1-已兑换，2-已拒绝
      */
     private Integer status;
 

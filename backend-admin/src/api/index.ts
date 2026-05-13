@@ -6,6 +6,7 @@ import { useUserStore } from '@/store/modules/user'
 // 导入 API 模块
 import product from './modules/product'
 import order from './modules/order'
+import exchange from './modules/exchange'
 
 // 调试模式
 const DEBUG = true
@@ -24,6 +25,7 @@ declare module 'axios' {
   export interface AxiosInstance {
     product: typeof product
     order: typeof order
+    exchange: typeof exchange
     // 重写get方法的类型定义
     get<T = any>(url: string, config?: AxiosRequestConfig): Promise<T>
     // 重写post方法的类型定义

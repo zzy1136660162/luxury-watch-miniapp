@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { ElButton, ElTable, ElTableColumn, ElSelect, ElOption, ElSpace, ElMessage, ElPagination } from 'element-plus'
+import exchangeApi from '@/api/modules/exchange'
 
 const statusOptions = [
   { label: '全部', value: -1 },
@@ -9,24 +10,29 @@ const statusOptions = [
   { label: '已拒绝', value: 2 }
 ]
 
-const data = ref<any[]>([
-  { id: 1, userName: '张三', productName: '劳力士腕表', points: 10000, status: 0, exchangeTime: '2024-01-15 10:30:00', address: '北京市朝阳区' },
-  { id: 2, userName: '李四', productName: '欧米茄腕表', points: 8000, status: 1, exchangeTime: '2024-01-14 15:20:00', address: '上海市浦东新区' },
-  { id: 3, userName: '王五', productName: '卡地亚腕表', points: 12000, status: 2, exchangeTime: '2024-01-13 09:45:00', address: '广州市天河区' }
-])
+const data = ref<any[]>([])
 const loading = ref(false)
 const queryParams = ref({
   status: -1
 })
-const pagination = ref({ page: 1, pageSize: 10, total: 3 })
+const pagination = ref({ page: 1, pageSize: 10, total: 0 })
 
 const loadData = async () => {
   try {
     loading.value = true
-    // TODO: 调用兑换记录接口
-    // const res: any = await exchangeApi.list(queryParams.value)
-    // data.value = res.list || []
-    // pagination.value.total = res.total || 0
+    const params = {
+      page: pagination.value.page,
+      size: pagination.value.pageSize,
+      status: queryParams.value.status === -1 ? undefined : queryParams.value.status
+    }
+    console.log('请求参数:', params)
+    const res: any = await exchangeApi.getExchangeList(params)
+    console.log('API返回结果:', res)
+    // 拦截器已经解包了data，直接使用res
+    data.value = res?.list || []
+    pagination.value.total = res?.total || 0
+    console.log('表格数据:', data.value)
+    console.log('总数:', pagination.value.total)
   } catch (error) {
     console.error('加载数据失败:', error)
     ElMessage.error('加载数据失败')
@@ -93,6 +99,7 @@ loadData()
       <el-table-column prop="userName" label="用户名称" width="120" />
       <el-table-column prop="productName" label="兑换商品" width="150" />
       <el-table-column prop="points" label="消耗积分" width="100" />
+      <el-table-column prop="phone" label="联系电话" width="120" />
       <el-table-column prop="status" label="状态" width="100">
         <template #default="{ row }">
           <span :style="{ color: getStatusColor(row.status) }">

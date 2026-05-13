@@ -232,12 +232,16 @@ const handleDelete = async (row: AdminData) => {
       }
     )
 
-    await adminApi.deleteAdminUser(row.id)
+    console.log('开始删除管理员，ID:', row.id)
+    console.log('API方法:', adminApi.deleteAdminUser.toString())
+    const result = await adminApi.deleteAdminUser(row.id)
+    console.log('删除结果:', result)
     ElMessage.success('删除成功')
     loadAdminList()
   } catch (error: any) {
+    console.error('删除失败:', error)
     if (error !== 'cancel') {
-      ElMessage.error(error.message || '删除失败')
+      ElMessage.error(error?.message || error?.msg || '删除失败')
     }
   }
 }

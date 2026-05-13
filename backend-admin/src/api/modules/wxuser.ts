@@ -49,4 +49,8 @@ export default {
   // 重置小程序用户密码
   resetWxUserPassword: (id: number) =>
     api.put<ApiResponse<void>>(`/wx-user/${id}/reset-password`),
+
+  // 删除小程序用户
+  deleteWxUser: (id: number) =>
+    api.delete<ApiResponse<void>>(`/wx-user/${id}`),
 }
