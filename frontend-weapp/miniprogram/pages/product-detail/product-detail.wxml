@@ -84,13 +84,13 @@
             <text class="brand-story-title">品牌故事</text>
             <text class="brand-story-subtitle">Brand Story</text>
           </view>
-          <view class="brand-story-content" id="brandstorycontent">
+          <view class="brand-story-content" id="brandstorycontent" style="width: 90%;">
             <text class="brand-story-text">自 18 世纪创立以来，我们始终秉持对精准与艺术的极致追求。每一枚腕表都凝聚了制表大师的心血，代表着对时间的敬意与对工艺的执着。</text>
           </view>
           <view class="imga">
           <image src="http://localhost:8081/api/images/unnamed%20(3).png" mode="aspectFill" />
           </view>
-          <button id="brandstorybtn" class="brand-story-btn" bindtap="onExploreHeritage" style="margin-top: 5vh;">探索品牌</button>
+          <!-- <button id="brandstorybtn" class="brand-story-btn" bindtap="onExploreHeritage" style="margin-top: 5vh;">探索品牌</button> -->
         </view>
       </view>
 
