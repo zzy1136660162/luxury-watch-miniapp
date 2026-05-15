@@ -335,7 +335,9 @@ const handleSubmit = async () => {
             convert_urls: false,
             relative_urls: false,
             remove_script_host: false,
+            popup_zindex: 999999,
           }"
+          @click.stop
         />
       </el-form-item>
     </el-form>
@@ -428,5 +430,24 @@ const handleSubmit = async () => {
       color: #909399;
     }
   }
+}
+
+:deep(.el-dialog__wrapper) {
+  z-index: 100 !important;
+}
+
+:deep(.el-overlay) {
+  z-index: 99 !important;
+}
+
+.tox-tinymce-aux,
+.tox .tox-tinymce,
+.tox .tox-pop,
+.tox .tox-dropdown,
+.tox .tox-menu,
+.tox .tox-toolbar,
+.tox .tox-pop__dialog {
+  z-index: 999999 !important;
+  position: fixed !important;
 }
 </style>

@@ -42,7 +42,6 @@
       <el-table :data="tableData" stripe v-loading="loading">
         <el-table-column prop="id" label="ID" width="80" />
         <el-table-column prop="username" label="用户名" />
-        <el-table-column prop="nickname" label="昵称" />
         <el-table-column prop="phone" label="手机号" />
         <el-table-column prop="points" label="积分" width="100" />
         <el-table-column prop="memberLevel" label="会员等级" width="120">
@@ -74,10 +73,7 @@
     <el-dialog v-model="dialogVisible" :title="dialogTitle" width="600px">
       <el-form :model="formData" label-width="100px">
         <el-form-item label="用户名">
-          <el-input v-model="formData.username" placeholder="请输入用户名" disabled />
-        </el-form-item>
-        <el-form-item label="昵称">
-          <el-input v-model="formData.nickname" placeholder="请输入昵称" />
+          <el-input v-model="formData.username" placeholder="请输入用户名" />
         </el-form-item>
         <el-form-item label="手机号">
           <el-input v-model="formData.phone" placeholder="请输入手机号" />
@@ -145,7 +141,6 @@ const searchForm = reactive<SearchForm>({
 const formData = reactive({
   id: 0,
   username: '',
-  nickname: '',
   phone: '',
   points: 0,
   memberLevel: 1,
@@ -228,7 +223,6 @@ const handleEdit = (row: WxUser) => {
   isEdit.value = true
   formData.id = row.id
   formData.username = row.username
-  formData.nickname = row.nickname || ''
   formData.phone = row.phone || ''
   formData.points = row.points || 0
   formData.memberLevel = row.memberLevel || 1

@@ -30,8 +30,14 @@ public class MiniLoginServiceImpl implements MiniLoginService {
         }
 
         LambdaQueryWrapper<WxUser> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(WxUser::getUsername, username);
+        wrapper.eq(WxUser::getPhone, username);
         WxUser existUser = wxUserMapper.selectOne(wrapper);
+        
+        if (existUser == null) {
+            LambdaQueryWrapper<WxUser> usernameWrapper = new LambdaQueryWrapper<>();
+            usernameWrapper.eq(WxUser::getUsername, username);
+            existUser = wxUserMapper.selectOne(usernameWrapper);
+        }
 
         WxUser user;
         if (existUser != null) {
@@ -56,7 +62,6 @@ public class MiniLoginServiceImpl implements MiniLoginService {
             user.setPassword(BCrypt.hashpw(password, BCrypt.gensalt()));
             user.setAvatar(request.getWechatAvatar() != null ? request.getWechatAvatar() : request.getAvatar());
             user.setWechatAvatar(request.getWechatAvatar());
-            user.setNickname(StringUtils.hasText(request.getNickname()) ? request.getNickname() : username);
             user.setPhone(request.getPhone());
             user.setPoints(0);
             user.setGrowthValue(0);

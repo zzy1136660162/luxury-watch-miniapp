@@ -115,6 +115,15 @@ public class WxUserController {
     }
 
     /**
+     * 根据手机号查询用户昵称
+     */
+    @GetMapping("/by-phone")
+    public R<String> getNicknameByPhone(@RequestParam String phone) {
+        String nickname = wxUserService.getNicknameByPhone(phone);
+        return R.success(nickname);
+    }
+
+    /**
      * 删除小程序用户
      */
     @DeleteMapping("/{id}")

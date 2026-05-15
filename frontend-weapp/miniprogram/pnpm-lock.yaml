@@ -11,21 +11,12 @@ importers:
       wl-pinyin:
         specifier: ^1.0.1
         version: 1.0.1
-    devDependencies:
-      miniprogram-api-typings:
-        specifier: ^2.8.3-1
-        version: 2.12.0
 
 packages:
-
-  miniprogram-api-typings@2.12.0:
-    resolution: {integrity: sha512-ibvbqeslVFur0IAvTxLMvsbtvVcMo6gwvOnj0YZHV7aeDLu091VQRrETT2QuiG9P6aZWRcxeNGJChRKVPCp9VQ==}
 
   wl-pinyin@1.0.1:
     resolution: {integrity: sha512-cn7MSdsJoaC6a4w94OoScCui2OuJhVNOZ/DL0g+6ZHWkDxKvwUQPC5NQiOOsBGql65YTgV5DTZRUzvJ1ATbTOw==, tarball: https://registry.npmmirror.com/wl-pinyin/-/wl-pinyin-1.0.1.tgz}
 
 snapshots:
-
-  miniprogram-api-typings@2.12.0: {}
 
   wl-pinyin@1.0.1: {}

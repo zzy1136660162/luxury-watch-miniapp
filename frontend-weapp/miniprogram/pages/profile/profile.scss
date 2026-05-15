@@ -25,14 +25,16 @@ $font-family-english: 'Manrope', sans-serif;
   align-items: center;
   justify-content: space-between;
   margin-top: 5vh;
-  height: 44px;
-  padding: 0 16px;
+  height: 100px;
+  padding-top: 45px;
+  padding-left:16px;
   background-color: $surface-container-lowest;
   position: fixed;
-  top: 0;
+  top: -45px;
   left: 0;
   right: 0;
   z-index: 100;
+  border-bottom: 1px solid rgb(176, 176, 176);
 }
 
 .nav-bar-left {
@@ -192,4 +194,110 @@ $font-family-english: 'Manrope', sans-serif;
   font-size: 13px;
   color: $secondary;
   text-align: center;
+}
+
+.arrow {
+  margin-left: 8px;
+  font-size: 18px;
+  color: $secondary;
+}
+
+.modal-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+
+  &.modal-show {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+.nickname-modal {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: $surface-container-lowest;
+  border-radius: 24px 24px 0 0;
+  z-index: 1000;
+  transform: translateY(100%);
+  transition: transform 0.3s ease;
+
+  &.modal-show {
+    transform: translateY(0);
+  }
+}
+
+.modal-header {
+  padding: 24px 20px 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 1px solid $outline-variant;
+}
+
+.modal-title {
+  font-family: $font-family-chinese;
+  font-size: 18px;
+  font-weight: bold;
+  color: $on-surface;
+}
+
+.modal-body {
+  padding: 20px;
+}
+
+.modal-input {
+  width: 100%;
+  height: 48px;
+  background-color: $surface-container;
+  border-radius: 12px;
+  padding: 0 16px;
+  font-family: $font-family-english;
+  font-size: 16px;
+  color: $on-surface;
+  box-sizing: border-box;
+}
+
+.modal-placeholder {
+  font-family: $font-family-chinese;
+  font-size: 15px;
+  color: $secondary;
+}
+
+.modal-footer {
+  display: flex;
+  padding: 16px 20px 34px;
+  gap: 12px;
+}
+
+.modal-btn {
+  flex: 1;
+  height: 48px;
+  border-radius: 24px;
+  font-family: $font-family-chinese;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &.cancel {
+    background-color: $surface-container;
+    color: $on-surface;
+  }
+
+  &.confirm {
+    background-color: $tertiary;
+    color: $surface-container-lowest;
+  }
 }

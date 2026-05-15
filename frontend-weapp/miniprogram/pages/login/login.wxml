@@ -40,22 +40,6 @@
       </view>
 
       <view class="input-group">
-        <view class="input-wrapper {{usernameFocus ? 'input-focus' : ''}}">
-          <image class="input-icon" src="{{icons.username}}" mode="aspectFit" />
-          <input 
-            class="input-field"
-            type="text"
-            placeholder="请输入用户名"
-            placeholder-class="placeholder"
-            value="{{username}}"
-            bindinput="onUsernameInput"
-            bindfocus="onUsernameFocus"
-            bindblur="onUsernameBlur"
-          />
-        </view>
-      </view>
-
-      <view class="input-group">
         <view class="input-wrapper {{passwordFocus ? 'input-focus' : ''}}">
           <image class="input-icon" src="{{icons.password}}" mode="aspectFit" />
           <input 

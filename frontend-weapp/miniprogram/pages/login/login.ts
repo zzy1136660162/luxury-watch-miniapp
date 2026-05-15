@@ -1,18 +1,15 @@
 interface LoginIcons {
   phone: string;
-  username: string;
   password: string;
   eyeOpen: string;
   eyeClosed: string;
 }
 
 interface LoginData {
-  username: string;
   password: string;
   phone: string;
   showPassword: boolean;
   loading: boolean;
-  usernameFocus: boolean;
   passwordFocus: boolean;
   phoneFocus: boolean;
   hasAvatar: boolean;
@@ -23,12 +20,10 @@ interface LoginData {
 
 Page({
   data: {
-    username: '',
     password: '',
     phone: '',
     showPassword: false,
     loading: false,
-    usernameFocus: false,
     passwordFocus: false,
     phoneFocus: false,
     hasAvatar: false,
@@ -36,7 +31,6 @@ Page({
     logoUrl: 'https://via.placeholder.com/150x150/000000/FFFFFF?text=CHRONOS',
     icons: {
       phone: 'https://cdn.jsdelivr.net/npm/material-design-icons/svg@latest/outline/phone_android.svg',
-      username: 'https://cdn.jsdelivr.net/npm/material-design-icons/svg@latest/outline/person_black_24dp.svg',
       password: 'https://cdn.jsdelivr.net/npm/material-design-icons/svg@latest/outline/lock_black_24dp.svg',
       eyeOpen: 'https://cdn.jsdelivr.net/npm/material-design-icons/svg@latest/outline/visibility_black_24dp.svg',
       eyeClosed: 'https://cdn.jsdelivr.net/npm/material-design-icons/svg@latest/outline/visibility_off_black_24dp.svg'
@@ -171,27 +165,9 @@ Page({
     });
   },
 
-  onUsernameInput(e: any) {
-    this.setData!({
-      username: e.detail.value
-    });
-  },
-
   onPasswordInput(e: any) {
     this.setData!({
       password: e.detail.value
-    });
-  },
-
-  onUsernameFocus() {
-    this.setData!({
-      usernameFocus: true
-    });
-  },
-
-  onUsernameBlur() {
-    this.setData!({
-      usernameFocus: false
     });
   },
 
@@ -214,7 +190,7 @@ Page({
   },
 
   onLogin() {
-    const { username, password, phone, loading, avatarUrl } = this.data;
+    const { password, phone, loading, avatarUrl } = this.data;
     
     if (loading) return;
 
@@ -230,15 +206,6 @@ Page({
     if (!/^1[3-9]\d{9}$/.test(phone.trim())) {
       wx.showToast({
         title: '请输入正确的手机号',
-        icon: 'none',
-        duration: 2000
-      });
-      return;
-    }
-
-    if (!username.trim()) {
-      wx.showToast({
-        title: '请输入用户名',
         icon: 'none',
         duration: 2000
       });
@@ -265,11 +232,10 @@ Page({
         'Content-Type': 'application/json'
       },
       data: {
-        username: username.trim(),
+        username: phone.trim(),
         password: password.trim(),
         phone: phone.trim(),
         avatar: wechatAvatar || 'https://img.yzcdn.cn/vant/cat.jpeg',
-        nickname: username.trim(),
         wechatAvatar: wechatAvatar
       },
       success: (res: any) => {

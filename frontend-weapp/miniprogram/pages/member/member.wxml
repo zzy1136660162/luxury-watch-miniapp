@@ -24,9 +24,7 @@
 
           <view class="card-header">
             <view class="card-status">
-              <text class="card-status-label">Current Status</text>
               <text class="card-level">{{memberLevelName}}</text>
-              <text class="card-level-en">{{memberLevelEn}}</text>
             </view>
             <image class="card-diamond" src="https://cdn.jsdelivr.net/npm/@material-design-icons/svg@0.14.15/filled/diamond.svg" mode="aspectFit" />
           </view>
@@ -43,7 +41,6 @@
 
           <view class="card-progress">
             <view class="progress-header">
-              <text class="progress-label">GROWTH PROGRESS</text>
               <text class="progress-value">{{growthValue}} / {{nextLevelGrowth}}</text>
             </view>
             <view class="progress-bar">

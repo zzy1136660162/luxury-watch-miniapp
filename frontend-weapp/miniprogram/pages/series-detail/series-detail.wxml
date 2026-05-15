@@ -113,7 +113,7 @@
 
       <!-- 品牌Tab - 展示品牌富文本内容 -->
       <view class="tab-panel {{currentTab === 'brand' ? 'active' : ''}}">
-        <view class="brand-content" style="padding: 20px;">
+        <view class="brand-content" style="padding: 20px;line-height: 1.5;">
           <rich-text nodes="{{brandInfo.content}}" wx:if="{{brandInfo && brandInfo.content && brandInfo.content.length > 0}}"></rich-text>
           <text class="empty-content" wx:else>暂无品牌介绍</text>
         </view>

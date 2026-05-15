@@ -84,4 +84,17 @@ public class WxUserServiceImpl extends ServiceImpl<WxUserMapper, WxUser> impleme
         user.setPassword("$2a$10$slYQmyNdGzTn7ZLBXBChFOC9f6kFjAqPhccnP6DxlWXx2lPk1C3G6");
         return updateById(user);
     }
+
+    @Override
+    public String getNicknameByPhone(String phone) {
+        if (!StringUtils.hasText(phone)) {
+            return null;
+        }
+        LambdaQueryWrapper<WxUser> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(WxUser::getPhone, phone);
+        wrapper.eq(WxUser::getDeleted, 0);
+        wrapper.select(WxUser::getNickname);
+        WxUser user = wxUserMapper.selectOne(wrapper);
+        return user != null ? user.getNickname() : null;
+    }
 }

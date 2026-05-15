@@ -21,12 +21,13 @@
 
     <view class="info-section">
       <view class="info-card">
-        <view class="info-item">
+        <view class="info-item" bindtap="onNicknameClick">
           <view class="info-left">
             <text class="info-label">用户名</text>
           </view>
           <view class="info-right">
             <text class="info-value">{{username}}</text>
+            <text class="arrow">›</text>
           </view>
         </view>
 
@@ -79,6 +80,29 @@
     <view class="tips-section">
       <text class="tips-text" wx:if="{{nextLevelGrowth > 0}}">成长值达到 {{nextLevelGrowth}} 可升级为 {{nextLevelName}}</text>
       <text class="tips-text" wx:if="{{nextLevelGrowth === 0}}">已是最高等级会员</text>
+    </view>
+  </view>
+
+  <view class="modal-mask {{showNicknameModal ? 'modal-show' : ''}}" bindtap="onCancelNickname"></view>
+  <view class="nickname-modal {{showNicknameModal ? 'modal-show' : ''}}">
+    <view class="modal-header">
+      <text class="modal-title">修改昵称</text>
+    </view>
+    <view class="modal-body">
+      <input 
+        class="modal-input"
+        type="text"
+        placeholder="请输入昵称"
+        placeholder-class="modal-placeholder"
+        value="{{tempNickname}}"
+        maxlength="20"
+        bindinput="onNicknameInput"
+        focus="{{showNicknameModal}}"
+      />
+    </view>
+    <view class="modal-footer">
+      <button class="modal-btn cancel" bindtap="onCancelNickname">取消</button>
+      <button class="modal-btn confirm" bindtap="onConfirmNickname">确定</button>
     </view>
   </view>
 </view>

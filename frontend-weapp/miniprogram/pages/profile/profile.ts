@@ -8,7 +8,9 @@ Page({
     memberLevel: 1,
     memberLevelName: '普通会员',
     nextLevelGrowth: 1000,
-    nextLevelName: '银卡会员'
+    nextLevelName: '银卡会员',
+    showNicknameModal: false,
+    tempNickname: ''
   },
 
   onLoad() {
@@ -73,6 +75,97 @@ Page({
       memberLevelName: currentLevelInfo.name,
       nextLevelGrowth: currentLevelInfo.nextGrowth,
       nextLevelName: currentLevelInfo.nextName
+    });
+  },
+
+  onNicknameClick() {
+    this.setData!({
+      showNicknameModal: true,
+      tempNickname: this.data.username
+    });
+  },
+
+  onNicknameInput(e: any) {
+    this.setData!({
+      tempNickname: e.detail.value
+    });
+  },
+
+  onCancelNickname() {
+    this.setData!({
+      showNicknameModal: false,
+      tempNickname: ''
+    });
+  },
+
+  onConfirmNickname() {
+    const { tempNickname } = this.data;
+    
+    if (!tempNickname.trim()) {
+      wx.showToast({
+        title: '用户名不能为空',
+        icon: 'none',
+        duration: 2000
+      });
+      return;
+    }
+
+    if (tempNickname.trim().length < 2) {
+      wx.showToast({
+        title: '用户名至少2个字符',
+        icon: 'none',
+        duration: 2000
+      });
+      return;
+    }
+
+    const userInfo = wx.getStorageSync('userInfo') || {};
+    const userId = userInfo.id;
+
+    wx.request({
+      url: 'http://localhost:8081/wx-user/' + userId,
+      method: 'PUT',
+      header: {
+        'Content-Type': 'application/json',
+        'Authorization': wx.getStorageSync('token')
+      },
+      data: {
+        username: tempNickname.trim()
+      },
+      success: (res: any) => {
+        if (res.data.code === 200) {
+          const newUsername = tempNickname.trim();
+          
+          userInfo.username = newUsername;
+          wx.setStorageSync('userInfo', userInfo);
+
+          this.setData!({
+            username: newUsername,
+            showNicknameModal: false,
+            tempNickname: ''
+          });
+
+          wx.showToast({
+            title: '修改成功',
+            icon: 'success',
+            duration: 2000
+          });
+        } else {
+          wx.showToast({
+            title: res.data.msg || '修改失败',
+            icon: 'none',
+            duration: 2000
+          });
+        }
+      },
+      fail: (err) => {
+        console.error('修改用户名失败:', err);
+        wx.showToast({
+          title: '网络请求失败',
+          icon: 'none',
+          duration: 2000
+        });
+      }
     });
   }
 });

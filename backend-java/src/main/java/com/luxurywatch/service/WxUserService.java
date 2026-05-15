@@ -30,4 +30,11 @@ public interface WxUserService extends IService<WxUser> {
      * 重置小程序用户密码
      */
     boolean resetPassword(Long id);
+
+    /**
+     * 根据手机号查询用户昵称
+     * @param phone 手机号
+     * @return 用户昵称，如果不存在返回null
+     */
+    String getNicknameByPhone(String phone);
 }
