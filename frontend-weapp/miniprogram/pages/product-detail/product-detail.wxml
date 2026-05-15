@@ -71,7 +71,7 @@
             <text class="brand-story-subtitle">Brand Story</text>
           </view>
           <view class="brand-story-content" id="brandstorycontent" style="width: 90%;">
-            <rich-text nodes="{{brandStory}}" style="line-height: 1.5;"></rich-text>
+            <rich-text nodes="{{brandStory}}"></rich-text>
           </view>
         </view>
       </view>

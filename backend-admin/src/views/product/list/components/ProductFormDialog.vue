@@ -521,23 +521,4 @@ const handleSubmit = async () => {
     margin-left: 10px;
   }
 }
-
-:deep(.el-dialog__wrapper) {
-  z-index: 100 !important;
-}
-
-:deep(.el-overlay) {
-  z-index: 99 !important;
-}
-
-.tox-tinymce-aux,
-.tox .tox-tinymce,
-.tox .tox-pop,
-.tox .tox-dropdown,
-.tox .tox-menu,
-.tox .tox-toolbar,
-.tox .tox-pop__dialog {
-  z-index: 999999 !important;
-  position: fixed !important;
-}
 </style>

@@ -84,3 +84,15 @@ body {
 textarea {
   font-family: inherit;
 }
+
+/* TinyMCE 富文本编辑器弹出菜单 z-index 修复 */
+.tox-tinymce-aux {
+  z-index: 999999 !important;
+}
+
+.tox .tox-pop,
+.tox .tox-dropdown,
+.tox .tox-menu,
+.tox .tox-pop__dialog {
+  z-index: 999999 !important;
+}
