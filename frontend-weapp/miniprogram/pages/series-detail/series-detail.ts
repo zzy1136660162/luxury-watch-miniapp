@@ -1,5 +1,6 @@
 import { getFullImageUrl } from '../../utils/config';
 import { productApi } from '../../utils/request';
+import { processRichText } from '../../utils/richTextHelper';
 
 interface Product {
   id: number;
@@ -311,28 +312,9 @@ Page({
     console.log('其他系列视频静音状态:', this.data.otherSeriesMuted);
   },
 
-  // 处理富文本中的图片路径，拼接完整URL并添加样式
+  // 处理富文本中的图片路径，拼接完整URL并添加样式，应用行高
   processRichTextImages(htmlContent: string): string {
     if (!htmlContent) return '';
-
-    const baseUrl = 'http://localhost:8081';
-
-    // 替换 img 标签中的 src 属性，并添加样式限制
-    let processedContent = htmlContent.replace(
-      /<img([^>]*)src=["']([^"']+)["']([^>]*)>/g,
-      (match, before, src, after) => {
-        let fullUrl = src;
-
-        // 如果是相对路径，拼接完整URL
-        if (!src.startsWith('http://') && !src.startsWith('https://')) {
-          fullUrl = baseUrl + src;
-        }
-
-        // 返回带有样式的 img 标签
-        return `<img${before}src="${fullUrl}"${after} style="max-width: 100%; height: auto; display: block; margin: 10px 0;" />`;
-      }
-    );
-
-    return processedContent;
+    return processRichText(htmlContent, 'http://localhost:8081');
   }
 });

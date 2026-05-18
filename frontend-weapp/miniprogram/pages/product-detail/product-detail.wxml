@@ -71,7 +71,7 @@
             <text class="brand-story-subtitle">Brand Story</text>
           </view>
           <view class="brand-story-content" id="brandstorycontent" style="width: 90%;">
-            <rich-text nodes="{{brandStory}}"></rich-text>
+            <rich-text class="rich-text-content" nodes="{{brandStory}}"></rich-text>
           </view>
         </view>
       </view>
@@ -100,7 +100,7 @@
             <text class="content-subtitle">Details</text>
           </view>
           <view class="content-html">
-            <text>{{product.content}}</text>
+            <rich-text class="rich-text-content" nodes="{{product.content}}"></rich-text>
           </view>
         </view>
       </view>

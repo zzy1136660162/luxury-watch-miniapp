@@ -21,6 +21,7 @@
   opacity: 0;
   visibility: hidden;
   height: 0;
+  line-height: 1.8;
   overflow: hidden;
   transition: opacity 0.25s ease, visibility 0.25s ease, height 0.25s ease;
 }
@@ -334,8 +335,31 @@
   display: block;
   font-size: 28rpx;
   color: #1f1f1f;
-  line-height: 1.9;
   padding: 0 20rpx;
+}
+
+.brand-content .rich-text-content img {
+  max-width: 100%;
+  height: auto;
+  margin: 16rpx 0;
+}
+
+.brand-content .rich-text-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16rpx 0;
+}
+
+.brand-content .rich-text-content td,
+.brand-content .rich-text-content th {
+  border: 1rpx solid #ededed;
+  padding: 8rpx 12rpx;
+}
+
+.brand-content .rich-text-content ul,
+.brand-content .rich-text-content ol {
+  margin: 16rpx 0;
+  padding-left: 24rpx;
 }
 
 .brand-content .empty-content {

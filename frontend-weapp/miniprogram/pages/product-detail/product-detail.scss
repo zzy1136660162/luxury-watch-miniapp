@@ -618,6 +618,44 @@ swiper-item {
   gap: 16px;
 }
 
+// 富文本内容样式
+.rich-text-content {
+  font-family: $font-family-chinese;
+  font-size: 15px;
+  color: $on-surface-variant;
+  letter-spacing: 0.5px;
+  
+  img {
+    max-width: 100%;
+    height: auto;
+    margin: 16px 0;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    
+    td, th {
+      border: 1px solid $outline-variant;
+      padding: 8px 12px;
+    }
+  }
+  
+  ul, ol {
+    margin: 16px 0;
+    padding-left: 24px;
+  }
+  
+  a {
+    color: $tertiary;
+  }
+  
+  strong, b {
+    font-weight: bold;
+  }
+}
+
 .action-button {
   flex: 1;
   min-width: 160px;

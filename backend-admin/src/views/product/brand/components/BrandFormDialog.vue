@@ -330,7 +330,7 @@ const handleSubmit = async () => {
             plugins: 'anchor lists advlist autolink charmap code media help link image',
             toolbar: 'undo redo | styles | bold italic underline | alignleft aligncenter alignright | bullist numlist outdent indent | link image',
             branding: false,
-            content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px } img { max-width: 100%; height: auto; }',
+            content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px; line-height:2; } p { line-height:2; margin-bottom:16px; } div { line-height:2; } span { line-height:2; } img { max-width: 100%; height: auto; } h1, h2, h3, h4, h5, h6 { line-height:2; margin-bottom:12px; }',
             images_upload_handler: handleImageUpload,
             convert_urls: false,
             relative_urls: false,

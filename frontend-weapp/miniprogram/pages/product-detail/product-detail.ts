@@ -1,6 +1,7 @@
 import { getFullImageUrl, getImageUrls } from '../../utils/config';
 import { productApi } from '../../utils/request';
 import { PointsManager } from '../../utils/pointsManager';
+import { processRichText } from '../../utils/richTextHelper';
 
 Component({
   data: {
@@ -65,6 +66,11 @@ Component({
         if (res.code === 200) {
           const product = res.data;
 
+          // 处理商品详情内容的行高和图片
+          if (product.content) {
+            product.content = processRichText(product.content, 'http://localhost:8081')
+          }
+
           let productImages: string[] = [];
           
           // 优先使用 images 字段（逗号分隔的多图）
@@ -127,22 +133,10 @@ Component({
             specifications
           };
 
-          // 处理品牌故事图片样式和路径
+          // 处理品牌故事图片样式和路径，并应用行高
           let processedBrandStory = product.brandStory || ''
           if (processedBrandStory) {
-            const imageBaseUrl = 'http://localhost:8081'
-            // 处理图片URL，添加完整前缀
-            processedBrandStory = processedBrandStory.replace(/src=["'](\/api\/images\/[^"']+)["']/g, `src="${imageBaseUrl}$1"`)
-            processedBrandStory = processedBrandStory.replace(/src=["'](\/images\/[^"']+)["']/g, `src="${imageBaseUrl}$1"`)
-            processedBrandStory = processedBrandStory.replace(/src=["'](images\/[^"']+)["']/g, `src="${imageBaseUrl}/api/$1"`)
-            processedBrandStory = processedBrandStory.replace(/src=["']([^"']+\.(jpg|jpeg|png|gif|webp))["']/gi, (match, p1) => {
-              if (p1.startsWith('http://') || p1.startsWith('https://')) {
-                return match
-              }
-              return `src="${imageBaseUrl}/api/images/${p1}"`
-            })
-            // 添加图片样式
-            processedBrandStory = processedBrandStory.replace(/<img/g, '<img style="max-width:80vw;height:auto;"')
+            processedBrandStory = processRichText(processedBrandStory, 'http://localhost:8081')
           }
 
           this.setData({
