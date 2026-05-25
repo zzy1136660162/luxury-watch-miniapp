@@ -4,66 +4,64 @@
  * 参考后端管理平台的图片处理方式
  */
 
-// 图片访问基础配置
-const imageConfig = {
-  // 小程序专用图片访问前缀（与后端 base-url 配置保持一致）
-  baseUrl: 'http://localhost:8081',
-  
-  // 图片路径前缀
-  imagePath: '/api/images',
-};
+import { apiConfig } from './api-config';
 
-// 处理单张图片URL
+/**
+ * 处理单张图片URL
+ * 兼容两种路径格式：
+ * - /api/images/xxx.png (完整路径)
+ * - /images/xxx.png (缺少api前缀)
+ */
 const getFullImageUrl = (relativePath: string | undefined | null): string => {
-  // 处理空值
   if (!relativePath) {
     return '';
   }
 
-  // 如果已经是完整URL，直接返回
   if (relativePath.startsWith('http://') || relativePath.startsWith('https://')) {
     return relativePath;
   }
 
-  // 如果包含逗号，取第一张
   if (relativePath.includes(',')) {
     relativePath = relativePath.split(',')[0];
   }
 
-  // 拼接完整URL
-  return `${imageConfig.baseUrl}${relativePath}`;
+  // 兼容处理：以 /images/ 开头但不是以 /api/images/ 开头的路径
+  if (relativePath.startsWith('/images/') && !relativePath.startsWith('/api/images/')) {
+    return `${apiConfig.baseUrl}/api${relativePath}`;
+  }
+
+  // 如果是完整路径 /api/images/xxx，直接拼接 baseUrl
+  if (relativePath.startsWith('/api/images/')) {
+    return `${apiConfig.baseUrl}${relativePath}`;
+  }
+
+  // 其他情况，拼接 imageUrl
+  return `${apiConfig.imageUrl}/${relativePath}`;
 };
 
-// 将逗号分隔的图片字符串转换为数组
+/**
+ * 将逗号分隔的图片字符串转换为数组
+ */
 const getImageList = (imageStr: string | undefined | null): string[] => {
   if (!imageStr) return [];
   
   return imageStr.split(',').filter(Boolean).map(img => img.trim());
 };
 
-// 将逗号分隔的图片字符串转换为完整URL数组
+/**
+ * 将逗号分隔的图片字符串转换为完整URL数组
+ */
 const getImageUrls = (imageStr: string | undefined | null): string[] => {
   return getImageList(imageStr).map(img => getFullImageUrl(img));
 };
 
-// API基础配置
-const apiConfig = {
-  baseUrl: 'http://localhost:8081',
-  apiPath: '/api',
-};
-
-// 导出配置
 export {
-  imageConfig,
-  apiConfig,
   getFullImageUrl,
   getImageList,
   getImageUrls,
 };
 
 export default {
-  imageConfig,
-  apiConfig,
   getFullImageUrl,
   getImageList,
   getImageUrls,

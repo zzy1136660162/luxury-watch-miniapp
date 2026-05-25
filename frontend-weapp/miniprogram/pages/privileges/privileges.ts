@@ -36,7 +36,7 @@ Component({
 
         const res: any = await userApi.getCurrentUser();
         if (res && res.code === 200) {
-          const points = res.data?.points || 0;
+          const points = (res.data && res.data.points) || 0;
           this.setData!({
             isLoggedIn: true,
             memberPoints: points.toLocaleString()
@@ -60,7 +60,7 @@ Component({
             tag: item.category || '积分礼品',
             title: item.name,
             desc: item.description || '暂无描述',
-            points: item.pointsCost?.toLocaleString() || '0',
+            points: (item.pointsCost && item.pointsCost.toLocaleString()) || '0',
             image: getFullImageUrl(item.image)
           }));
 
@@ -100,14 +100,15 @@ Component({
     },
 
     onImageError(e: any) {
-      const index = e.target?.dataset?.index;
+      const target = e.target;
+      const index = (target && target.dataset && target.dataset.index);
       if (index !== undefined) {
         const products = [...this.data.products];
         if (products[index]) {
           products[index].image = '';
           this.setData!({ products });
         }
-      } else if (e.target?.dataset?.type === 'hero') {
+      } else if (target && target.dataset && target.dataset.type === 'hero') {
         this.setData!({
           heroImage: ''
         });

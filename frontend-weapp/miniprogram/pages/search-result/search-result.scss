@@ -360,8 +360,11 @@
 
   .filter-body {
     flex: 1;
+    min-height: 200rpx;
+    max-height: 60vh;
     padding: 32rpx;
-    overflow-y: auto;
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
   }
 
   .filter-section {

@@ -44,8 +44,8 @@
   </scroll-view>
 
   <!-- 高级筛选弹窗 -->
-  <view class="filter-modal {{showFilter ? 'show' : ''}}" catchtouchmove="preventTouchMove">
-    <view class="filter-overlay" bindtap="onCloseFilter"></view>
+  <view class="filter-modal {{showFilter ? 'show' : ''}}">
+    <view class="filter-overlay" catchtouchmove="preventTouchMove" bindtap="onCloseFilter"></view>
     <view class="filter-content">
       <view class="filter-header">
         <text class="filter-title">高级筛选</text>
@@ -54,7 +54,7 @@
         </view>
       </view>
 
-      <scroll-view class="filter-body" scroll-y>
+      <scroll-view class="filter-body" scroll-y type="list" enhanced="{{true}}" bounces="{{true}}" show-scrollbar="{{false}}">
         <!-- 分类筛选 -->
         <view class="filter-section">
           <text class="filter-section-title">腕表分类</text>

@@ -134,7 +134,8 @@ Component({
 
       // 滚动到底部附近时，强制选中最后一个品牌，避免最后一组被误判成倒数第二组
       if (scrollHeight > 0 && clientHeight > 0 && scrollTop + clientHeight >= scrollHeight - BOTTOM_ACTIVE_THRESHOLD) {
-        const lastBrand = brandSeriesList[brandSeriesList.length - 1]?.brand;
+        const lastItem = brandSeriesList[brandSeriesList.length - 1];
+        const lastBrand = (lastItem && lastItem.brand);
         this.setCurrentBrand(lastBrand);
         return;
       }
@@ -152,7 +153,8 @@ Component({
         for (let i = 0; i < res.length; i++) {
           const rect = res[i];
           if (rect && rect.top <= 150 && rect.bottom >= 150) {
-            const brand = brandSeriesList[i]?.brand;
+            const item = brandSeriesList[i];
+            const brand = (item && item.brand);
             this.setCurrentBrand(brand);
             break;
           }
@@ -231,7 +233,8 @@ Component({
     // 点击品牌导航
     onBrandTap(e: any) {
       const index = Number(e.currentTarget.dataset.index);
-      const brand = this.data.brandSeriesList[index]?.brand || e.currentTarget.dataset.brand;
+      const item = this.data.brandSeriesList[index];
+      const brand = (item && item.brand) || e.currentTarget.dataset.brand;
 
       // 使用视图层传入的索引，避免按品牌名查找导致的定位偏差
       if (!Number.isNaN(index) && index >= 0) {
@@ -263,7 +266,9 @@ Component({
       const brand = e.currentTarget.dataset.brand;
       // 找到该品牌的第一个系列
       const brandData = this.data.brandSeriesList.find((item: any) => item.brand === brand);
-      const firstSeries = brandData?.series?.[0]?.name || brand;
+      const seriesArray = (brandData && brandData.series);
+      const firstSeriesItem = (seriesArray && seriesArray[0]);
+      const firstSeries = (firstSeriesItem && firstSeriesItem.name) || brand;
       wx.navigateTo({
         url: `/pages/series-detail/series-detail?brand=${encodeURIComponent(brand)}&series=${encodeURIComponent(firstSeries)}`
       });

@@ -207,7 +207,7 @@ Page({
     }
 
     console.log('开始兑换，商品信息:', this.data.reward);
-    console.log('商品ID:', this.data.reward?.id, '商品标题:', this.data.reward?.title);
+    console.log('商品ID:', (this.data.reward && this.data.reward.id), '商品标题:', (this.data.reward && this.data.reward.title));
 
     // 先打开地址选择弹窗
     this.openAddressDialog();
@@ -217,7 +217,7 @@ Page({
   doExchange(selectedAddress: AddressItem | null) {
     wx.showModal({
       title: '兑换确认',
-      content: `确定要兑换「${this.data.reward?.title}」吗？\n所需积分：${this.data.reward?.points}\n收货地址：${selectedAddress?.address || '无'}`,
+      content: `确定要兑换「${(this.data.reward && this.data.reward.title)}」吗？\n所需积分：${(this.data.reward && this.data.reward.points)}\n收货地址：${(selectedAddress && selectedAddress.address) || '无'}`,
       success: async (res) => {
         if (res.confirm) {
           try {
@@ -227,7 +227,7 @@ Page({
 
             const result: any = await rewardApi.exchange({
               productId: this.data.reward.id,
-              phone: selectedAddress?.phone || '',
+              phone: (selectedAddress && selectedAddress.phone) || '',
               address: addressStr
             });
 

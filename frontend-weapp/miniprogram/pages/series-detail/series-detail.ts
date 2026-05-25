@@ -1,6 +1,7 @@
 import { getFullImageUrl } from '../../utils/config';
 import { productApi } from '../../utils/request';
 import { processRichText } from '../../utils/richTextHelper';
+import { apiConfig } from '../../utils/api-config';
 
 interface Product {
   id: number;
@@ -315,6 +316,6 @@ Page({
   // 处理富文本中的图片路径，拼接完整URL并添加样式，应用行高
   processRichTextImages(htmlContent: string): string {
     if (!htmlContent) return '';
-    return processRichText(htmlContent, 'http://localhost:8081');
+    return processRichText(htmlContent, apiConfig.baseUrl);
   }
 });

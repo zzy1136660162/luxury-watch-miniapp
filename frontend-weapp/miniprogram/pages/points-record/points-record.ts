@@ -17,7 +17,7 @@ Page({
     
     this.setData({
       pointsRecords: records,
-      currentPoints: userInfo?.points || 0
+      currentPoints: (userInfo && userInfo.points) || 0
     });
   },
 

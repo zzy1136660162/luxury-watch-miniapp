@@ -1,3 +1,5 @@
+import { wxUserApi } from '../../utils/request';
+
 Page({
   data: {
     userAvatar: 'https://img.yzcdn.cn/vant/cat.jpeg',
@@ -98,7 +100,7 @@ Page({
     });
   },
 
-  onConfirmNickname() {
+  async onConfirmNickname() {
     const { tempNickname } = this.data;
     
     if (!tempNickname.trim()) {
@@ -122,50 +124,42 @@ Page({
     const userInfo = wx.getStorageSync('userInfo') || {};
     const userId = userInfo.id;
 
-    wx.request({
-      url: 'http://localhost:8081/wx-user/' + userId,
-      method: 'PUT',
-      header: {
-        'Content-Type': 'application/json',
-        'Authorization': wx.getStorageSync('token')
-      },
-      data: {
+    try {
+      const res = await wxUserApi.update(userId, {
         username: tempNickname.trim()
-      },
-      success: (res: any) => {
-        if (res.data.code === 200) {
-          const newUsername = tempNickname.trim();
-          
-          userInfo.username = newUsername;
-          wx.setStorageSync('userInfo', userInfo);
+      });
 
-          this.setData!({
-            username: newUsername,
-            showNicknameModal: false,
-            tempNickname: ''
-          });
+      if (res.code === 200) {
+        const newUsername = tempNickname.trim();
+        
+        userInfo.username = newUsername;
+        wx.setStorageSync('userInfo', userInfo);
 
-          wx.showToast({
-            title: '修改成功',
-            icon: 'success',
-            duration: 2000
-          });
-        } else {
-          wx.showToast({
-            title: res.data.msg || '修改失败',
-            icon: 'none',
-            duration: 2000
-          });
-        }
-      },
-      fail: (err) => {
-        console.error('修改用户名失败:', err);
+        this.setData!({
+          username: newUsername,
+          showNicknameModal: false,
+          tempNickname: ''
+        });
+
         wx.showToast({
-          title: '网络请求失败',
+          title: '修改成功',
+          icon: 'success',
+          duration: 2000
+        });
+        } else {
+        wx.showToast({
+          title: res.msg || '修改失败',
           icon: 'none',
           duration: 2000
         });
       }
-    });
+    } catch (err) {
+      console.error('修改用户名失败:', err);
+      wx.showToast({
+        title: '网络请求失败',
+        icon: 'none',
+        duration: 2000
+      });
+    }
   }
 });

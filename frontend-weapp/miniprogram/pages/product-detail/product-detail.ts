@@ -2,6 +2,7 @@ import { getFullImageUrl, getImageUrls } from '../../utils/config';
 import { productApi } from '../../utils/request';
 import { PointsManager } from '../../utils/pointsManager';
 import { processRichText } from '../../utils/richTextHelper';
+import { apiConfig } from '../../utils/api-config';
 
 Component({
   data: {
@@ -22,6 +23,8 @@ Component({
     },
 
     brandStory: '',
+    
+    defaultBrandImage: apiConfig.imageUrl + '/unnamed%20(3).png',
 
     loading: true
   },
@@ -68,7 +71,7 @@ Component({
 
           // 处理商品详情内容的行高和图片
           if (product.content) {
-            product.content = processRichText(product.content, 'http://localhost:8081')
+            product.content = processRichText(product.content, apiConfig.baseUrl)
           }
 
           let productImages: string[] = [];
@@ -136,7 +139,7 @@ Component({
           // 处理品牌故事图片样式和路径，并应用行高
           let processedBrandStory = product.brandStory || ''
           if (processedBrandStory) {
-            processedBrandStory = processRichText(processedBrandStory, 'http://localhost:8081')
+            processedBrandStory = processRichText(processedBrandStory, apiConfig.baseUrl)
           }
 
           this.setData({

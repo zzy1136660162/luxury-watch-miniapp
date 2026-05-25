@@ -25,6 +25,7 @@ public class SaTokenConfig implements WebMvcConfigurer {
                 "/admin/logout",
                 "/admin/captcha/**",
                 "/api/**",
+                "/api/images/**",
                 "/images/**",
                 "/error",
                 "/favicon.ico",

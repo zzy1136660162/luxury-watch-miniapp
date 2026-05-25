@@ -55,6 +55,9 @@ public class ExchangeRecordController {
             wrapper.eq(ExchangeRecord::getPhone, phone);
         }
 
+        // 按兑换时间倒序，最新的在前
+        wrapper.orderByDesc(ExchangeRecord::getExchangeTime);
+
         // 执行分页查询
         Page<ExchangeRecord> resultPage = exchangeRecordService.page(pageParam, wrapper);
 

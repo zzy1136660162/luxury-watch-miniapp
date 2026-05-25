@@ -96,9 +96,9 @@ Page({
       brands: group.items.map(name => {
         const brand = brandMap.get(name);
         return {
-          id: brand?.id || 0,
+          id: (brand && brand.id) || 0,
           name,
-          logo: brand?.logo || ''
+          logo: (brand && brand.logo) || ''
         };
       })
     }));

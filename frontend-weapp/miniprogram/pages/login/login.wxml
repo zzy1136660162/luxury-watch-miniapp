@@ -76,11 +76,6 @@
     </view>
 
     <view class="footer-section">
-      <view class="divider">
-        <view class="divider-line"></view>
-        <text class="divider-text">其他登录方式</text>
-        <view class="divider-line"></view>
-      </view>
     </view>
   </view>
 </view>

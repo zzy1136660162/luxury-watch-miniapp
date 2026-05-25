@@ -1,4 +1,5 @@
-import { storeApi, appointmentApi } from '../../utils/request';
+import { storeApi } from '../../utils/request';
+import { appointmentApi } from '../../utils/request';
 
 Component({
   data: {

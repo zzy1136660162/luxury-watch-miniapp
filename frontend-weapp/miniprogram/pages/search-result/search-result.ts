@@ -85,7 +85,7 @@ Page({
 
   async loadBrandSeries(brand: string) {
     try {
-      const res: any = await productApi.getSeriesByBrandName(brand);
+      const res: any = await productApi.getSeriesByBrand(brand);
       if (res && res.code === 200 && res.data) {
         this.setData({
           brandSeries: res.data
@@ -165,7 +165,8 @@ Page({
     Object.keys(params).forEach(key => {
       if (params[key]) {
         const value = params[key];
-        const label = valueMap[key]?.[value] || value;
+        const nestedValue = valueMap[key];
+        const label = (nestedValue && nestedValue[value]) || value;
         labels.push({ type: key, value, label });
       }
     });
@@ -193,7 +194,7 @@ Page({
       
       console.log('查询参数:', queryParams);
       
-      const res: any = await productApi.getOnlineList(queryParams);
+      const res: any = await productApi.getList(queryParams);
       console.log('查询结果:', res);
 
       if (res && res.code === 200) {
@@ -318,6 +319,10 @@ Page({
 
   onCloseFilter() {
     this.setData({ showFilter: false });
+  },
+
+  preventTouchMove() {
+    return;
   },
 
   onSearchInput(e: any) {

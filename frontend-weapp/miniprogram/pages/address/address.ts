@@ -150,23 +150,26 @@ Page({
     this.saveAddresses(addresses);
   },
 
-  saveAddresses(addresses: AddressItem[]) {
+  saveAddresses: (addresses: AddressItem[]) => {
     const userInfo = wx.getStorageSync('userInfo') || {};
     userInfo.address = addresses.map(item => `${item.name}|${item.phone}|${item.address}`).join(',');
 
     wx.setStorageSync('userInfo', userInfo);
 
-    userApi.updateUserInfo({ address: userInfo.address }).then(() => {
+    const page = (getCurrentPages as any)().pop();
+    if (page) {
+      page.setData!({
+        addresses,
+        showDialog: false
+      });
+    }
+
+    wx.showToast({ title: '保存成功', icon: 'success' });
+
+    userApi.updateUser({ address: userInfo.address }).then(() => {
       console.log('地址保存成功');
     }).catch((err) => {
       console.error('地址保存失败', err);
     });
-
-    this.setData!({
-      addresses,
-      showDialog: false
-    });
-
-    wx.showToast({ title: '保存成功', icon: 'success' });
   }
 });

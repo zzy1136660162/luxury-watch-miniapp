@@ -3,7 +3,9 @@
  * 用于调用后端API
  */
 
-const baseUrl = 'http://127.0.0.1:8081';
+import { apiConfig } from './api-config';
+
+const baseUrl = apiConfig.baseUrl;
 
 /**
  * 处理登录过期
@@ -36,7 +38,6 @@ const request = (options: any): Promise<any> => {
       data: options.data || {},
       header: headers,
       success: (res: any) => {
-        // 检查登录过期
         if (res.statusCode === 401 || (res.data && res.data.code === 401)) {
           wx.showToast({
             title: '登录已过期，请重新登录',
@@ -60,165 +61,9 @@ const request = (options: any): Promise<any> => {
 };
 
 /**
- * 商品相关API
- */
-export const productApi = {
-  /**
-   * 获取商品列表
-   */
-  getList: (params?: { page?: number; size?: number; category?: string }) => {
-    return request({
-      url: '/api/product/list',
-      method: 'GET',
-      data: params
-    });
-  },
-
-  /**
-   * 获取商品详情
-   */
-  getDetail: (id: number) => {
-    return request({
-      url: `/api/product/${id}`,
-      method: 'GET'
-    });
-  },
-
-  /**
-   * 获取上架商品列表（小程序专用）
-   */
-  getOnlineList: (params?: {
-    page?: number;
-    size?: number;
-    category?: string;
-    brand?: string;
-    price?: string;
-    caseSize?: string;
-    material?: string;
-    strap?: string;
-    waterResistance?: string;
-    powerReserve?: string;
-  }) => {
-    return request({
-      url: '/api/product/online/list',
-      method: 'GET',
-      data: params
-    });
-  },
-
-  /**
-   * 获取精选商品
-   */
-  getFeatured: (params?: { brand?: string }) => {
-    return request({
-      url: '/api/product/featured',
-      method: 'GET',
-      data: params
-    });
-  },
-
-  /**
-   * 获取所有品牌列表
-   */
-  getAllBrands: () => {
-    return request({
-      url: '/api/brands',
-      method: 'GET'
-    });
-  },
-
-  /**
-   * 获取热门系列
-   */
-  getHotSeries: () => {
-    return request({
-      url: '/api/series/hot',
-      method: 'GET'
-    });
-  },
-
-  /**
-   * 获取所有系列列表（去重）
-   */
-  getAllSeriesList: () => {
-    return request({
-      url: '/api/series/all',
-      method: 'GET'
-    });
-  },
-
-  /**
-   * 根据品牌名称获取该品牌的所有系列
-   */
-  getSeriesByBrandName: (brand: string) => {
-    return request({
-      url: '/api/series/by-brand',
-      method: 'GET',
-      data: { brand }
-    });
-  },
-
-  /**
-   * 获取品牌下所有系列详情（带商品）
-   */
-  getBrandSeriesDetail: (brand: string) => {
-    return request({
-      url: '/api/series/brand-detail',
-      method: 'GET',
-      data: { brand }
-    });
-  },
-
-  /**
-   * 搜索商品
-   */
-  search: (params: { keyword: string }) => {
-    return request({
-      url: '/api/product/search',
-      method: 'GET',
-      data: params
-    });
-  },
-
-  /**
-   * 高级筛选商品
-   */
-  advancedFilter: (params: {
-    brand?: string;
-    series?: string;
-    price?: string;
-    caseSize?: string;
-    material?: string;
-    strap?: string;
-    waterResistance?: string;
-    powerReserve?: string;
-  }) => {
-    return request({
-      url: '/api/product/filter',
-      method: 'GET',
-      data: params
-    });
-  },
-
-  /**
-   * 根据品牌获取商品列表
-   */
-  getProductsByBrand: (brand: string, params?: { page?: number; size?: number }) => {
-    return request({
-      url: '/api/product/online/list',
-      method: 'GET',
-      data: { brand, ...params }
-    });
-  }
-};
-
-/**
  * 首页相关API
  */
 export const homeApi = {
-  /**
-   * 获取首页数据
-   */
   getHomeData: () => {
     return request({
       url: '/api/home/data',
@@ -226,9 +71,6 @@ export const homeApi = {
     });
   },
 
-  /**
-   * 获取新品推荐
-   */
   getNewArrivals: () => {
     return request({
       url: '/api/home/new-arrivals',
@@ -236,9 +78,6 @@ export const homeApi = {
     });
   },
 
-  /**
-   * 获取热门系列
-   */
   getFeaturedCollections: () => {
     return request({
       url: '/api/home/featured-collections',
@@ -251,22 +90,86 @@ export const homeApi = {
  * 系列相关API
  */
 export const collectionApi = {
-  /**
-   * 获取所有系列
-   */
   getAllCollections: () => {
     return request({
-      url: '/api/collection/list',
+      url: '/api/series/all',
+      method: 'GET'
+    });
+  }
+};
+
+/**
+ * 商品相关API
+ */
+export const productApi = {
+  getList: (params?: { page?: number; size?: number; category?: string }) => {
+    return request({
+      url: '/api/product/online/list',
+      method: 'GET',
+      data: params
+    });
+  },
+
+  getDetail: (id: number) => {
+    return request({
+      url: `/api/product/${id}`,
       method: 'GET'
     });
   },
 
-  /**
-   * 获取指定系列下的商品
-   */
-  getByCollection: (collection: string, params?: { page?: number; size?: number }) => {
+  getAllBrands: () => {
     return request({
-      url: `/api/collection/${collection}`,
+      url: '/api/brands',
+      method: 'GET'
+    });
+  },
+
+  getAllSeriesList: () => {
+    return request({
+      url: '/api/series/all',
+      method: 'GET'
+    });
+  },
+
+  getSeriesByBrand: (brand: string) => {
+    return request({
+      url: `/api/series/by-brand?brand=${encodeURIComponent(brand)}`,
+      method: 'GET'
+    });
+  },
+
+  getHotSeries: () => {
+    return request({
+      url: '/api/series/hot',
+      method: 'GET'
+    });
+  },
+
+  getFeatured: () => {
+    return request({
+      url: '/api/product/featured',
+      method: 'GET'
+    });
+  },
+
+  getBrandSeriesDetail: (brand: string) => {
+    return request({
+      url: `/api/series/brand-detail?brand=${encodeURIComponent(brand)}`,
+      method: 'GET'
+    });
+  },
+
+  search: (params: { keyword?: string; brand?: string; series?: string; category?: string; price?: string }) => {
+    return request({
+      url: '/api/product/search',
+      method: 'GET',
+      data: params
+    });
+  },
+
+  filter: (params: { brand?: string; series?: string; category?: string; price?: string; caseSize?: string; material?: string }) => {
+    return request({
+      url: '/api/product/filter',
       method: 'GET',
       data: params
     });
@@ -274,15 +177,39 @@ export const collectionApi = {
 };
 
 /**
- * 门店相关API
+ * 品牌相关API
  */
-export const storeApi = {
-  /**
-   * 获取门店列表
-   */
-  getList: () => {
+export const brandApi = {
+  getBrandDetail: (brand: string) => {
     return request({
-      url: '/api/appointment/stores',
+      url: `/api/series/brand-detail?brand=${encodeURIComponent(brand)}`,
+      method: 'GET'
+    });
+  }
+};
+
+/**
+ * 用户相关API
+ */
+export const userApi = {
+  getCurrentUser: () => {
+    return request({
+      url: '/api/user/current',
+      method: 'GET'
+    });
+  },
+
+  updateUser: (data: any) => {
+    return request({
+      url: '/api/user/update',
+      method: 'POST',
+      data: data
+    });
+  },
+
+  getExchangeRecords: () => {
+    return request({
+      url: '/api/user/exchange-records',
       method: 'GET'
     });
   }
@@ -292,20 +219,21 @@ export const storeApi = {
  * 预约相关API
  */
 export const appointmentApi = {
-  /**
-   * 创建预约
-   */
-  create: (data: { storeId: number; appointmentDate: string; appointmentTime: string; remark?: string }) => {
+  getStores: () => {
     return request({
-      url: '/api/appointment',
-      method: 'POST',
-      data
+      url: '/api/appointment/stores',
+      method: 'GET'
     });
   },
 
-  /**
-   * 获取我的预约列表
-   */
+  create: (data: any) => {
+    return request({
+      url: '/api/appointment',
+      method: 'POST',
+      data: data
+    });
+  },
+
   getMyList: () => {
     return request({
       url: '/api/appointment/my',
@@ -313,9 +241,6 @@ export const appointmentApi = {
     });
   },
 
-  /**
-   * 取消预约
-   */
   cancel: (id: number) => {
     return request({
       url: `/api/appointment/${id}/cancel`,
@@ -325,75 +250,94 @@ export const appointmentApi = {
 };
 
 /**
- * 用户相关API
+ * 门店相关API
  */
-export const userApi = {
-  /**
-   * 获取当前用户信息（包含积分）
-   */
-  getCurrentUser: () => {
+export const storeApi = {
+  getList: () => {
     return request({
-      url: '/api/user/current',
+      url: '/api/appointment/stores',
       method: 'GET'
-    });
-  },
-
-  /**
-   * 获取当前用户的兑换记录列表
-   */
-  getExchangeRecords: () => {
-    return request({
-      url: '/api/user/exchange-records',
-      method: 'GET'
-    });
-  },
-
-  /**
-   * 更新用户信息
-   */
-  updateUserInfo: (data: { address?: string }) => {
-    return request({
-      url: '/api/user/update',
-      method: 'POST',
-      data
     });
   }
 };
 
 /**
- * 积分兑换相关API
+ * 积分礼品相关API
  */
 export const rewardApi = {
-  /**
-   * 获取可积分兑换的商品列表
-   */
-  getRedeemableProducts: (params?: { page?: number; size?: number }) => {
+  getRedeemableProducts: () => {
     return request({
       url: '/api/product/redeemable',
-      method: 'GET',
-      data: params
+      method: 'GET'
     });
   },
 
-  /**
-   * 积分兑换商品
-   */
-  exchange: (data: { productId: number; phone?: string }) => {
+  exchange: (data: { productId: number; phone: string; address: string }) => {
     return request({
       url: '/api/exchange',
       method: 'POST',
-      data
+      data: data
+    });
+  }
+};
+
+/**
+ * 登录相关API
+ */
+export const loginApi = {
+  login: (data: { phone: string; password: string; username?: string; avatar?: string; wechatAvatar?: string }) => {
+    return request({
+      url: '/api/mini/login',
+      method: 'POST',
+      data: data
+    });
+  },
+
+  getUserInfo: () => {
+    return request({
+      url: '/api/mini/userinfo',
+      method: 'GET'
+    });
+  },
+
+  logout: () => {
+    return request({
+      url: '/api/mini/logout',
+      method: 'POST'
+    });
+  }
+};
+
+/**
+ * 微信用户相关API
+ */
+export const wxUserApi = {
+  update: (id: number, data: any) => {
+    return request({
+      url: `/wx-user/${id}`,
+      method: 'PUT',
+      data: data
+    });
+  },
+
+  getByPhone: (phone: string) => {
+    return request({
+      url: `/wx-user/by-phone?phone=${phone}`,
+      method: 'GET'
     });
   }
 };
 
 export default {
   request,
-  productApi,
   homeApi,
   collectionApi,
-  storeApi,
-  appointmentApi,
+  productApi,
+  brandApi,
   userApi,
-  rewardApi
+  appointmentApi,
+  rewardApi,
+  loginApi,
+  wxUserApi,
+  storeApi
 };

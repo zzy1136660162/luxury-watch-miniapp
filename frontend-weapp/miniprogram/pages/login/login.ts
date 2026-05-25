@@ -1,3 +1,5 @@
+import { loginApi } from '../../utils/request';
+
 interface LoginIcons {
   phone: string;
   password: string;
@@ -189,7 +191,7 @@ Page({
     });
   },
 
-  onLogin() {
+  async onLogin() {
     const { password, phone, loading, avatarUrl } = this.data;
     
     if (loading) return;
@@ -225,72 +227,64 @@ Page({
 
     const wechatAvatar = wx.getStorageSync('wechatAvatar') || avatarUrl;
 
-    wx.request({
-      url: 'http://localhost:8081/api/mini/login',
-      method: 'POST',
-      header: {
-        'Content-Type': 'application/json'
-      },
-      data: {
-        username: phone.trim(),
-        password: password.trim(),
+    try {
+      const res = await loginApi.login({
         phone: phone.trim(),
+        password: password.trim(),
+        username: phone.trim(),
         avatar: wechatAvatar || 'https://img.yzcdn.cn/vant/cat.jpeg',
         wechatAvatar: wechatAvatar
-      },
-      success: (res: any) => {
-        if (res.data.code === 200) {
-          const userInfo = res.data.data;
-          
-          wx.setStorageSync('token', userInfo.token);
-          wx.setStorageSync('userInfo', {
-            id: userInfo.id,
-            username: userInfo.username,
-            avatar: userInfo.avatar,
-            phone: userInfo.phone || phone.trim(),
-            points: userInfo.points,
-            growthValue: userInfo.growthValue,
-            memberLevel: userInfo.memberLevel,
-            memberLevelName: userInfo.memberLevelName,
-            address: userInfo.address || ''
-          });
+      });
 
-          wx.showToast({
-            title: '登录成功',
-            icon: 'success',
-            duration: 2000
-          });
+      if (res.code === 200) {
+        const userInfo = res.data;
+        
+        wx.setStorageSync('token', userInfo.token);
+        wx.setStorageSync('userInfo', {
+          id: userInfo.id,
+          username: userInfo.username,
+          avatar: userInfo.avatar,
+          phone: userInfo.phone || phone.trim(),
+          points: userInfo.points,
+          growthValue: userInfo.growthValue,
+          memberLevel: userInfo.memberLevel,
+          memberLevelName: userInfo.memberLevelName,
+          address: userInfo.address || ''
+        });
 
-          setTimeout(() => {
-            const pages = getCurrentPages();
-            if (pages.length > 1) {
-              wx.navigateBack();
-            } else {
-              wx.switchTab({
-                url: '/pages/home/home'
-              });
-            }
-          }, 2000);
-        } else {
-          wx.showToast({
-            title: res.data.msg || '登录失败',
-            icon: 'none',
-            duration: 2000
-          });
-        }
-      },
-      fail: (err) => {
-        console.error('登录请求失败:', err);
         wx.showToast({
-          title: '网络请求失败',
+          title: '登录成功',
+          icon: 'success',
+          duration: 2000
+        });
+
+        setTimeout(() => {
+          const pages = getCurrentPages();
+          if (pages.length > 1) {
+            wx.navigateBack();
+          } else {
+            wx.switchTab({
+              url: '/pages/home/home'
+            });
+          }
+        }, 2000);
+      } else {
+        wx.showToast({
+          title: res.msg || '登录失败',
           icon: 'none',
           duration: 2000
         });
-      },
-      complete: () => {
-        this.setData!({ loading: false });
       }
-    });
+    } catch (err) {
+      console.error('登录请求失败:', err);
+      wx.showToast({
+        title: '网络请求失败',
+        icon: 'none',
+        duration: 2000
+      });
+    } finally {
+      this.setData!({ loading: false });
+    }
   },
 
   onUserAgreement() {

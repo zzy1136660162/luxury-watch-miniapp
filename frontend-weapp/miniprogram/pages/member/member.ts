@@ -66,7 +66,7 @@ Component({
       if (token && userInfo) {
         // 初始化积分（如果未设置）
         PointsManager.initPoints();
-        
+
         const level = userInfo.memberLevel || 1;
         const levelInfo = this.data.levelInfo[level as keyof typeof this.data.levelInfo] || this.data.levelInfo[1];
 
@@ -118,14 +118,14 @@ Component({
       if (!this.checkLogin()) return;
 
       const type = e.currentTarget.dataset.type;
-      
+
       if (type === 'priority') {
         wx.navigateTo({
           url: '/pages/appointment/appointment'
         });
         return;
       }
-      
+
       wx.showModal({
         title: '尊享权益',
         content: `正在打开 ${type} 功能`,
@@ -138,7 +138,7 @@ Component({
 
       const id = e.currentTarget.dataset.id;
       let rewardData = null;
-      
+
       if (id === 'reward1') {
         rewardData = this.data.reward1;
       } else if (id === 'reward2') {
@@ -146,7 +146,7 @@ Component({
       } else if (id === 'reward3') {
         rewardData = this.data.reward3;
       }
-      
+
       if (rewardData) {
         wx.navigateTo({
           url: `/pages/reward-detail/reward-detail?data=${encodeURIComponent(JSON.stringify(rewardData))}`
@@ -158,7 +158,7 @@ Component({
       if (!this.checkLogin()) return;
 
       const type = e.currentTarget.dataset.type;
-      
+
       switch (type) {
         case 'appointments':
           wx.navigateTo({
@@ -251,7 +251,7 @@ Component({
     // 点击积分记录按钮
     onPointsRecordTap() {
       if (!this.checkLogin()) return;
-      
+
       wx.navigateTo({
         url: '/pages/points-record/points-record'
       });
@@ -260,11 +260,11 @@ Component({
     // 点击兑换按钮
     async onRedeemTap(e: any) {
       if (!this.checkLogin()) return;
-      
+
       const rewardId = e.currentTarget.dataset.id;
       let rewardData = null;
       let points = 0;
-      
+
       if (rewardId === 'reward1') {
         rewardData = this.data.reward1;
         points = parseInt(rewardData.points.replace(/,/g, ''));
@@ -275,11 +275,11 @@ Component({
         rewardData = this.data.reward3;
         points = parseInt(rewardData.points.replace(/,/g, ''));
       }
-      
+
       if (rewardData) {
         const userInfo = wx.getStorageSync('userInfo');
         const currentPoints = userInfo?.points || 0;
-        
+
         if (currentPoints < points) {
           wx.showToast({
             title: '积分不足',
@@ -287,7 +287,7 @@ Component({
           });
           return;
         }
-        
+
         wx.showModal({
           title: '确认兑换',
           content: `确定要使用 ${points} 积分兑换 ${rewardData.title} 吗？`,

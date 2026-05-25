@@ -24,25 +24,15 @@ export default defineConfig(({ mode, command }) => {
       host: true,
       port: 9000,
       proxy: {
-        '/proxy': {
+        '/api': {
           target: env.VITE_APP_API_BASEURL,
-          changeOrigin: command === 'serve' && env.VITE_OPEN_PROXY === 'true',
-          rewrite: (path: Rewrite) => path.replace(/^\/proxy/, ''),
-          configure: (proxy: any) => {
-            proxy.on('proxyRes', (proxyRes: any) => {
-              // 大文件上传需要禁用响应缓冲
-            });
-          },
+          changeOrigin: true,
+          rewrite: (path: Rewrite) => path.replace(/^\/api/, ''),
         },
         '/images': {
           target: env.VITE_APP_API_BASEURL,
           changeOrigin: true,
           rewrite: (path: Rewrite) => path.replace(/^\/images/, '/images'),
-        },
-        '/api/images': {
-          target: env.VITE_APP_API_BASEURL,
-          changeOrigin: true,
-          rewrite: (path: Rewrite) => path.replace(/^\/api\/images/, '/api/images'),
         },
       },
     },

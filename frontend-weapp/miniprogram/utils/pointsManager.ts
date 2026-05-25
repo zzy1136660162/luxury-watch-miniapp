@@ -17,7 +17,7 @@ export class PointsManager {
   // 获取当前积分
   static getCurrentPoints(): number {
     const userInfo = wx.getStorageSync('userInfo');
-    return userInfo?.points || 0;
+    return (userInfo && userInfo.points) || 0;
   }
 
   // 增加积分
