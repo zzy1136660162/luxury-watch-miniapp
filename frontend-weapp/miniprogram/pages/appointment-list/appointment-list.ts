@@ -1,4 +1,4 @@
-import { appointmentApi } from '../../utils/request';
+import { appointmentApi, checkLogin } from '../../utils/request';
 
 Component({
   data: {
@@ -24,11 +24,8 @@ Component({
     },
 
     async loadMyAppointments() {
-      const token = wx.getStorageSync('token');
-      if (!token) {
-        wx.showToast({ title: '请先登录', icon: 'none' });
-        return;
-      }
+      const confirmed = await checkLogin();
+      if (!confirmed) return;
 
       try {
         this.setData!({ loading: true });

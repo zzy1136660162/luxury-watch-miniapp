@@ -1,4 +1,4 @@
-import { userApi } from '../../utils/request';
+import { userApi, checkLogin } from '../../utils/request';
 
 interface AddressItem {
   name: string;

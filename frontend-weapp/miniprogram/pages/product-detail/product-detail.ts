@@ -207,20 +207,12 @@ Component({
         confirmText: '确定',
         cancelText: '取消',
         success: async (res) => {
-          // 不管点击确定还是取消，都会增加积分
-          try {
-            await PointsManager.addPoints(1000, PointsManager.POINTS_TYPE.REVIEW, '咨询顾问');
-            
-            // 只有点击确定时才显示咨询成功的提示
-            if (res.confirm) {
-              wx.showToast({
-                title: '咨询成功，获得1000积分',
-                icon: 'success',
-                duration: 2000
-              });
-            }
-          } catch (error) {
-            console.error('添加积分失败:', error);
+          if (res.confirm) {
+            wx.showToast({
+              title: '咨询成功',
+              icon: 'success',
+              duration: 2000
+            });
           }
         }
       });

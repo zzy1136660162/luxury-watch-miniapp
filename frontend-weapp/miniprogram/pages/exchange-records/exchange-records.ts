@@ -1,4 +1,4 @@
-import { userApi } from '../../utils/request';
+import { userApi, checkLogin } from '../../utils/request';
 
 interface ExchangeRecord {
   id: number;
@@ -35,6 +35,12 @@ Component({
 
   methods: {
     async loadExchangeRecords() {
+      const confirmed = await checkLogin();
+      if (!confirmed) {
+        this.setData({ loading: false });
+        return;
+      }
+
       try {
         this.setData({ loading: true });
 

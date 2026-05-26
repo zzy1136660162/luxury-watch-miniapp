@@ -1,5 +1,6 @@
 // 导入积分管理工具类
 import { PointsManager } from '../../utils/pointsManager';
+import { checkLogin } from '../../utils/request';
 
 Component({
   pageLifetimes: {
@@ -154,10 +155,17 @@ Component({
       }
     },
 
-    onServiceTap(e: any) {
-      if (!this.checkLogin()) return;
-
+    onServiceTap: async function(e: any) {
       const type = e.currentTarget.dataset.type;
+
+      switch (type) {
+        case 'appointments':
+        case 'records':
+        case 'address':
+          const confirmed = await checkLogin();
+          if (!confirmed) return;
+          break;
+      }
 
       switch (type) {
         case 'appointments':

@@ -1,6 +1,5 @@
 Component({
   data: {
-    // 当前选中的索引，由页面通过 getTabBar 设置
     currentIndex: 0,
     list: [
       {
@@ -30,8 +29,39 @@ Component({
     ]
   },
 
+  lifetimes: {
+    attached() {
+      this.init();
+    },
+    ready() {
+      this.init();
+    }
+  },
+
+  pageLifetimes: {
+    show() {
+      this.init();
+    },
+    resize() {
+      this.init();
+    }
+  },
+
   methods: {
-    // 设置当前选中的索引（由页面调用）
+    init() {
+      // 获取当前页面栈，设置对应的索引
+      const pages = getCurrentPages();
+      if (pages.length > 0) {
+        const currentPage = pages[pages.length - 1];
+        const route = currentPage.route;
+        
+        const index = this.data.list.findIndex(item => item.pagePath === '/' + route);
+        if (index !== -1 && index !== this.data.currentIndex) {
+          this.setData({ currentIndex: index });
+        }
+      }
+    },
+
     setSelectedIndex(index: number) {
       if (index === this.data.currentIndex) {
         return;
@@ -41,25 +71,27 @@ Component({
       });
     },
 
-    // 切换标签
     switchTab(e: any) {
       const index = Number(e.currentTarget.dataset.index);
       const item = this.data.list[index];
 
-      // 如果已经是当前选中的，不执行任何操作
       if (index === this.data.currentIndex) {
         return;
       }
 
-      // 更新选中状态
       this.setData({
         currentIndex: index
       });
 
-      // 页面跳转
       wx.switchTab({
-        url: item.pagePath
+        url: item.pagePath,
+        fail: () => {
+          // 如果 switchTab 失败，尝试使用 reLaunch
+          wx.reLaunch({
+            url: item.pagePath
+          });
+        }
       });
     }
   }
-});
+})

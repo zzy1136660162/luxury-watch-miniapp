@@ -1,4 +1,4 @@
-import { storeApi } from '../../utils/request';
+import { storeApi, checkLogin } from '../../utils/request';
 import { appointmentApi } from '../../utils/request';
 
 Component({
@@ -66,6 +66,9 @@ Component({
     },
 
     async onSubmitBooking() {
+      const confirmed = await checkLogin();
+      if (!confirmed) return;
+
       if (!this.data.selectedStoreId) {
         wx.showToast({ title: '请选择门店', icon: 'none' });
         return;

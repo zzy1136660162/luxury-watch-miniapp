@@ -13,9 +13,59 @@ const baseUrl = apiConfig.baseUrl;
 const handleUnauthorized = () => {
   wx.removeStorageSync('token');
   wx.removeStorageSync('userInfo');
-  wx.redirectTo({
-    url: '/pages/login/login'
+  wx.showModal({
+    title: '提示',
+    content: '登录已过期，请重新登录',
+    confirmText: '确定',
+    cancelText: '取消',
+    success: (res) => {
+      if (res.confirm) {
+        wx.redirectTo({
+          url: '/pages/login/login'
+        });
+      }
+    }
   });
+};
+
+/**
+ * 检查登录状态并跳转登录页
+ * 返回 Promise，res.confirm === true 表示用户点击确定，false 表示取消
+ */
+export const checkLogin = (): Promise<boolean> => {
+  return new Promise((resolve) => {
+    const token = wx.getStorageSync('token');
+    
+    // 如果已有token，认为已登录
+    if (token) {
+      resolve(true);
+      return;
+    }
+    
+    // 没有token，显示登录弹窗
+    wx.showModal({
+      title: '提示',
+      content: '该功能需要登录后使用，是否立即登录？',
+      confirmText: '确定',
+      cancelText: '取消',
+      success: (res) => {
+        if (res.confirm) {
+          wx.navigateTo({
+            url: '/pages/login/login'
+          });
+        }
+        resolve(res.confirm);
+      }
+    });
+  });
+};
+
+/**
+ * 检查是否已登录
+ */
+export const isLoggedIn = (): boolean => {
+  const token = wx.getStorageSync('token');
+  return !!token;
 };
 
 /**
@@ -39,10 +89,6 @@ const request = (options: any): Promise<any> => {
       header: headers,
       success: (res: any) => {
         if (res.statusCode === 401 || (res.data && res.data.code === 401)) {
-          wx.showToast({
-            title: '登录已过期，请重新登录',
-            icon: 'none'
-          });
           handleUnauthorized();
           reject(res);
           return;
