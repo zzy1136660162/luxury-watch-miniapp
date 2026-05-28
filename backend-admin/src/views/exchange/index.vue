@@ -66,6 +66,20 @@ const handleSizeChange = (size: number) => {
   loadData()
 }
 
+const handleProcess = async (row: any) => {
+  try {
+    loading.value = true
+    await exchangeApi.updateExchangeStatus(row.id, 1)
+    ElMessage.success('处理成功')
+    loadData()
+  } catch (error) {
+    console.error('处理失败:', error)
+    ElMessage.error('处理失败')
+  } finally {
+    loading.value = false
+  }
+}
+
 loadData()
 </script>
 
@@ -111,7 +125,7 @@ loadData()
       <el-table-column prop="address" label="收货地址" />
       <el-table-column label="操作" width="150" fixed="right">
         <template #default="{ row }">
-          <el-button size="small" type="primary" :disabled="row.status !== 0">
+          <el-button size="small" type="primary" :disabled="row.status !== 0" @click="handleProcess(row)">
             处理
           </el-button>
         </template>
