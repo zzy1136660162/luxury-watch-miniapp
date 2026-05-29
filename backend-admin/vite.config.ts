@@ -24,15 +24,35 @@ export default defineConfig(({ mode, command }) => {
       host: true,
       port: 9000,
       proxy: {
+        '/proxy': {
+          target: env.VITE_APP_API_BASEURL,
+          changeOrigin: true,
+          rewrite: (path: Rewrite) => path.replace(/^\/proxy/, ''),
+          configure: (proxy: any) => {
+            proxy.on('proxyReq', (proxyReq: any) => {
+              proxyReq.setTimeout(0); // 不超时
+            });
+          },
+        },
         '/api': {
           target: env.VITE_APP_API_BASEURL,
           changeOrigin: true,
           rewrite: (path: Rewrite) => path.replace(/^\/api/, ''),
+          configure: (proxy: any) => {
+            proxy.on('proxyReq', (proxyReq: any) => {
+              proxyReq.setTimeout(0); // 不超时
+            });
+          },
         },
         '/images': {
           target: env.VITE_APP_API_BASEURL,
           changeOrigin: true,
           rewrite: (path: Rewrite) => path.replace(/^\/images/, '/images'),
+          configure: (proxy: any) => {
+            proxy.on('proxyReq', (proxyReq: any) => {
+              proxyReq.setTimeout(0); // 不超时
+            });
+          },
         },
       },
     },

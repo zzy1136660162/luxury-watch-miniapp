@@ -76,9 +76,7 @@ const emit = defineEmits<{
 }>()
 
 const baseUrl = import.meta.env.VITE_APP_API_BASEURL || 'http://localhost:8081'
-const isProxy = import.meta.env.DEV && import.meta.env.VITE_OPEN_PROXY
-const actualBaseUrl = isProxy ? '/proxy' : baseUrl
-const uploadUrl = `${actualBaseUrl}/api/upload/image`
+const uploadUrl = `${baseUrl}/api/upload/image`
 
 const uploadHeaders = ref({
   Authorization: localStorage.getItem('token') || '',

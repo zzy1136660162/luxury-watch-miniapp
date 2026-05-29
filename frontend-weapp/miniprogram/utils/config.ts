@@ -40,6 +40,27 @@ const getFullImageUrl = (relativePath: string | undefined | null): string => {
 };
 
 /**
+ * 处理单张视频URL
+ * 后端返回路径如：/images/videos/2026-05/xxx.mp4
+ * 需要拼接为：http://xxx:8081/images/videos/2026-05/xxx.mp4
+ */
+const getFullVideoUrl = (relativePath: string | undefined | null): string => {
+  if (!relativePath) {
+    return '';
+  }
+
+  if (relativePath.startsWith('http://') || relativePath.startsWith('https://')) {
+    return relativePath;
+  }
+
+  // 移除开头的 /
+  let cleanPath = relativePath.startsWith('/') ? relativePath.slice(1) : relativePath;
+
+  // 视频路径直接使用 baseUrl + 路径
+  return `${apiConfig.baseUrl}/${cleanPath}`;
+};
+
+/**
  * 将逗号分隔的图片字符串转换为数组
  */
 const getImageList = (imageStr: string | undefined | null): string[] => {
@@ -57,12 +78,14 @@ const getImageUrls = (imageStr: string | undefined | null): string[] => {
 
 export {
   getFullImageUrl,
+  getFullVideoUrl,
   getImageList,
   getImageUrls,
 };
 
 export default {
   getFullImageUrl,
+  getFullVideoUrl,
   getImageList,
   getImageUrls,
 };

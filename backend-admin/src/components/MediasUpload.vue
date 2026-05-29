@@ -38,8 +38,8 @@
 
     <el-dialog v-model="previewVisible" title="预览" width="60%" destroy-on-close>
       <div class="preview-container">
-        <video v-if="isVideo(previewUrl)" class="preview-video" :src="previewUrl" controls autoplay />
-        <img v-else :src="previewUrl" class="preview-image" />
+        <video v-if="isVideo(previewUrl)" class="preview-video" :src="getFullUrl(previewUrl)" controls autoplay />
+        <img v-else :src="getFullUrl(previewUrl)" class="preview-image" />
       </div>
     </el-dialog>
   </div>
@@ -78,10 +78,8 @@ const emit = defineEmits<{
 }>()
 
 const baseUrl = import.meta.env.VITE_APP_API_BASEURL || 'http://localhost:8081'
-const isProxy = import.meta.env.DEV && import.meta.env.VITE_OPEN_PROXY
-const actualBaseUrl = isProxy ? '/proxy' : baseUrl
-const uploadImageUrl = `${actualBaseUrl}/api/upload/image`
-const uploadVideoUrl = `${actualBaseUrl}/api/upload/video`
+const uploadImageUrl = `${baseUrl}/api/upload/image`
+const uploadVideoUrl = `${baseUrl}/api/upload/video`
 
 const uploadHeaders = {
   Authorization: localStorage.getItem('token') || '',

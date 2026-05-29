@@ -47,9 +47,15 @@ const rules = {
 
 // 上传配置
 const baseUrl = import.meta.env.VITE_APP_API_BASEURL || 'http://localhost:8081'
-const isProxy = import.meta.env.DEV && import.meta.env.VITE_OPEN_PROXY
-const uploadUrl = isProxy ? '/proxy/api/upload/image' : '/api/upload/image'
-const uploadVideoUrl = isProxy ? '/proxy/api/upload/video' : '/api/upload/video'
+const uploadUrl = `${baseUrl}/api/upload/image`
+const uploadVideoUrl = `${baseUrl}/api/upload/video`
+
+// 视频URL处理
+const getFullVideoUrl = (url: string) => {
+  if (!url) return ''
+  if (url.startsWith('http://') || url.startsWith('https://')) return url
+  return baseUrl + url
+}
 
 // 富文本图片上传
 const handleImageUpload = (blobInfo: any, progress: any): Promise<string> => {
@@ -153,6 +159,7 @@ const handleRemoveLogo = () => {
 
 // 触发视频文件选择
 const triggerVideoUpload = () => {
+  if (uploadingVideo.value) return
   videoInputRef.value?.click()
 }
 
@@ -288,7 +295,7 @@ const handleSubmit = async () => {
       <el-form-item label="系列视频">
         <div class="video-upload">
           <div v-if="form.videoUrl" class="video-preview">
-            <video :src="form.videoUrl" class="video-player" controls />
+            <video :src="getFullVideoUrl(form.videoUrl)" class="video-player" controls />
             <div class="video-actions">
               <el-button size="small" type="primary" @click="triggerVideoUpload" :loading="uploadingVideo">
                 {{ uploadingVideo ? '上传中...' : '更换' }}

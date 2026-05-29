@@ -1,4 +1,4 @@
-import { getFullImageUrl } from '../../utils/config';
+import { getFullImageUrl, getFullVideoUrl } from '../../utils/config';
 import { productApi } from '../../utils/request';
 import { processRichText } from '../../utils/richTextHelper';
 import { apiConfig } from '../../utils/api-config';
@@ -102,16 +102,22 @@ Page({
         );
 
         // 处理轮播图媒体（包含品牌视频和图片），将品牌视频放到第一位
-        const brandVideo = data.brand.video ? getFullImageUrl(data.brand.video) : '';
-        const allMedias = (data.bannerImages || []).map((img: string) =>
-          img ? getFullImageUrl(img) : ''
-        ).filter(Boolean);
+        const brandVideo = data.brand.video ? getFullVideoUrl(data.brand.video) : '';
+        console.log('品牌视频原始URL:', data.brand.video);
+        console.log('品牌视频处理后URL:', brandVideo);
+        
+        // 分别处理视频和图片URL
+        const videoMedias = (data.bannerImages || [])
+          .filter((img: string) => img && this.isVideoFile(img))
+          .map((img: string) => getFullVideoUrl(img));
+        
+        const imageMedias = (data.bannerImages || [])
+          .filter((img: string) => img && !this.isVideoFile(img))
+          .map((img: string) => getFullImageUrl(img));
+        
+        console.log('处理后的视频列表:', videoMedias);
 
         // 将品牌视频放到最前面，然后是轮播图中的视频，然后是图片
-        const videoMedias = allMedias.filter((media: string) => this.isVideoFile(media));
-        const imageMedias = allMedias.filter((media: string) => !this.isVideoFile(media));
-
-        // 如果有品牌视频，将其放到第一位
         let bannerMedias: string[] = [];
         if (brandVideo) {
           bannerMedias = [brandVideo, ...videoMedias, ...imageMedias];
@@ -142,7 +148,7 @@ Page({
             id: seriesData.id,
             name: seriesData.name,
             logo: seriesData.logo ? getFullImageUrl(seriesData.logo) : '',
-            videoUrl: seriesData.videoUrl ? getFullImageUrl(seriesData.videoUrl) : '',
+            videoUrl: seriesData.videoUrl ? getFullVideoUrl(seriesData.videoUrl) : '',
             content: seriesData.content || '',
             products: (seriesData.products || []).map((p: any) => ({
               id: p.id,
@@ -160,7 +166,7 @@ Page({
             id: s.id,
             name: s.name,
             logo: s.logo ? getFullImageUrl(s.logo) : '',
-            videoUrl: s.videoUrl ? getFullImageUrl(s.videoUrl) : '',
+            videoUrl: s.videoUrl ? getFullVideoUrl(s.videoUrl) : '',
             content: s.content || '',
             products: (s.products || []).slice(0, 3).map((p: any) => ({
               id: p.id,

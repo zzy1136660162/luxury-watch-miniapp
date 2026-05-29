@@ -46,8 +46,14 @@ const rules = {
 
 // 上传配置
 const baseUrl = import.meta.env.VITE_APP_API_BASEURL || 'http://localhost:8081'
-const isProxy = import.meta.env.DEV && import.meta.env.VITE_OPEN_PROXY
-const uploadUrl = isProxy ? '/proxy/api/upload/image' : '/api/upload/image'
+const uploadUrl = `${baseUrl}/api/upload/image`
+
+// 视频URL处理
+const getFullVideoUrl = (url: string) => {
+  if (!url) return ''
+  if (url.startsWith('http://') || url.startsWith('https://')) return url
+  return baseUrl + url
+}
 
 // 富文本图片上传
 const handleImageUpload = (blobInfo: any, progress: any): Promise<string> => {
@@ -152,6 +158,7 @@ const handleRemoveLogo = () => {
 
 // 触发视频上传
 const triggerVideoUpload = () => {
+  if (uploadingVideo.value) return
   videoInputRef.value?.click()
 }
 
@@ -179,8 +186,7 @@ const handleVideoChange = async (event: Event) => {
     const formData = new FormData()
     formData.append('file', file)
 
-    const isProxy = import.meta.env.DEV && import.meta.env.VITE_OPEN_PROXY
-    const uploadVideoUrl = isProxy ? '/proxy/api/upload/video' : '/api/upload/video'
+    const uploadVideoUrl = `${baseUrl}/api/upload/video`
 
     const res = await axios.post(uploadVideoUrl, formData, {
       headers: {
@@ -298,14 +304,14 @@ const handleSubmit = async () => {
       <el-form-item label="品牌视频" prop="video">
         <div class="video-upload">
           <div v-if="form.video" class="video-preview">
-            <video class="video-player" :src="form.video" controls style="max-width: 300px; max-height: 200px;" />
+            <video class="video-player" :src="getFullVideoUrl(form.video)" controls style="max-width: 300px; max-height: 200px;" />
             <div class="video-actions">
               <el-button size="small" type="danger" @click="handleRemoveVideo">删除</el-button>
             </div>
           </div>
           <div v-else class="video-placeholder">
-            <el-button size="small" type="primary" @click="triggerVideoUpload">
-              上传视频
+            <el-button size="small" type="primary" @click="triggerVideoUpload" :loading="uploadingVideo">
+              {{ uploadingVideo ? '上传中...' : '上传视频' }}
             </el-button>
             <div class="video-tip">支持 mp4、mov、avi 格式，最大 500MB</div>
           </div>

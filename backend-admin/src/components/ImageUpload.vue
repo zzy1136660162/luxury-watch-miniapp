@@ -67,17 +67,11 @@ const emit = defineEmits<{
 }>()
 
 const baseUrl = import.meta.env.VITE_APP_API_BASEURL || 'http://localhost:8081'
-const isProxy = import.meta.env.DEV && import.meta.env.VITE_OPEN_PROXY
-const actualBaseUrl = isProxy ? '/proxy' : baseUrl
-const uploadUrl = `${actualBaseUrl}/api/upload/image`
+const uploadUrl = `${baseUrl}/api/upload/image`
 
 console.log('🌐 [ImageUpload] 上传配置:', {
   'VITE_APP_API_BASEURL': import.meta.env.VITE_APP_API_BASEURL,
-  'VITE_OPEN_PROXY': import.meta.env.VITE_OPEN_PROXY,
-  '开发模式': import.meta.env.DEV,
-  '是否使用代理': isProxy,
   'baseUrl': baseUrl,
-  'actualBaseUrl': actualBaseUrl,
   'uploadUrl': uploadUrl
 })
 
