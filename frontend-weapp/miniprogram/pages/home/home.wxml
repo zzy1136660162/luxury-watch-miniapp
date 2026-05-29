@@ -1,4 +1,4 @@
-<import src="/components/navigation-bar/navigation-bar.wxml" />
+<!-- <import src="/components/navigation-bar/navigation-bar.wxml" /> -->
 
 <view class="page">
   <navigation-bar title="时全饰美" back="{{false}}" color="black" background="#ffffff" showMenu="{{true}}" />
@@ -9,7 +9,7 @@
       <image class="hero-image" src="{{heroImage}}" mode="aspectFill" />
       <view class="hero-overlay"></view>
       <view class="hero-content">
-        <text class="hero-title">时间之承</text>
+        <text class="hero-title">时全饰美</text>
         <text class="hero-subtitle">Heritage of Time</text>
         <view class="hero-divider"></view>
       </view>

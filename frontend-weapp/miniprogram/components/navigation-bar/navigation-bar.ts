@@ -48,29 +48,13 @@ Component({
   },
 
   data: {
-    displayStyle: '',
-    ios: true,
-    innerPaddingRight: '',
-    leftWidth: '',
-    safeAreaTop: ''
+    displayStyle: ''
   },
 
   lifetimes: {
     attached() {
       this.initSystemInfo();
     },
-    ready() {
-      this.initSystemInfo();
-    }
-  },
-
-  pageLifetimes: {
-    show() {
-      this.initSystemInfo();
-    },
-    resize() {
-      this.initSystemInfo();
-    }
   },
 
   methods: {
@@ -81,21 +65,11 @@ Component({
           success: (res: any) => {
             const isAndroid = res.platform === 'android';
             const isDevtools = res.platform === 'devtools';
-            
             this.setData({
               ios: !isAndroid,
               innerPaddingRight: `padding-right: ${res.windowWidth - rect.left}px`,
-              leftWidth: `width: ${res.windowWidth - rect.left}px`,
+              leftWidth: `width: ${res.windowWidth - rect.left }px`,
               safeAreaTop: isDevtools || isAndroid ? `height: calc(var(--height) + ${res.safeArea.top}px); padding-top: ${res.safeArea.top}px` : ``
-            });
-          },
-          fail: () => {
-            // 失败时使用默认值
-            this.setData({
-              ios: true,
-              innerPaddingRight: 'padding-right: 80px',
-              leftWidth: 'width: 80px',
-              safeAreaTop: ''
             });
           }
         });
@@ -121,12 +95,7 @@ Component({
       const data = this.data;
       if (data.delta) {
         wx.navigateBack({
-          delta: data.delta,
-          fail: () => {
-            wx.switchTab({
-              url: '/pages/home/home'
-            });
-          }
+          delta: data.delta
         });
       }
       this.triggerEvent('back', { delta: data.delta }, {});

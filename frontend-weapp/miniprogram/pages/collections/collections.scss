@@ -262,11 +262,11 @@
 // 固定在左侧的品牌导航栏（滚动时显示）
 .brand-sidebar-fixed-v2 {
   position: fixed;
-  top: 0;
+  top: -17px;
   left: 0;
   width: calc(100vw * 3 / 10);
   height: 90vh;
-  margin-top: 10.3vh;
+  margin-top: 9vh;
   background-color: #ffffff;
   border-right: 2rpx solid #e0e0e0;
   box-sizing: border-box;

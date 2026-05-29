@@ -4,7 +4,7 @@
   <navigation-bar title="时全饰美" back="{{false}}" color="black" background="#ffffff" showMenu="{{true}}" />
 
   <!-- 固定在左侧的品牌导航栏（滚动时显示） -->
-  <view class="brand-sidebar-fixed-v2 {{isNavFixed ? 'show' : ''}}">
+  <view class="brand-sidebar-fixed-v2 {{isNavFixed ? 'show' : 'show'}}">
     <view class="brand-sidebar-title" bindtap="onSearchTap">
       <image class="search-icon" src="/assets/iconfont/search.png" mode="aspectFit" />
     </view>
@@ -19,7 +19,7 @@
 
   <scroll-view class="content" scroll-y type="list" enhanced="{{true}}" bounces="{{false}}" bindscroll="onScroll" id="main-scroll" scroll-into-view="{{scrollIntoView}}" bindrefresherrefresh="onPullDownRefresh" refresher-enabled="{{true}}">
     <!-- Hero Banner -->
-    <view class="hero-banner" id="hero-banner" wx:if="{{heroImage}}">
+    <!-- <view class="hero-banner" id="hero-banner" wx:if="{{heroImage}}">
       <image class="hero-image" src="{{heroImage}}" mode="aspectFill" />
       <view class="hero-overlay"></view>
       <view class="hero-content">
@@ -27,7 +27,7 @@
         <text class="hero-subtitle">The Art of Eternity</text>
         <view class="hero-divider"></view>
       </view>
-    </view>
+    </view> -->
 
     <!-- 带侧边栏的内容区域 -->
     <view class="content-with-sidebar">
