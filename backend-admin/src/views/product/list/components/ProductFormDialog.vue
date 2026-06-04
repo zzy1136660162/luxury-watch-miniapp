@@ -112,25 +112,6 @@
             </el-radio-group>
           </el-form-item>
         </el-col>
-        <el-col :span="12">
-          <el-form-item label="积分兑换" prop="canRedeemPoints">
-            <el-radio-group v-model="form.canRedeemPoints">
-              <el-radio :label="1">是</el-radio>
-              <el-radio :label="0">否</el-radio>
-            </el-radio-group>
-          </el-form-item>
-        </el-col>
-        <el-col v-if="form.canRedeemPoints === 1" :span="12">
-          <el-form-item label="兑换积分" prop="pointsCost">
-            <el-input-number
-              v-model="form.pointsCost"
-              :min="0"
-              :precision="0"
-              style="width: 100%"
-              placeholder="请输入所需积分"
-            />
-          </el-form-item>
-        </el-col>
       </el-row>
 
       <el-form-item label="商品图片" prop="image">

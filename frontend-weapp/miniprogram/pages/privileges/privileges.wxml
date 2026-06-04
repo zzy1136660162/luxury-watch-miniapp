@@ -13,7 +13,8 @@
         <text class="hero-title">尊享礼遇</text>
         <view class="points-display">
           <text class="points-label">当前积分 | POINTS</text>
-          <text class="points-value">{{memberPoints}}</text>
+          <view wx:if="{{!isLoggedIn}}" class="points-value points-login" bindtap="onLoginTap">{{memberPoints}}</view>
+          <text wx:else class="points-value">{{memberPoints}}</text>
         </view>
       </view>
     </view>

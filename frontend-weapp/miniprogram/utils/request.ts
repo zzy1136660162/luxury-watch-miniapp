@@ -313,8 +313,9 @@ export const storeApi = {
 export const rewardApi = {
   getRedeemableProducts: () => {
     return request({
-      url: '/api/product/redeemable',
-      method: 'GET'
+      url: '/api/exchange/product/list',
+      method: 'GET',
+      data: { page: 1, size: 100, status: 1 }
     });
   },
 

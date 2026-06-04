@@ -29,7 +29,7 @@ Component({
         if (!token) {
           this.setData!({
             isLoggedIn: false,
-            memberPoints: '0'
+            memberPoints: '未登录'
           });
           return;
         }
@@ -46,7 +46,7 @@ Component({
         console.error('获取用户积分失败:', err);
         this.setData!({
           isLoggedIn: false,
-          memberPoints: '0'
+          memberPoints: '未登录'
         });
       }
     },
@@ -55,9 +55,11 @@ Component({
       try {
         const res: any = await rewardApi.getRedeemableProducts();
         if (res && res.code === 200 && res.data) {
-          const products = res.data.map((item: any) => ({
+          // 新接口返回 { list: [...], total: ... }
+          const productList = res.data.list || res.data;
+          const products = productList.map((item: any) => ({
             id: item.id,
-            tag: item.category || '积分礼品',
+            tag: '积分礼品',
             title: item.name,
             desc: item.description || '暂无描述',
             points: (item.pointsCost && item.pointsCost.toLocaleString()) || '0',
@@ -97,6 +99,12 @@ Component({
           url: `/pages/reward-detail/reward-detail?data=${encodedData}`
         });
       }
+    },
+
+    onLoginTap() {
+      wx.navigateTo({
+        url: '/pages/login/login'
+      });
     },
 
     onImageError(e: any) {

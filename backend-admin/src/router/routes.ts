@@ -101,6 +101,15 @@ const mainRoutes: RouteRecordRaw[] = [
         },
       },
       {
+        path: 'exchange/products',
+        name: 'exchange-products',
+        component: () => import('@/views/exchange/products/index.vue'),
+        meta: {
+          title: '兑换商品列表',
+          icon: 'i-ant-design:unordered-list-outlined',
+        },
+      },
+      {
         path: 'system/user',
         name: 'system-user',
         component: () => import('@/views/system/user/index.vue'),

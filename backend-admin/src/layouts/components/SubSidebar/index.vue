@@ -12,6 +12,10 @@ const route = useRoute()
 const settingsStore = useSettingsStore()
 const menuStore = useMenuStore()
 
+// 自动收起定时器
+let hideTimer: ReturnType<typeof setTimeout> | null = null
+const HIDE_DELAY = 2000 // 2秒后自动隐藏
+
 const enableSidebar = computed(() => {
   return settingsStore.mode === 'mobile' || (
     menuStore.sidebarMenus.length !== 0
@@ -38,6 +42,35 @@ watch(() => menuStore.actived, (val, oldVal) => {
     }
   }
 })
+
+// 鼠标移入时展开
+const handleMouseEnter = () => {
+  if (hideTimer) {
+    clearTimeout(hideTimer)
+    hideTimer = null
+  }
+  if (settingsStore.settings.menu.subMenuCollapse) {
+    settingsStore.settings.menu.subMenuCollapse = false
+  }
+}
+
+// 鼠标移出时延迟隐藏
+const handleMouseLeave = () => {
+  if (settingsStore.mode === 'pc') {
+    hideTimer = setTimeout(() => {
+      if (!settingsStore.settings.menu.subMenuCollapse) {
+        settingsStore.settings.menu.subMenuCollapse = true
+      }
+    }, HIDE_DELAY)
+  }
+}
+
+onUnmounted(() => {
+  if (hideTimer) {
+    clearTimeout(hideTimer)
+    hideTimer = null
+  }
+})
 </script>
 
 <template>
@@ -46,6 +79,8 @@ watch(() => menuStore.actived, (val, oldVal) => {
       v-if="enableSidebar" class="sub-sidebar-container" :class="{
         'is-collapse': settingsStore.mode === 'pc' && settingsStore.settings.menu.subMenuCollapse,
       }"
+      @mouseenter="handleMouseEnter"
+      @mouseleave="handleMouseLeave"
     >
       <component :is="useSlots('sub-sidebar-top')" />
       <Logo
@@ -67,8 +102,8 @@ watch(() => menuStore.actived, (val, oldVal) => {
           </template>
         </TransitionGroup>
       </FaScrollArea>
-      <div v-if="settingsStore.mode === 'pc'" class="relative flex items-center px-4 py-3" :class="[settingsStore.settings.menu.subMenuCollapse ? 'justify-center' : 'justify-end']">
-        <FaButton v-show="settingsStore.settings.menu.enableSubMenuCollapseButton" variant="secondary" size="icon" class="h-8 w-8 transition" :class="{ '-rotate-z-180': settingsStore.settings.menu.subMenuCollapse }" @click="settingsStore.toggleSidebarCollapse()">
+      <div v-if="settingsStore.mode === 'pc'" class="collapse-button" :class="{ 'is-collapse': settingsStore.settings.menu.subMenuCollapse }">
+        <FaButton v-show="settingsStore.settings.menu.enableSubMenuCollapseButton" variant="secondary" size="icon" class="h-8 w-8 transition bg-white" :class="{ '-rotate-z-180': settingsStore.settings.menu.subMenuCollapse }" @click="settingsStore.toggleSidebarCollapse()">
           <FaIcon name="toolbar-collapse" class="size-4" />
         </FaButton>
       </div>
@@ -96,6 +131,7 @@ watch(() => menuStore.actived, (val, oldVal) => {
 
   &.is-collapse {
     width: var(--g-sub-sidebar-collapse-width);
+    background-color: var(--g-main-sidebar-bg);
 
     .sidebar-logo {
       &:not(.single) {
@@ -106,10 +142,26 @@ watch(() => menuStore.actived, (val, oldVal) => {
         display: none;
       }
     }
+
+    /* 隐藏菜单选中项的背景色 */
+    :deep(.menu-item-container) {
+      background-color: transparent !important;
+    }
   }
 
   .menu {
     width: 100%;
+  }
+
+  .collapse-button {
+    position: absolute !important;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    z-index: 10;
+    width: auto !important;
+    height: auto !important;
+    flex: none !important;
   }
 }
 

@@ -65,8 +65,8 @@
         stripe
         @selection-change="handleSelectionChange"
       >
-        <el-table-column type="selection" width="55" />
-        <el-table-column label="商品信息" min-width="280">
+        <el-table-column type="selection" width="45" />
+        <el-table-column label="商品信息" min-width="220">
           <template #default="{ row }">
             <div class="product-info">
               <el-image
@@ -92,47 +92,31 @@
             <el-tag>{{ getCategoryText(row.category) }}</el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="brand" label="品牌" width="120">
+        <el-table-column prop="brand" label="品牌" width="110">
           <template #default="{ row }">
             <el-tag type="warning">{{ row.brand || '-' }}</el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="price" label="价格" width="120">
+        <el-table-column prop="price" label="价格" width="100">
           <template #default="{ row }">
             <span class="price">¥{{ row.price.toLocaleString() }}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="stock" label="库存" width="100" />
-        <el-table-column prop="sales" label="销量" width="100" />
-        <el-table-column label="积分" width="100">
-          <template #default="{ row }">
-            <span>{{ row.points || 1000 }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="状态" width="100">
+        <el-table-column prop="stock" label="库存" width="70" />
+        <el-table-column prop="sales" label="销量" width="70" />
+        <el-table-column label="状态" width="70">
           <template #default="{ row }">
             <el-tag :type="row.status === 1 ? 'success' : 'info'">
               {{ row.status === 1 ? '上架' : '下架' }}
             </el-tag>
           </template>
         </el-table-column>
-        <el-table-column label="积分兑换" width="100">
+        <el-table-column label="创建时间" width="170">
           <template #default="{ row }">
-            <el-tag :type="row.canRedeemPoints === 1 ? 'warning' : 'info'">
-              {{ row.canRedeemPoints === 1 ? '是' : '否' }}
-            </el-tag>
+            {{ formatDateTime(row.createTime) }}
           </template>
         </el-table-column>
-        <el-table-column label="兑换积分" width="120">
-          <template #default="{ row }">
-            <span v-if="row.canRedeemPoints === 1" class="points-cost">
-              {{ row.pointsCost || 0 }}
-            </span>
-            <span v-else class="points-none">-</span>
-          </template>
-        </el-table-column>
-        <el-table-column prop="createTime" label="创建时间" width="180" />
-        <el-table-column label="操作" width="150" fixed="right">
+        <el-table-column label="操作" width="140" fixed="right">
           <template #default="{ row }">
             <el-button link type="primary" @click="handleEdit(row)">编辑</el-button>
             <el-button link type="danger" @click="handleDelete(row)">删除</el-button>
@@ -243,6 +227,12 @@ const categoryMap: Record<string, string> = {
 // 获取分类文本
 const getCategoryText = (category: string) => {
   return categoryMap[category] || category
+}
+
+// 格式化日期时间，将 T 替换为空格
+const formatDateTime = (dateTime: string | undefined) => {
+  if (!dateTime) return '-'
+  return dateTime.replace('T', ' ')
 }
 
 // 获取列表数据

@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.luxurywatch.common.R;
 import com.luxurywatch.entity.Brand;
+import com.luxurywatch.entity.ExchangeProduct;
 import com.luxurywatch.entity.ExchangeRecord;
 import com.luxurywatch.entity.Product;
 import com.luxurywatch.entity.ProductCategory;
@@ -12,6 +13,7 @@ import com.luxurywatch.entity.Series;
 import com.luxurywatch.entity.WxUser;
 import com.luxurywatch.mapper.BrandMapper;
 import com.luxurywatch.mapper.SeriesMapper;
+import com.luxurywatch.service.ExchangeProductService;
 import com.luxurywatch.service.ExchangeRecordService;
 import com.luxurywatch.service.ProductService;
 import com.luxurywatch.service.ProductCategoryService;
@@ -44,6 +46,9 @@ public class MiniAppController {
 
     @Autowired
     private ExchangeRecordService exchangeRecordService;
+
+    @Autowired
+    private ExchangeProductService exchangeProductService;
 
     @Autowired
     private BrandMapper brandMapper;
@@ -445,7 +450,7 @@ public class MiniAppController {
         try {
             // 检查是否登录
             if (!StpUtil.isLogin()) {
-                return R.error("用户未登录");
+                return R.error(401, "用户未登录");
             }
 
             // 获取当前登录用户ID
@@ -454,14 +459,14 @@ public class MiniAppController {
             // 查询用户信息
             WxUser user = wxUserService.getById(userId);
             if (user == null) {
-                return R.error("用户不存在");
+                return R.error(401, "用户不存在");
             }
 
             // 返回用户信息（可以只返回必要的字段，增强安全性）
             return R.success(user);
         } catch (Exception e) {
             e.printStackTrace();
-            return R.error("获取用户信息失败: " + e.getMessage());
+            return R.error(401, "获取用户信息失败: " + e.getMessage());
         }
     }
 
@@ -485,6 +490,42 @@ public class MiniAppController {
     }
 
     /**
+     * 获取积分兑换商品列表（从exchange_product表）
+     */
+    @GetMapping("/exchange/product/list")
+    public R<Map<String, Object>> getExchangeProductList(
+            @RequestParam(defaultValue = "1") Integer page,
+            @RequestParam(defaultValue = "10") Integer size,
+            @RequestParam(required = false) Integer status) {
+        try {
+            Page<ExchangeProduct> productPage = new Page<>(page, size);
+            QueryWrapper<ExchangeProduct> wrapper = new QueryWrapper<>();
+            
+            // 默认只查询上架的商品
+            if (status == null) {
+                wrapper.eq("status", 1);
+            } else {
+                wrapper.eq("status", status);
+            }
+            
+            wrapper.orderByDesc("sort", "create_time");
+            
+            Page<ExchangeProduct> result = exchangeProductService.page(productPage, wrapper);
+            
+            Map<String, Object> data = new HashMap<>();
+            data.put("list", result.getRecords() != null ? result.getRecords() : new ArrayList<>());
+            data.put("total", result.getTotal());
+            data.put("page", result.getCurrent());
+            data.put("size", result.getSize());
+            
+            return R.success(data);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return R.error("获取兑换商品列表失败: " + e.getMessage());
+        }
+    }
+
+    /**
      * 积分兑换商品
      */
     @PostMapping("/exchange")
@@ -493,7 +534,7 @@ public class MiniAppController {
         try {
             // 检查用户是否登录
             if (!StpUtil.isLogin()) {
-                return R.error("用户未登录");
+                return R.error(401, "用户未登录");
             }
 
             // 获取参数
@@ -510,15 +551,15 @@ public class MiniAppController {
                 return R.error("用户不存在");
             }
 
-            // 查询商品信息
-            Product product = productService.getById(productId);
+            // 从积分兑换商品表查询商品信息
+            ExchangeProduct product = exchangeProductService.getById(productId);
             if (product == null) {
                 return R.error("商品不存在");
             }
 
-            // 检查商品是否可兑换
-            if (product.getCanRedeemPoints() == null || product.getCanRedeemPoints() != 1) {
-                return R.error("该商品不可积分兑换");
+            // 检查商品是否上架
+            if (product.getStatus() == null || product.getStatus() != 1) {
+                return R.error("该商品已下架");
             }
 
             // 检查积分是否足够
@@ -574,7 +615,7 @@ public class MiniAppController {
         try {
             // 检查用户是否登录
             if (!StpUtil.isLogin()) {
-                return R.error("用户未登录");
+                return R.error(401, "用户未登录");
             }
 
             // 获取当前登录用户ID
@@ -601,7 +642,7 @@ public class MiniAppController {
         try {
             // 检查用户是否登录
             if (!StpUtil.isLogin()) {
-                return R.error("用户未登录");
+                return R.error(401, "用户未登录");
             }
 
             // 获取当前登录用户ID

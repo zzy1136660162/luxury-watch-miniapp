@@ -3,36 +3,6 @@ import type { Menu } from '#/global'
 const menu: Menu.recordMainRaw[] = [
   {
     meta: {
-      title: '门店管理',
-      icon: 'i-ant-design:shop-twotone',
-    },
-    children: [
-      {
-        path: '/store',
-        meta: {
-          title: '门店列表',
-          icon: 'i-ant-design:shop-outlined',
-        },
-      },
-    ],
-  },
-  {
-    meta: {
-      title: '预约管理',
-      icon: 'i-ant-design:calendar-outlined',
-    },
-    children: [
-      {
-        path: '/appointment',
-        meta: {
-          title: '预约列表',
-          icon: 'i-ant-design:calendar-check-outline',
-        },
-      },
-    ],
-  },
-  {
-    meta: {
       title: '商品管理',
       icon: 'i-ant-design:shopping-outlined',
     },
@@ -69,6 +39,36 @@ const menu: Menu.recordMainRaw[] = [
   },
   {
     meta: {
+      title: '门店管理',
+      icon: 'i-ant-design:shop-twotone',
+    },
+    children: [
+      {
+        path: '/store',
+        meta: {
+          title: '门店列表',
+          icon: 'i-ant-design:shop-outlined',
+        },
+      },
+    ],
+  },
+  {
+    meta: {
+      title: '预约管理',
+      icon: 'i-ant-design:calendar-outlined',
+    },
+    children: [
+      {
+        path: '/appointment',
+        meta: {
+          title: '预约列表',
+          icon: 'i-ant-design:calendar-check-outline',
+        },
+      },
+    ],
+  },
+  {
+    meta: {
       title: '兑换管理',
       icon: 'i-ant-design:gift-outlined',
     },
@@ -78,6 +78,13 @@ const menu: Menu.recordMainRaw[] = [
         meta: {
           title: '兑换记录',
           icon: 'i-ant-design:swap-outlined',
+        },
+      },
+      {
+        path: '/exchange/products',
+        meta: {
+          title: '兑换商品列表',
+          icon: 'i-ant-design:unordered-list-outlined',
         },
       },
     ],
