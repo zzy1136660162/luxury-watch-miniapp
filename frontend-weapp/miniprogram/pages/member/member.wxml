@@ -1,12 +1,14 @@
 <import src="/components/navigation-bar/navigation-bar.wxml" />
 
 <view class="page">
-  <navigation-bar title="时全饰美" back="{{true}}" color="black" background="#ffffff" />
-
+  <!-- <navigation-bar title="时全饰美" back="{{true}}" color="#ffffff" background="#000000" extClass="member-nav"/> -->
   <scroll-view class="content" scroll-y type="list" enhanced="{{true}}" bounces="{{false}}">
     <!-- Not Logged In -->
     <block wx:if="{{!isLoggedIn}}">
       <view class="login-prompt-section">
+        <view class="navb">
+          <text style="color: rgb(0, 0, 0);">时全饰美</text>
+        </view>
         <view class="login-prompt-card">
           <image class="prompt-icon" src="https://cdn.jsdelivr.net/npm/@material-design-icons/svg@0.14.15/filled/account_circle.svg" mode="aspectFit" />
           <text class="prompt-title">登录后查看会员信息</text>
@@ -19,6 +21,9 @@
     <!-- Member Card Section (Logged In) -->
     <block wx:if="{{isLoggedIn}}">
       <view class="member-card-section">
+        <view class="nav">
+          <text style="color: rgb(255, 255, 255);">时全饰美</text>
+        </view>
         <view class="member-card">
           <view class="card-grain"></view>
 
@@ -32,6 +37,8 @@
           <view class="card-user">
             <view class="user-avatar-wrapper">
               <image class="user-avatar" src="{{userAvatar}}" mode="aspectFill" />
+              <!-- 微信头像选择按钮（覆盖在头像上） -->
+              <button class="avatar-overlay-btn" open-type="chooseAvatar" bindchooseavatar="onWechatAvatarChoose"></button>
             </view>
             <view class="user-info">
               <text class="user-name">{{userName}}</text>

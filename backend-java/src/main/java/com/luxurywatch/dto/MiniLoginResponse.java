@@ -17,6 +17,8 @@ public class MiniLoginResponse implements Serializable {
 
     private String avatar;
 
+    private String wechatAvatar;
+
     private Integer points;
 
     private Integer growthValue;

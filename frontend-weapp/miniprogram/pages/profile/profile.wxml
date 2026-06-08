@@ -12,6 +12,8 @@
       <view class="avatar-section">
         <view class="avatar-wrapper">
           <image class="avatar-image" src="{{userAvatar}}" mode="aspectFill" />
+          <!-- 微信头像选择按钮（覆盖在头像上） -->
+          <button class="avatar-overlay-btn" open-type="chooseAvatar" bindchooseavatar="onWechatAvatarChoose"></button>
         </view>
         <view class="level-badge">
           <text class="level-text">{{memberLevelName}}</text>

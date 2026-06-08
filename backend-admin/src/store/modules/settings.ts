@@ -151,6 +151,30 @@ export const useSettingsStore = defineStore(
       immediate: true,
     })
 
+    // 切换主侧边栏导航展开/收起（1导航栏）
+    function toggleMainSidebarCollapse() {
+      settings.value.menu.mainSidebarCollapse = !settings.value.menu.mainSidebarCollapse
+    }
+    // 主侧边栏是否收起（用于记录 pc 模式下最后的状态）
+    const mainSidebarCollapseLastStatus = ref(settingsDefault.menu.mainSidebarCollapse ?? false)
+    watch(() => settings.value.menu.mainSidebarCollapse, (val) => {
+      if (mode.value === 'pc') {
+        mainSidebarCollapseLastStatus.value = val
+      }
+    })
+    watch(mode, (val) => {
+      switch (val) {
+        case 'pc':
+          settings.value.menu.mainSidebarCollapse = mainSidebarCollapseLastStatus.value
+          break
+        case 'mobile':
+          settings.value.menu.mainSidebarCollapse = true
+          break
+      }
+    }, {
+      immediate: true,
+    })
+
     // 设置主题颜色模式
     function setColorScheme(color: Required<Settings.app>['colorScheme']) {
       settings.value.app.colorScheme = color
@@ -173,6 +197,8 @@ export const useSettingsStore = defineStore(
       setMode,
       subMenuCollapseLastStatus,
       toggleSidebarCollapse,
+      mainSidebarCollapseLastStatus,
+      toggleMainSidebarCollapse,
       setColorScheme,
       updateSettings,
     }

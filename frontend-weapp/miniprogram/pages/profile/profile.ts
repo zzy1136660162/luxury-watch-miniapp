@@ -1,4 +1,5 @@
 import { wxUserApi } from '../../utils/request';
+import { chooseAndSaveAvatar, handleWechatAvatar, setCurrentPageInstance } from '../../utils/util';
 
 Page({
   data: {
@@ -16,6 +17,7 @@ Page({
   },
 
   onLoad() {
+    setCurrentPageInstance(this);
     this.loadUserInfo();
   },
 
@@ -29,8 +31,14 @@ Page({
 
   loadUserInfo() {
     const userInfo = wx.getStorageSync('userInfo') || {};
-    const wechatAvatar = wx.getStorageSync('wechatAvatar');
+    let serverAvatar = wx.getStorageSync('serverWechatAvatar');
+    const localAvatar = wx.getStorageSync('wechatAvatar');
     const token = wx.getStorageSync('token');
+
+    // 如果是相对路径，拼接完整的图片服务器地址
+    if (serverAvatar && serverAvatar.startsWith('/')) {
+      serverAvatar = 'http://101.126.90.255:8081' + serverAvatar;
+    }
 
     if (!token) {
       wx.showModal({
@@ -61,8 +69,11 @@ Page({
     const currentLevelInfo = levelInfo[level] || levelInfo[1];
 
     let avatar = this.data.userAvatar;
-    if (wechatAvatar) {
-      avatar = wechatAvatar;
+    // 优先级：服务器头像 > 用户选择的本地头像 > 用户默认头像
+    if (serverAvatar) {
+      avatar = serverAvatar;
+    } else if (localAvatar) {
+      avatar = localAvatar;
     } else if (userInfo.avatar) {
       avatar = userInfo.avatar;
     }
@@ -161,5 +172,24 @@ Page({
         duration: 2000
       });
     }
+  },
+
+  onAvatarTap() {
+    chooseAndSaveAvatar((avatarPath) => {
+      this.setData!({
+        userAvatar: avatarPath
+      });
+    });
+  },
+
+  // 处理微信头像选择
+  onWechatAvatarChoose(e: any) {
+    const avatarUrl = e.detail.avatarUrl;
+    handleWechatAvatar(avatarUrl, (savedPath: string) => {
+      // 更新页面头像
+      this.setData!({
+        userAvatar: savedPath
+      });
+    });
   }
 });

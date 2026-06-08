@@ -4,17 +4,25 @@ import cn.dev33.satoken.stp.StpUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.luxurywatch.common.PageResult;
 import com.luxurywatch.common.R;
+import com.luxurywatch.dto.ImageUploadDTO;
 import com.luxurywatch.entity.WxUser;
+import com.luxurywatch.service.ImageUploadService;
 import com.luxurywatch.service.WxUserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+@Slf4j
 @RestController
-@RequestMapping("/wx-user")
+@RequestMapping("/api/wx-user")
 public class WxUserController {
 
     @Autowired
     private WxUserService wxUserService;
+
+    @Autowired
+    private ImageUploadService imageUploadService;
 
     /**
      * 获取小程序用户列表
@@ -133,5 +141,35 @@ public class WxUserController {
         }
 
         return R.success(wxUserService.removeById(id));
+    }
+
+    /**
+     * 上传微信头像
+     */
+    @PostMapping("/upload-avatar")
+    public R<String> uploadAvatar(@RequestParam("file") MultipartFile file) {
+        try {
+            log.info("接收到头像上传请求: {}", file.getOriginalFilename());
+            ImageUploadDTO result = imageUploadService.uploadImage(file);
+            String avatarUrl = result.getUrl();
+            log.info("头像上传成功: {}", avatarUrl);
+
+            // 获取当前登录用户并更新头像
+            Object loginId = StpUtil.getLoginId();
+            if (loginId != null) {
+                Long userId = Long.valueOf(loginId.toString());
+                WxUser user = wxUserService.getById(userId);
+                if (user != null) {
+                    user.setWechatAvatar(avatarUrl);
+                    wxUserService.updateById(user);
+                    log.info("用户 {} 头像已更新为: {}", userId, avatarUrl);
+                }
+            }
+
+            return R.success(avatarUrl);
+        } catch (Exception e) {
+            log.error("头像上传失败: {}", e.getMessage(), e);
+            return R.error(e.getMessage());
+        }
     }
 }

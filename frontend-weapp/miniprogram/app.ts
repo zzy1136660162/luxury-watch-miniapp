@@ -56,10 +56,12 @@ App<IAppOption>({
       url: `${apiConfig.baseUrl}/api/user/current`,
       method: 'GET',
       header: {
-        'Authorization': `Bearer ${token}`
+        'Authorization': token
       },
       success: (res: any) => {
-        if (res.statusCode === 401 || (res.data && res.data.code === 401)) {
+        // 只有在明确收到 401 状态码时才清除登录状态
+        // 如果是其他错误（如网络错误、服务端错误），保持登录状态
+        if (res.statusCode === 401) {
           callback(false);
         } else {
           callback(true);

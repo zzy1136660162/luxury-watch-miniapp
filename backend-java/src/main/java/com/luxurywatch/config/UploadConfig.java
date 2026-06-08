@@ -18,4 +18,6 @@ public class UploadConfig {
     private Integer maxFileSize;
     
     private String baseUrl;
+    
+    private String serverUrl;
 }

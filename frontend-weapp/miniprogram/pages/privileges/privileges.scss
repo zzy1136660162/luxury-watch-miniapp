@@ -30,10 +30,26 @@ $font-family-english: 'Manrope', sans-serif;
 .content {
   flex: 1;
   // padding-top: 80px;
-  padding-bottom: 100px;
+  padding: 10vh 0 100px 0;
   overflow-y: hidden;
 }
-
+.navb{
+  z-index: 10;
+  width: 100%;
+  height: 10vh;
+  position: fixed;
+  top: 0;
+  left: 0px;
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  font-weight: bold;
+  padding-top: 1.4vh;
+  font-size: 17px;
+  .text{
+    margin-top: 5vh;
+  }
+}
 // Hero Section
 .hero-section {
   position: relative;
@@ -66,7 +82,7 @@ $font-family-english: 'Manrope', sans-serif;
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(to top, $primary-container, transparent 50%, transparent);
+    background: linear-gradient(135deg, rgb(0, 0, 0) 0%,rgb(97, 97, 97) 50%, rgb(0, 0, 0) 100%);
   }
 
   .hero-content {

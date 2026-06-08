@@ -96,6 +96,7 @@ public class MiniLoginServiceImpl implements MiniLoginService {
         response.setUsername(user.getUsername());
         response.setPhone(user.getPhone());
         response.setAvatar(user.getAvatar());
+        response.setWechatAvatar(user.getWechatAvatar());
         response.setPoints(user.getPoints() != null ? user.getPoints() : 0);
         response.setGrowthValue(user.getGrowthValue() != null ? user.getGrowthValue() : 0);
         response.setMemberLevel(user.getMemberLevel() != null ? user.getMemberLevel() : 1);

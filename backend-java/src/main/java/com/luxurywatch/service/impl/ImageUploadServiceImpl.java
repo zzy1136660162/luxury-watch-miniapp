@@ -74,6 +74,11 @@ public class ImageUploadServiceImpl implements ImageUploadService {
 
         String accessUrl = uploadConfig.getBaseUrl() + "/" + relativePath;
         
+        // 如果配置了 serverUrl，则拼接完整 URL
+        if (uploadConfig.getServerUrl() != null && !uploadConfig.getServerUrl().isEmpty()) {
+            accessUrl = uploadConfig.getServerUrl() + accessUrl;
+        }
+        
         ImageUploadDTO result = new ImageUploadDTO();
         result.setUrl(accessUrl);
         result.setFilename(uniqueFilename);

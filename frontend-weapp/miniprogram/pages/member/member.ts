@@ -1,6 +1,7 @@
 // 导入积分管理工具类
 import { PointsManager } from '../../utils/pointsManager';
-import { checkLogin } from '../../utils/request';
+import { checkLogin, isLoggedIn } from '../../utils/request';
+import { chooseAndSaveAvatar, handleWechatAvatar, setCurrentPageInstance } from '../../utils/util';
 
 Component({
   pageLifetimes: {
@@ -10,6 +11,13 @@ Component({
         tabBar.setSelectedIndex(3);
       }
       this.loadUserInfo();
+    }
+  },
+
+  lifetimes: {
+    attached() {
+      // 注册页面实例，用于触发微信头像选择
+      setCurrentPageInstance(this);
     }
   },
 
@@ -62,7 +70,16 @@ Component({
     loadUserInfo() {
       const userInfo = wx.getStorageSync('userInfo');
       const token = wx.getStorageSync('token');
-      const wechatAvatar = wx.getStorageSync('wechatAvatar');
+      let serverAvatar = wx.getStorageSync('serverWechatAvatar');
+      const localAvatar = wx.getStorageSync('wechatAvatar');
+
+      console.log('loadUserInfo - serverAvatar:', serverAvatar);
+      console.log('loadUserInfo - localAvatar:', localAvatar);
+
+      // 如果是相对路径，拼接完整的图片服务器地址
+      if (serverAvatar && serverAvatar.startsWith('/')) {
+        serverAvatar = 'http://101.126.90.255:8081' + serverAvatar;
+      }
 
       if (token && userInfo) {
         // 初始化积分（如果未设置）
@@ -72,8 +89,11 @@ Component({
         const levelInfo = this.data.levelInfo[level as keyof typeof this.data.levelInfo] || this.data.levelInfo[1];
 
         let avatarUrl = this.data.userAvatar;
-        if (wechatAvatar) {
-          avatarUrl = wechatAvatar;
+        // 优先级：服务器头像 > 用户选择的本地头像 > 用户默认头像
+        if (serverAvatar) {
+          avatarUrl = serverAvatar;
+        } else if (localAvatar) {
+          avatarUrl = localAvatar;
         } else if (userInfo.avatar) {
           avatarUrl = userInfo.avatar;
         }
@@ -99,7 +119,55 @@ Component({
       }
     },
 
+    onAvatarTap() {
+      if (!isLoggedIn()) {
+        wx.showModal({
+          title: '提示',
+          content: '请先登录',
+          confirmText: '去登录',
+          success: (res) => {
+            if (res.confirm) {
+              wx.navigateTo({
+                url: '/pages/login/login'
+              });
+            }
+          }
+        });
+        return;
+      }
 
+      chooseAndSaveAvatar((avatarPath) => {
+        this.setData!({
+          userAvatar: avatarPath
+        });
+      });
+    },
+
+    // 处理微信头像选择
+    onWechatAvatarChoose(e: any) {
+      const avatarUrl = e.detail.avatarUrl;
+      handleWechatAvatar(avatarUrl, (savedPath: string) => {
+        // 更新页面头像
+        this.setData!({
+          userAvatar: savedPath
+        });
+      });
+    },
+
+    // 触发微信头像选择（由 util 调用）
+    triggerWechatAvatarChoose() {
+      // 使用 SelectorQuery 找到隐藏的 button 并触发点击
+      const query = wx.createSelectorQuery().in(this);
+      query.select('.hidden-avatar-btn').node((res: any) => {
+        if (res && res.node) {
+          // 直接调用 button 的点击方法
+          const button = res.node;
+          if (button.click) {
+            button.click();
+          }
+        }
+      }).exec();
+    },
 
     calculateNextLevel() {
       const level = this.data.currentLevel;

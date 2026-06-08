@@ -1,9 +1,12 @@
 <import src="/components/navigation-bar/navigation-bar.wxml" />
 
 <view class="page">
-  <navigation-bar title="时全饰美" back="{{true}}" color="black" background="#ffffff" />
+  <!-- <navigation-bar title="时全饰美" back="{{true}}" color="black" background="#ffffff" /> -->
 
   <scroll-view class="content" scroll-y type="list" enhanced="{{true}}" bounces="{{false}}">
+        <view class="navb">
+          <text class="text" style="color: rgb(0, 0, 0);">时全饰美</text>
+        </view>
     <!-- Hero Section -->
     <view class="hero-section {{heroImage ? '' : 'hero-no-image'}}">
       <image wx:if="{{heroImage}}" class="hero-image" src="{{heroImage}}" mode="aspectFill" binderror="onImageError" data-type="hero" />

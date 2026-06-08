@@ -66,3 +66,4 @@ upload:
   allowed-extensions: jpg,jpeg,png,gif,webp
   max-file-size: 10
   base-url: /images
+  server-url: http://localhost:8080

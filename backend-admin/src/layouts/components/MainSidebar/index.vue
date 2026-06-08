@@ -14,6 +14,14 @@ const router = useRouter()
 
 const { switchTo } = useMenu()
 
+// 平台名称
+const platformTitle = ref(import.meta.env.VITE_APP_TITLE || '管理平台')
+
+// 折叠状态 - 监听 settingsStore 的状态
+const isCollapse = computed(() => {
+  return settingsStore.settings.menu.mainSidebarCollapse ?? false
+})
+
 // 展开的菜单索引
 const expandedIndex = ref<number | null>(null)
 
@@ -30,6 +38,11 @@ const toggleMenu = (index: number) => {
 const handleSubMenuClick = (parentIndex: number, child: any) => {
   menuStore.setActived(parentIndex)
   router.push(child.path)
+}
+
+// 切换主侧边栏折叠状态
+const toggleMainSidebarCollapse = () => {
+  settingsStore.toggleMainSidebarCollapse()
 }
 
 // 检查当前路由是否匹配某个子菜单
@@ -72,10 +85,46 @@ onUnmounted(() => {
 
 <template>
   <Transition name="main-sidebar">
-    <div v-if="settingsStore.settings.menu.mode === 'side' || (settingsStore.mode === 'mobile' && settingsStore.settings.menu.mode !== 'single')" class="main-sidebar-container">
+    <div
+      v-if="settingsStore.settings.menu.mode === 'side' || (settingsStore.mode === 'mobile' && settingsStore.settings.menu.mode !== 'single')"
+      class="main-sidebar-container"
+      :class="{ 'is-collapse': isCollapse }"
+    >
       <component :is="useSlots('main-sidebar-top')" />
-      <Logo :show-title="false" class="sidebar-logo" />
+
+      <!-- Logo 和平台名称区域 -->
+      <div class="sidebar-header">
+        <Logo :show-title="false" class="sidebar-logo" />
+        <div v-if="!isCollapse" class="sidebar-title">
+          <span class="platform-name">{{ platformTitle }}</span>
+        </div>
+      </div>
+
       <component :is="useSlots('main-sidebar-after-logo')" />
+      <!-- 折叠按钮 -->
+      <div v-if="settingsStore.mode === 'pc' && !isCollapse" class="collapse-button">
+        <FaButton
+          variant="secondary"
+          size="icon"
+          class="h-8 w-8 transition bg-white"
+          @click="toggleMainSidebarCollapse"
+        >
+          <FaIcon name="toolbar-collapse" class="size-4" />
+        </FaButton>
+      </div>
+
+      <!-- 折叠状态下显示的展开按钮 -->
+      <div v-if="settingsStore.mode === 'pc' && isCollapse" class="expand-button">
+        <FaButton
+          variant="secondary"
+          size="icon"
+          class="h-8 w-8 transition bg-white"
+          @click="toggleMainSidebarCollapse"
+        >
+          <FaIcon name="toolbar-collapse" class="size-4 rotate-180" />
+        </FaButton>
+      </div>
+
       <FaScrollArea :scrollbar="false" mask gradient-color="var(--g-main-sidebar-bg)" class="menu flex-1 overscroll-contain">
         <!-- 侧边栏模式（含主导航） -->
         <div class="w-full flex flex-col of-hidden py-1 transition-all -mt-2">
@@ -89,7 +138,7 @@ onUnmounted(() => {
               <template v-if="item.children && item.children.length !== 0">
                 <!-- 父菜单项 -->
                 <div
-                  class="group menu-item-container relative h-full w-full flex cursor-pointer items-center justify-center rounded-lg py-4 text-[var(--g-main-sidebar-menu-color)] transition-colors hover-(bg-[var(--g-main-sidebar-menu-hover-bg)] text-[var(--g-main-sidebar-menu-hover-color)]) px-2!"
+                  class="group menu-item-container relative h-full w-full flex cursor-pointer items-center justify-start rounded-lg py-4 text-[var(--g-main-sidebar-menu-color)] transition-colors hover-(bg-[var(--g-main-sidebar-menu-hover-bg)] text-[var(--g-main-sidebar-menu-hover-color)]) px-2!"
                   :class="{
                     'text-[var(--g-main-sidebar-menu-active-color)]! bg-[var(--g-main-sidebar-menu-active-bg)]!': isParentActive(index),
                   }"
@@ -126,14 +175,14 @@ onUnmounted(() => {
               <!-- 没有子菜单的情况 -->
               <div
                 v-else
-                class="group menu-item-container relative h-full w-full flex cursor-pointer items-center justify-center rounded-lg py-4 text-[var(--g-main-sidebar-menu-color)] transition-colors hover-(bg-[var(--g-main-sidebar-menu-hover-bg)] text-[var(--g-main-sidebar-menu-hover-color)]) px-2!"
+                class="group menu-item-container relative h-full w-full flex cursor-pointer items-center justify-start rounded-lg py-4 text-[var(--g-main-sidebar-menu-color)] transition-colors hover-(bg-[var(--g-main-sidebar-menu-hover-bg)] text-[var(--g-main-sidebar-menu-hover-color)]) px-2!"
                 :class="{
                   'text-[var(--g-main-sidebar-menu-active-color)]! bg-[var(--g-main-sidebar-menu-active-bg)]!': index === menuStore.actived,
                 }"
                 :title="typeof item.meta?.title === 'function' ? item.meta?.title() : item.meta?.title"
                 @click="switchTo(index)"
               >
-                <span class="truncate text-center text-sm">
+                <span class="truncate text-left text-sm">
                   {{ typeof item.meta?.title === 'function' ? item.meta?.title() : item.meta?.title }}
                 </span>
               </div>
@@ -141,10 +190,19 @@ onUnmounted(() => {
           </template>
         </div>
       </FaScrollArea>
+
       <component :is="useSlots('main-sidebar-after-menu')" />
-      <div class="flex-center px-4 py-3">
-        <AccountButton only-avatar :button-variant="settingsStore.settings.menu.mode === 'side' ? 'secondary' : 'ghost'" class="size-12 p-2" />
+
+      <div class="account-section">
+        <div class="account-button-wrapper">
+          <AccountButton
+            :only-avatar="isCollapse"
+            :button-variant="settingsStore.settings.menu.mode === 'side' ? 'secondary' : 'ghost'"
+            class="account-btn"
+          />
+        </div>
       </div>
+
       <component :is="useSlots('main-sidebar-bottom')" />
     </div>
   </Transition>
@@ -160,11 +218,58 @@ onUnmounted(() => {
   color: var(--g-main-sidebar-menu-color);
   background-color: var(--g-main-sidebar-bg);
   box-shadow: 1px 0 0 0 hsl(var(--border)), -1px 0 0 0 hsl(var(--border));
-  transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
+  transition: background-color 0.3s, color 0.3s, box-shadow 0.3s, width 0.3s;
 
-  .sidebar-logo {
+  &.is-collapse {
+    width: var(--g-main-sidebar-collapse-width);
+
+    .sidebar-header {
+      .sidebar-title {
+        display: none;
+      }
+    }
+
+    /* 折叠状态下隐藏菜单和子菜单 */
+    .menu {
+      display: none !important;
+    }
+
+    :deep(.menu-item-container) {
+      background-color: transparent !important;
+    }
+
+    /* 折叠状态下隐藏子菜单 */
+    .sub-menu-list {
+      display: none !important;
+    }
+  }
+
+  .sidebar-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 12px;
+    height: var(--g-sidebar-logo-height);
     background-color: var(--g-main-sidebar-bg);
-    transition: background-color 0.3s;
+
+    .sidebar-logo {
+      flex-shrink: 0;
+      background-color: transparent;
+    }
+
+    .sidebar-title {
+      flex: 1;
+      min-width: 0;
+
+      .platform-name {
+        font-size: 16px;
+        font-weight: 600;
+        color: var(--g-main-sidebar-menu-color);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
   }
 
   .menu {
@@ -190,6 +295,26 @@ onUnmounted(() => {
     }
   }
 
+  .collapse-button {
+    /* position: absolute; */
+    /* top: 70%; */
+    margin: 1vh 0 0 85%;
+    transform: translateY(-50%);
+    z-index: 10;
+    width: 32px;
+    transition: opacity 0.3s;
+  }
+
+  .expand-button {
+    /* position: absolute; */
+    /* top: 70%; */
+    margin: 1vh 0 0 33%;
+    right: 15px;
+    transform: translateY(-50%);
+    z-index: 10;
+    width: 32px;
+  }
+
   /* 子菜单样式 */
   .sub-menu-list {
     overflow: hidden;
@@ -199,6 +324,27 @@ onUnmounted(() => {
     &:hover {
       color: var(--g-main-sidebar-menu-hover-color);
       background-color: var(--g-main-sidebar-menu-hover-bg);
+    }
+  }
+
+  /* 账户区域样式 */
+  .account-section {
+    display: flex;
+    align-items: center;
+    padding: 12px 8px;
+    border-top: 1px solid var(--el-border-color-lighter);
+    margin-top: auto;
+  }
+
+  .account-button-wrapper {
+    width: 100%;
+
+    :deep(.account-btn) {
+      width: 100%;
+
+      > div {
+        width: 100%;
+      }
     }
   }
 }

@@ -372,6 +372,32 @@ export const wxUserApi = {
       url: `/wx-user/by-phone?phone=${phone}`,
       method: 'GET'
     });
+  },
+
+  // 上传头像到服务器
+  uploadAvatar: (filePath: string) => {
+    return new Promise((resolve, reject) => {
+      const token = wx.getStorageSync('token');
+      wx.uploadFile({
+        url: `${baseUrl}/api/wx-user/upload-avatar`,
+        filePath: filePath,
+        name: 'file',
+        header: {
+          'Authorization': token
+        },
+        success: (res) => {
+          if (res.statusCode === 200) {
+            const data = JSON.parse(res.data);
+            resolve(data);
+          } else {
+            reject(new Error('上传失败'));
+          }
+        },
+        fail: (err) => {
+          reject(err);
+        }
+      });
+    });
   }
 };
 

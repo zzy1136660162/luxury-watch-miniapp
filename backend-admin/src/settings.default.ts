@@ -29,6 +29,7 @@ const globalSettingsDefault: RecursiveRequired<Settings.all> = {
     subMenuCollapse: true,
     enableSubMenuCollapseButton: true,
     enableHotkeys: false,
+    mainSidebarCollapse: false,
   },
   topbar: {
     mode: 'static',

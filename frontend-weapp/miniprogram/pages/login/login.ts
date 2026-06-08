@@ -238,12 +238,18 @@ Page({
 
       if (res.code === 200) {
         const userInfo = res.data;
-        
+
+        // 保存服务器返回的头像 URL
+        if (userInfo.wechatAvatar) {
+          wx.setStorageSync('serverWechatAvatar', userInfo.wechatAvatar);
+        }
+
         wx.setStorageSync('token', userInfo.token);
         wx.setStorageSync('userInfo', {
           id: userInfo.id,
           username: userInfo.username,
           avatar: userInfo.avatar,
+          wechatAvatar: userInfo.wechatAvatar,
           phone: userInfo.phone || phone.trim(),
           points: userInfo.points,
           growthValue: userInfo.growthValue,

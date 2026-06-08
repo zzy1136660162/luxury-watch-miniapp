@@ -5,7 +5,6 @@ import AppSetting from './components/AppSetting/index.vue'
 import Header from './components/Header/index.vue'
 import HotkeysIntro from './components/HotkeysIntro/index.vue'
 import MainSidebar from './components/MainSidebar/index.vue'
-import SubSidebar from './components/SubSidebar/index.vue'
 import Topbar from './components/Topbar/index.vue'
 import LinkView from './components/views/link.vue'
 
@@ -30,9 +29,9 @@ const isMainSidebarHide = computed(() => {
     || (settingsStore.settings.menu.mode === 'head' && settingsStore.mode !== 'mobile')
 })
 
-// 侧边栏次导航是否隐藏
-const isSubSidebarHide = computed(() => {
-  return menuStore.sidebarMenus.every(item => item.meta?.menu === false)
+// 主侧边栏是否收起（1导航栏）
+const isMainSidebarCollapse = computed(() => {
+  return settingsStore.settings.menu.mainSidebarCollapse ?? false
 })
 
 // 标签栏是否隐藏
@@ -79,8 +78,7 @@ const enableAppSetting = import.meta.env.VITE_APP_SETTING
   <div
     class="layout" :style="{
       '--g-header-actual-height': isHeaderHide ? '0px' : 'var(--g-header-height)',
-      '--g-main-sidebar-actual-width': isMainSidebarHide ? '0px' : 'var(--g-main-sidebar-width)',
-      '--g-sub-sidebar-actual-width': isSubSidebarHide ? '0px' : (settingsStore.settings.menu.subMenuCollapse && settingsStore.mode !== 'mobile' ? 'var(--g-sub-sidebar-collapse-width)' : 'var(--g-sub-sidebar-width)'),
+      '--g-main-sidebar-actual-width': isMainSidebarHide ? '0px' : (isMainSidebarCollapse && settingsStore.mode !== 'mobile' ? 'var(--g-main-sidebar-collapse-width)' : 'var(--g-main-sidebar-width)'),
       '--g-tabbar-actual-height': isTabbarHide ? '0px' : 'var(--g-tabbar-height)',
       '--g-toolbar-actual-height': isToolbarHide ? '0px' : 'var(--g-toolbar-height)',
     }"
@@ -88,11 +86,10 @@ const enableAppSetting = import.meta.env.VITE_APP_SETTING
     <div id="app-main">
       <Header />
       <div class="wrapper">
-        <div class="sidebar-container" :class="{ show: settingsStore.mode === 'mobile' && !settingsStore.settings.menu.subMenuCollapse }">
+        <div class="sidebar-container" :class="{ show: settingsStore.mode === 'mobile' && !settingsStore.settings.menu.mainSidebarCollapse }">
           <MainSidebar />
-          <SubSidebar />
         </div>
-        <div class="invisible fixed inset-0 z-1009 bg-black/50 op-0 backdrop-blur-sm transition-opacity" :class="{ 'op-100! visible!': settingsStore.mode === 'mobile' && !settingsStore.settings.menu.subMenuCollapse }" @click="settingsStore.toggleSidebarCollapse()" />
+        <div class="invisible fixed inset-0 z-1009 bg-black/50 op-0 backdrop-blur-sm transition-opacity" :class="{ 'op-100! visible!': settingsStore.mode === 'mobile' && !settingsStore.settings.menu.mainSidebarCollapse }" @click="settingsStore.toggleMainSidebarCollapse()" />
         <div class="main-container pb-[var(--g-main-container-padding-bottom)]">
           <Topbar />
           <div class="main">
@@ -123,7 +120,7 @@ const enableAppSetting = import.meta.env.VITE_APP_SETTING
 <style scoped>
 [data-mode="mobile"] {
   .sidebar-container {
-    transform: translateX(calc((var(--g-main-sidebar-width) + var(--g-sub-sidebar-width)) * -1));
+    transform: translateX(calc(var(--g-main-sidebar-width) * -1));
 
     &.show {
       transform: translateX(0);
@@ -136,7 +133,7 @@ const enableAppSetting = import.meta.env.VITE_APP_SETTING
 
   &[data-menu-mode="single"] {
     .sidebar-container {
-      transform: translateX(calc(var(--g-sub-sidebar-width) * -1));
+      transform: translateX(calc(var(--g-main-sidebar-width) * -1));
 
       &.show {
         transform: translateX(0);
@@ -168,27 +165,21 @@ const enableAppSetting = import.meta.env.VITE_APP_SETTING
     bottom: 0;
     z-index: 1010;
     display: flex;
-    width: calc(var(--g-main-sidebar-actual-width) + var(--g-sub-sidebar-actual-width));
+    width: var(--g-main-sidebar-actual-width);
     box-shadow: -1px 0 0 0 hsl(var(--border)), 1px 0 0 0 hsl(var(--border));
     transition: width 0.3s, transform 0.3s, box-shadow 0.3s, top 0.3s;
 
     &:has(> .main-sidebar-container.main-sidebar-enter-active),
-    &:has(> .main-sidebar-container.main-sidebar-leave-active),
-    &:has(> .sub-sidebar-container.sub-sidebar-enter-active),
-    &:has(> .sub-sidebar-container.sub-sidebar-leave-active) {
+    &:has(> .main-sidebar-container.main-sidebar-leave-active) {
       overflow: hidden;
     }
-  }
-
-  .main-sidebar-container:not(.main-sidebar-leave-active) + .sub-sidebar-container {
-    left: var(--g-main-sidebar-width);
   }
 
   .main-container {
     display: flex;
     flex-direction: column;
     min-height: 100%;
-    margin-left: calc(var(--g-main-sidebar-actual-width) + var(--g-sub-sidebar-actual-width));
+    margin-left: var(--g-main-sidebar-actual-width);
     background-color: var(--g-main-area-bg);
     box-shadow: -1px 0 0 0 hsl(var(--border)), 1px 0 0 0 hsl(var(--border));
     transition: margin-left 0.3s, background-color 0.3s, box-shadow 0.3s;
