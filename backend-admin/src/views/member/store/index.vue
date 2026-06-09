@@ -2,6 +2,7 @@
 import { storeApi } from '@/api/modules/store'
 import { ElButton, ElTable, ElForm, ElFormItem, ElInput, ElInputNumber, ElDialog, ElSpace, ElSwitch, ElMessage } from 'element-plus'
 import { h, ref } from 'vue'
+import { formatDateTime } from '@/utils'
 
 const columns = [
   { prop: 'name', label: '门店名称' },
@@ -14,7 +15,7 @@ const columns = [
     width: 80,
     render: (row: any) => row.status === 1 ? '正常' : '禁用'
   },
-  { prop: 'createTime', label: '创建时间', width: 180 },
+  { prop: 'createTime', label: '创建时间', width: 180, render: (row: any) => formatDateTime(row.createTime) },
   {
     prop: 'actions',
     label: '操作',
@@ -141,6 +142,9 @@ loadData()
         <template v-else-if="col.prop === 'actions'" #default="{ row }">
           <el-button size="small" @click="handleEdit(row)">编辑</el-button>
           <el-button size="small" type="danger" @click="handleDelete(row.id)">删除</el-button>
+        </template>
+        <template v-else-if="col.prop === 'createTime'" #default="{ row }">
+          {{ formatDateTime(row.createTime) }}
         </template>
       </el-table-column>
     </el-table>

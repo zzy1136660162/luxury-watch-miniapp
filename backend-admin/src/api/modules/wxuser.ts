@@ -25,32 +25,32 @@ export default {
     phone?: string
     memberLevel?: number
     status?: number
-  }) => api.get<ApiResponse<PageResult<WxUser>>>('/wx-user/list', { params }),
+  }) => api.get<ApiResponse<PageResult<WxUser>>>('/api/wx-user/list', { params }),
 
   // 获取小程序用户详情
-  getWxUserDetail: (id: number) => api.get<ApiResponse<WxUser>>(`/wx-user/${id}`),
+  getWxUserDetail: (id: number) => api.get<ApiResponse<WxUser>>(`/api/wx-user/${id}`),
 
   // 更新小程序用户状态
   updateWxUserStatus: (id: number, status: number) =>
-    api.put<ApiResponse<void>>(`/wx-user/${id}/status?status=${status}`),
+    api.put<ApiResponse<void>>(`/api/wx-user/${id}/status?status=${status}`),
 
   // 更新小程序用户会员等级
   updateWxUserLevel: (id: number, level: number) =>
-    api.put<ApiResponse<void>>(`/wx-user/${id}/level`, { level }),
+    api.put<ApiResponse<void>>(`/api/wx-user/${id}/level`, { level }),
 
   // 调整小程序用户积分
   adjustWxUserPoints: (id: number, points: number, description: string) =>
-    api.post<ApiResponse<void>>(`/wx-user/${id}/points?points=${points}&description=${encodeURIComponent(description)}`),
+    api.post<ApiResponse<void>>(`/api/wx-user/${id}/points?points=${points}&description=${encodeURIComponent(description)}`),
 
   // 更新小程序用户信息
   updateWxUser: (id: number, data: Partial<WxUser>) =>
-    api.put<ApiResponse<WxUser>>(`/wx-user/${id}`, data),
+    api.put<ApiResponse<WxUser>>(`/api/wx-user/${id}`, data),
 
   // 重置小程序用户密码
   resetWxUserPassword: (id: number) =>
-    api.put<ApiResponse<void>>(`/wx-user/${id}/reset-password`),
+    api.put<ApiResponse<void>>(`/api/wx-user/${id}/reset-password`),
 
   // 删除小程序用户
   deleteWxUser: (id: number) =>
-    api.delete<ApiResponse<void>>(`/wx-user/${id}`),
+    api.delete<ApiResponse<void>>(`/api/wx-user/${id}`),
 }

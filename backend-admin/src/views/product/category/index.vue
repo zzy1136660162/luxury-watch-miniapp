@@ -54,7 +54,11 @@
             </el-tag>
           </template>
         </el-table-column>
-        <el-table-column label="创建时间" prop="createTime" width="180" />
+        <el-table-column label="创建时间" width="180">
+          <template #default="{ row }">
+            {{ formatDateTime(row.createTime) }}
+          </template>
+        </el-table-column>
         <el-table-column label="操作" width="200" fixed="right">
           <template #default="{ row }">
             <el-button type="primary" link @click="handleEdit(row)">
@@ -124,6 +128,7 @@ import { ref, reactive, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Search, Plus, Edit, Delete } from '@element-plus/icons-vue'
 import api from '@/api'
+import { formatDateTime } from '@/utils'
 
 // 搜索表单
 const searchForm = reactive({

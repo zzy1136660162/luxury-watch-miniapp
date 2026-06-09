@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import { ElButton, ElTable, ElTableColumn, ElSelect, ElOption, ElSpace, ElMessage, ElPagination } from 'element-plus'
 import exchangeApi from '@/api/modules/exchange'
+import { formatDateTime } from '@/utils'
 
 const statusOptions = [
   { label: '全部', value: -1 },
@@ -121,7 +122,11 @@ loadData()
           </span>
         </template>
       </el-table-column>
-      <el-table-column prop="exchangeTime" label="兑换时间" width="180" />
+      <el-table-column label="兑换时间" width="180">
+        <template #default="{ row }">
+          {{ formatDateTime(row.exchangeTime) }}
+        </template>
+      </el-table-column>
       <el-table-column prop="address" label="收货地址" />
       <el-table-column label="操作" width="150" fixed="right">
         <template #default="{ row }">

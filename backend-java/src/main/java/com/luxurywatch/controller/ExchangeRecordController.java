@@ -6,7 +6,9 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.luxurywatch.common.PageResult;
 import com.luxurywatch.common.R;
 import com.luxurywatch.entity.ExchangeRecord;
+import com.luxurywatch.entity.WxUser;
 import com.luxurywatch.service.ExchangeRecordService;
+import com.luxurywatch.service.WxUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,6 +25,9 @@ public class ExchangeRecordController {
 
     @Autowired
     private ExchangeRecordService exchangeRecordService;
+
+    @Autowired
+    private WxUserService wxUserService;
 
     /**
      * 获取兑换记录列表（分页）
@@ -66,7 +71,15 @@ public class ExchangeRecordController {
             Map<String, Object> map = new java.util.HashMap<>();
             map.put("id", record.getId());
             map.put("userId", record.getUserId());
-            map.put("userName", record.getUserName());
+            // 实时获取用户名称
+            String realUserName = record.getUserName();
+            if (record.getUserId() != null) {
+                WxUser user = wxUserService.getById(record.getUserId());
+                if (user != null && user.getUsername() != null) {
+                    realUserName = user.getUsername();
+                }
+            }
+            map.put("userName", realUserName);
             map.put("productId", record.getProductId());
             map.put("productName", record.getProductName());
             map.put("productImage", record.getProductImage());

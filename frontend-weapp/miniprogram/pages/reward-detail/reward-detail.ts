@@ -93,6 +93,11 @@ Page({
     });
   },
 
+  // 阻止弹窗内容点击冒泡
+  onDialogTap() {
+    // 空函数，用于阻止事件冒泡
+  },
+
   // 选择地址
   onSelectAddress(e: any) {
     const index = e.currentTarget.dataset.index;
@@ -163,7 +168,7 @@ Page({
     wx.setStorageSync('userInfo', userInfo);
 
     // 调用后端更新用户地址
-    userApi.updateUserInfo({ address: addressStr }).catch((err) => {
+    userApi.updateUser({ address: addressStr }).catch((err) => {
       console.error('保存地址失败', err);
     });
 

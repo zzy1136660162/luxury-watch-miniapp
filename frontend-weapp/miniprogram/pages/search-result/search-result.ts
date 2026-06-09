@@ -53,9 +53,9 @@ Page({
     const activeFilters = this.buildFilterLabels(params);
 
     this.setData({
-      brand,
-      series,
-      keyword,
+      brand: brand || '',
+      series: series || '',
+      keyword: keyword || '',
       activeFilters,
       filters: {
         category: options.category ? decodeURIComponent(options.category) : '',

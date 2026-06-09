@@ -40,7 +40,11 @@
             </el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="createTime" label="创建时间" />
+        <el-table-column label="创建时间">
+          <template #default="{ row }">
+            {{ formatDateTime(row.createTime) }}
+          </template>
+        </el-table-column>
         <el-table-column label="操作" width="200">
           <template #default="{ row }">
             <el-button link type="primary" size="small" @click="handleEdit(row)">编辑</el-button>
@@ -91,6 +95,7 @@
 <script setup lang="ts">
 import { ElMessage, ElMessageBox, type FormInstance, type FormRules } from 'element-plus'
 import adminApi from '@/api/modules/admin'
+import { formatDateTime } from '@/utils'
 
 interface AdminData {
   id: number

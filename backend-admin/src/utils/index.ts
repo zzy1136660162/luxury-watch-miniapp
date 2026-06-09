@@ -10,3 +10,9 @@ export function cn(...inputs: ClassValue[]) {
 export function resolveRoutePath(basePath?: string, routePath?: string) {
   return basePath ? path.resolve(basePath, routePath ?? '') : routePath ?? ''
 }
+
+// 格式化日期时间，将 T 替换为空格
+export function formatDateTime(dateTime: string | undefined | null): string {
+  if (!dateTime) return '-'
+  return dateTime.replace('T', ' ')
+}

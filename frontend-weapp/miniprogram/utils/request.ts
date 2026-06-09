@@ -361,7 +361,7 @@ export const loginApi = {
 export const wxUserApi = {
   update: (id: number, data: any) => {
     return request({
-      url: `/wx-user/${id}`,
+      url: `/api/wx-user/${id}`,
       method: 'PUT',
       data: data
     });
@@ -369,7 +369,7 @@ export const wxUserApi = {
 
   getByPhone: (phone: string) => {
     return request({
-      url: `/wx-user/by-phone?phone=${phone}`,
+      url: `/api/wx-user/by-phone?phone=${phone}`,
       method: 'GET'
     });
   },

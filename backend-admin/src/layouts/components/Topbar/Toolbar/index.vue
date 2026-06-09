@@ -12,7 +12,7 @@ defineOptions({
     <div class="left-side h-full flex items-center of-hidden pe-16 ps-2">
       <LeftSide />
     </div>
-    <div class="h-full flex flex-shrink-0 items-center justify-end px-2">
+    <div class="h-full flex flex-shrink-0 items-center justify-end px-2" style="z-index: 999;">
       <RightSide />
     </div>
   </div>
@@ -21,5 +21,15 @@ defineOptions({
 <style scoped>
 .left-side {
   mask-image: linear-gradient(to right, #000 0%, #000 calc(100% - 50px), transparent);
+  width: 100vw !important;
+  position: absolute;
+  left: -70vw;
+  top: 0px;
+  background-color: white;
+}
+.toolbar-container{
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
 }
 </style>

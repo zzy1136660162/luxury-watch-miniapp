@@ -8,7 +8,7 @@
   <!-- 搜索头部 -->
   <view class="search-header">
     <view class="search-input-wrapper">
-      <input style="width: 100%;" type="text" placeholder="点击搜索" value="{{searchKey}}" bindinput="onSearchInput" bindconfirm="onSearchConfirm"/>
+      <input class="search-input" type="text" placeholder="点击搜索" value="{{searchKey}}" bindinput="onSearchInput" bindconfirm="onSearchConfirm"/>
       <image class="input-image" src="/assets/iconfont/search.png" mode="aspectFit" bindtap="onSearchIconTap" />
     </view>
   </view>

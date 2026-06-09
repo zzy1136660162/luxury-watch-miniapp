@@ -4,8 +4,8 @@
       <text class="back-arrow">‹</text>
     </view>
     <view class="nav-title">
-      <text>{{keyword ? (keyword.includes('-') ? keyword : '搜索结果') : (series ? (brand + '-' + series) : (brand || '搜索结果'))}}</text>
-      <text wx:if="{{keyword && !keyword.includes('-')}}" class="keyword-text">"{{keyword}}"</text>
+      <text>{{keyword ? (keyword.indexOf('-') !== -1 ? keyword : '搜索结果') : (series ? (brand + '-' + series) : (brand || '搜索结果'))}}</text>
+      <text wx:if="{{keyword && keyword.indexOf('-') === -1}}" class="keyword-text">"{{keyword}}"</text>
     </view>
     <view class="nav-right"></view>
   </view>
@@ -16,8 +16,8 @@
       <view wx:if="{{filterCount > 0}}" class="filter-badge">{{filterCount}}</view>
     </view>
     <view class="search-input-wrapper">
-      <input type="text" placeholder="搜索关键词..." value="{{searchKey}}" bindinput="onSearchInput" bindconfirm="onKeywordSearch"/>
-      <image class="search-icon" src="/assets/iconfont/search.png" mode="aspectFit" />
+      <input class="search-input" type="text" placeholder="搜索关键词..." value="{{searchKey}}" bindinput="onSearchInput" bindconfirm="onKeywordSearch"/>
+      <image class="search-icon" src="/assets/iconfont/search.png" mode="aspectFit" bindtap="onKeywordSearch" />
     </view>
   </view>
   <view class="section-divider"></view>

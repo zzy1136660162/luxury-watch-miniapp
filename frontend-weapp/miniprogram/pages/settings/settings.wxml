@@ -17,12 +17,10 @@
         <text class="item-arrow-text">›</text>
       </view>
 
-      <view class="settings-item" bindtap="onLogoutTap">
+      <view class="settings-itemb" bindtap="onLogoutTap">
         <view class="item-left">
-          <text class="item-icon-text">🚪</text>
           <text class="item-name">退出登录</text>
         </view>
-        <text class="item-arrow-text">›</text>
       </view>
     </view>
 

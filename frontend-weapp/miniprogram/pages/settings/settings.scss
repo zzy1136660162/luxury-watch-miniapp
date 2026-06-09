@@ -11,7 +11,7 @@ $font-family-english: 'Manrope', sans-serif;
 
 .page {
   width: 100vw;
-  min-height: 100vh;
+  min-height: 90vh;
   margin-top: 10vh;
   display: flex;
   flex-direction: column;
@@ -98,6 +98,27 @@ $font-family-english: 'Manrope', sans-serif;
   }
 }
 
+.settings-itemb {
+  width: 80vw;
+  position: absolute;
+  bottom: 50px;
+  left: 43px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid $outline-variant;
+  border-radius: 20px;
+  background-color: rgb(255, 185, 185);
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &:active {
+    background-color: $surface;
+  }
+}
 .item-left {
   display: flex;
   align-items: center;

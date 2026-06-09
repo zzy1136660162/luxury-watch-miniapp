@@ -2,6 +2,7 @@
 import { PointsManager } from '../../utils/pointsManager';
 import { checkLogin, isLoggedIn } from '../../utils/request';
 import { chooseAndSaveAvatar, handleWechatAvatar, setCurrentPageInstance } from '../../utils/util';
+import { getFullImageUrl } from '../../utils/config';
 
 Component({
   pageLifetimes: {
@@ -75,11 +76,7 @@ Component({
 
       console.log('loadUserInfo - serverAvatar:', serverAvatar);
       console.log('loadUserInfo - localAvatar:', localAvatar);
-
-      // 如果是相对路径，拼接完整的图片服务器地址
-      if (serverAvatar && serverAvatar.startsWith('/')) {
-        serverAvatar = 'http://101.126.90.255:8081' + serverAvatar;
-      }
+      console.log('loadUserInfo - userInfo.avatar:', userInfo?.avatar);
 
       if (token && userInfo) {
         // 初始化积分（如果未设置）
@@ -89,13 +86,13 @@ Component({
         const levelInfo = this.data.levelInfo[level as keyof typeof this.data.levelInfo] || this.data.levelInfo[1];
 
         let avatarUrl = this.data.userAvatar;
-        // 优先级：服务器头像 > 用户选择的本地头像 > 用户默认头像
+        // 优先级：服务器头像 > 本地头像 > 用户信息中的头像 > 默认头像
         if (serverAvatar) {
-          avatarUrl = serverAvatar;
+          avatarUrl = getFullImageUrl(serverAvatar);
         } else if (localAvatar) {
           avatarUrl = localAvatar;
         } else if (userInfo.avatar) {
-          avatarUrl = userInfo.avatar;
+          avatarUrl = getFullImageUrl(userInfo.avatar);
         }
 
         this.setData!({

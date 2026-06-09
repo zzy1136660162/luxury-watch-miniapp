@@ -59,9 +59,17 @@
     color: #999;
   }
 
+  .search-input {
+    flex: 1;
+    height: 100%;
+    background: transparent;
+    font-size: 28rpx;
+  }
+
   .input-image {
     width: 36rpx;
     height: 36rpx;
+    flex-shrink: 0;
   }
 
   .filter-btn-wrapper {

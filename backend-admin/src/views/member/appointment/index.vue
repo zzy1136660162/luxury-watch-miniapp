@@ -2,6 +2,7 @@
 import { appointmentApi } from '@/api/modules/appointment'
 import { ElButton, ElTable, ElTableColumn, ElSelect, ElOption, ElSpace, ElMessage } from 'element-plus'
 import { ref } from 'vue'
+import { formatDateTime } from '@/utils'
 
 const statusOptions = [
   { label: '全部', value: -1 },
@@ -119,13 +120,17 @@ loadData()
           </span>
         </template>
       </el-table-column>
-      <el-table-column prop="createTime" label="创建时间" width="180" />
+      <el-table-column label="创建时间" width="180">
+        <template #default="{ row }">
+          {{ formatDateTime(row.createTime) }}
+        </template>
+      </el-table-column>
       <el-table-column label="操作" width="120">
         <template #default="{ row }">
-          <el-button 
-            v-if="row.status === 0" 
-            size="small" 
-            type="primary" 
+          <el-button
+            v-if="row.status === 0"
+            size="small"
+            type="primary"
             @click="handleConfirm(row.id)"
           >
             确认到店
