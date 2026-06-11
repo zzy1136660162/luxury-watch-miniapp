@@ -12,7 +12,6 @@
     <view class="form-section">
       <view class="input-group">
         <view class="input-wrapper {{phoneFocus ? 'input-focus' : ''}}">
-          <!-- <image class="input-icon" src="{{icons.phone}}" mode="aspectFit" /> -->
           <input 
             class="input-field"
             type="number"
@@ -29,7 +28,6 @@
 
       <view class="input-group">
         <view class="input-wrapper {{passwordFocus ? 'input-focus' : ''}}">
-          <!-- <image class="input-icon" src="{{icons.password}}" mode="aspectFit" /> -->
           <input 
             class="input-field"
             password="{{!showPassword}}"
