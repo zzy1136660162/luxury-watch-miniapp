@@ -59,7 +59,7 @@ spring:
 
 # 图片上传配置
 upload:
-  image-path: /data/luxury-watch-miniapp
+  image-path: /data/projects/luxury-watch-miniapp
   base-url: /images
 
 # Sa-Token 配置
@@ -101,7 +101,7 @@ mvn clean package -DskipTests
 #### 2. 创建目录
 ```bash
 mkdir -p /opt/luxury-watch
-mkdir -p /data/luxury-watch-miniapp
+mkdir -p /data/projects/luxury-watch-miniapp
 mkdir -p /var/log/luxury-watch
 ```
 
@@ -155,11 +155,11 @@ systemctl start luxury-watch
 
 ```bash
 # 创建目录
-mkdir -p /data/luxury-watch-miniapp
+mkdir -p /data/projects/luxury-watch-miniapp
 
 # 设置权限
-chmod 755 /data/luxury-watch-miniapp
-chown root:root /data/luxury-watch-miniapp
+chmod 755 /data/projects/luxury-watch-miniapp
+chown root:root /data/projects/luxury-watch-miniapp
 ```
 
 ## 防火墙配置
@@ -203,7 +203,7 @@ journalctl -u luxury-watch -n 100
 - 检查数据库是否存在
 
 ### 3. 图片上传失败
-- 检查 /data/luxury-watch-miniapp 目录是否存在
+- 检查 /data/projects/luxury-watch-miniapp 目录是否存在
 - 检查目录权限
 
 ### 4. 端口被占用

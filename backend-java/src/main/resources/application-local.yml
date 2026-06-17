@@ -5,7 +5,7 @@ spring:
   application:
     name: luxury-watch-backend
   datasource:
-    url: jdbc:mysql://101.126.90.255:63306/luxury-watch-db?characterEncoding=utf8&connectTimeout=30000&socketTimeout=30000&autoReconnect=true&useUnicode=true&useSSL=false&serverTimezone=Asia/Shanghai&allowMultiQueries=true
+    url: jdbc:mysql://167.88.180.246:63306/luxury-watch-db?characterEncoding=utf8&connectTimeout=30000&socketTimeout=30000&autoReconnect=true&useUnicode=true&useSSL=false&serverTimezone=Asia/Shanghai&allowMultiQueries=true
     username: root
     password: Gesoft9919.
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -62,7 +62,7 @@ logging:
     console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{50} - %msg%n"
 
 upload:
-  image-path: D:/image
+  image-path: /data/projects/luxury-watch-miniapp/image
   allowed-extensions: jpg,jpeg,png,gif,webp
   max-file-size: 10
   base-url: /images

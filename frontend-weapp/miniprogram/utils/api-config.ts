@@ -5,7 +5,7 @@
  * 其他所有模块会自动引用此配置
  */
 
-const SERVER_BASE_URL = 'http://101.126.90.255:8081';
+const SERVER_BASE_URL = 'http://167.88.180.246:8081';
 const API_PREFIX = '/api';
 
 const apiConfig = {

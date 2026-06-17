@@ -10,7 +10,7 @@
  * @param defaultLineHeight 默认行高
  * @returns 处理后的HTML内容
  */
-export function processRichText(htmlContent: string, imageBaseUrl: string = 'http://101.126.90.255:8081', defaultLineHeight: string = '2'): string {
+export function processRichText(htmlContent: string, imageBaseUrl: string = 'http://167.88.180.246:8081', defaultLineHeight: string = '2'): string {
   if (!htmlContent) return '';
 
   let content = htmlContent;

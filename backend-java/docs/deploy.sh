@@ -8,8 +8,8 @@
 APP_NAME="luxury-watch-backend"
 APP_PORT=8081
 APP_USER="root"
-JAR_DIR="/data/luxury-watch-miniapp/jar"
-IMAGE_DIR="/data/luxury-watch-miniapp/image"
+JAR_DIR="/data/projects/luxury-watch-miniapp/jar"
+IMAGE_DIR="/data/projects/luxury-watch-miniapp/image"
 LOG_DIR="${JAR_DIR}/logs"
 JAR_FILE=""
 BACKUP_DIR="${JAR_DIR}/backup"
