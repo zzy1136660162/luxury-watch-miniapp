@@ -12,10 +12,7 @@
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="handleSearch">
-            <el-icon><Search /></el-icon>
-            查询
-          </el-button>
+          <el-button type="primary" @click="handleSearch">查询</el-button>
           <el-button @click="handleReset">重置</el-button>
         </el-form-item>
       </el-form>

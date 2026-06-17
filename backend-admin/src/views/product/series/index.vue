@@ -19,13 +19,15 @@ const pagination = ref({ page: 1, pageSize: 10, total: 0 })
 const showDialog = ref(false)
 const isEdit = ref(false)
 const currentItem = ref<any>(null)
+const searchForm = ref({ name: '' })
 
 const loadData = async () => {
   try {
     loading.value = true
     const res: any = await api.product.getSeriesList({
       page: pagination.value.page,
-      size: pagination.value.pageSize
+      size: pagination.value.pageSize,
+      name: searchForm.value.name || undefined
     })
     data.value = res.list || []
     pagination.value.total = res.total || 0
@@ -35,6 +37,17 @@ const loadData = async () => {
   } finally {
     loading.value = false
   }
+}
+
+const handleSearch = () => {
+  pagination.value.page = 1
+  loadData()
+}
+
+const handleReset = () => {
+  searchForm.value.name = ''
+  pagination.value.page = 1
+  loadData()
 }
 
 const handleAdd = () => {
@@ -80,6 +93,19 @@ loadData()
 
 <template>
   <div class="series-management">
+    <!-- 搜索栏 -->
+    <el-card class="search-card" shadow="never">
+      <el-form :model="searchForm" inline>
+        <el-form-item label="系列名称">
+          <el-input v-model="searchForm.name" placeholder="请输入系列名称" clearable @keyup.enter="handleSearch" />
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="handleSearch">查询</el-button>
+          <el-button @click="handleReset">重置</el-button>
+        </el-form-item>
+      </el-form>
+    </el-card>
+
     <div class="table-toolbar">
       <el-button type="primary" @click="handleAdd">
         <el-icon><Plus /></el-icon>
@@ -144,7 +170,7 @@ loadData()
 }
 
 .table-toolbar {
-  margin-bottom: 16px;
+  margin: 16px 0;
 }
 
 .pagination {

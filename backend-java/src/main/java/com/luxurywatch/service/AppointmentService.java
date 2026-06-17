@@ -13,7 +13,7 @@ public interface AppointmentService {
     /**
      * 获取预约列表（管理平台用）
      */
-    IPage<Map<String, Object>> getAppointmentPage(Integer page, Integer size, Integer status);
+    IPage<Map<String, Object>> getAppointmentPage(Integer page, Integer size, Integer status, String userName, String startDate, String endDate);
 
     /**
      * 根据ID获取预约

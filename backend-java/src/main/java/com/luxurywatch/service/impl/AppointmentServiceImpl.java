@@ -32,7 +32,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     private WxUserMapper wxUserMapper;
 
     @Override
-    public IPage<Map<String, Object>> getAppointmentPage(Integer page, Integer size, Integer status) {
+    public IPage<Map<String, Object>> getAppointmentPage(Integer page, Integer size, Integer status, String userName, String startDate, String endDate) {
         Page<Appointment> appointmentPage = new Page<>(page, size);
         QueryWrapper<Appointment> wrapper = new QueryWrapper<>();
         wrapper.eq("deleted", 0);
@@ -47,10 +47,42 @@ public class AppointmentServiceImpl implements AppointmentService {
         List<Long> userIds = appointments.stream().map(Appointment::getUserId).distinct().collect(Collectors.toList());
         List<Long> storeIds = appointments.stream().map(Appointment::getStoreId).distinct().collect(Collectors.toList());
         
-        Map<Long, WxUser> userMap = new HashMap<>();
-        if (!userIds.isEmpty()) {
-            List<WxUser> users = wxUserMapper.selectBatchIds(userIds);
-            userMap = users.stream().collect(Collectors.toMap(WxUser::getId, u -> u));
+        // 先获取所有用户用于用户名筛选
+        Map<Long, WxUser> allUserMap = new HashMap<>();
+        List<WxUser> allUsers = wxUserMapper.selectList(null);
+        for (WxUser user : allUsers) {
+            allUserMap.put(user.getId(), user);
+        }
+        
+        // 根据用户名筛选
+        if (userName != null && !userName.trim().isEmpty()) {
+            final String searchName = userName.trim();
+            final List<Long> filteredUserIds = userIds.stream()
+                .filter(id -> {
+                    WxUser user = allUserMap.get(id);
+                    return user != null && user.getUsername() != null 
+                        && user.getUsername().contains(searchName);
+                })
+                .collect(Collectors.toList());
+            appointments = appointments.stream()
+                .filter(appt -> filteredUserIds.contains(appt.getUserId()))
+                .collect(Collectors.toList());
+        }
+        
+        // 根据日期范围筛选
+        if (startDate != null && !startDate.trim().isEmpty()) {
+            final String start = startDate.trim();
+            appointments = appointments.stream()
+                .filter(appt -> appt.getAppointmentDate() != null 
+                    && appt.getAppointmentDate().toString().compareTo(start.substring(0, 10)) >= 0)
+                .collect(Collectors.toList());
+        }
+        if (endDate != null && !endDate.trim().isEmpty()) {
+            final String end = endDate.trim();
+            appointments = appointments.stream()
+                .filter(appt -> appt.getAppointmentDate() != null 
+                    && appt.getAppointmentDate().toString().compareTo(end.substring(0, 10)) <= 0)
+                .collect(Collectors.toList());
         }
         
         Map<Long, Store> storeMap = new HashMap<>();
@@ -79,7 +111,7 @@ public class AppointmentServiceImpl implements AppointmentService {
             String[] statusText = {"正常", "已完成", "已取消"};
             map.put("statusText", statusText[appt.getStatus()]);
             
-            WxUser user = userMap.get(appt.getUserId());
+            WxUser user = allUserMap.get(appt.getUserId());
             if (user != null) {
                 map.put("userName", user.getUsername());
                 String phone = user.getPhone();
@@ -99,7 +131,7 @@ public class AppointmentServiceImpl implements AppointmentService {
             records.add(map);
         }
         
-        Page<Map<String, Object>> resultPage = new Page<>(result.getCurrent(), result.getSize(), result.getTotal());
+        Page<Map<String, Object>> resultPage = new Page<>(result.getCurrent(), result.getSize(), records.size());
         resultPage.setRecords(records);
         return resultPage;
     }

@@ -20,12 +20,15 @@ public class StoreServiceImpl implements StoreService {
     private StoreMapper storeMapper;
 
     @Override
-    public IPage<Store> getStorePage(Integer page, Integer size, String name) {
+    public IPage<Store> getStorePage(Integer page, Integer size, String name, Integer status) {
         Page<Store> storePage = new Page<>(page, size);
         QueryWrapper<Store> wrapper = new QueryWrapper<>();
         wrapper.eq("deleted", 0);
         if (name != null && !name.isEmpty()) {
             wrapper.like("name", name);
+        }
+        if (status != null) {
+            wrapper.eq("status", status);
         }
         wrapper.orderByAsc("sort");
         return storeMapper.selectPage(storePage, wrapper);

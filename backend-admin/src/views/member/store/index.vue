@@ -42,12 +42,19 @@ const formData = ref({
   status: 1
 })
 
+const searchForm = ref({
+  name: '',
+  status: null as number | null
+})
+
 const loadData = async () => {
   try {
     loading.value = true
     const res: any = await storeApi.list({
       page: pagination.value.page,
-      size: pagination.value.pageSize
+      size: pagination.value.pageSize,
+      name: searchForm.value.name || undefined,
+      status: searchForm.value.status
     })
     data.value = res.list || []
     pagination.value.total = res.total || 0
@@ -57,6 +64,18 @@ const loadData = async () => {
   } finally {
     loading.value = false
   }
+}
+
+const handleSearch = () => {
+  pagination.value.page = 1
+  loadData()
+}
+
+const handleReset = () => {
+  searchForm.value.name = ''
+  searchForm.value.status = null
+  pagination.value.page = 1
+  loadData()
 }
 
 const handleAdd = () => {
@@ -119,6 +138,7 @@ const handlePageChange = (page: number) => {
 
 const handleSizeChange = (size: number) => {
   pagination.value.pageSize = size
+  pagination.value.page = 1
   loadData()
 }
 
@@ -127,9 +147,28 @@ loadData()
 
 <template>
   <div class="store-management">
+    <!-- 搜索栏 -->
+    <el-card class="search-card" shadow="never">
+      <el-form :model="searchForm" inline>
+        <el-form-item label="门店名称">
+          <el-input v-model="searchForm.name" placeholder="请输入门店名称" clearable @keyup.enter="handleSearch" />
+        </el-form-item>
+        <el-form-item label="门店状态">
+          <el-select v-model="searchForm.status" placeholder="请选择状态" clearable style="width: 150px">
+            <el-option label="正常" :value="1" />
+            <el-option label="禁用" :value="0" />
+          </el-select>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="handleSearch">查询</el-button>
+          <el-button @click="handleReset">重置</el-button>
+        </el-form-item>
+      </el-form>
+    </el-card>
+
     <div class="table-toolbar">
       <el-button type="primary" @click="handleAdd">
-        <i class="el-icon-plus"></i>
+        <el-icon><Plus /></el-icon>
         新增门店
       </el-button>
     </div>
@@ -193,7 +232,7 @@ loadData()
 }
 
 .table-toolbar {
-  margin-bottom: 16px;
+  margin: 16px 0;
 }
 
 .pagination {

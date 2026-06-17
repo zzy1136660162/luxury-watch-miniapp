@@ -13,27 +13,26 @@ const statusOptions = [
 
 const data = ref<any[]>([])
 const loading = ref(false)
-const queryParams = ref({
-  status: -1
+const searchForm = ref({
+  phone: '',
+  status: -1 as number
 })
 const pagination = ref({ page: 1, pageSize: 10, total: 0 })
 
 const loadData = async () => {
   try {
     loading.value = true
-    const params = {
+    const params: any = {
       page: pagination.value.page,
       size: pagination.value.pageSize,
-      status: queryParams.value.status === -1 ? undefined : queryParams.value.status
+      status: searchForm.value.status === -1 ? undefined : searchForm.value.status
     }
-    console.log('请求参数:', params)
+    if (searchForm.value.phone) {
+      params.phone = searchForm.value.phone
+    }
     const res: any = await exchangeApi.getExchangeList(params)
-    console.log('API返回结果:', res)
-    // 拦截器已经解包了data，直接使用res
     data.value = res?.list || []
     pagination.value.total = res?.total || 0
-    console.log('表格数据:', data.value)
-    console.log('总数:', pagination.value.total)
   } catch (error) {
     console.error('加载数据失败:', error)
     ElMessage.error('加载数据失败')
@@ -52,7 +51,14 @@ const getStatusColor = (status: number) => {
   return colorMap[status] || '#999'
 }
 
-const handleQuery = () => {
+const handleSearch = () => {
+  pagination.value.page = 1
+  loadData()
+}
+
+const handleReset = () => {
+  searchForm.value.phone = ''
+  searchForm.value.status = -1
   pagination.value.page = 1
   loadData()
 }
@@ -64,6 +70,7 @@ const handlePageChange = (page: number) => {
 
 const handleSizeChange = (size: number) => {
   pagination.value.pageSize = size
+  pagination.value.page = 1
   loadData()
 }
 
@@ -86,28 +93,28 @@ loadData()
 
 <template>
   <div class="exchange-management">
-    <div class="table-toolbar">
-      <el-space>
-        <el-select
-          v-model="queryParams.status"
-          placeholder="兑换状态"
-          clearable
-          style="width: 150px"
-          @change="handleQuery"
-        >
-          <el-option
-            v-for="item in statusOptions"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          />
-        </el-select>
-        <el-button @click="loadData">
-          <i class="el-icon-search"></i>
-          刷新
-        </el-button>
-      </el-space>
-    </div>
+    <!-- 搜索栏 -->
+    <el-card class="search-card" shadow="never">
+      <el-form :model="searchForm" inline>
+        <el-form-item label="联系电话">
+          <el-input v-model="searchForm.phone" placeholder="请输入联系电话" clearable @keyup.enter="handleSearch" style="width: 150px" />
+        </el-form-item>
+        <el-form-item label="兑换状态">
+          <el-select v-model="searchForm.status" placeholder="请选择状态" clearable style="width: 150px">
+            <el-option
+              v-for="item in statusOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="handleSearch">查询</el-button>
+          <el-button @click="handleReset">重置</el-button>
+        </el-form-item>
+      </el-form>
+    </el-card>
 
     <el-table :data="data" :loading="loading" stripe>
       <el-table-column prop="id" label="ID" width="80" />
@@ -157,7 +164,7 @@ loadData()
 }
 
 .table-toolbar {
-  margin-bottom: 16px;
+  margin: 16px 0;
 }
 
 .pagination {

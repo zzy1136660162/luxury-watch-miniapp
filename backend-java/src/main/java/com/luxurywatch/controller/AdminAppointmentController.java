@@ -27,9 +27,12 @@ public class AdminAppointmentController {
     public R<Map<String, Object>> list(
             @RequestParam(defaultValue = "1") Integer page,
             @RequestParam(defaultValue = "10") Integer size,
-            @RequestParam(required = false) Integer status) {
+            @RequestParam(required = false) Integer status,
+            @RequestParam(required = false) String userName,
+            @RequestParam(required = false) String startDate,
+            @RequestParam(required = false) String endDate) {
         
-        IPage<Map<String, Object>> appointmentPage = appointmentService.getAppointmentPage(page, size, status);
+        IPage<Map<String, Object>> appointmentPage = appointmentService.getAppointmentPage(page, size, status, userName, startDate, endDate);
         
         Map<String, Object> result = new HashMap<>();
         result.put("list", appointmentPage.getRecords());

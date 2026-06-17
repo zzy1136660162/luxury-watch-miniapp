@@ -1,13 +1,16 @@
 <template>
   <div class="page-container">
-    <div class="page-header">
-      <h1>管理员管理</h1>
-      <div class="header-actions">
-        <el-button type="primary" @click="handleAdd">新增管理员</el-button>
+    <!-- 页面标题和搜索栏 -->
+    <el-card class="page-header-card" shadow="never">
+      <div class="header-content">
+        <div class="header-title">
+          <h1>管理员管理</h1>
+        </div>
+        <div class="header-actions">
+          <el-button type="primary" @click="handleAdd">新增管理员</el-button>
+        </div>
       </div>
-    </div>
-
-    <div class="search-container">
+      <el-divider style="margin: 12px 0;" />
       <el-form :model="searchForm" inline>
         <el-form-item label="用户名">
           <el-input v-model="searchForm.username" placeholder="请输入用户名" clearable />
@@ -23,7 +26,7 @@
           <el-button @click="handleReset">重置</el-button>
         </el-form-item>
       </el-form>
-    </div>
+    </el-card>
 
     <div class="page-content">
       <el-table :data="tableData" stripe v-loading="loading">
@@ -293,13 +296,15 @@ const handleSubmit = async () => {
 .page-container {
   padding: 20px;
 }
-.page-header {
+.page-header-card {
+  margin-bottom: 16px;
+}
+.header-content {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
 }
-.page-header h1 {
+.header-title h1 {
   font-size: 24px;
   font-weight: 600;
   margin: 0;
@@ -307,14 +312,5 @@ const handleSubmit = async () => {
 .header-actions {
   display: flex;
   gap: 10px;
-}
-.search-container {
-  background: #f8f9fa;
-  padding: 20px;
-  border-radius: 8px;
-  margin-bottom: 20px;
-}
-.page-content {
-  margin-top: 20px;
 }
 </style>

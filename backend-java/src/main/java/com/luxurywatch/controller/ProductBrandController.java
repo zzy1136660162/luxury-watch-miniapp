@@ -1,12 +1,14 @@
 package com.luxurywatch.controller;
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.luxurywatch.common.PageResult;
 import com.luxurywatch.common.R;
 import com.luxurywatch.entity.Brand;
 import com.luxurywatch.mapper.BrandMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,9 +30,15 @@ public class ProductBrandController {
     @SaCheckPermission("product:list")
     public R<PageResult<Brand>> list(
             @RequestParam(defaultValue = "1") Integer page,
-            @RequestParam(defaultValue = "10") Integer size) {
+            @RequestParam(defaultValue = "10") Integer size,
+            @RequestParam(required = false) String name) {
         Page<Brand> pageParam = new Page<>(page, size);
-        Page<Brand> result = brandMapper.selectPage(pageParam, null);
+        QueryWrapper<Brand> queryWrapper = new QueryWrapper<>();
+        if (StringUtils.hasText(name)) {
+            queryWrapper.like("name", name);
+        }
+        queryWrapper.orderByDesc("id");
+        Page<Brand> result = brandMapper.selectPage(pageParam, queryWrapper);
         
         return R.success(new PageResult<>(
             result.getRecords(),

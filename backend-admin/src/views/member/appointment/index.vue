@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { appointmentApi } from '@/api/modules/appointment'
-import { ElButton, ElTable, ElTableColumn, ElSelect, ElOption, ElSpace, ElMessage } from 'element-plus'
+import { ElButton, ElTable, ElTableColumn, ElSelect, ElOption, ElSpace, ElMessage, ElDatePicker } from 'element-plus'
 import { ref } from 'vue'
 import { formatDateTime } from '@/utils'
+import type { DateModelType } from 'element-plus'
 
 const statusOptions = [
   { label: '全部', value: -1 },
@@ -13,8 +14,11 @@ const statusOptions = [
 
 const data = ref<any[]>([])
 const loading = ref(false)
-const queryParams = ref({
-  status: -1
+const searchForm = ref({
+  userName: '',
+  status: -1 as number,
+  startDate: '' as string,
+  endDate: '' as string
 })
 const pagination = ref({ page: 1, pageSize: 10, total: 0 })
 
@@ -25,8 +29,17 @@ const loadData = async () => {
       page: pagination.value.page,
       size: pagination.value.pageSize
     }
-    if (queryParams.value.status !== -1) {
-      params.status = queryParams.value.status
+    if (searchForm.value.userName) {
+      params.userName = searchForm.value.userName
+    }
+    if (searchForm.value.status !== -1) {
+      params.status = searchForm.value.status
+    }
+    if (searchForm.value.startDate) {
+      params.startDate = searchForm.value.startDate
+    }
+    if (searchForm.value.endDate) {
+      params.endDate = searchForm.value.endDate
     }
     const res: any = await appointmentApi.list(params)
     data.value = res.list || []
@@ -59,7 +72,16 @@ const getStatusColor = (status: number) => {
   return colorMap[status] || '#999'
 }
 
-const handleQuery = () => {
+const handleSearch = () => {
+  pagination.value.page = 1
+  loadData()
+}
+
+const handleReset = () => {
+  searchForm.value.userName = ''
+  searchForm.value.status = -1
+  searchForm.value.startDate = ''
+  searchForm.value.endDate = ''
   pagination.value.page = 1
   loadData()
 }
@@ -71,6 +93,7 @@ const handlePageChange = (page: number) => {
 
 const handleSizeChange = (size: number) => {
   pagination.value.pageSize = size
+  pagination.value.page = 1
   loadData()
 }
 
@@ -79,28 +102,47 @@ loadData()
 
 <template>
   <div class="appointment-management">
-    <div class="table-toolbar">
-      <el-space>
-        <el-select
-          v-model="queryParams.status"
-          placeholder="预约状态"
-          clearable
-          style="width: 150px"
-          @change="handleQuery"
-        >
-          <el-option
-            v-for="item in statusOptions"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
+    <!-- 搜索栏 -->
+    <el-card class="search-card" shadow="never">
+      <el-form :model="searchForm" inline>
+        <el-form-item label="用户名称">
+          <el-input v-model="searchForm.userName" placeholder="请输入用户名称" clearable @keyup.enter="handleSearch" />
+        </el-form-item>
+        <el-form-item label="预约状态">
+          <el-select v-model="searchForm.status" placeholder="请选择状态" clearable style="width: 150px">
+            <el-option
+              v-for="item in statusOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="预约日期">
+          <el-date-picker
+            v-model="searchForm.startDate"
+            type="date"
+            placeholder="开始日期"
+            style="width: 150px"
+            value-format="YYYY-MM-DD"
+            :clearable="true"
           />
-        </el-select>
-        <el-button @click="loadData">
-          <i class="el-icon-search"></i>
-          刷新
-        </el-button>
-      </el-space>
-    </div>
+          <span style="margin: 0 5px;">至</span>
+          <el-date-picker
+            v-model="searchForm.endDate"
+            type="date"
+            placeholder="结束日期"
+            style="width: 150px"
+            value-format="YYYY-MM-DD"
+            :clearable="true"
+          />
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="handleSearch">查询</el-button>
+          <el-button @click="handleReset">重置</el-button>
+        </el-form-item>
+      </el-form>
+    </el-card>
 
     <el-table :data="data" :loading="loading" stripe>
       <el-table-column prop="id" label="ID" width="80" />
@@ -160,7 +202,7 @@ loadData()
 }
 
 .table-toolbar {
-  margin-bottom: 16px;
+  margin: 20px 0;
 }
 
 .pagination {

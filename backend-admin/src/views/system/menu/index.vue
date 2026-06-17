@@ -1,11 +1,16 @@
 <template>
   <div class="page-container">
-    <div class="page-header">
-      <h1>菜单管理</h1>
-      <div class="header-actions">
-        <el-button type="primary" @click="handleAdd">新增菜单</el-button>
+    <!-- 页面标题和操作栏 -->
+    <el-card class="page-header-card" shadow="never">
+      <div class="header-content">
+        <div class="header-title">
+          <h1>菜单管理</h1>
+        </div>
+        <div class="header-actions">
+          <el-button type="primary" @click="handleAdd">新增菜单</el-button>
+        </div>
       </div>
-    </div>
+    </el-card>
     <div class="page-content">
       <el-table :data="tableData" stripe row-key="id">
         <el-table-column prop="name" label="菜单名称" />
@@ -133,13 +138,15 @@ const handleSubmit = () => {
 .page-container {
   padding: 20px;
 }
-.page-header {
+.page-header-card {
+  margin-bottom: 16px;
+}
+.header-content {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
 }
-.page-header h1 {
+.header-title h1 {
   font-size: 24px;
   font-weight: 600;
   margin: 0;

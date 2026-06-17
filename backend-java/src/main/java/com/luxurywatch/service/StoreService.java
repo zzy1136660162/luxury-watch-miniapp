@@ -12,7 +12,7 @@ public interface StoreService {
     /**
      * 获取门店列表（分页）
      */
-    IPage<Store> getStorePage(Integer page, Integer size, String name);
+    IPage<Store> getStorePage(Integer page, Integer size, String name, Integer status);
 
     /**
      * 根据ID获取门店

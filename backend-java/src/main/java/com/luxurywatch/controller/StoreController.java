@@ -29,9 +29,10 @@ public class StoreController {
     public R<Map<String, Object>> list(
             @RequestParam(defaultValue = "1") Integer page,
             @RequestParam(defaultValue = "10") Integer size,
-            @RequestParam(required = false) String name) {
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) Integer status) {
         
-        IPage<Store> storePage = storeService.getStorePage(page, size, name);
+        IPage<Store> storePage = storeService.getStorePage(page, size, name, status);
         
         Map<String, Object> result = new HashMap<>();
         result.put("list", storePage.getRecords());
