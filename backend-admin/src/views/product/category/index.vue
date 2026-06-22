@@ -22,10 +22,7 @@
       <template #header>
         <div class="table-header">
           <span class="title">商品分类</span>
-          <el-button type="primary" @click="handleAdd">
-            <el-icon><Plus /></el-icon>
-            新增分类
-          </el-button>
+          <el-button type="primary" @click="handleAdd">新增分类</el-button>
         </div>
       </template>
 

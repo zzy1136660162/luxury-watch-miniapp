@@ -44,10 +44,7 @@
         <div class="table-header">
           <span class="title">商品列表</span>
           <div class="actions">
-            <el-button type="primary" @click="handleAdd">
-              <el-icon><Plus /></el-icon>
-              新增商品
-            </el-button>
+            <el-button type="primary" @click="handleAdd">新增商品</el-button>
             <el-button type="danger" :disabled="!selectedIds.length" @click="handleBatchDelete">
               <el-icon><Delete /></el-icon>
               批量删除

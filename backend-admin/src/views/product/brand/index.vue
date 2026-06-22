@@ -106,10 +106,7 @@ loadData()
     </el-card>
 
     <div class="table-toolbar">
-      <el-button type="primary" @click="handleAdd">
-        <el-icon><Plus /></el-icon>
-        新增品牌
-      </el-button>
+      <el-button type="primary" @click="handleAdd">新增品牌</el-button>
     </div>
 
     <el-table :data="data" v-loading="loading" stripe>
