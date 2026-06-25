@@ -1,7 +1,7 @@
 <import src="/components/navigation-bar/navigation-bar.wxml" />
 
 <view class="page">
-  <navigation-bar title="收货地址" back="{{true}}" color="black" background="#ffffff" />
+  <navigation-bar title="收货地址" back="{{true}}" color="black" background="#ffffff" style="position: fixed;z-index: 1000;top: 0px;"/>
 
   <view class="add-btn" bindtap="onAddAddress">
     <text class="add-icon">+</text>

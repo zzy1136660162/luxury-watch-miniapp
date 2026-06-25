@@ -37,7 +37,7 @@ Page({
 
     // 如果是相对路径，拼接完整的图片服务器地址
     if (serverAvatar && serverAvatar.startsWith('/')) {
-      serverAvatar = 'http://101.126.90.255:8081' + serverAvatar;
+      serverAvatar = 'http://167.88.180.246:8081' + serverAvatar;
     }
 
     if (!token) {

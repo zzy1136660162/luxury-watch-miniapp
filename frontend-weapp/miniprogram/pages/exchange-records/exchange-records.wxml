@@ -1,7 +1,6 @@
-<!-- <import src="/components/navigation-bar/navigation-bar.wxml" /> -->
+
 
 <view class="page">
-  <!-- <navigation-bar title="兑换记录" back="{{true}}" color="black" background="#ffffff" /> -->
 
   <scroll-view class="content" scroll-y type="list" enhanced="{{true}}" bounces="{{false}}">
     <!-- Empty State -->

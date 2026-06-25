@@ -6,6 +6,7 @@ $border-color: #E5E5E5;
 $background: #F5F5F5;
 
 .page {
+  padding-top: 10vh;
   height: 95vh;
   background-color: $background;
   position: relative;
@@ -15,7 +16,7 @@ $background: #F5F5F5;
 .add-btn {
   position: fixed;
   right: 32px;
-  top: 90vh;
+  top: 85vh;
   transform: translateY(-50%);
   width: 50px;
   height: 50px;
