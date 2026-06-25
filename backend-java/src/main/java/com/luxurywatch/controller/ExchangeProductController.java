@@ -1,5 +1,6 @@
 package com.luxurywatch.controller;
 
+import cn.dev33.satoken.annotation.SaIgnore;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.luxurywatch.common.PageResult;
@@ -26,6 +27,7 @@ public class ExchangeProductController {
     /**
      * 获取兑换商品列表（分页）
      */
+    @SaIgnore
     @GetMapping("/list")
     public R<PageResult<Map<String, Object>>> list(
             @RequestParam(defaultValue = "1") Integer page,

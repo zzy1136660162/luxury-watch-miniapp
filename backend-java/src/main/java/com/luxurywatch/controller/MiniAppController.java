@@ -1,5 +1,6 @@
 package com.luxurywatch.controller;
 
+import cn.dev33.satoken.annotation.SaIgnore;
 import cn.dev33.satoken.stp.StpUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -266,6 +267,7 @@ public class MiniAppController {
     /**
      * 获取所有品牌列表（从 brand 表）
      */
+    @SaIgnore
     @GetMapping("/brands")
     public R<List<Brand>> getAllBrands() {
         try {
@@ -281,6 +283,7 @@ public class MiniAppController {
     /**
      * 根据品牌名称获取该品牌的所有系列
      */
+    @SaIgnore
     @GetMapping("/series/by-brand")
     public R<List<String>> getSeriesByBrand(@RequestParam String brand) {
         try {
@@ -315,6 +318,7 @@ public class MiniAppController {
     /**
      * 获取所有系列列表（从 series 表）
      */
+    @SaIgnore
     @GetMapping("/series/all")
     public R<List<Map<String, Object>>> getAllSeries() {
         try {
@@ -358,6 +362,7 @@ public class MiniAppController {
     /**
      * 获取热门系列（从 series 表，返回所有系列）
      */
+    @SaIgnore
     @GetMapping("/series/hot")
     public R<List<Map<String, Object>>> getHotSeries() {
         try {
@@ -932,6 +937,7 @@ public class MiniAppController {
     /**
      * 获取品牌下所有系列详情（带商品）
      */
+    @SaIgnore
     @GetMapping("/series/brand-detail")
     public R<Map<String, Object>> getBrandSeriesDetail(@RequestParam String brand) {
         try {

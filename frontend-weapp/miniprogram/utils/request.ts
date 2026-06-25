@@ -13,19 +13,7 @@ const baseUrl = apiConfig.baseUrl;
 const handleUnauthorized = () => {
   wx.removeStorageSync('token');
   wx.removeStorageSync('userInfo');
-  wx.showModal({
-    title: '提示',
-    content: '登录已过期，请重新登录',
-    confirmText: '确定',
-    cancelText: '取消',
-    success: (res) => {
-      if (res.confirm) {
-        wx.redirectTo({
-          url: '/pages/login/login'
-        });
-      }
-    }
-  });
+  // 不显示弹窗，静默处理
 };
 
 /**
@@ -88,13 +76,29 @@ const request = (options: any): Promise<any> => {
       data: options.data || {},
       header: headers,
       success: (res: any) => {
-        if (res.statusCode === 401 || (res.data && res.data.code === 401)) {
+        // 处理 HTTP 401
+        if (res.statusCode === 401) {
           handleUnauthorized();
           reject(res);
           return;
         }
+        
+        // 处理 HTTP 200 但 data 中包含错误码
+        if (res.data && res.data.code === 401) {
+          handleUnauthorized();
+          reject(res);
+          return;
+        }
+        
+        // 处理 HTTP 200
         if (res.statusCode === 200) {
-          resolve(res.data);
+          // 检查返回数据是否是有效的 JSON 对象
+          if (typeof res.data === 'object' && res.data !== null) {
+            resolve(res.data);
+          } else {
+            // 返回的不是有效 JSON，可能是代理错误页面
+            reject({ message: '数据格式错误', data: res.data });
+          }
         } else {
           reject(res);
         }
@@ -313,7 +317,7 @@ export const storeApi = {
 export const rewardApi = {
   getRedeemableProducts: () => {
     return request({
-      url: '/api/exchange/product/list',
+      url: '/exchange/product/list',
       method: 'GET',
       data: { page: 1, size: 100, status: 1 }
     });

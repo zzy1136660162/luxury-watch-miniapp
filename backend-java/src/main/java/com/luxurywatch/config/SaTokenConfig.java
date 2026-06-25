@@ -34,6 +34,7 @@ public class SaTokenConfig implements WebMvcConfigurer {
                 "/api/mini/login",
                 "/api/mini/getPhone",
                 "/api/wx-user/openid/**",
+                "/exchange/**",
                 "/images/**",
                 "/error",
                 "/favicon.ico",
