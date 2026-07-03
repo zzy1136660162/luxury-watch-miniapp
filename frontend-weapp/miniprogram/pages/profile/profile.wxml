@@ -46,14 +46,14 @@
 
         <view class="info-divider"></view>
 
-        <view class="info-item">
+        <!-- <view class="info-item">
           <view class="info-left">
             <text class="info-label">会员等级</text>
           </view>
           <view class="info-right">
             <text class="info-value highlight">{{memberLevelName}}</text>
           </view>
-        </view>
+        </view> -->
 
         <view class="info-divider"></view>
 
@@ -68,21 +68,21 @@
 
         <view class="info-divider"></view>
 
-        <view class="info-item">
+        <!-- <view class="info-item">
           <view class="info-left">
             <text class="info-label">成长值</text>
           </view>
           <view class="info-right">
             <text class="info-value growth">{{growthValue}}</text>
           </view>
-        </view>
+        </view> -->
       </view>
     </view>
 
-    <view class="tips-section">
+    <!-- <view class="tips-section">
       <text class="tips-text" wx:if="{{nextLevelGrowth > 0}}">成长值达到 {{nextLevelGrowth}} 可升级为 {{nextLevelName}}</text>
       <text class="tips-text" wx:if="{{nextLevelGrowth === 0}}">已是最高等级会员</text>
-    </view>
+    </view> -->
   </view>
 
   <view class="modal-mask {{showNicknameModal ? 'modal-show' : ''}}" bindtap="onCancelNickname"></view>

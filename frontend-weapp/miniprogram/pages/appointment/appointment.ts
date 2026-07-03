@@ -1,4 +1,4 @@
-import { storeApi, checkLogin } from '../../utils/request';
+import { storeApi } from '../../utils/request';
 import { appointmentApi } from '../../utils/request';
 
 Component({
@@ -66,8 +66,23 @@ Component({
     },
 
     async onSubmitBooking() {
-      const confirmed = await checkLogin();
-      if (!confirmed) return;
+      // 检查登录状态
+      const token = wx.getStorageSync('token');
+      if (!token) {
+        wx.showModal({
+          title: '提示',
+          content: '请先登录后再预约',
+          confirmText: '去登录',
+          success: (res) => {
+            if (res.confirm) {
+              wx.navigateTo({
+                url: '/pages/login/login'
+              });
+            }
+          }
+        });
+        return;
+      }
 
       if (!this.data.selectedStoreId) {
         wx.showToast({ title: '请选择门店', icon: 'none' });

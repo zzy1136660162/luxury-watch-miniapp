@@ -164,6 +164,7 @@ $font-family-english: 'Manrope', sans-serif;
 .member-card {
   aspect-ratio: 1.6 / 1;
   width: 90%;
+  height: 25vh;
   background: linear-gradient(135deg, rgb(225, 187, 168) 0%,rgb(204, 204, 204) 50%, rgb(250, 235, 204) 100%);
   padding: 32px;
   display: flex;

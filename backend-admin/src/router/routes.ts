@@ -134,6 +134,7 @@ const mainRoutes: RouteRecordRaw[] = [
         meta: {
           title: '菜单管理',
           icon: 'i-ant-design:menu-twotone',
+          menu: false,
         },
       },
       {

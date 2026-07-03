@@ -1,4 +1,4 @@
-import { appointmentApi, checkLogin } from '../../utils/request';
+import { appointmentApi } from '../../utils/request';
 
 Component({
   data: {
@@ -24,8 +24,23 @@ Component({
     },
 
     async loadMyAppointments() {
-      const confirmed = await checkLogin();
-      if (!confirmed) return;
+      // 检查登录状态
+      const token = wx.getStorageSync('token');
+      if (!token) {
+        wx.showModal({
+          title: '提示',
+          content: '请先登录后再查看预约',
+          confirmText: '去登录',
+          success: (res) => {
+            if (res.confirm) {
+              wx.navigateTo({
+                url: '/pages/login/login'
+              });
+            }
+          }
+        });
+        return;
+      }
 
       try {
         this.setData!({ loading: true });
