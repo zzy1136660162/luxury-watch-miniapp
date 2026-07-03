@@ -128,16 +128,6 @@ const mainRoutes: RouteRecordRaw[] = [
         },
       },
       {
-        path: 'system/menu',
-        name: 'system-menu',
-        component: () => import('@/views/system/menu/index.vue'),
-        meta: {
-          title: '菜单管理',
-          icon: 'i-ant-design:menu-twotone',
-          menu: false,
-        },
-      },
-      {
         path: 'reload',
         name: 'reload',
         component: () => import('@/views/reload.vue'),
